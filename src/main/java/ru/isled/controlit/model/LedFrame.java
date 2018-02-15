@@ -2,14 +2,14 @@ package ru.isled.controlit.model;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import ru.isled.controlit.view.MainController;
+import ru.isled.controlit.view.MainView;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class LedFrame {
-    private static final int MAX_PIXELS = MainController.MAX_PIXELS;
+    private static final int MAX_PIXELS = MainView.MAX_PIXELS;
     private List<IntegerProperty> frames = new ArrayList<>(MAX_PIXELS);
 
 

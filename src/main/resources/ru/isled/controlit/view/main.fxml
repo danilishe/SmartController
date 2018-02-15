@@ -1,198 +1,161 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.SeparatorMenuItem?>
-<?import javafx.scene.control.Slider?>
-<?import javafx.scene.control.Spinner?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.control.ToggleButton?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
-
-<BorderPane cacheShape="false" centerShape="false" prefWidth="600.0" scaleShape="false" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.isled.controlit.view.MainController">
-   <top>
-    <MenuBar BorderPane.alignment="CENTER">
-      <menus>
-          <Menu mnemonicParsing="false" text="Файл">
-          <items>
-            <MenuItem mnemonicParsing="false" onAction="#newFile" text="Новый" />
-            <MenuItem mnemonicParsing="false" onAction="#loadFile" text="Открыть..." />
-            <Menu mnemonicParsing="false" text="Открыть недавние" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" onAction="#saveFile" text="Сохранить" />
-            <MenuItem mnemonicParsing="false" onAction="#saveFileAs" text="Сохранить как..." />
-            <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" onAction="#exportFile" text="Экспорт..." />
-                  <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" onAction="#exitHandler" text="Выход" />
-          </items>
-        </Menu>
-        <Menu mnemonicParsing="false" text="Редактирование">
-          <items>
-            <MenuItem mnemonicParsing="false" onAction="#selectAll" text="Выделить всё" />
-            <MenuItem mnemonicParsing="false" onAction="#deselectAll" text="Снять выделение" />
-          </items>
-        </Menu>
-        <Menu mnemonicParsing="false" text="Помощь">
-          <items>
-            <MenuItem mnemonicParsing="false" onAction="#showAboutInfo" text="О программе..." />
-          </items>
-        </Menu>
-      </menus>
-    </MenuBar>
-   </top>
-   <right>
-      <VBox prefHeight="476.0" prefWidth="252.0" spacing="5.0">
-         <children>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" cacheShape="false" centerShape="false" prefWidth="600.0"
+            scaleShape="false" xmlns="http://javafx.com/javafx/8.0.141"
+            fx:controller="ru.isled.controlit.view.MainView">
+    <top>
+        <MenuBar BorderPane.alignment="CENTER">
+            <Menu mnemonicParsing="false" text="Файл">
+                <MenuItem mnemonicParsing="false" onAction="#newFile" text="Новый"/>
+                <MenuItem mnemonicParsing="false" onAction="#loadFile" text="Открыть..."/>
+                <Menu mnemonicParsing="false" text="Открыть недавние"/>
+                <SeparatorMenuItem mnemonicParsing="false"/>
+                <MenuItem mnemonicParsing="false" onAction="#saveFile" text="Сохранить"/>
+                <MenuItem mnemonicParsing="false" onAction="#saveFileAs" text="Сохранить как..."/>
+                <SeparatorMenuItem mnemonicParsing="false"/>
+                <MenuItem mnemonicParsing="false" text="Экспорт..."/>
+                <SeparatorMenuItem mnemonicParsing="false"/>
+                <MenuItem mnemonicParsing="false" onAction="#exitHandler" text="Выход"/>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Редактирование">
+                <MenuItem mnemonicParsing="false" onAction="#selectAll" text="Выделить всё"/>
+                <MenuItem mnemonicParsing="false" onAction="#deselectAll" text="Снять выделение"/>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Помощь">
+                <MenuItem mnemonicParsing="false" onAction="#showAboutInfo" text="О программе..."/>
+            </Menu>
+        </MenuBar>
+    </top>
+    <right>
+        <VBox prefHeight="476.0" prefWidth="252.0" spacing="5.0">
+            <BorderPane.margin>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </BorderPane.margin>
             <TitledPane text="Свойства">
-               <content>
-                  <VBox spacing="5.0">
-                     <children>
-                        <HBox prefWidth="500.0" spacing="5.0">
-                           <children>
-                              <Slider fx:id="brightSlider" majorTickUnit="100.0" max="255.0" minHeight="15.0" minorTickCount="50" onDragDone="#setBrightBySlider" onDragDropped="#setBrightBySlider" onMouseClicked="#setBrightBySlider" onMouseDragOver="#setBrightBySlider" prefHeight="25.0" prefWidth="180.0" />
-                              <TextField fx:id="brightField" disable="true" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0" text="0" />
-                           </children>
-                        </HBox>
-                        <HBox spacing="5.0">
-                           <children>
-                              <Button mnemonicParsing="false" onAction="#setMinBright" prefWidth="500.0" text="0" />
-                              <Button mnemonicParsing="false" onAction="#setRandomBright" prefWidth="500.0" text="Случайно" />
-                              <Button fx:id="maxBright" mnemonicParsing="false" onAction="#setMaxBright" prefWidth="500.0" text="255" />
-                           </children>
-                        </HBox>
-                     </children>
-                  </VBox>
-               </content>
+                <VBox spacing="5.0">
+                    <HBox prefWidth="500.0" spacing="5.0">
+                        <Slider fx:id="brightSlider" majorTickUnit="100.0" max="255.0" minHeight="15.0"
+                                minorTickCount="50" onDragDone="#setBrightBySlider"
+                                onDragDropped="#setBrightBySlider" onMouseClicked="#setBrightBySlider"
+                                onMouseDragOver="#setBrightBySlider" prefHeight="25.0"
+                                prefWidth="180.0"/>
+                        <TextField fx:id="brightField" disable="true" maxWidth="-Infinity"
+                                   minWidth="-Infinity" prefWidth="50.0" text="0"/>
+                    </HBox>
+                    <HBox spacing="5.0">
+                        <Button mnemonicParsing="false" onAction="#setMinBright" prefWidth="500.0"
+                                text="0"/>
+                        <Button mnemonicParsing="false" onAction="#setRandomBright" prefWidth="500.0"
+                                text="Случайно"/>
+                        <Button fx:id="maxBright" mnemonicParsing="false" onAction="#setMaxBright"
+                                prefWidth="500.0" text="255"/>
+                    </HBox>
+                </VBox>
             </TitledPane>
-          <TitledPane text="Редактирование">
-               <content>
-                  <FlowPane hgap="5.0" vgap="10.0">
-                     <children>
+            <TitledPane text="Редактирование">
+                <FlowPane hgap="5.0" vgap="10.0">
+                    <HBox spacing="5.0">
+                        <Button mnemonicParsing="false" onAction="#deselectAll" text="Снять выделение"/>
+                        <Button mnemonicParsing="false" onAction="#selectAll" text="Выделить всё"/>
+                    </HBox>
+                    <VBox pickOnBounds="false" spacing="5.0">
+                        <ChoiceBox fx:id="effectsSelector" prefWidth="200.0"/>
+                        <Button alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false"
+                                onAction="#applyEffectHandler" text="Применить эффект">
+                            <opaqueInsets>
+                                <Insets/>
+                            </opaqueInsets>
+                        </Button>
+                    </VBox>
+                </FlowPane>
+            </TitledPane>
+            <TitledPane text="Отображение">
+                <FlowPane hgap="15.0" vgap="5.0">
+                    <CheckBox fx:id="showDigits" mnemonicParsing="false" onAction="#refresh" selected="true"
+                              text="Число"/>
+                    <CheckBox fx:id="showBright" mnemonicParsing="false" onAction="#refresh" text="Яркость"/>
+                </FlowPane>
+            </TitledPane>
+            <TitledPane text="Настройки программы">
+                <AnchorPane>
+                    <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                    </padding>
+                    <VBox prefWidth="240.0" spacing="5.0" AnchorPane.bottomAnchor="5.0"
+                          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                          AnchorPane.topAnchor="5.0">
+                        <GridPane hgap="5.0" vgap="15.0">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="15.0" prefHeight="20.0" vgrow="SOMETIMES"/>
+                                <RowConstraints minHeight="15.0" prefHeight="20.0" vgrow="SOMETIMES"/>
+                                <RowConstraints minHeight="15.0" prefHeight="20.0" vgrow="SOMETIMES"/>
+                                <RowConstraints minHeight="15.0" prefHeight="20.0" vgrow="SOMETIMES"/>
+                            </rowConstraints>
+                            <VBox.margin>
+                                <Insets bottom="5.0" top="5.0"/>
+                            </VBox.margin>
+                            <Spinner fx:id="framesSpinner" editable="true" prefWidth="150.0"
+                                     GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                            <Label text="Кадров" GridPane.rowIndex="3"/>
+                            <Spinner fx:id="pixelSpinner" editable="true" prefWidth="150.0"
+                                     GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                            <Label text="Пикселей" GridPane.rowIndex="2"/>
+                            <Spinner editable="true" prefWidth="150.0" GridPane.columnIndex="1"
+                                     GridPane.rowIndex="1"/>
+                            <Label text="Длина кадров, мс" GridPane.rowIndex="1"/>
+                            <Label text="Кадров в секунду"/>
+                            <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="97.0"
+                                   text="0" textAlignment="RIGHT" GridPane.columnIndex="1"/>
+                        </GridPane>
                         <HBox spacing="5.0">
-                           <children>
-                              <Button mnemonicParsing="false" onAction="#deselectAll" text="Снять выделение" />
-                            <Button mnemonicParsing="false" onAction="#selectAll" text="Выделить всё" />
-                           </children>
+                            <Button mnemonicParsing="false" onAction="#decrement5Frames"
+                                    prefWidth="150.0" text="-5"/>
+                            <Button mnemonicParsing="false" onAction="#decrement15Frames"
+                                    prefWidth="150.0" text="-15"/>
+                            <Button mnemonicParsing="false" onAction="#increment15Frames"
+                                    prefWidth="150.0" text="+15"/>
+                            <Button mnemonicParsing="false" onAction="#increment5Frames"
+                                    prefWidth="150.0" text="+5"/>
                         </HBox>
-                        <VBox pickOnBounds="false" spacing="5.0">
-                           <children>
-                              <ChoiceBox fx:id="effectsSelector" prefWidth="200.0" />
-                              <Button alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#applyEffectHandler" text="Применить эффект">
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Button>
-                           </children>
-                        </VBox>
-                     </children>
-                  </FlowPane>
-               </content>
-          </TitledPane>
-          <TitledPane text="Отображение">
-               <content>
-                  <FlowPane hgap="15.0" vgap="5.0">
-                     <children>
-                        <CheckBox fx:id="showDigits" mnemonicParsing="false" onAction="#refresh" selected="true" text="Число" />
-                        <CheckBox fx:id="showBright" mnemonicParsing="false" onAction="#refresh" text="Яркость" />
-                     </children>
-                  </FlowPane>
-               </content>
-          </TitledPane>
-          <TitledPane text="Настройки программы">
-               <content>
-                  <AnchorPane>
-                     <children>
-                        <VBox prefWidth="240.0" spacing="5.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0">
-                           <children>
-                              <GridPane hgap="5.0" vgap="15.0">
-                                <columnConstraints>
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                </columnConstraints>
-                                <rowConstraints>
-                                    <RowConstraints minHeight="15.0" prefHeight="20.0" vgrow="SOMETIMES" />
-                                  <RowConstraints minHeight="15.0" prefHeight="20.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="15.0" prefHeight="20.0" vgrow="SOMETIMES" />
-                                  <RowConstraints minHeight="15.0" prefHeight="20.0" vgrow="SOMETIMES" />
-                                </rowConstraints>
-                                 <children>
-                                    <Spinner fx:id="framesSpinner" editable="true" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                    <Label text="Кадров" GridPane.rowIndex="3" />
-                                    <Spinner fx:id="pixelSpinner" editable="true" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                    <Label text="Пикселей" GridPane.rowIndex="2" />
-                                    <Spinner fx:id="frameRateSpinner" editable="true" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                    <Label text="Длина кадров, мс" GridPane.rowIndex="1" />
-                                    <Label text="Кадров в секунду" />
-                                    <Label fx:id="framerate" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="97.0" text="0" textAlignment="RIGHT" GridPane.columnIndex="1" />
-                                 </children>
-                                 <VBox.margin>
-                                    <Insets bottom="5.0" top="5.0" />
-                                 </VBox.margin>
-                              </GridPane>
-                              <HBox spacing="5.0">
-                                 <children>
-                                    <Button mnemonicParsing="false" onAction="#decrement5Frames" prefWidth="150.0" text="-5" />
-                                    <Button mnemonicParsing="false" onAction="#decrement15Frames" prefWidth="150.0" text="-15" />
-                                    <Button mnemonicParsing="false" onAction="#increment15Frames" prefWidth="150.0" text="+15" />
-                                    <Button mnemonicParsing="false" onAction="#increment5Frames" prefWidth="150.0" text="+5" />
-                                 </children>
-                              </HBox>
-                           </children>
-                        </VBox>
-                     </children>
-                     <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </padding>
-                  </AnchorPane>
-               </content>
-          </TitledPane>
+                    </VBox>
+                </AnchorPane>
+            </TitledPane>
             <TitledPane text="Предпросмотр">
-               <content>
-                  <AnchorPane minHeight="75.0">
-                     <children>
-                        <ToggleButton layoutX="14.0" layoutY="-12.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" prefHeight="30.0" text="Предпросмотр" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
-                     </children>
-                  </AnchorPane>
-               </content>
+                <AnchorPane minHeight="75.0">
+                    <ToggleButton layoutX="14.0" layoutY="-12.0" maxHeight="-Infinity" minHeight="-Infinity"
+                                  mnemonicParsing="false" prefHeight="30.0" text="Предпросмотр"
+                                  AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0"
+                                  AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0"/>
+                </AnchorPane>
             </TitledPane>
-         </children>
-         <BorderPane.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </BorderPane.margin>
-      </VBox>
-   </right>
-   <bottom>
-      <HBox fx:id="previewBox" cacheShape="false" centerShape="false" maxWidth="-Infinity" minHeight="30.0" prefWidth="862.0" scaleShape="false" spacing="5.0" BorderPane.alignment="TOP_LEFT">
-         <padding>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </padding>
-      </HBox>
-   </bottom>
-   <center>
-      <TableView fx:id="frameTableView" cacheHint="SPEED" cacheShape="false" centerShape="false" editable="true" fixedCellSize="30.0" focusTraversable="false" minWidth="600.0" nodeOrientation="LEFT_TO_RIGHT" scaleShape="false" BorderPane.alignment="CENTER">
-        <columns>
-          <TableColumn fx:id="frameNumColumn" maxWidth="-Infinity" minWidth="50.0" prefWidth="-1.0" resizable="false" sortable="false" text="№" />
-        </columns>
-         <BorderPane.margin>
-            <Insets />
-         </BorderPane.margin>
-      </TableView>
-   </center>
+        </VBox>
+    </right>
+    <bottom>
+        <HBox fx:id="previewBox" cacheShape="false" centerShape="false" maxWidth="-Infinity" minHeight="30.0"
+              prefWidth="862.0" scaleShape="false" spacing="5.0" BorderPane.alignment="TOP_LEFT">
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </padding>
+        </HBox>
+    </bottom>
+    <center>
+        <TableView fx:id="frameTableView" cacheHint="SPEED" cacheShape="false" centerShape="false" editable="true"
+                   fixedCellSize="30.0" focusTraversable="false" minWidth="600.0" nodeOrientation="LEFT_TO_RIGHT"
+                   scaleShape="false" BorderPane.alignment="CENTER">
+            <columns>
+                <TableColumn fx:id="frameNumColumn" maxWidth="-Infinity" minWidth="50.0" prefWidth="-1.0"
+                             resizable="false" sortable="false" text="№"/>
+            </columns>
+            <BorderPane.margin>
+                <Insets/>
+            </BorderPane.margin>
+        </TableView>
+    </center>
 </BorderPane>

@@ -12,36 +12,28 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 import javafx.stage.FileChooser;
+import ru.isled.controlit.Constants;
+import ru.isled.controlit.Controlit;
 import ru.isled.controlit.controller.FileHelper;
-import ru.isled.controlit.controller.ISLedController;
 import ru.isled.controlit.model.Effect;
 import ru.isled.controlit.model.LedFrame;
+import ru.isled.controlit.model.Project;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class MainController {
+public class MainView implements Constants {
 
-    public static final int MIN_FRAMES = 1;
-    public static final int MAX_FRAMES = 2000;
-    public static final int INIT_FRAMES = 10;
-    public static final int MIN_PIXELS = 1;
-    public static final int MAX_PIXELS = 40;
-    public static final int INIT_PIXELS = 8;
-    public static final int MIN_BRIGHT = 0;
-    public static final int MAX_BRIGHT = 255;
-    public static final int DEFAULT_FRAMERATE = 30;
-    private static final int MIN_FRAMERATE = 2;
-    private static final int MAX_FRAMERATE = 60;
-    public static boolean isPreviewMode = false;
-    public static boolean hasUnsavedChanges = false;
     public ObservableList<LedFrame> frames;
     public List<LedFrame> framesBackup = new ArrayList<>(MAX_PIXELS);
+    private Project project;
+
     @FXML
-    public Spinner<Integer> frameRateSpinner;
+    public HBox previewBox;
+    //    @FXML
+//    public Spinner<Integer> frameLength;
     @FXML
     public Button maxBright;
     @FXML
@@ -53,8 +45,6 @@ public class MainController {
     @FXML
     public TableColumn<LedFrame, String> frameNumColumn;
     @FXML
-    public HBox previewBox;
-    @FXML
     public ChoiceBox<String> effectsSelector;
     @FXML
     public Slider brightSlider;
@@ -64,82 +54,53 @@ public class MainController {
     public CheckBox showDigits;
     @FXML
     public CheckBox showBright;
-    public File fileName = null;
+
+    public File file = null;
+
     public List<Shape> previewPixels = new ArrayList<>(MAX_PIXELS);
-    @FXML
-    private CheckBox smoothInterpolation;
-    @FXML
-    private Label frameLength;
+    private Controlit mainApp;
+//    @FXML
+//    private Label framerateLabel;
 
     @FXML
     public void newFile() {
-        //todo не создаёт обновления ячеек, при выборе "нет" корректно сбрасывается отсутствия изменений и всё
-        if (hasUnsavedChanges)
-            if (askToSaveFile()) {
-                createNewFile();
+        if (project.hasUnsavedChanges())
+            if (continueAfterAskSaveFile()) {
+                mainApp.createNewProject();
             }
     }
 
-    private boolean askToSaveFile() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.initOwner(ISLedController.getMainStage());
-        alert.setTitle("Сохраненить изменения?");
-        alert.setHeaderText("Имеются несохранённые изменения. Сохранить?");
+    private boolean continueAfterAskSaveFile() {
 
-        ButtonType btnYes = new ButtonType("Да");
-        ButtonType btnNo = new ButtonType("Нет");
-        ButtonType btnCancel = new ButtonType("Отмена", ButtonBar.ButtonData.CANCEL_CLOSE);
+        switch (Dialogs.askSaveProject(mainApp.getMainStage())) {
+            case YES:
+                mainApp.saveProject();
+            case NO:
+                return true;
 
-        alert.getButtonTypes().setAll(btnYes, btnNo, btnCancel);
-
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == btnYes) {
-            saveFile();
-        } else if (result.get() == btnNo) {
-
-        } else {
-            return false;
+            case CANCEL_CLOSE:
+            default:
+                return false;
         }
-        return true;
 
     }
 
     @FXML
     public void saveFile() {
 
-        if (fileName == null) {
-            fileName = getFileNameForSave();
-            if (fileName == null) return;
+        if (!project.hasName()) {
+            file = getFileNameForSave();
+            if (file == null) return;
+
+            project.setName(file.getAbsolutePath());
         }
 
-        try {
-            FileHelper.save(fileName, getByteData());
-            hasUnsavedChanges = false;
-            updateMainTitle();
-        } catch (Exception e) {
-            showErrorAlert(e.getMessage());
-            e.printStackTrace();
-        }
+        mainApp.saveProject();
+
     }
 
-    @FXML
-    public void exportFile() {
-
-        File exportName = getFileNameForSave();
-        if (exportName == null) return;
-
-
-        try {
-            FileHelper.save(exportName, getInterpolatedByteData());
-        } catch (Exception e) {
-            showErrorAlert(e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-    public void updateMainTitle() {
-        String title = "ISLed MainController" + (fileName != null ? " - " + fileName.getName() : "");
-        ISLedController.getMainStage().setTitle(title);
+    public void updateHeader() {
+        mainApp.updateHeader();
     }
 
     public void showErrorAlert(String message) {
@@ -160,46 +121,6 @@ public class MainController {
         return data;
     }
 
-    public List<Byte> getInterpolatedByteData() {
-        List<Byte> data = new ArrayList<>();
-        for (int row = 0; row < framesSpinner.getValue(); row++) {
-            if (row > 0) {
-                data.addAll(
-                        interpolate(framesBackup.get(row - 1).asByteList(), framesBackup.get(row).asByteList())
-                );
-            } else {
-                data.addAll(
-                        interpolate(framesBackup.get(row).asByteList(), framesBackup.get(row).asByteList())
-                );
-            }
-
-        }
-        return data;
-    }
-
-    // неясно поведение интерполяции при фреймрейтах НЕ кратных 30
-    private List<Byte> interpolate(List<Byte> first, List<Byte> last) {
-        int interpolatingSteps = DEFAULT_FRAMERATE / frameRateSpinner.getValue();
-        int width = first.size();
-
-        List<Byte> result = new ArrayList<>(width * (interpolatingSteps + 1));
-
-        for (int i = 0; i < interpolatingSteps - 1; i++) {
-            if (smoothInterpolation.isSelected()) {
-                for (int w = 0; w < width; w++) {
-                    result.add(
-                            (byte) ((double) (last.get(w) - first.get(w)) / interpolatingSteps * i)
-                    );
-                }
-            } else {
-                result.addAll(first);
-            }
-        }
-
-        result.addAll(last);
-
-        return result;
-    }
 
     @FXML
     public void loadFile() {
@@ -226,8 +147,8 @@ public class MainController {
                 framesSpinner.getValueFactory().setValue(rows);
                 pixelSpinner.getValueFactory().setValue(maxPixels);
 
-                fileName = newFileName;
-                updateMainTitle();
+                file = newFileName;
+                updateHeader();
 
                 refresh();
 
@@ -242,23 +163,23 @@ public class MainController {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Открыть...");
 
-        return fileChooser.showOpenDialog(ISLedController.getMainStage());
+        return fileChooser.showOpenDialog(mainApp.getMainStage());
 
     }
 
     private File getFileNameForSave() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Сохранить как...");
-        fileChooser.setInitialFileName(fileName == null ? "data" : fileName.getName());
+        fileChooser.setInitialFileName(file == null ? "data" : file.getName());
         fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("ISLed проект для контроллера", "*.isd"));
-        return fileChooser.showSaveDialog(ISLedController.getMainStage());
+        return fileChooser.showSaveDialog(mainApp.getMainStage());
     }
 
     @FXML
     public void saveFileAs() {
         File saveAs = getFileNameForSave();
         if (saveAs == null) return;
-        fileName = saveAs;
+        file = saveAs;
         saveFile();
     }
 
@@ -268,14 +189,14 @@ public class MainController {
 
         disableColumnReordering();
         initializeRowHeader();
-        initializeEffects();
+        loadAndSetDefaultEffects();
 
         initializeSpinners();
         initializeColumns();
         initializePreviewZone();
         initializeBrightHandlers();
 
-        createNewFile();
+        mainApp.createNewProject();
 
         frameTableView.getSelectionModel().setCellSelectionEnabled(true);
         frameTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -285,12 +206,6 @@ public class MainController {
         frameTableView.setItems(frames);
     }
 
-    private void createNewFile() {
-        hasUnsavedChanges = false;
-
-        initializeDefaultData();
-        refresh();
-    }
 
     public void initializePreviewZone() {
         for (int i = 0; i < MAX_PIXELS; i++) {
@@ -344,7 +259,7 @@ public class MainController {
         for (TablePosition cell : getSelectedCells()) {
             frames.get(cell.getRow()).getPixel(cell.getColumn() - 1).setValue(val);
         }
-        hasUnsavedChanges = true;
+        project.setHasChanges(true);
         refresh();
     }
 
@@ -367,9 +282,7 @@ public class MainController {
         if (!cellsWithoutHeaders.isEmpty()) {
             brightField.disableProperty().setValue(false);
 
-            if (!isPreviewMode) {
-                setPreviewRow(getSelectedRow());
-            }
+            setPreviewRow(getSelectedRow());
             TablePosition position = cellsWithoutHeaders.get(0);
 
             IntegerProperty cellValue = frames.get(position.getRow()).getPixel(position.getColumn() - 1);
@@ -469,35 +382,29 @@ public class MainController {
         frameTableView.getSelectionModel().clearSelection();
     }
 
-    @FXML
-    public void setFrameLengthFromRate(Integer rate) {
-        int length = 1000 / rate;
-        frameLength.setText(String.valueOf(length));
-    }
 
     private void initializeSpinners() {
 
-        frameRateSpinner.setValueFactory(
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(MIN_FRAMERATE, MAX_FRAMERATE, DEFAULT_FRAMERATE)
-        );
-
-        frameRateSpinner.getEditor().textProperty().addListener((o, oldValue, newValue) -> {
-            try {
-                Integer rate = Integer.parseInt(newValue);
-                if (rate > MAX_FRAMERATE) {
-                    rate = MAX_FRAMERATE;
-                    frameRateSpinner.getEditor().textProperty().setValue(String.valueOf(rate));
-                } else if (rate < MIN_FRAMERATE) {
-                    rate = MIN_FRAMERATE;
-                    frameRateSpinner.getEditor().textProperty().setValue(String.valueOf(rate));
-                }
-                setFrameLengthFromRate(rate);
-            } catch (NumberFormatException nfe) {
-                frameRateSpinner.getEditor().textProperty().setValue(oldValue);
-            }
-
-        });
-
+//        frameLength.setValueFactory(
+//                new SpinnerValueFactory.IntegerSpinnerValueFactory(MIN_FRAMERATE, MAX_FRAMERATE, DEFAULT_FRAMERATE)
+//        );
+//
+//        frameLength.getEditor().textProperty().addListener((o, oldValue, newValue) -> {
+//            try {
+//                Integer rate = Integer.parseInt(newValue);
+//                if (rate > MAX_FRAMERATE) {
+//                    rate = MAX_FRAMERATE;
+//                    frameLength.getEditor().textProperty().setValue(String.valueOf(rate));
+//                } else if (rate < MIN_FRAMERATE) {
+//                    rate = MIN_FRAMERATE;
+//                    frameLength.getEditor().textProperty().setValue(String.valueOf(rate));
+//                }
+//            } catch (NumberFormatException nfe) {
+//                frameLength.getEditor().textProperty().setValue(oldValue);
+//            }
+//
+//        });
+//
 
         framesSpinner.setValueFactory(
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(MIN_FRAMES, MAX_FRAMES, INIT_FRAMES)
@@ -672,7 +579,7 @@ public class MainController {
         updateFramesCount();
     }
 
-    public void initializeEffects() {
+    public void loadAndSetDefaultEffects() {
         for (Effect effect : Effect.values()) {
             effectsSelector.getItems().add(effect.toString());
         }
@@ -688,14 +595,18 @@ public class MainController {
 
     @FXML
     public void exitHandler() {
-        System.exit(0);
+        if (project.hasUnsavedChanges()) {
+            if (continueAfterAskSaveFile())
+                mainApp.exit();
+        }
+
     }
 
     @FXML
     public void showAboutInfo() {
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.initOwner(ISLedController.getMainStage());
+        alert.initOwner(mainApp.getMainStage());
         alert.setTitle("О программе");
         alert.setHeaderText(null);
         alert.setContentText("Программа для создания программ для контроллера ISLed. ЗнакСвет (C) 2018");
@@ -731,6 +642,7 @@ public class MainController {
 
     }
 
-    public void setMainApp(ISLedController main) {
+    public void setMainApp(Controlit main) {
+        mainApp = main;
     }
 }
