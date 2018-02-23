@@ -1,0 +1,42 @@
+.fadeIn {
+    -fx-background-image: url("../images/fadeIn.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 100% 100%;
+    -fx-background-position: center center;
+}
+.fadeOut {
+    -fx-background-image: url("../images/fadeOut.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 100% 100%;
+    -fx-background-position: center center;
+}
+.blink {
+    -fx-background-image: url("../images/blink.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 100% 100%;
+    -fx-background-position: center center;
+}
+.mFadeIn {
+    -fx-background-image: url("../images/fadeIn.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 100% 100%;
+    -fx-background-position: center center;
+}
+.chaos {
+    -fx-background-image: url("../images/fadeIn.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 100% 100%;
+    -fx-background-position: center center;
+}
+.mFadeOut {
+    -fx-background-image: url("../images/fadeIn.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 100% 100%;
+    -fx-background-position: center center;
+}
+
+.header {
+    -fx-alignment: center;
+    -fx-background-color: /*-fx-box-border, -fx-inner-border,*/ -fx-body-color;
+    /*-fx-background-insets: 0, 0 1 1 0, 1 2 2 1;*/
+}

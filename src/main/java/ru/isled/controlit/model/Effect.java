@@ -1,25 +1,25 @@
 package ru.isled.controlit.model;
 
 import javafx.beans.property.IntegerProperty;
-import ru.isled.controlit.Constants;
-import ru.isled.controlit.view.MainView;
 
 import java.util.List;
 import java.util.Random;
 
-public enum Effect implements Constants {
+import static ru.isled.controlit.Constants.*;
+
+public enum Effect {
     Разгорание {
         @Override
         public void apply(List<IntegerProperty> list,
-                           Integer col,  Integer row,
-                           Integer startVal,  Integer endVal) {
+                          Integer col, Integer row,
+                          Integer startVal, Integer endVal) {
 
             if (startVal == null) startVal = MIN_BRIGHT;
             if (endVal == null) endVal = MAX_BRIGHT;
 
             int range = endVal - startVal;
             double step = row > 1 ? (double) range / (row - 1)
-                                    : range;
+                    : range;
 
             for (int r = 0; r < row; r++) {
                 for (int c = 0; c < col; c++) {
@@ -37,8 +37,8 @@ public enum Effect implements Constants {
     Угасание {
         @Override
         public void apply(List<IntegerProperty> list,
-                           Integer col,  Integer row,
-                           Integer startVal,  Integer endVal) {
+                          Integer col, Integer row,
+                          Integer startVal, Integer endVal) {
 
             if (startVal == null) startVal = MAX_BRIGHT;
             if (endVal == null) endVal = MIN_BRIGHT;
@@ -51,8 +51,8 @@ public enum Effect implements Constants {
     Случайно {
         @Override
         public void apply(List<IntegerProperty> list,
-                           Integer col,  Integer row,
-                           Integer min,  Integer max) {
+                          Integer col, Integer row,
+                          Integer min, Integer max) {
 
             if (min == null) min = MIN_BRIGHT;
             int range = max == null ? MAX_BRIGHT - min : max - min;
@@ -67,8 +67,8 @@ public enum Effect implements Constants {
     Блик;
 
     public void apply(List<IntegerProperty> list,
-                       Integer col,  Integer row,
-                       Integer startVal,  Integer endVal) {
+                      Integer col, Integer row,
+                      Integer startVal, Integer endVal) {
         throw new UnsupportedOperationException("This effect didn't ready yet... :(");
     }
 }

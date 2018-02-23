@@ -21,8 +21,7 @@ public class FileHelper {
         is.close();
 
         List<Byte> result  = new ArrayList<>();
-        for (byte b :
-                data) {
+        for (byte b : data) {
             result.add(b);
         }
         return result;
