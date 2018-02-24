@@ -9,9 +9,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
+import javafx.scene.text.Text;
 import ru.isled.controlit.Controlit;
 import ru.isled.controlit.model.*;
 
@@ -193,12 +195,14 @@ public class MainController {
     public void initializePreviewZone() {
         for (int i = 0; i < MAX_PIXELS; i++) {
             Shape pixel = new Circle(10, Color.rgb(0xFF, 0xFF, 0, 0));
+            Text pixelText = new Text("" + (i + 1));
+            StackPane stack = new StackPane(pixel, pixelText);
             pixel.setStroke(Color.BLACK);
             pixel.setStrokeWidth(0.7);
 
-            if (i > INIT_PIXELS - 1) pixel.setVisible(false);
+            if (i >= INIT_PIXELS) stack.setVisible(false);
             previewPixels.add(pixel);
-            previewBox.getChildren().add(pixel);
+            previewBox.getChildren().add(stack);
         }
     }
 
@@ -319,16 +323,14 @@ public class MainController {
                 pixel.fillProperty().setValue(
                         Color.rgb(0xFF, 0xFF, 0, ((double) frame.getInt(i) / MAX_BRIGHT)));
             } else {
-                pixel.fillProperty().setValue(
-                        null
-                );
+//                pixel.fillProperty().setValue(
+//                        null
+//                );
+
                 if (pixel.getStyleClass().isEmpty())
                     pixel.getStyleClass().add(PixelEffect.cssByIndex(frame.getInt(i)));
                 else
                     pixel.getStyleClass().set(0, PixelEffect.cssByIndex(frame.getInt(i)));
-//                String cssClass = ;
-
-//                pixel.fillProperty().setValue().getStyleClass().add(cssClass);
 
             }
         }
@@ -494,7 +496,7 @@ public class MainController {
             frameTableView.getColumns().get(i + SYS_COLS).visibleProperty().setValue(
                     i < selectedPixelNumber);
 
-            previewPixels.get(i).setVisible(
+            previewPixels.get(i).getParent().setVisible(
                     i < selectedPixelNumber);
         }
     }

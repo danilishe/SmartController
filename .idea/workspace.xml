@@ -1,24 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/ru/isled/controlit/images/base.png" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/ru/isled/controlit/images/blink.gif" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/ru/isled/controlit/images/chaos.gif" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/ru/isled/controlit/images/chaos.png" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/ru/isled/controlit/images/fadeIn.gif" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/ru/isled/controlit/images/fadeOut.gif" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/ru/isled/controlit/images/mFadeIn.gif" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/ru/isled/controlit/images/mFadeIn.png" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/ru/isled/controlit/images/mFadeOut.gif" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/ru/isled/controlit/images/mFadeOut.png" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/isled/controlit/Constants.java" afterPath="$PROJECT_DIR$/src/main/java/ru/isled/controlit/Constants.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/isled/controlit/model/LedFrameTableCell.java" afterPath="$PROJECT_DIR$/src/main/java/ru/isled/controlit/model/LedFrameTableCell.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/isled/controlit/model/PixelEffect.java" afterPath="$PROJECT_DIR$/src/main/java/ru/isled/controlit/model/PixelEffect.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/isled/controlit/view/MainController.java" afterPath="$PROJECT_DIR$/src/main/java/ru/isled/controlit/view/MainController.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/ru/isled/controlit/css/custom.css" afterPath="$PROJECT_DIR$/src/main/resources/ru/isled/controlit/css/custom.css" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/ru/isled/controlit/view/main.fxml" afterPath="$PROJECT_DIR$/src/main/resources/ru/isled/controlit/view/main.fxml" />
+    <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="Добавил нумерацию пикселей на панели предпросмотра">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/description.html" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_alibaba_fastjson_1_2_44.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_zenjava_javafx_maven_plugin_8_8_3.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_maven_maven_aether_provider_3_0.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_maven_maven_artifact_3_0.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_maven_maven_core_3_0.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_maven_maven_model_3_0.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_maven_maven_model_builder_3_0.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_maven_maven_plugin_api_3_0.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_maven_maven_repository_metadata_3_0.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_maven_maven_settings_3_0.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_maven_maven_settings_builder_3_0.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_codehaus_plexus_plexus_classworlds_2_2_3.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_codehaus_plexus_plexus_component_annotations_1_5_5.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_codehaus_plexus_plexus_interpolation_1_14.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_codehaus_plexus_plexus_utils_2_0_4.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_sonatype_aether_aether_api_1_7.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_sonatype_aether_aether_impl_1_7.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_sonatype_aether_aether_spi_1_7.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_sonatype_aether_aether_util_1_7.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_sonatype_plexus_plexus_cipher_1_4.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_sonatype_plexus_plexus_sec_dispatcher_1_3.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_sonatype_sisu_sisu_guice_noaop_2_1_7.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_sonatype_sisu_sisu_inject_bean_1_4_2.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_sonatype_sisu_sisu_inject_plexus_1_4_2.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="" />
     </list>
     <ignored path="JavaFxApplication.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -80,37 +97,37 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="MainController.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="MainController.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/ru/isled/controlit/view/MainController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="250">
-              <caret line="317" column="46" lean-forward="true" selection-start-line="317" selection-start-column="46" selection-end-line="317" selection-end-column="46" />
+            <state relative-caret-position="431">
+              <caret line="622" column="35" lean-forward="false" selection-start-line="622" selection-start-column="35" selection-end-line="622" selection-end-column="35" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#2014#2015#0" expanded="true" />
-                <element signature="e#2078#2079#0" expanded="true" />
-                <element signature="e#2124#2125#0" expanded="true" />
-                <element signature="e#2186#2187#0" expanded="true" />
-                <element signature="e#2587#2588#0" expanded="true" />
-                <element signature="e#2658#2659#0" expanded="true" />
-                <element signature="e#10300#10301#0" expanded="true" />
-                <element signature="e#10342#10343#0" expanded="true" />
-                <element signature="e#10391#10392#0" expanded="true" />
-                <element signature="e#10434#10435#0" expanded="true" />
-                <element signature="e#10482#10483#0" expanded="true" />
-                <element signature="e#10524#10525#0" expanded="true" />
-                <element signature="e#10573#10574#0" expanded="true" />
-                <element signature="e#10616#10617#0" expanded="true" />
-                <element signature="e#11765#11766#0" expanded="true" />
-                <element signature="e#11832#11833#0" expanded="true" />
+                <element signature="e#2083#2084#0" expanded="true" />
+                <element signature="e#2147#2148#0" expanded="true" />
+                <element signature="e#2193#2194#0" expanded="true" />
+                <element signature="e#2255#2256#0" expanded="true" />
+                <element signature="e#2656#2657#0" expanded="true" />
+                <element signature="e#2727#2728#0" expanded="true" />
+                <element signature="e#10369#10370#0" expanded="true" />
+                <element signature="e#10411#10412#0" expanded="true" />
+                <element signature="e#10460#10461#0" expanded="true" />
+                <element signature="e#10503#10504#0" expanded="true" />
+                <element signature="e#10551#10552#0" expanded="true" />
+                <element signature="e#10593#10594#0" expanded="true" />
+                <element signature="e#10642#10643#0" expanded="true" />
+                <element signature="e#10685#10686#0" expanded="true" />
+                <element signature="e#11834#11835#0" expanded="true" />
+                <element signature="e#11901#11902#0" expanded="true" />
                 <element signature="method#loadAndSetDefaultEffects#0;class#MainController#0" expanded="false" />
                 <element signature="method#exitHandler#0;class#MainController#0" expanded="false" />
-                <element signature="e#17970#17971#0" expanded="true" />
-                <element signature="e#18009#18010#0" expanded="true" />
-                <element signature="e#19386#19387#0" expanded="true" />
-                <element signature="e#19433#19434#0" expanded="true" />
-                <element signature="e#19479#19480#0" expanded="true" />
-                <element signature="e#19509#19510#0" expanded="true" />
+                <element signature="e#18051#18052#0" expanded="true" />
+                <element signature="e#18090#18091#0" expanded="true" />
+                <element signature="e#19467#19468#0" expanded="true" />
+                <element signature="e#19514#19515#0" expanded="true" />
+                <element signature="e#19560#19561#0" expanded="true" />
+                <element signature="e#19590#19591#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -200,11 +217,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="custom.css" pinned="false" current-in-tab="true">
+      <file leaf-file-name="custom.css" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/resources/ru/isled/controlit/css/custom.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="17" column="34" lean-forward="false" selection-start-line="17" selection-start-column="34" selection-end-line="17" selection-end-column="34" />
+            <state relative-caret-position="705">
+              <caret line="56" column="26" lean-forward="true" selection-start-line="56" selection-start-column="26" selection-end-line="56" selection-end-column="26" />
               <folding />
             </state>
           </provider>
@@ -342,8 +359,8 @@
         <option value="$PROJECT_DIR$/src/main/java/ru/isled/controlit/Controlit.java" />
         <option value="$PROJECT_DIR$/src/main/java/ru/isled/controlit/Constants.java" />
         <option value="$PROJECT_DIR$/src/main/java/ru/isled/controlit/model/LedFrameTableCell.java" />
-        <option value="$PROJECT_DIR$/src/main/java/ru/isled/controlit/view/MainController.java" />
         <option value="$PROJECT_DIR$/src/main/resources/ru/isled/controlit/css/custom.css" />
+        <option value="$PROJECT_DIR$/src/main/java/ru/isled/controlit/view/MainController.java" />
       </list>
     </option>
   </component>
@@ -482,125 +499,7 @@
             <path>
               <item name="Controller" type="b2602c69:ProjectViewProjectNode" />
               <item name="Controller" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Controller" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Controller" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Controller" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Controller" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Controller" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Controller" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="ru" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Controller" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Controller" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="ru" type="462c0819:PsiDirectoryNode" />
-              <item name="isled" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Controller" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Controller" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="ru" type="462c0819:PsiDirectoryNode" />
-              <item name="isled" type="462c0819:PsiDirectoryNode" />
-              <item name="controlit" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Controller" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Controller" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="ru" type="462c0819:PsiDirectoryNode" />
-              <item name="isled" type="462c0819:PsiDirectoryNode" />
-              <item name="controlit" type="462c0819:PsiDirectoryNode" />
-              <item name="model" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Controller" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Controller" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="ru" type="462c0819:PsiDirectoryNode" />
-              <item name="isled" type="462c0819:PsiDirectoryNode" />
-              <item name="controlit" type="462c0819:PsiDirectoryNode" />
-              <item name="view" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Controller" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Controller" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Controller" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Controller" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="ru" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Controller" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Controller" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="ru" type="462c0819:PsiDirectoryNode" />
-              <item name="isled" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Controller" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Controller" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="ru" type="462c0819:PsiDirectoryNode" />
-              <item name="isled" type="462c0819:PsiDirectoryNode" />
-              <item name="controlit" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Controller" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Controller" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="ru" type="462c0819:PsiDirectoryNode" />
-              <item name="isled" type="462c0819:PsiDirectoryNode" />
-              <item name="controlit" type="462c0819:PsiDirectoryNode" />
-              <item name="css" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Controller" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Controller" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="ru" type="462c0819:PsiDirectoryNode" />
-              <item name="isled" type="462c0819:PsiDirectoryNode" />
-              <item name="controlit" type="462c0819:PsiDirectoryNode" />
-              <item name="images" type="462c0819:PsiDirectoryNode" />
+              <item name=".idea" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -895,7 +794,7 @@
       <updated>1359379246138</updated>
       <workItem from="1359379250712" duration="1302000" />
       <workItem from="1519389049710" duration="22098000" />
-      <workItem from="1519451329106" duration="13807000" />
+      <workItem from="1519451329106" duration="15044000" />
     </task>
     <task id="LOCAL-00001" summary="Начальный коммит. Множество глюков: не доделано корректно сохранение/восстановление, нет полного набора эффектов, нет обработки длины кадра, множественные глюки при отображении. Нет реализации предпросмотра.">
       <created>1518455217267</created>
@@ -932,11 +831,25 @@
       <option name="project" value="LOCAL" />
       <updated>1519405278182</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Добавил отображение предпросмотровой линейки в виде анимации.">
+      <created>1519471299982</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1519471299982</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Добавил нумерацию пикселей на панели предпросмотра">
+      <created>1519472044530</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1519472044530</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="37207000" />
+    <option name="totallyTimeSpent" value="38444000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1039,7 +952,9 @@
     <option name="INCLUDE_TEXT_INTO_SHELF" value="false" />
     <MESSAGE value="Начальный коммит. Множество глюков: не доделано корректно сохранение/восстановление, нет полного набора эффектов, нет обработки длины кадра, множественные глюки при отображении. Нет реализации предпросмотра." />
     <MESSAGE value="Стабильная версия, пофиксены основные глюки. Начинаю доработку пиксельных эффектов и их графического отображения" />
-    <option name="LAST_COMMIT_MESSAGE" value="Стабильная версия, пофиксены основные глюки. Начинаю доработку пиксельных эффектов и их графического отображения" />
+    <MESSAGE value="Добавил отображение предпросмотровой линейки в виде анимации." />
+    <MESSAGE value="Добавил нумерацию пикселей на панели предпросмотра" />
+    <option name="LAST_COMMIT_MESSAGE" value="Добавил нумерацию пикселей на панели предпросмотра" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1055,12 +970,6 @@
           <line>28</line>
           <properties />
           <option name="timeStamp" value="73" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/ru/isled/controlit/view/MainController.java</url>
-          <line>330</line>
-          <properties />
-          <option name="timeStamp" value="82" />
         </line-breakpoint>
         <breakpoint type="java-exception">
           <properties class="java.lang.IndexOutOfBoundsException" package="java.lang" />
@@ -1477,40 +1386,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/ru/isled/controlit/view/MainController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="250">
-          <caret line="317" column="46" lean-forward="true" selection-start-line="317" selection-start-column="46" selection-end-line="317" selection-end-column="46" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#2014#2015#0" expanded="true" />
-            <element signature="e#2078#2079#0" expanded="true" />
-            <element signature="e#2124#2125#0" expanded="true" />
-            <element signature="e#2186#2187#0" expanded="true" />
-            <element signature="e#2587#2588#0" expanded="true" />
-            <element signature="e#2658#2659#0" expanded="true" />
-            <element signature="e#10300#10301#0" expanded="true" />
-            <element signature="e#10342#10343#0" expanded="true" />
-            <element signature="e#10391#10392#0" expanded="true" />
-            <element signature="e#10434#10435#0" expanded="true" />
-            <element signature="e#10482#10483#0" expanded="true" />
-            <element signature="e#10524#10525#0" expanded="true" />
-            <element signature="e#10573#10574#0" expanded="true" />
-            <element signature="e#10616#10617#0" expanded="true" />
-            <element signature="e#11765#11766#0" expanded="true" />
-            <element signature="e#11832#11833#0" expanded="true" />
-            <element signature="method#loadAndSetDefaultEffects#0;class#MainController#0" expanded="false" />
-            <element signature="method#exitHandler#0;class#MainController#0" expanded="false" />
-            <element signature="e#17970#17971#0" expanded="true" />
-            <element signature="e#18009#18010#0" expanded="true" />
-            <element signature="e#19386#19387#0" expanded="true" />
-            <element signature="e#19433#19434#0" expanded="true" />
-            <element signature="e#19479#19480#0" expanded="true" />
-            <element signature="e#19509#19510#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/ru/isled/controlit/Constants.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="252">
@@ -1521,9 +1396,43 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/ru/isled/controlit/css/custom.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="17" column="34" lean-forward="false" selection-start-line="17" selection-start-column="34" selection-end-line="17" selection-end-column="34" />
+        <state relative-caret-position="705">
+          <caret line="56" column="26" lean-forward="true" selection-start-line="56" selection-start-column="26" selection-end-line="56" selection-end-column="26" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/ru/isled/controlit/view/MainController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="431">
+          <caret line="622" column="35" lean-forward="false" selection-start-line="622" selection-start-column="35" selection-end-line="622" selection-end-column="35" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2083#2084#0" expanded="true" />
+            <element signature="e#2147#2148#0" expanded="true" />
+            <element signature="e#2193#2194#0" expanded="true" />
+            <element signature="e#2255#2256#0" expanded="true" />
+            <element signature="e#2656#2657#0" expanded="true" />
+            <element signature="e#2727#2728#0" expanded="true" />
+            <element signature="e#10369#10370#0" expanded="true" />
+            <element signature="e#10411#10412#0" expanded="true" />
+            <element signature="e#10460#10461#0" expanded="true" />
+            <element signature="e#10503#10504#0" expanded="true" />
+            <element signature="e#10551#10552#0" expanded="true" />
+            <element signature="e#10593#10594#0" expanded="true" />
+            <element signature="e#10642#10643#0" expanded="true" />
+            <element signature="e#10685#10686#0" expanded="true" />
+            <element signature="e#11834#11835#0" expanded="true" />
+            <element signature="e#11901#11902#0" expanded="true" />
+            <element signature="method#loadAndSetDefaultEffects#0;class#MainController#0" expanded="false" />
+            <element signature="method#exitHandler#0;class#MainController#0" expanded="false" />
+            <element signature="e#18051#18052#0" expanded="true" />
+            <element signature="e#18090#18091#0" expanded="true" />
+            <element signature="e#19467#19468#0" expanded="true" />
+            <element signature="e#19514#19515#0" expanded="true" />
+            <element signature="e#19560#19561#0" expanded="true" />
+            <element signature="e#19590#19591#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
