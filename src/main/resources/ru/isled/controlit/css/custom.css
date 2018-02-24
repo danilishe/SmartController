@@ -53,8 +53,11 @@
     -fx-background-position: center center;
 }
 
-.header {
+.header/*, .table-cell:hover:selected > .header */{
     -fx-alignment: center;
-    -fx-background-color: /*-fx-box-border, -fx-inner-border,*/ -fx-body-color;
+    -fx-background-color: -fx-box-border, -fx-inner-border/*, -fx-body-color*/;
+    -fx-font-weight: bold;
+    -fx-text-fill: black;
+    /*-fx-font-size: 14pt;*/
     /*-fx-background-insets: 0, 0 1 1 0, 1 2 2 1;*/
 }

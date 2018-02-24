@@ -113,7 +113,7 @@ public class MainController {
     public void newFile() {
         if (project.hasUnsavedChanges())
             if (!continueAfterAskSaveFile()) {
-               return;
+                return;
             }
         mainApp.createNewProject();
     }
@@ -167,6 +167,8 @@ public class MainController {
         initializeRowHeader();
         loadAndSetDefaultEffects();
 
+        initZoomSlider();
+
         initSpinners();
         initializeColumns();
         initializePreviewZone();
@@ -180,6 +182,15 @@ public class MainController {
 //        frameTableView.addEventHandler(EventType.ROOT, x -> handleCellSelection());
         frameTableView.addEventHandler(MouseEvent.MOUSE_CLICKED, x -> handleCellSelection());
         frameTableView.setItems(frames);
+    }
+
+    private void initZoomSlider() {
+        zoomSlider.setMin(MIN_COL_WIDTH);
+        zoomSlider.setMax(MAX_COL_WIDTH);
+        zoomSlider.setValue(INIT_COL_WIDTH);
+        zoomSlider.setBlockIncrement((MAX_BRIGHT - MIN_BRIGHT) / 10);
+        zoomSlider.valueProperty().addListener((o, ov, nv) -> setColumnsWidth(nv.doubleValue()));
+//                IntegerSpinnerValueFactory(MIN_PIXELS, MAX_PIXELS, INIT_PIXELS)
     }
 
 
@@ -238,6 +249,9 @@ public class MainController {
     }
 
     private void handleCellSelection() {
+
+        frameTableView.requestFocus();
+
         selectAllRowsWhereHeaderIsSelected();
 
         List<TablePosition> selectedDataCells = getSelectedDataCells();
@@ -364,7 +378,6 @@ public class MainController {
 
         clearSelection();
 
-        //fixme
         frameTableView.getSelectionModel().selectRange(0, colsList.get(SYS_COLS),
                 rows - 1, colsList.get(lastVisibleColNumber + SYS_COLS - 1));
     }
@@ -531,9 +544,10 @@ public class MainController {
 
 
     private void setDefaultColumnProperties(TableColumn<LedFrame, Integer> column) {
-        column.setMaxWidth(50);
-        column.setPrefWidth(50);
-        column.setMinWidth(50);
+//        column.setMaxWidth(50);
+        column.setPrefWidth(INIT_COL_WIDTH);
+//        column.setMinWidth(50);
+        column.setResizable(false);
         column.setSortable(false);
         column.setEditable(false);
         column.setStyle(DEFAULT_CELL_STYLE);
@@ -617,5 +631,14 @@ public class MainController {
         this.project = project;
         frames.clear();
         updateFramesCount();
+    }
+
+    private void setColumnsWidth(double columnsWidth) {
+        frameTableView.getColumns().stream()
+                .skip(SYS_COLS).forEach(col -> {
+//            col.setMinWidth(columnsWidth);
+            col.setPrefWidth(columnsWidth);
+//            col.setMaxWidth(columnsWidth);
+        });
     }
 }

@@ -18,4 +18,7 @@ public interface Constants {
     int DEFAULT_FRAMES_COUNT = 10;
     int SYS_COLS = 3;
     String DEFAULT_CELL_STYLE = "-fx-alignment: CENTER;";
+    int INIT_COL_WIDTH = 40;
+    int MIN_COL_WIDTH = 20;
+    int MAX_COL_WIDTH = 80;
 }

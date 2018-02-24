@@ -65,54 +65,43 @@
                         <Button accessibleHelp="Случайная яркость пиксела" accessibleText="Случайно" mnemonicParsing="false" onAction="#setRandomBright" prefWidth="500.0" text="Случайно" />
                         <Button fx:id="maxBright" accessibleHelp="Максимальная яркость пиксела" accessibleText="Максимальная яркость" mnemonicParsing="false" onAction="#setMaxBright" prefWidth="500.0" text="255" />
                     </HBox>
-               <HBox layoutX="20.0" layoutY="50.0" spacing="5.0">
-                  <children>
-                     <Button accessibleHelp="Плавное разгорание пиксела" accessibleText="Разгорание" mnemonicParsing="false" onAction="#setFadeInEffect" prefWidth="500.0" text="Разгорание" />
-                     <Button accessibleHelp="Мерцание пиксела от минимальной до максимальной яркости" accessibleText="Мерцание" mnemonicParsing="false" onAction="#setBlinkEffect" prefWidth="500.0" text="Мерцание" />
-                     <Button fx:id="maxBright1" accessibleHelp="Медленное уменьшение яркости пиксела" accessibleText="Угасани" mnemonicParsing="false" onAction="#setFadeOutEffect" prefWidth="500.0" text="Угасание" />
-                  </children>
-               </HBox>
-               <HBox spacing="5.0">
-                  <children>
-                     <Button accessibleHelp="Мерцающее увеличение яркости пиксела" accessibleText="Мерцающее разгорание" mnemonicParsing="false" onAction="#setBlinkingFadeInEffect" prefWidth="500.0" text="М. разгорание" />
-                     <Button accessibleHelp="Хаотичное изменение яркости пиксела" accessibleText="Хаос" mnemonicParsing="false" onAction="#setChaosEffect" prefWidth="500.0" text="Хаос" />
-                     <Button fx:id="maxBright11" accessibleHelp="Мерцающее уменьшение яркости пиксела" accessibleText="Мерцающее угасание" mnemonicParsing="false" onAction="#setBlinkingFadeOutEffect" prefWidth="500.0" text="М. угасание" />
-                  </children>
-               </HBox>
-               <HBox alignment="CENTER_LEFT" layoutX="20.0" layoutY="80.0" spacing="5.0">
-                  <children>
-                            <Label prefHeight="17.0" prefWidth="99.0" text="Длина кадра, мс" />
-                            <Spinner fx:id="frameLengthSpinner" editable="true" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="125.0" />
-                  </children>
-               </HBox>
-               <HBox alignment="CENTER_LEFT" layoutX="20.0" layoutY="110.0" spacing="5.0">
-                  <children>
-                     <Label prefHeight="17.0" prefWidth="99.0" text="Повторов кадра" />
-                     <Spinner fx:id="frameCyclesSpinner" editable="true" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="125.0" />
-                  </children>
-               </HBox>
+                    <HBox layoutX="20.0" layoutY="50.0" spacing="5.0">
+                        <Button accessibleHelp="Плавное разгорание пиксела" accessibleText="Разгорание" mnemonicParsing="false" onAction="#setFadeInEffect" prefWidth="500.0" text="Разгорание" />
+                        <Button accessibleHelp="Мерцание пиксела от минимальной до максимальной яркости" accessibleText="Мерцание" mnemonicParsing="false" onAction="#setBlinkEffect" prefWidth="500.0" text="Мерцание" />
+                        <Button accessibleHelp="Медленное уменьшение яркости пиксела" accessibleText="Угасани" mnemonicParsing="false" onAction="#setFadeOutEffect" prefWidth="500.0" text="Угасание" />
+                    </HBox>
+                    <HBox spacing="5.0">
+                        <Button accessibleHelp="Мерцающее увеличение яркости пиксела" accessibleText="Мерцающее разгорание" mnemonicParsing="false" onAction="#setBlinkingFadeInEffect" prefWidth="500.0" text="М. разгорание" />
+                        <Button accessibleHelp="Хаотичное изменение яркости пиксела" accessibleText="Хаос" mnemonicParsing="false" onAction="#setChaosEffect" prefWidth="500.0" text="Хаос" />
+                        <Button accessibleHelp="Мерцающее уменьшение яркости пиксела" accessibleText="Мерцающее угасание" mnemonicParsing="false" onAction="#setBlinkingFadeOutEffect" prefWidth="500.0" text="М. угасание" />
+                    </HBox>
+                    <HBox alignment="CENTER_LEFT" layoutX="20.0" layoutY="80.0" spacing="5.0">
+                        <Label prefHeight="17.0" prefWidth="99.0" text="Длина кадра, мс" />
+                        <Spinner fx:id="frameLengthSpinner" editable="true" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="125.0" />
+                    </HBox>
+                    <HBox alignment="CENTER_LEFT" layoutX="20.0" layoutY="110.0" spacing="5.0">
+                        <Label prefHeight="17.0" prefWidth="99.0" text="Повторов кадра" />
+                        <Spinner fx:id="frameCyclesSpinner" editable="true" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="125.0" />
+                    </HBox>
                 </VBox>
             </TitledPane>
             <TitledPane text="Редактирование">
-                <FlowPane hgap="5.0" vgap="10.0">
-                    <HBox spacing="5.0">
-                        <Button mnemonicParsing="false" onAction="#clearSelection" text="Снять выделение" />
-                        <Button mnemonicParsing="false" onAction="#selectAll" text="Выделить всё" />
-                    </HBox>
-                    <VBox maxWidth="300.0" pickOnBounds="false" spacing="5.0">
-                        <ChoiceBox fx:id="effectsSelector" minWidth="200.0" />
-                        <Button alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#applyEffectHandler" text="Применить эффект">
-                            <opaqueInsets>
-                                <Insets />
-                            </opaqueInsets>
-                     <padding>
-                        <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
-                     </padding>
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                        </Button>
-                    </VBox>
+                <FlowPane columnHalignment="CENTER" hgap="5.0" minWidth="-Infinity" prefWidth="250.0" prefWrapLength="100.0" vgap="10.0">
+                     <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#clearSelection" text="Снять выделение" />
+                     <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#selectAll" text="Выделить всё">
+                  <opaqueInsets>
+                     <Insets />
+                  </opaqueInsets>
+               </Button>
+                     <ChoiceBox fx:id="effectsSelector" minWidth="200.0" />
+                     <Button alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#applyEffectHandler" text="Применить эффект">
+                         <opaqueInsets>
+                             <Insets />
+                         </opaqueInsets>
+                  <padding>
+                     <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
+                  </padding>
+                     </Button>
                 </FlowPane>
             </TitledPane>
             <TitledPane text="Отображение">
@@ -120,12 +109,10 @@
                <Label text="В ячейках:" />
                     <CheckBox fx:id="showDigits" mnemonicParsing="false" onMouseReleased="#refresh" selected="true" text="Число" />
                     <CheckBox fx:id="showBright" mnemonicParsing="false" onMouseReleased="#refresh" text="Яркость" />
-               <HBox spacing="5.0">
-                  <children>
-                     <Label text="Масштаб" />
-                     <Slider fx:id="zoomSlider" />
-                  </children>
-               </HBox>
+                    <HBox spacing="5.0">
+                        <Label text="Масштаб" />
+                        <Slider fx:id="zoomSlider" />
+                    </HBox>
                 </FlowPane>
             </TitledPane>
             <TitledPane text="Настройки программы">
