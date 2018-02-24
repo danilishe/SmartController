@@ -56,10 +56,10 @@ public class MainController {
     public CheckBox showDigits;
     @FXML
     public CheckBox showBright;
-//    @FXML
-//    public Button setFadeInEffect;
-//    @FXML
-//    public Button setBlinkEffect;
+    @FXML
+    public Spinner<Integer> frameLengthSpinner;
+    @FXML
+    public Spinner<Integer> frameCyclesSpinner;
 //    @FXML
 //    public Button setFadeOutEffect;
 //    @FXML
@@ -71,35 +71,43 @@ public class MainController {
 
     @FXML
     public void setFadeInEffect() {
-        setSelectedCells(PixelEffect.РазгораниеКод);
+        setSelectedCells(PixelEffect.Разгорание.index());
     }
 
     @FXML
     public void setBlinkEffect() {
-        setSelectedCells(PixelEffect.МерцаниеКод);
+        setSelectedCells(PixelEffect.Мерцание.index());
     }
 
     @FXML
     public void setFadeOutEffect() {
-        setSelectedCells(PixelEffect.УгасаниеКод);
+        setSelectedCells(PixelEffect.Угасание.index());
 
     }
 
     @FXML
     public void setBlinkingFadeInEffect() {
-        setSelectedCells(PixelEffect.МерцающееРазгораниеКод);
+        setSelectedCells(PixelEffect.МерцающееРазгорание.index());
 
     }
 
     @FXML
     public void setChaosEffect() {
-        setSelectedCells(PixelEffect.ХаосКод);
+        setSelectedCells(PixelEffect.Хаос.index());
 
     }
 
     @FXML
     public void setBlinkingFadeOutEffect() {
-        setSelectedCells(PixelEffect.МерцающееУгасаниеКод);
+        setSelectedCells(PixelEffect.МерцающееУгасание.index());
+    }
+
+
+    @FXML
+    private void refresh() {
+        // todo придумать более памятеефективный способ обновлнеия внешнего вида ячеек
+        frameTableView.refresh();
+//        System.gc();
     }
 
     private List<Shape> previewPixels = new ArrayList<>(MAX_PIXELS);
@@ -141,18 +149,13 @@ public class MainController {
 
     }
 
-    public void updateHeader() {
-        mainApp.updateHeader();
-    }
-
-
     @FXML
     public void loadFile() {
         if (project.hasUnsavedChanges())
             if (!continueAfterAskSaveFile()) return;
         File fileForLoad = Dialogs.loadFile();
-        if (fileForLoad == null) return;
-        else mainApp.loadProject(fileForLoad);
+        if (fileForLoad != null)
+            mainApp.loadProject(fileForLoad);
     }
 
 
@@ -181,10 +184,8 @@ public class MainController {
 
         frameTableView.getSelectionModel().setCellSelectionEnabled(true);
         frameTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        frameTableView.addEventHandler(MouseEvent.MOUSE_CLICKED, x -> {
-                        handleCellSelection();
-                }
-        );
+//        frameTableView.addEventHandler(EventType.ROOT, x -> handleCellSelection());
+        frameTableView.addEventHandler(MouseEvent.MOUSE_CLICKED, x -> handleCellSelection());
         frameTableView.setItems(frames);
     }
 
@@ -244,7 +245,8 @@ public class MainController {
         List<TablePosition> selectedDataCells = getSelectedDataCells();
 
         if (!selectedDataCells.isEmpty()) {
-            brightField.disableProperty().setValue(false);
+
+//            setFrameHandlersDisabled(false);
 
             redrawPreviewRow();
 
@@ -252,17 +254,25 @@ public class MainController {
 
             int cellValue = frames.get(position.getRow()).getInt(position.getColumn() - SYS_COLS);
 
-            if (selectedDataCells.size() == 1)
+            if (selectedDataCells.size() == 1) {
+
                 if (cellValue <= MAX_BRIGHT) {
                     brightField.textProperty().setValue("" + cellValue);
                 } else {
                     brightField.textProperty().setValue(PixelEffect.byIndex(cellValue).name());
                 }
-
-        } else {
+            } else {
 //            brightField.textProperty().setValue("");
-            brightField.disableProperty().setValue(true);
+//                setFrameHandlersDisabled(true);
+            }
         }
+    }
+
+    private void setFrameHandlersDisabled(boolean b) {
+        brightField.setDisable(b);
+        brightSlider.setDisable(b);
+        frameLengthSpinner.setDisable(b);
+        frameCyclesSpinner.setDisable(b);
     }
 
     private void selectAllRowsWhereHeaderIsSelected() {
@@ -299,19 +309,29 @@ public class MainController {
 
         LedFrame frame = frames.get(row);
         for (int i = 0; i < pixelSpinner.getValue(); i++) {
+
+            Shape pixel = previewPixels.get(i);
+
+            pixel.getStyleClass().clear();
+
             if (frame.getInt(i) <= MAX_BRIGHT) {
-                previewPixels.get(i).fillProperty().setValue(
+                pixel.getStyleClass().clear();
+                pixel.fillProperty().setValue(
                         Color.rgb(0xFF, 0xFF, 0, ((double) frame.getInt(i) / MAX_BRIGHT)));
             } else {
-                setPreviewShapeFill(i, frame.getInt(i));
+                pixel.fillProperty().setValue(
+                        null
+                );
+                if (pixel.getStyleClass().isEmpty())
+                    pixel.getStyleClass().add(PixelEffect.cssByIndex(frame.getInt(i)));
+                else
+                    pixel.getStyleClass().set(0, PixelEffect.cssByIndex(frame.getInt(i)));
+//                String cssClass = ;
+
+//                pixel.fillProperty().setValue().getStyleClass().add(cssClass);
 
             }
         }
-    }
-
-    private void setPreviewShapeFill(int num, int effectIndex) {
-        previewPixels.get(num).fillProperty().setValue(
-                Color.rgb(0xFF, 0x33, 0, ((double) effectIndex % MAX_BRIGHT / MAX_BRIGHT)));
     }
 
 
@@ -514,7 +534,7 @@ public class MainController {
             if (i >= INIT_PIXELS) column.visibleProperty().setValue(false);
             final int in = i;
 
-            column.setCellFactory(cell -> new LedFrameTableCell());
+            column.setCellFactory(cell -> new LedFrameTableCell(showDigits.selectedProperty(), showBright.selectedProperty()));
 
             column.setCellValueFactory(cellData -> cellData.getValue().get(in));
 
@@ -522,13 +542,14 @@ public class MainController {
         }
     }
 
+
     private void setDefaultColumnProperties(TableColumn<LedFrame, Integer> column) {
         column.setMaxWidth(50);
         column.setPrefWidth(50);
         column.setMinWidth(50);
         column.setSortable(false);
         column.setEditable(false);
-        column.setStyle("-fx-alignment: CENTER;");
+        column.setStyle(DEFAULT_CELL_STYLE);
     }
 
     private void loadAndSetDefaultEffects() {
@@ -571,11 +592,7 @@ public class MainController {
             int rows = lastCell.getRow() - firstCell.getRow() + 1;
 
 
-            List<IntegerProperty> values = cells.stream()
-                    .map(c -> frames.get(
-                            c.getRow()).getProperty(
-                            c.getColumn() - SYS_COLS))
-                    .collect(Collectors.toList());
+            List<IntegerProperty> values = getValuesList(cells);
 
 
             String selectedEffect = effectsSelector.getValue();
@@ -591,6 +608,14 @@ public class MainController {
 
         }
 //        redrawPreviewRow();
+    }
+
+    private List<IntegerProperty> getValuesList(List<TablePosition> cells) {
+        return cells.stream()
+                .map(c -> frames.get(
+                        c.getRow()).getProperty(
+                        c.getColumn() - SYS_COLS))
+                .collect(Collectors.toList());
     }
 
     private void redrawPreviewRow() {

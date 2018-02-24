@@ -1,37 +1,55 @@
 .fadeIn {
+    -fx-fill: image-pattern("/ru/isled/controlit/images/fadeIn.gif");
     -fx-background-image: url("../images/fadeIn.png");
     -fx-background-repeat: stretch;
     -fx-background-size: 100% 100%;
     -fx-background-position: center center;
 }
+
 .fadeOut {
+    -fx-fill: image-pattern("/ru/isled/controlit/images/fadeOut.gif");
     -fx-background-image: url("../images/fadeOut.png");
     -fx-background-repeat: stretch;
     -fx-background-size: 100% 100%;
     -fx-background-position: center center;
 }
+
 .blink {
+    -fx-fill: image-pattern("/ru/isled/controlit/images/blink.gif");
     -fx-background-image: url("../images/blink.png");
     -fx-background-repeat: stretch;
     -fx-background-size: 100% 100%;
     -fx-background-position: center center;
 }
+
 .mFadeIn {
-    -fx-background-image: url("../images/fadeIn.png");
+    -fx-fill: image-pattern("/ru/isled/controlit/images/mFadeIn.gif");
+    -fx-background-image: url("../images/mFadeIn.png");
     -fx-background-repeat: stretch;
     -fx-background-size: 100% 100%;
     -fx-background-position: center center;
 }
+
 .chaos {
-    -fx-background-image: url("../images/fadeIn.png");
+    -fx-fill: image-pattern("/ru/isled/controlit/images/chaos.gif");
+    -fx-background-image: url("../images/chaos.png");
     -fx-background-repeat: stretch;
     -fx-background-size: 100% 100%;
     -fx-background-position: center center;
 }
+
 .mFadeOut {
-    -fx-background-image: url("../images/fadeIn.png");
+    -fx-fill: image-pattern("/ru/isled/controlit/images/mFadeOut.gif");
+    -fx-background-image: url("../images/mFadeOut.png");
     -fx-background-repeat: stretch;
     -fx-background-size: 100% 100%;
+    -fx-background-position: center center;
+}
+
+.base {
+    -fx-background-image: url("../images/base.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 0% 100%;
     -fx-background-position: center center;
 }
 

@@ -17,4 +17,5 @@ public interface Constants {
     String DEFAULT_WORK_DIRECTORY = System.getProperty("user.home") + "/Documents/";
     int DEFAULT_FRAMES_COUNT = 10;
     int SYS_COLS = 3;
+    String DEFAULT_CELL_STYLE = "-fx-alignment: CENTER;";
 }

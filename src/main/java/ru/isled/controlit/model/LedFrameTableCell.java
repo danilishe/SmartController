@@ -1,42 +1,55 @@
 package ru.isled.controlit.model;
 
-import javafx.scene.control.TableCell;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Shape;
+import javafx.beans.property.BooleanProperty;
+import ru.isled.controlit.view.MainController;
 
-import static ru.isled.controlit.Constants.MAX_BRIGHT;
+import static ru.isled.controlit.Constants.*;
 
 public class LedFrameTableCell extends javafx.scene.control.TableCell<LedFrame, Integer> {
 
-        @Override
-        protected void updateItem(Integer item, boolean empty) {
-            super.updateItem(item, empty);
 
-            // данный иф необходим для удаления артефакто
-            if (empty || item == null) {
-                setGraphic(null);
-                setText(null);
-            } else {
-//                if (showBright.isSelected()) {
-//                    double brightness = (double) item / MAX_BRIGHT;
-//                    Shape fig = new Circle(10, Color.color(1, 1, 0, brightness));
-//                    fig.setStroke(Color.BLACK);
-//                    fig.setStrokeWidth(0.5);
-//                    setGraphic(fig);
-//                } else {
-//                    setGraphic(null);
-//                }
+    private BooleanProperty isDigitsEnabled;
+    private BooleanProperty isBrightEnabled;
 
-//                if (showDigits.isSelected())
-                if (item <= MAX_BRIGHT) {
+    public LedFrameTableCell(BooleanProperty isDigitEnabled, BooleanProperty isBrightEnabled) {
+        super();
+        this.isBrightEnabled = isBrightEnabled;
+        this.isDigitsEnabled = isDigitEnabled;
+    }
+
+    @Override
+    protected void updateItem(Integer item, boolean empty) {
+        super.updateItem(item, empty);
+        // данный иф необходим для удаления артефакто
+        if (empty || item == null) {
+            setText(null);
+            styleProperty().setValue(DEFAULT_CELL_STYLE);
+            getStyleClass().set(0, "base");
+
+        } else {
+            if (isDigitsEnabled.get()) {
+                if (item <= MAX_BRIGHT)
                     setText(item.toString());
+                else
+                    setText(PixelEffect.byIndex(item).toString());
+            } else {
+                setText(null);
+            }
+
+            if (isBrightEnabled.get()) {
+//                if (!getStyleClass().isEmpty()) getStyleClass().clear();
+                if (item <= MAX_BRIGHT) {
+                    styleProperty().setValue(DEFAULT_CELL_STYLE + "   -fx-background-size:" + item * 100/ MAX_BRIGHT + "% 100%;");
+                    getStyleClass().set(0, "base");
                 } else {
-                    setText(PixelEffect.byIndex(item).name());
+                    styleProperty().setValue(DEFAULT_CELL_STYLE);
+                    getStyleClass().set(0, PixelEffect.cssByIndex(item));
                 }
-//                else
-//                    setText(null);
+            } else {
+                styleProperty().setValue(DEFAULT_CELL_STYLE);
+                getStyleClass().set(0, "base");
             }
         }
+    }
 
 }

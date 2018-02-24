@@ -58,7 +58,7 @@
                 <VBox spacing="5.0">
                     <HBox prefWidth="500.0" spacing="5.0">
                         <Slider fx:id="brightSlider" majorTickUnit="100.0" max="255.0" minHeight="15.0" minorTickCount="50" onDragDone="#setBrightBySlider" onDragDropped="#setBrightBySlider" onMouseClicked="#setBrightBySlider" onMouseDragOver="#setBrightBySlider" prefHeight="25.0" prefWidth="180.0" />
-                        <TextField fx:id="brightField" disable="true" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0" text="0" />
+                        <TextField fx:id="brightField" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0" text="0" />
                     </HBox>
                     <HBox spacing="5.0">
                         <Button accessibleHelp="Отключение пиксела" accessibleText="Отключение пиксела" mnemonicParsing="false" onAction="#setMinBright" prefWidth="500.0" text="0" />
@@ -82,13 +82,13 @@
                <HBox alignment="CENTER_LEFT" layoutX="20.0" layoutY="80.0" spacing="5.0">
                   <children>
                             <Label prefHeight="17.0" prefWidth="99.0" text="Длина кадра, мс" />
-                            <Spinner editable="true" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="125.0" />
+                            <Spinner fx:id="frameLengthSpinner" editable="true" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="125.0" />
                   </children>
                </HBox>
                <HBox alignment="CENTER_LEFT" layoutX="20.0" layoutY="110.0" spacing="5.0">
                   <children>
                      <Label prefHeight="17.0" prefWidth="99.0" text="Повторов кадра" />
-                     <Spinner editable="true" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="125.0" />
+                     <Spinner fx:id="frameCyclesSpinner" editable="true" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="125.0" />
                   </children>
                </HBox>
                 </VBox>
@@ -111,8 +111,8 @@
             </TitledPane>
             <TitledPane text="Отображение">
                 <FlowPane hgap="15.0" vgap="5.0">
-                    <CheckBox fx:id="showDigits" mnemonicParsing="false" selected="true" text="Число" />
-                    <CheckBox fx:id="showBright" mnemonicParsing="false" text="Яркость" />
+                    <CheckBox fx:id="showDigits" mnemonicParsing="false" onMouseReleased="#refresh" selected="true" text="Число" />
+                    <CheckBox fx:id="showBright" mnemonicParsing="false" onMouseReleased="#refresh" text="Яркость" />
                 </FlowPane>
             </TitledPane>
             <TitledPane text="Настройки программы">
