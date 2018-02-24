@@ -16,13 +16,16 @@ import ru.isled.controlit.view.MainController;
 import java.io.File;
 import java.io.IOException;
 
-import static ru.isled.controlit.Constants.*;
+import static ru.isled.controlit.Constants.DEFAULT_FRAMES_COUNT;
 
 public class Controlit extends Application {
     private Stage mainStage = null;
     private Project project = null;
     private MainController controller = null;
 
+    public static void main(String[] args) {
+        launch(args);
+    }
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -33,10 +36,7 @@ public class Controlit extends Application {
         loadViewAndSetIcons();
 
         getDefaultProject();
-        updateHeader();
-        project.hasChangesProperty().addListener(l -> updateHeader());
 
-        controller.setProject(project);
         mainStage.show();
 
     }
@@ -55,12 +55,8 @@ public class Controlit extends Application {
 
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
-
     public void updateHeader() {
-        String name = project.getName() == null? "- несохранённый проект -" : project.getName();
+        String name = project.getName() == null ? "- несохранённый проект -" : project.getName();
         String unsavedMark = project.hasUnsavedChanges() ? "*" : "";
         mainStage.setTitle("ISLed Control It! " + name + unsavedMark);
     }
@@ -80,8 +76,7 @@ public class Controlit extends Application {
             Dialogs.showErrorAlert("Неверный формат файла или данная версия не поддерживается программой!");
             return;
         }
-        project.setHasChanges(false);
-        updateHeader();
+        registerProjToControllerAndListener();
     }
 
     public void saveProject() {
@@ -93,11 +88,17 @@ public class Controlit extends Application {
     }
 
     public void createNewProject() {
-        // todo
         project = new Project();
         for (int i = 0; i < DEFAULT_FRAMES_COUNT; i++) {
             project.addRow(new LedFrame());
         }
+        registerProjToControllerAndListener();
+    }
+
+    private void registerProjToControllerAndListener() {
+        controller.setProject(project);
+        project.hasChangesProperty().addListener(l -> updateHeader());
+        updateHeader();
     }
 
     public void exportProject() {

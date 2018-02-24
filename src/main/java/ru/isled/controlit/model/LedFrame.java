@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ru.isled.controlit.Constants.*;
+import static ru.isled.controlit.Constants.DEFAULT_FRAME_LENGTH;
+import static ru.isled.controlit.Constants.MAX_PIXELS;
 
 public class LedFrame {
     private IntegerProperty frameLength = new SimpleIntegerProperty(DEFAULT_FRAME_LENGTH);
@@ -44,6 +45,7 @@ public class LedFrame {
     public ObjectProperty<Integer> get(int num) {
         return frames.get(num).asObject();
     }
+
     public IntegerProperty getProperty(int num) {
         return frames.get(num);
     }

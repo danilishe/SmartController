@@ -25,7 +25,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane cacheShape="false" centerShape="false" prefWidth="600.0" scaleShape="false" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.isled.controlit.view.MainController">
+<BorderPane cacheShape="false" centerShape="false" prefWidth="600.0" scaleShape="false" stylesheets="@../css/custom.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.isled.controlit.view.MainController">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
             <Menu mnemonicParsing="false" text="Файл">
@@ -99,20 +99,33 @@
                         <Button mnemonicParsing="false" onAction="#clearSelection" text="Снять выделение" />
                         <Button mnemonicParsing="false" onAction="#selectAll" text="Выделить всё" />
                     </HBox>
-                    <VBox pickOnBounds="false" spacing="5.0">
+                    <VBox maxWidth="300.0" pickOnBounds="false" spacing="5.0">
                         <ChoiceBox fx:id="effectsSelector" minWidth="200.0" />
-                        <Button alignment="CENTER" contentDisplay="TOP" minWidth="200.0" mnemonicParsing="false" onAction="#applyEffectHandler" text="Применить эффект">
+                        <Button alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#applyEffectHandler" text="Применить эффект">
                             <opaqueInsets>
                                 <Insets />
                             </opaqueInsets>
+                     <padding>
+                        <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
                         </Button>
                     </VBox>
                 </FlowPane>
             </TitledPane>
             <TitledPane text="Отображение">
-                <FlowPane hgap="15.0" vgap="5.0">
+                <FlowPane hgap="15.0" minWidth="200.0" vgap="10.0">
+               <Label text="В ячейках:" />
                     <CheckBox fx:id="showDigits" mnemonicParsing="false" onMouseReleased="#refresh" selected="true" text="Число" />
                     <CheckBox fx:id="showBright" mnemonicParsing="false" onMouseReleased="#refresh" text="Яркость" />
+               <HBox spacing="5.0">
+                  <children>
+                     <Label text="Масштаб" />
+                     <Slider fx:id="zoomSlider" />
+                  </children>
+               </HBox>
                 </FlowPane>
             </TitledPane>
             <TitledPane text="Настройки программы">
@@ -157,16 +170,16 @@
     <bottom>
         <HBox fx:id="previewBox" cacheShape="false" centerShape="false" maxWidth="1.7976931348623157E308" minHeight="30.0" scaleShape="false" spacing="5.0" BorderPane.alignment="TOP_LEFT">
             <padding>
-                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                <Insets bottom="5.0" left="140.0" right="5.0" top="5.0" />
             </padding>
         </HBox>
     </bottom>
     <center>
         <TableView fx:id="frameTableView" cacheShape="false" centerShape="false" editable="true" fixedCellSize="30.0" focusTraversable="false" minHeight="400.0" minWidth="600.0" nodeOrientation="LEFT_TO_RIGHT" scaleShape="false" BorderPane.alignment="CENTER">
             <columns>
-                <TableColumn fx:id="frameNumColumn" editable="false" maxWidth="-Infinity" minWidth="40.0" prefWidth="-1.0" resizable="false" sortable="false" text="#" />
-            <TableColumn fx:id="frameRepeatColumn" editable="false" maxWidth="-1.0" minWidth="40.0" prefWidth="-1.0" resizable="false" sortable="false" text="⭮" />
-            <TableColumn fx:id="frameLengthColumn" editable="false" maxWidth="-1.0" minWidth="40.0" prefWidth="-1.0" resizable="false" sortable="false" text="⏰" />
+                <TableColumn fx:id="frameNumColumn" editable="false" maxWidth="-Infinity" minWidth="40.0" prefWidth="-1.0" resizable="false" sortable="false" styleClass="header" text="#" />
+            <TableColumn fx:id="frameRepeatColumn" editable="false" maxWidth="-1.0" minWidth="40.0" prefWidth="-1.0" resizable="false" sortable="false" styleClass="header" text="⭮" />
+            <TableColumn fx:id="frameLengthColumn" editable="false" maxWidth="-1.0" minWidth="40.0" prefWidth="-1.0" resizable="false" sortable="false" styleClass="header" text="⏰" />
             </columns>
             <BorderPane.margin>
                 <Insets />

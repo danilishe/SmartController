@@ -13,17 +13,16 @@ import static ru.isled.controlit.Constants.MAX_FRAMES;
 import static ru.isled.controlit.Constants.UNSAVED_FILE_NAME;
 
 public class Project {
-    public BooleanProperty hasChangesProperty() {
-        return hasChanges;
-    }
-
     private BooleanProperty hasChanges;
     private ObjectProperty<File> file;
     private List<LedFrame> data;
-
     public Project() {
         hasChanges = new SimpleBooleanProperty(false);
         data = new ArrayList<>(MAX_FRAMES);
+    }
+
+    public BooleanProperty hasChangesProperty() {
+        return hasChanges;
     }
 
     public boolean hasUnsavedChanges() {

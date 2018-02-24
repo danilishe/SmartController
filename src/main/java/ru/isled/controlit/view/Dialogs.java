@@ -8,15 +8,16 @@ import javafx.stage.Stage;
 import java.io.File;
 
 import static javafx.scene.control.ButtonType.*;
-import static ru.isled.controlit.Constants.*;
+import static ru.isled.controlit.Constants.DEFAULT_FILE_NAME;
+import static ru.isled.controlit.Constants.DEFAULT_WORK_DIRECTORY;
 
 public class Dialogs {
+
+    private static Stage stage;
 
     public static void setStage(Stage stage) {
         Dialogs.stage = stage;
     }
-
-    private static Stage stage;
 
     public static File loadFile() {
 

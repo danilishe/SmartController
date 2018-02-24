@@ -5,7 +5,8 @@ import javafx.beans.property.IntegerProperty;
 import java.util.List;
 import java.util.Random;
 
-import static ru.isled.controlit.Constants.*;
+import static ru.isled.controlit.Constants.MAX_BRIGHT;
+import static ru.isled.controlit.Constants.MIN_BRIGHT;
 
 public enum Effect {
     Разгорание {

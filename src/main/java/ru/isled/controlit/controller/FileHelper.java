@@ -20,7 +20,7 @@ public class FileHelper {
         is.read(data);
         is.close();
 
-        List<Byte> result  = new ArrayList<>();
+        List<Byte> result = new ArrayList<>();
         for (byte b : data) {
             result.add(b);
         }

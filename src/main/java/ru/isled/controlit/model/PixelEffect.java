@@ -26,6 +26,7 @@ public enum PixelEffect {
                 .findFirst()
                 .orElseThrow(() -> new InvalidParameterException("Отсутствует пиксельный эффект с индексом: " + index));
     }
+
     public static String cssByIndex(int index) {
         return Arrays.stream(values())
                 .filter(e -> e.code == index)
@@ -38,6 +39,7 @@ public enum PixelEffect {
     public String cssClass() {
         return cssClass;
     }
+
     public int index() {
         return code;
     }

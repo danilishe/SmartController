@@ -1,9 +1,9 @@
 package ru.isled.controlit.model;
 
 import javafx.beans.property.BooleanProperty;
-import ru.isled.controlit.view.MainController;
 
-import static ru.isled.controlit.Constants.*;
+import static ru.isled.controlit.Constants.DEFAULT_CELL_STYLE;
+import static ru.isled.controlit.Constants.MAX_BRIGHT;
 
 public class LedFrameTableCell extends javafx.scene.control.TableCell<LedFrame, Integer> {
 
@@ -39,7 +39,7 @@ public class LedFrameTableCell extends javafx.scene.control.TableCell<LedFrame, 
             if (isBrightEnabled.get()) {
 //                if (!getStyleClass().isEmpty()) getStyleClass().clear();
                 if (item <= MAX_BRIGHT) {
-                    styleProperty().setValue(DEFAULT_CELL_STYLE + "   -fx-background-size:" + item * 100/ MAX_BRIGHT + "% 100%;");
+                    styleProperty().setValue(DEFAULT_CELL_STYLE + "   -fx-background-size:" + item * 100 / MAX_BRIGHT + "% 100%;");
                     getStyleClass().set(0, "base");
                 } else {
                     styleProperty().setValue(DEFAULT_CELL_STYLE);

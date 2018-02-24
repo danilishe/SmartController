@@ -26,14 +26,10 @@ import static ru.isled.controlit.Constants.*;
 
 public class MainController {
 
-    private ObservableList<LedFrame> frames;
-    //    public List<LedFrame> framesBackup = new ArrayList<>(MAX_PIXELS);
-    private Project project;
-
     @FXML
     public HBox previewBox;
-    //    @FXML
-//    public Spinner<Integer> frameLength;
+    @FXML
+    public Spinner<Integer> frameLength;
     @FXML
     public Button maxBright;
     @FXML
@@ -62,14 +58,20 @@ public class MainController {
     public Spinner<Integer> frameLengthSpinner;
     @FXML
     public Spinner<Integer> frameCyclesSpinner;
-//    @FXML
-//    public Button setFadeOutEffect;
-//    @FXML
-//    public Button setBlinkingFadeInEffect;
-//    @FXML
-//    public Button setChaosEffect;
-//    @FXML
-//    public Button setBlinkingFadeOutEffect;
+    @FXML
+    public Slider zoomSlider;
+
+
+    private ObservableList<LedFrame> frames = FXCollections.observableArrayList();
+    private Project project;
+    private List<Shape> previewPixels = new ArrayList<>(MAX_PIXELS);
+    private Controlit mainApp;
+    //    public Button setBlinkingFadeOutEffect;
+    //    @FXML
+    //    public Button setChaosEffect;
+    //    @FXML
+    //    public Button setBlinkingFadeInEffect;
+    //    @FXML
 
     @FXML
     public void setFadeInEffect() {
@@ -84,19 +86,16 @@ public class MainController {
     @FXML
     public void setFadeOutEffect() {
         setSelectedCells(PixelEffect.Угасание.index());
-
     }
 
     @FXML
     public void setBlinkingFadeInEffect() {
         setSelectedCells(PixelEffect.МерцающееРазгорание.index());
-
     }
 
     @FXML
     public void setChaosEffect() {
         setSelectedCells(PixelEffect.Хаос.index());
-
     }
 
     @FXML
@@ -104,25 +103,19 @@ public class MainController {
         setSelectedCells(PixelEffect.МерцающееУгасание.index());
     }
 
-
     @FXML
     private void refresh() {
         // todo придумать более памятеефективный способ обновлнеия внешнего вида ячеек
         frameTableView.refresh();
-//        System.gc();
     }
-
-    private List<Shape> previewPixels = new ArrayList<>(MAX_PIXELS);
-    private Controlit mainApp;
-//    @FXML
-//    private Label framerateLabel;
 
     @FXML
     public void newFile() {
         if (project.hasUnsavedChanges())
-            if (continueAfterAskSaveFile()) {
-                mainApp.createNewProject();
+            if (!continueAfterAskSaveFile()) {
+               return;
             }
+        mainApp.createNewProject();
     }
 
     private boolean continueAfterAskSaveFile() {
@@ -171,8 +164,6 @@ public class MainController {
 
     @FXML
     public void initialize() {
-        frames = FXCollections.observableArrayList();
-
         initializeRowHeader();
         loadAndSetDefaultEffects();
 
@@ -210,7 +201,8 @@ public class MainController {
 
         maxBright.setText(String.valueOf(MAX_BRIGHT));
 
-        brightField.textProperty().addListener((ov, oldValue, newValue) -> {
+        brightField.textProperty().addListener((ol, oldValue, newValue) -> {
+
             if ("".equals(newValue)) return;
             try {
                 int val = Integer.parseInt(newValue);
@@ -237,10 +229,12 @@ public class MainController {
         for (TablePosition cell : getSelectedDataCells()) {
             int pixel = cell.getColumn() - SYS_COLS;
             int frame = cell.getRow();
-            frames.get(frame).set(pixel, val);
+            if (frames.get(frame).getInt(pixel) != val) {
+                frames.get(frame).set(pixel, val);
+                project.setHasChanges(true);
+            }
         }
         redrawPreviewRow();
-        project.setHasChanges(true);
     }
 
     private void handleCellSelection() {
@@ -249,8 +243,6 @@ public class MainController {
         List<TablePosition> selectedDataCells = getSelectedDataCells();
 
         if (!selectedDataCells.isEmpty()) {
-
-//            setFrameHandlersDisabled(false);
 
             redrawPreviewRow();
 
@@ -265,9 +257,6 @@ public class MainController {
                 } else {
                     brightField.textProperty().setValue(PixelEffect.byIndex(cellValue).name());
                 }
-            } else {
-//            brightField.textProperty().setValue("");
-//                setFrameHandlersDisabled(true);
             }
         }
     }
@@ -502,9 +491,6 @@ public class MainController {
     }
 
     private void initializeRowHeader() {
-        frameNumColumn.getStyleClass().add("header");
-        frameRepeatColumn.getStyleClass().add("header");
-        frameLengthColumn.getStyleClass().add("header");
 
         frameNumColumn.setCellValueFactory(
                 cellData -> new SimpleStringProperty(
@@ -521,7 +507,6 @@ public class MainController {
                         String.valueOf(x.getValue().getFrameLength()
                         )
                 ));
-//        frameNumColumn.setEditable(false);
     }
 
     private void initializeColumns() {
@@ -630,6 +615,7 @@ public class MainController {
 
     public void setProject(Project project) {
         this.project = project;
+        frames.clear();
         updateFramesCount();
     }
 }
