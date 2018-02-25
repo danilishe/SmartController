@@ -27,6 +27,8 @@ import static ru.isled.controlit.Constants.*;
 
 public class MainController {
 
+    private static final int MAX_CYCLES = 100;
+    private static final int MIN_CYCLES = 0;
     @FXML
     public HBox previewBox;
     @FXML
@@ -433,6 +435,32 @@ public class MainController {
 
         initLengthSpinner();
 
+        initCyclesSpinner();
+
+    }
+
+    private void initCyclesSpinner() {
+        frameCyclesSpinner.setValueFactory(
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(MIN_CYCLES, MAX_CYCLES, 1));
+        frameCyclesSpinner.getEditor().textProperty().addListener((ov, oldV, newV) -> {
+            if (!newV.matches("\\d+"))
+                frameCyclesSpinner.getEditor().setText(oldV);
+        });
+        frameCyclesSpinner.getValueFactory().valueProperty().addListener((ov, oldV, newV) -> {
+            if (newV > MAX_CYCLES)
+                frameCyclesSpinner.getEditor().setText("" + MAX_CYCLES);
+            else if (newV < MIN_CYCLES)
+                frameCyclesSpinner.getEditor().setText("" + MIN_CYCLES);
+
+            if (newV >= MIN_CYCLES && newV <= MAX_CYCLES) {
+                setCyclesSelectedFrames();
+            }
+        });
+    }
+
+    private void setCyclesSelectedFrames() {
+        int cycles = frameCyclesSpinner.getValue();
+        frameTableView.getSelectionModel().getSelectedItems().forEach(frame -> frame.setCycles(cycles));
     }
 
     private void initLengthSpinner() {
@@ -442,7 +470,7 @@ public class MainController {
 
         frameLengthSpinner.getEditor().addEventHandler(KeyEvent.KEY_PRESSED, (event) -> {
         });
-        
+
         frameLengthSpinner.getEditor().textProperty().addListener((ov, oldValue, newValue) -> {
             if (newValue.matches("\\d+")) {
                 int val = Integer.parseInt(newValue);
