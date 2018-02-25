@@ -86,23 +86,29 @@
                 </VBox>
             </TitledPane>
             <TitledPane text="Редактирование">
-                <FlowPane columnHalignment="CENTER" hgap="5.0" minWidth="-Infinity" prefWidth="250.0" prefWrapLength="100.0" vgap="10.0">
-                     <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#clearSelection" text="Снять выделение" />
-                     <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#selectAll" text="Выделить всё">
-                  <opaqueInsets>
-                     <Insets />
-                  </opaqueInsets>
-               </Button>
-                     <ChoiceBox fx:id="effectsSelector" minWidth="200.0" />
-                     <Button alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#applyEffectHandler" text="Применить эффект">
-                         <opaqueInsets>
-                             <Insets />
-                         </opaqueInsets>
-                  <padding>
-                     <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
-                  </padding>
-                     </Button>
-                </FlowPane>
+            <VBox spacing="10.0">
+               <children>
+                  <HBox spacing="10.0">
+                     <children>
+                              <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#clearSelection" text="Снять выделение" />
+                              <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#selectAll" text="Выделить всё">
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </Button>
+                     </children>
+                  </HBox>
+                        <ChoiceBox fx:id="effectsSelector" minWidth="200.0" />
+                        <Button alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#applyEffectHandler" text="Применить эффект">
+                            <opaqueInsets>
+                                <Insets />
+                            </opaqueInsets>
+                     <padding>
+                        <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
+                     </padding>
+                        </Button>
+               </children>
+            </VBox>
             </TitledPane>
             <TitledPane text="Отображение">
                 <FlowPane hgap="15.0" minWidth="200.0" vgap="10.0">
