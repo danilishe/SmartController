@@ -7,6 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -468,29 +469,52 @@ public class MainController {
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(MIN_FRAME_LENGTH, MAX_FRAME_LENGTH, DEFAULT_FRAME_LENGTH, FRAME_LENGTH_STEP)
         );
 
-        frameLengthSpinner.getEditor().addEventHandler(KeyEvent.KEY_PRESSED, (event) -> {
+        // запрет ввода НЕ цифр
+        frameLengthSpinner.getEditor().textProperty().addListener((ov, oldValue, newValue) -> {
+            if (!newValue.matches("\\d+"))
+                frameLengthSpinner.getEditor().setText(oldValue);
         });
 
-        frameLengthSpinner.getEditor().textProperty().addListener((ov, oldValue, newValue) -> {
-            if (newValue.matches("\\d+")) {
-                int val = Integer.parseInt(newValue);
-                if (val % MIN_FRAME_LENGTH != 0 || val > MAX_FRAME_LENGTH || val < MIN_FRAME_LENGTH) {
-                    System.out.println("comes val = " + val);
-                    val = (int) ((double) val / MIN_FRAME_LENGTH) * MIN_FRAME_LENGTH;
-                    System.out.println("val = " + val);
-                    if (val < MIN_FRAME_LENGTH) {
-                        val = MIN_FRAME_LENGTH;
-                    } else if (val > MAX_FRAME_LENGTH)
-                        val = MAX_FRAME_LENGTH;
-//todo победить в пизду тупую систему обновления таблицы
-                    frameLengthSpinner.getEditor().setText("" + val);
-                    zoomSlider.increment();
-                    zoomSlider.decrement();
-                }
+        // отслеживает корректность значения спиннера (не текстового поля, входящего в его состав)
+        frameLengthSpinner.getValueFactory().valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue % FRAME_LENGTH_STEP != 0)
+                frameLengthSpinner.getEditor().setText("" + (newValue / FRAME_LENGTH_STEP * FRAME_LENGTH_STEP));
 
-                setLengthSelectedFrames(val);
-            } else {
-                frameLengthSpinner.getEditor().setText(oldValue);
+            if (newValue > MAX_FRAME_LENGTH)
+                frameLengthSpinner.getEditor().setText("" + MAX_FRAME_LENGTH);
+            else if (newValue < MIN_FRAME_LENGTH)
+                frameLengthSpinner.getEditor().setText("" + MIN_FRAME_LENGTH);
+
+            if (newValue % MIN_FRAME_LENGTH == 0 || newValue > MAX_FRAME_LENGTH || newValue < MIN_FRAME_LENGTH) {
+                setLengthSelectedFrames(newValue);
+            }
+
+        });
+
+        frameLengthSpinner.getEditor().addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                frameTableView.getColumns().get(SYS_COLS - 1).setVisible(false);
+                frameTableView.getColumns().get(SYS_COLS - 1).setVisible(true);
+            }
+        });
+        // применяет значение после потери фокуса
+        frameLengthSpinner.getEditor().focusedProperty().addListener((ov, o, n) -> {
+            if (n == false) {
+                int val = Integer.parseInt(frameLengthSpinner.getEditor().getText());
+                if (val % FRAME_LENGTH_STEP != 0)
+                    val = val / FRAME_LENGTH_STEP * FRAME_LENGTH_STEP;
+
+                if (val > MAX_FRAME_LENGTH)
+                    val = MAX_FRAME_LENGTH;
+                else if (val < MIN_FRAME_LENGTH)
+                    val = MIN_FRAME_LENGTH;
+//todo наблюдается дефект при подтверждении ввода в поле, тогда не происходит обновления статуса tableview
+                // чётко обновляет внешний вид таблицы, так как после скрытия столбца, его значение меняется
+                if (frameLengthSpinner.getValue() != val) {
+                    frameTableView.getColumns().get(SYS_COLS - 1).setVisible(false);
+                    frameLengthSpinner.getValueFactory().setValue(val);
+                    frameTableView.getColumns().get(SYS_COLS - 1).setVisible(true);
+                }
             }
         });
 

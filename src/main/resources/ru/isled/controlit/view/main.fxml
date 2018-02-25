@@ -61,19 +61,19 @@
                         <TextField fx:id="brightField" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0" text="0" />
                     </HBox>
                     <HBox spacing="5.0">
-                        <Button accessibleHelp="Отключение пиксела" accessibleText="Отключение пиксела" mnemonicParsing="false" onAction="#setMinBright" prefWidth="500.0" text="0" />
-                        <Button accessibleHelp="Случайная яркость пиксела" accessibleText="Случайно" mnemonicParsing="false" onAction="#setRandomBright" prefWidth="500.0" text="Случайно" />
+                        <Button fx:id="minBright" accessibleHelp="Отключение пиксела" accessibleText="Отключение пиксела" mnemonicParsing="false" onAction="#setMinBright" prefWidth="500.0" text="0" />
+                        <Button fx:id="random" accessibleHelp="Случайная яркость пиксела" accessibleText="Случайно" mnemonicParsing="false" onAction="#setRandomBright" prefWidth="500.0" text="Случайно" />
                         <Button fx:id="maxBright" accessibleHelp="Максимальная яркость пиксела" accessibleText="Максимальная яркость" mnemonicParsing="false" onAction="#setMaxBright" prefWidth="500.0" text="255" />
                     </HBox>
                     <HBox layoutX="20.0" layoutY="50.0" spacing="5.0">
-                        <Button accessibleHelp="Плавное разгорание пиксела" accessibleText="Разгорание" mnemonicParsing="false" onAction="#setFadeInEffect" prefWidth="500.0" text="Разгорание" />
-                        <Button accessibleHelp="Мерцание пиксела от минимальной до максимальной яркости" accessibleText="Мерцание" mnemonicParsing="false" onAction="#setBlinkEffect" prefWidth="500.0" text="Мерцание" />
-                        <Button accessibleHelp="Медленное уменьшение яркости пиксела" accessibleText="Угасани" mnemonicParsing="false" onAction="#setFadeOutEffect" prefWidth="500.0" text="Угасание" />
+                        <Button fx:id="fadeIn" accessibleHelp="Плавное разгорание пиксела" accessibleText="Разгорание" mnemonicParsing="false" onAction="#setFadeInEffect" prefWidth="500.0" text="Разгорание" />
+                        <Button fx:id="blink" accessibleHelp="Мерцание пиксела от минимальной до максимальной яркости" accessibleText="Мерцание" mnemonicParsing="false" onAction="#setBlinkEffect" prefWidth="500.0" text="Мерцание" />
+                        <Button fx:id="fadeOut" accessibleHelp="Медленное уменьшение яркости пиксела" accessibleText="Угасани" mnemonicParsing="false" onAction="#setFadeOutEffect" prefWidth="500.0" text="Угасание" />
                     </HBox>
                     <HBox spacing="5.0">
-                        <Button accessibleHelp="Мерцающее увеличение яркости пиксела" accessibleText="Мерцающее разгорание" mnemonicParsing="false" onAction="#setBlinkingFadeInEffect" prefWidth="500.0" text="М. разгорание" />
-                        <Button accessibleHelp="Хаотичное изменение яркости пиксела" accessibleText="Хаос" mnemonicParsing="false" onAction="#setChaosEffect" prefWidth="500.0" text="Хаос" />
-                        <Button accessibleHelp="Мерцающее уменьшение яркости пиксела" accessibleText="Мерцающее угасание" mnemonicParsing="false" onAction="#setBlinkingFadeOutEffect" prefWidth="500.0" text="М. угасание" />
+                        <Button fx:id="mFadeIn" accessibleHelp="Мерцающее увеличение яркости пиксела" accessibleText="Мерцающее разгорание" mnemonicParsing="false" onAction="#setBlinkingFadeInEffect" prefWidth="500.0" text="М. разгорание" />
+                        <Button fx:id="chaos" accessibleHelp="Хаотичное изменение яркости пиксела" accessibleText="Хаос" mnemonicParsing="false" onAction="#setChaosEffect" prefWidth="500.0" text="Хаос" />
+                        <Button fx:id="mFadeOut" accessibleHelp="Мерцающее уменьшение яркости пиксела" accessibleText="Мерцающее угасание" mnemonicParsing="false" onAction="#setBlinkingFadeOutEffect" prefWidth="500.0" text="М. угасание" />
                     </HBox>
                     <HBox alignment="CENTER_LEFT" layoutX="20.0" layoutY="80.0" spacing="5.0">
                         <Label prefHeight="17.0" prefWidth="99.0" text="Длина кадра, мс" />
@@ -90,16 +90,16 @@
                <children>
                   <HBox spacing="10.0">
                      <children>
-                              <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#clearSelection" text="Снять выделение" />
-                              <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#selectAll" text="Выделить всё">
+                              <Button fx:id="clearSelection" minWidth="-Infinity" mnemonicParsing="false" onAction="#clearSelection" prefWidth="110.0" text="Снять выделение" />
+                              <Button fx:id="selectAll" minWidth="-Infinity" mnemonicParsing="false" onAction="#selectAll" prefWidth="110.0" text="Выделить всё">
                            <opaqueInsets>
                               <Insets />
                            </opaqueInsets>
                         </Button>
                      </children>
                   </HBox>
-                        <ChoiceBox fx:id="effectsSelector" minWidth="200.0" />
-                        <Button alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#applyEffectHandler" text="Применить эффект">
+                        <ChoiceBox fx:id="effectsSelector" minWidth="230.0" />
+                        <Button alignment="CENTER" contentDisplay="TOP" minWidth="-Infinity" mnemonicParsing="false" onAction="#applyEffectHandler" prefWidth="230.0" text="Применить эффект">
                             <opaqueInsets>
                                 <Insets />
                             </opaqueInsets>
