@@ -22,16 +22,16 @@ public class LedFrame {
         }
     }
 
-    public int getFrameLength() {
-        return frameLength.get();
+    public ObjectProperty<Integer> getFrameLength() {
+        return frameLength.asObject();
     }
 
     public void setFrameLength(int frameLength) {
         this.frameLength.set(frameLength);
     }
 
-    public int getCycles() {
-        return cycles.get();
+    public ObjectProperty<Integer> getCycles() {
+        return cycles.asObject();
     }
 
     public void setCycles(int cycles) {

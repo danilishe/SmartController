@@ -162,7 +162,7 @@
         </HBox>
     </bottom>
     <center>
-        <TableView fx:id="frameTableView" cacheShape="false" centerShape="false" editable="true" fixedCellSize="30.0" focusTraversable="false" minHeight="400.0" minWidth="600.0" nodeOrientation="LEFT_TO_RIGHT" scaleShape="false" BorderPane.alignment="CENTER">
+        <TableView fx:id="frameTableView" accessibleRole="IMAGE_VIEW" cache="true" cacheShape="false" centerShape="false" editable="true" fixedCellSize="0.0" focusTraversable="false" minHeight="400.0" minWidth="600.0" nodeOrientation="LEFT_TO_RIGHT" pickOnBounds="false" scaleShape="false" BorderPane.alignment="CENTER">
             <columns>
                 <TableColumn fx:id="frameNumColumn" editable="false" maxWidth="-Infinity" minWidth="40.0" prefWidth="-1.0" resizable="false" sortable="false" styleClass="header" text="#" />
             <TableColumn fx:id="frameRepeatColumn" editable="false" maxWidth="-1.0" minWidth="40.0" prefWidth="-1.0" resizable="false" sortable="false" styleClass="header" text="⭮" />

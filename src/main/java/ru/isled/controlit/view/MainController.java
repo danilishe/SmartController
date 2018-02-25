@@ -2,11 +2,12 @@ package ru.isled.controlit.view;
 
 import com.sun.javafx.scene.control.skin.TableHeaderRow;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -29,8 +30,6 @@ public class MainController {
     @FXML
     public HBox previewBox;
     @FXML
-    public Spinner<Integer> frameLength;
-    @FXML
     public Button maxBright;
     @FXML
     public Spinner<Integer> framesSpinner;
@@ -39,11 +38,11 @@ public class MainController {
     @FXML
     public TableView<LedFrame> frameTableView;
     @FXML
-    public TableColumn<LedFrame, String> frameNumColumn;
+    public TableColumn<LedFrame, Integer> frameNumColumn;
     @FXML
-    public TableColumn<LedFrame, String> frameRepeatColumn;
+    public TableColumn<LedFrame, Integer> frameRepeatColumn;
     @FXML
-    public TableColumn<LedFrame, String> frameLengthColumn;
+    public TableColumn<LedFrame, Integer> frameLengthColumn;
     @FXML
     public ChoiceBox<String> effectsSelector;
     @FXML
@@ -75,32 +74,32 @@ public class MainController {
 
     @FXML
     public void setFadeInEffect() {
-        setSelectedCells(PixelEffect.Разгорание.index());
+        setBrightSelectedCells(PixelEffect.Разгорание.index());
     }
 
     @FXML
     public void setBlinkEffect() {
-        setSelectedCells(PixelEffect.Мерцание.index());
+        setBrightSelectedCells(PixelEffect.Мерцание.index());
     }
 
     @FXML
     public void setFadeOutEffect() {
-        setSelectedCells(PixelEffect.Угасание.index());
+        setBrightSelectedCells(PixelEffect.Угасание.index());
     }
 
     @FXML
     public void setBlinkingFadeInEffect() {
-        setSelectedCells(PixelEffect.МерцающееРазгорание.index());
+        setBrightSelectedCells(PixelEffect.МерцающееРазгорание.index());
     }
 
     @FXML
     public void setChaosEffect() {
-        setSelectedCells(PixelEffect.Хаос.index());
+        setBrightSelectedCells(PixelEffect.Хаос.index());
     }
 
     @FXML
     public void setBlinkingFadeOutEffect() {
-        setSelectedCells(PixelEffect.МерцающееУгасание.index());
+        setBrightSelectedCells(PixelEffect.МерцающееУгасание.index());
     }
 
     @FXML
@@ -170,16 +169,12 @@ public class MainController {
         initZoomSlider();
 
         initSpinners();
-        initializeColumns();
+        initDataColumns();
         initializePreviewZone();
         initializeBrightHandlers();
 
-//        mainApp.createNewProject();
-
-
         frameTableView.getSelectionModel().setCellSelectionEnabled(true);
         frameTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-//        frameTableView.addEventHandler(EventType.ROOT, x -> handleCellSelection());
         frameTableView.addEventHandler(MouseEvent.MOUSE_CLICKED, x -> handleCellSelection());
         frameTableView.setItems(frames);
     }
@@ -190,11 +185,10 @@ public class MainController {
         zoomSlider.setValue(INIT_COL_WIDTH);
         zoomSlider.setBlockIncrement((MAX_BRIGHT - MIN_BRIGHT) / 10);
         zoomSlider.valueProperty().addListener((o, ov, nv) -> setColumnsWidth(nv.doubleValue()));
-//                IntegerSpinnerValueFactory(MIN_PIXELS, MAX_PIXELS, INIT_PIXELS)
     }
 
 
-    public void initializePreviewZone() {
+    private void initializePreviewZone() {
         for (int i = 0; i < MAX_PIXELS; i++) {
             Shape pixel = new Circle(10, Color.rgb(0xFF, 0xFF, 0, 0));
             Text pixelText = new Text("" + (i + 1));
@@ -208,12 +202,10 @@ public class MainController {
         }
     }
 
-    public void initializeBrightHandlers() {
-
+    private void initializeBrightHandlers() {
         maxBright.setText(String.valueOf(MAX_BRIGHT));
 
         brightField.textProperty().addListener((ol, oldValue, newValue) -> {
-
             if ("".equals(newValue)) return;
             try {
                 int val = Integer.parseInt(newValue);
@@ -226,7 +218,7 @@ public class MainController {
                 brightField.textProperty().setValue(String.valueOf(val));
 
                 brightSlider.setValue(val);
-                setSelectedCells(val);
+                setBrightSelectedCells(val);
 
             } catch (NumberFormatException nfe) {
 //                System.err.println(nfe.getCause() + " newVal=" + newValue + " oldValue=" + oldValue);
@@ -236,7 +228,7 @@ public class MainController {
     }
 
 
-    private void setSelectedCells(int val) {
+    private void setBrightSelectedCells(int val) {
         for (TablePosition cell : getSelectedDataCells()) {
             int pixel = cell.getColumn() - SYS_COLS;
             int frame = cell.getRow();
@@ -246,6 +238,22 @@ public class MainController {
             }
         }
         redrawPreviewRow();
+    }
+
+    private void setLengthSelectedFrames(int length) {
+        for (LedFrame frame : frameTableView.getSelectionModel().getSelectedItems()) {
+            System.out.println("was=" + frame.getFrameLength() + " become=" + length);
+            frames.get(frames.indexOf(frame)).setLength(length);
+            project.setHasChanges(true);
+
+//            frame.setLength(length);
+        }
+    }
+
+    private void setCyclesSelectedFrames(int cycles) {
+        for (LedFrame frame : frameTableView.getSelectionModel().getSelectedItems()) {
+            frame.setLength(cycles);
+        }
     }
 
     private void handleCellSelection() {
@@ -264,7 +272,13 @@ public class MainController {
 
             int cellValue = frames.get(position.getRow()).getInt(position.getColumn() - SYS_COLS);
 
+            String frameLeng = frames.get(position.getRow()).getFrameLength().get().toString();
+            String frameCycl = frames.get(position.getRow()).getCycles().get().toString();
+
             if (selectedDataCells.size() == 1) {
+
+                frameLengthSpinner.getEditor().setText(frameLeng);
+                frameCyclesSpinner.getEditor().setText(frameCycl);
 
                 if (cellValue <= MAX_BRIGHT) {
                     brightField.textProperty().setValue("" + cellValue);
@@ -390,13 +404,13 @@ public class MainController {
     @FXML
     public void setMaxBright() {
         brightField.textProperty().setValue(String.valueOf(MAX_BRIGHT));
-        setSelectedCells(MAX_BRIGHT);
+        setBrightSelectedCells(MAX_BRIGHT);
     }
 
     @FXML
     public void setMinBright() {
         brightField.textProperty().setValue(String.valueOf(MIN_BRIGHT));
-        setSelectedCells(MIN_BRIGHT);
+        setBrightSelectedCells(MIN_BRIGHT);
     }
 
     @FXML
@@ -417,6 +431,40 @@ public class MainController {
 
         initPixelSpinner();
 
+        initLengthSpinner();
+
+    }
+
+    private void initLengthSpinner() {
+        frameLengthSpinner.setValueFactory(
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(MIN_FRAME_LENGTH, MAX_FRAME_LENGTH, DEFAULT_FRAME_LENGTH, FRAME_LENGTH_STEP)
+        );
+
+        frameLengthSpinner.getEditor().addEventHandler(KeyEvent.KEY_PRESSED, (event) -> {
+        });
+        
+        frameLengthSpinner.getEditor().textProperty().addListener((ov, oldValue, newValue) -> {
+            if (newValue.matches("\\d+")) {
+                int val = Integer.parseInt(newValue);
+                if (val % MIN_FRAME_LENGTH != 0 || val > MAX_FRAME_LENGTH || val < MIN_FRAME_LENGTH) {
+                    System.out.println("comes val = " + val);
+                    val = (int) ((double) val / MIN_FRAME_LENGTH) * MIN_FRAME_LENGTH;
+                    System.out.println("val = " + val);
+                    if (val < MIN_FRAME_LENGTH) {
+                        val = MIN_FRAME_LENGTH;
+                    } else if (val > MAX_FRAME_LENGTH)
+                        val = MAX_FRAME_LENGTH;
+//todo победить в пизду тупую систему обновления таблицы
+                    frameLengthSpinner.getEditor().setText("" + val);
+                    zoomSlider.increment();
+                    zoomSlider.decrement();
+                }
+
+                setLengthSelectedFrames(val);
+            } else {
+                frameLengthSpinner.getEditor().setText(oldValue);
+            }
+        });
 
     }
 
@@ -433,6 +481,7 @@ public class MainController {
                     pixelSpinner.getEditor().textProperty().setValue(String.valueOf(MIN_PIXELS));
                 if (val > MAX_PIXELS)
                     pixelSpinner.getEditor().textProperty().setValue(String.valueOf(MAX_PIXELS));
+
 
                 // хак для вызова обработчика событий спиннера
                 pixelSpinner.getValueFactory().setValue(
@@ -506,23 +555,15 @@ public class MainController {
     private void initializeRowHeader() {
 
         frameNumColumn.setCellValueFactory(
-                cellData -> new SimpleStringProperty(
-                        String.valueOf(
-                                frames.indexOf(cellData.getValue()) + 1)
-                ));
-        frameRepeatColumn.setCellValueFactory(x ->
-                new SimpleStringProperty(
-                        String.valueOf(x.getValue().getCycles()
-                        )
-                ));
-        frameLengthColumn.setCellValueFactory(x ->
-                new SimpleStringProperty(
-                        String.valueOf(x.getValue().getFrameLength()
-                        )
-                ));
+                cellData -> new SimpleObjectProperty<>(frames.indexOf(cellData.getValue()) + 1));
+
+        frameRepeatColumn.setCellValueFactory(x -> x.getValue().getCycles());
+
+        frameLengthColumn.setCellFactory(column -> new LedFrameLengthCell());
+        frameLengthColumn.setCellValueFactory(x -> x.getValue().getFrameLength());
     }
 
-    private void initializeColumns() {
+    private void initDataColumns() {
         disableColumnReordering();
 
         // пиксели/каналы
@@ -544,9 +585,7 @@ public class MainController {
 
 
     private void setDefaultColumnProperties(TableColumn<LedFrame, Integer> column) {
-//        column.setMaxWidth(50);
         column.setPrefWidth(INIT_COL_WIDTH);
-//        column.setMinWidth(50);
         column.setResizable(false);
         column.setSortable(false);
         column.setEditable(false);

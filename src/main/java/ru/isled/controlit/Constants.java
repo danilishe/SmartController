@@ -9,8 +9,9 @@ public interface Constants {
     int MIN_BRIGHT = 0;
     int MAX_BRIGHT = 255;
     int DEFAULT_FRAME_LENGTH = 25;
-    int MIN_FRAME_lENGTH = 12;
-    int MAX_FRAME_LENGTH = Integer.MAX_VALUE;
+    int MIN_FRAME_LENGTH = 25;
+    int FRAME_LENGTH_STEP = MIN_FRAME_LENGTH;
+    int MAX_FRAME_LENGTH = 20000;
     String DEFAULT_FILE_NAME = "data";
 
     String UNSAVED_FILE_NAME = "- несохранённый проект -";
@@ -19,6 +20,6 @@ public interface Constants {
     int SYS_COLS = 3;
     String DEFAULT_CELL_STYLE = "-fx-alignment: CENTER;";
     int INIT_COL_WIDTH = 40;
-    int MIN_COL_WIDTH = 20;
+    int MIN_COL_WIDTH = 25;
     int MAX_COL_WIDTH = 80;
 }

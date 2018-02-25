@@ -39,6 +39,13 @@
         </plugins>
     </build>
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.controlsfx/controlsfx -->
+        <dependency>
+            <groupId>org.controlsfx</groupId>
+            <artifactId>controlsfx</artifactId>
+            <version>8.40.14</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/com.zenjava/javafx-maven-plugin -->
         <dependency>
             <groupId>com.zenjava</groupId>
@@ -51,9 +58,9 @@
             <version>1.2.44</version>
         </dependency>
         <!--<dependency>-->
-            <!--<groupId>org.kordamp.ikonli</groupId>-->
-            <!--<artifactId>ikonli-materialdesign-pack</artifactId>-->
-            <!--<version>2.1.1</version>-->
+        <!--<groupId>org.kordamp.ikonli</groupId>-->
+        <!--<artifactId>ikonli-materialdesign-pack</artifactId>-->
+        <!--<version>2.1.1</version>-->
         <!--</dependency>-->
     </dependencies>
 
