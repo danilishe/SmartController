@@ -2,10 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="Починил дефект прыгающих кнопок -- дефект FlowPane">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/description.html" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" afterPath="" />
       <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterPath="" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_alibaba_fastjson_1_2_44.xml" afterPath="" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_zenjava_javafx_maven_plugin_8_8_3.xml" afterPath="" />
@@ -31,12 +27,10 @@
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_sonatype_sisu_sisu_guice_noaop_2_1_7.xml" afterPath="" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_sonatype_sisu_sisu_inject_bean_1_4_2.xml" afterPath="" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_sonatype_sisu_sisu_inject_plexus_1_4_2.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/isled/controlit/Controlit.java" afterPath="$PROJECT_DIR$/src/main/java/ru/isled/controlit/Controlit.java" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ru/isled/controlit/view/MainController.java" afterPath="$PROJECT_DIR$/src/main/java/ru/isled/controlit/view/MainController.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/ru/isled/controlit/view/main.fxml" afterPath="$PROJECT_DIR$/src/main/resources/ru/isled/controlit/view/main.fxml" />
     </list>
     <ignored path="JavaFxApplication.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -50,7 +44,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/Controller$Controlit.coverage" NAME="Controlit Coverage Results" MODIFIED="1519563373743" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+    <SUITE FILE_PATH="coverage/Controller$Controlit.coverage" NAME="Controlit Coverage Results" MODIFIED="1519566779274" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>ru.isled.controlit.*</FILTER>
     </SUITE>
     <SUITE FILE_PATH="coverage/Controller$Main__1_.coverage" NAME="Main (1) Coverage Results" MODIFIED="1515263708719" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
@@ -101,33 +95,36 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="MainController.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="MainController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/ru/isled/controlit/view/MainController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="544">
-              <caret line="254" column="17" lean-forward="false" selection-start-line="254" selection-start-column="17" selection-end-line="254" selection-end-column="17" />
+            <state relative-caret-position="144">
+              <caret line="636" column="18" lean-forward="true" selection-start-line="636" selection-start-column="18" selection-end-line="636" selection-end-column="18" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#3150#3151#0" expanded="true" />
+                <element signature="e#3192#3193#0" expanded="true" />
                 <element signature="method#initZoomSlider#0;class#MainController#0" expanded="false" />
                 <element signature="method#initializePreviewZone#0;class#MainController#0" expanded="false" />
-                <element signature="e#11454#11455#0" expanded="true" />
-                <element signature="e#11496#11497#0" expanded="true" />
-                <element signature="e#11545#11546#0" expanded="true" />
-                <element signature="e#11588#11589#0" expanded="true" />
-                <element signature="e#11636#11637#0" expanded="true" />
-                <element signature="e#11678#11679#0" expanded="true" />
-                <element signature="e#11727#11728#0" expanded="true" />
-                <element signature="e#11770#11771#0" expanded="true" />
-                <element signature="e#12915#12916#0" expanded="true" />
-                <element signature="e#12982#12983#0" expanded="true" />
-                <element signature="method#loadAndSetDefaultEffects#0;class#MainController#0" expanded="false" />
-                <element signature="method#exitHandler#0;class#MainController#0" expanded="false" />
-                <element signature="e#21189#21190#0" expanded="true" />
-                <element signature="e#21228#21229#0" expanded="true" />
-                <element signature="e#22605#22606#0" expanded="true" />
-                <element signature="e#22652#22653#0" expanded="true" />
-                <element signature="e#22698#22699#0" expanded="true" />
-                <element signature="e#22728#22729#0" expanded="true" />
+                <element signature="e#10705#10706#0" expanded="true" />
+                <element signature="e#10747#10748#0" expanded="true" />
+                <element signature="e#10796#10797#0" expanded="true" />
+                <element signature="e#10839#10840#0" expanded="true" />
+                <element signature="e#10887#10888#0" expanded="true" />
+                <element signature="e#10929#10930#0" expanded="true" />
+                <element signature="e#10978#10979#0" expanded="true" />
+                <element signature="e#11021#11022#0" expanded="true" />
+                <element signature="e#12166#12167#0" expanded="true" />
+                <element signature="e#12233#12234#0" expanded="true" />
+                <element signature="e#13776#13924#0" expanded="false" />
+                <element signature="e#21504#21505#0" expanded="true" />
+                <element signature="e#21534#21535#0" expanded="true" />
+                <element signature="e#21586#21587#0" expanded="true" />
+                <element signature="e#21625#21626#0" expanded="true" />
+                <element signature="e#23002#23003#0" expanded="true" />
+                <element signature="e#23049#23050#0" expanded="true" />
+                <element signature="e#23095#23096#0" expanded="true" />
+                <element signature="e#23125#23126#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -136,11 +133,21 @@
       <file leaf-file-name="Controlit.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/ru/isled/controlit/Controlit.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="63" column="6" lean-forward="false" selection-start-line="63" selection-start-column="6" selection-end-line="63" selection-end-column="6" />
+            <state relative-caret-position="189">
+              <caret line="42" column="0" lean-forward="true" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
               <folding>
                 <element signature="method#registerProjToControllerAndListener#0;class#Controlit#0" expanded="false" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="286">
+              <caret line="28" column="0" lean-forward="true" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -211,9 +218,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>selectAll</find>
-      <find>pixel</find>
-      <find>setBr</find>
       <find>update</find>
       <find>&quot;&quot;</find>
       <find>selectRange</find>
@@ -239,8 +243,11 @@
       <find>was</find>
       <find>хак</find>
       <find>chaos</find>
-      <find>refre</find>
       <find>length</find>
+      <find>init</find>
+      <find>refre</find>
+      <find>refresh(</find>
+      <find>exit</find>
     </findStrings>
     <replaceStrings>
       <replace>channelsSpinner</replace>
@@ -313,16 +320,16 @@
         <option value="$PROJECT_DIR$/src/main/java/ru/isled/controlit/controller/FileHelper.java" />
         <option value="$PROJECT_DIR$/src/main/java/ru/isled/controlit/model/Project.java" />
         <option value="$PROJECT_DIR$/src/main/java/ru/isled/controlit/model/PixelEffect.java" />
-        <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/src/main/resources/ru/isled/controlit/view/main.fxml" />
         <option value="$PROJECT_DIR$/src/main/resources/ru/isled/controlit/css/custom.css" />
         <option value="$PROJECT_DIR$/src/main/java/ru/isled/controlit/model/LedFrameTableCell.java" />
         <option value="$PROJECT_DIR$/src/main/java/ru/isled/controlit/model/LedFrame.java" />
         <option value="$PROJECT_DIR$/src/main/java/ru/isled/controlit/Constants.java" />
-        <option value="$PROJECT_DIR$/src/main/java/ru/isled/controlit/Controlit.java" />
         <option value="$PROJECT_DIR$/src/main/java/ru/isled/controlit/model/LedFrameLengthCell.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/ru/isled/controlit/view/MainController.java" />
+        <option value="$PROJECT_DIR$/src/main/java/ru/isled/controlit/Controlit.java" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -505,28 +512,6 @@
               <item name="Controller" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="ru" type="462c0819:PsiDirectoryNode" />
-              <item name="isled" type="462c0819:PsiDirectoryNode" />
-              <item name="controlit" type="462c0819:PsiDirectoryNode" />
-              <item name="model" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Controller" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Controller" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="ru" type="462c0819:PsiDirectoryNode" />
-              <item name="isled" type="462c0819:PsiDirectoryNode" />
-              <item name="controlit" type="462c0819:PsiDirectoryNode" />
-              <item name="view" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Controller" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Controller" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -656,9 +641,9 @@
         </pattern>
       </extension>
       <option name="MAIN_CLASS_NAME" value="ru.isled.controlit.Controlit" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="VM_PARAMETERS" value="" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="ENABLE_SWING_INSPECTOR" value="false" />
@@ -871,7 +856,7 @@
       <workItem from="1519389049710" duration="22098000" />
       <workItem from="1519451329106" duration="43133000" />
       <workItem from="1519537099961" duration="2351000" />
-      <workItem from="1519562941278" duration="2212000" />
+      <workItem from="1519562941278" duration="17136000" />
     </task>
     <task id="LOCAL-00001" summary="Начальный коммит. Множество глюков: не доделано корректно сохранение/восстановление, нет полного набора эффектов, нет обработки длины кадра, множественные глюки при отображении. Нет реализации предпросмотра.">
       <created>1518455217267</created>
@@ -964,11 +949,25 @@
       <option name="project" value="LOCAL" />
       <updated>1519563446083</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Добавил изменение циклов кадра. Работает без сбоев. Попробую остальные спиннеры сделать так же">
+      <created>1519565235445</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1519565235445</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Окончательно починил прыгающие кнопки - нужно задавать id.&#10;Добавил редактор циклов.&#10;Остальные фабрики пока не оптимизирую, всё работает.">
+      <created>1519577562366</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1519577562366</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="71096000" />
+    <option name="totallyTimeSpent" value="86020000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -985,16 +984,17 @@
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32022473" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3269663" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3269663" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32921347" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" x="335" y="85" width="1447" height="1017" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27345416" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="16" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.3696629" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32599357" sideWeight="0.5" order="10" side_tool="true" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32921347" sideWeight="0.5" order="15" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32921347" sideWeight="0.5" order="15" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29108486" sideWeight="0.6703755" order="0" side_tool="false" content_ui="combo" />
@@ -1013,7 +1013,6 @@
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24973147" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Profiler" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" x="335" y="85" width="1447" height="1017" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Run with VisualVM" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32979852" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1038,8 +1037,10 @@
     <MESSAGE value="Удалил из git ненужные файлы" />
     <MESSAGE value="Доавил горизонтальный зум колонок, удалил непонятный баг с прыганием кнопок выделения, поправил стили заголовков ячеек" />
     <MESSAGE value="Доработал изменение времени кадра. Пока остаются глюки с обновлением и прыгают  кнопки после обновления." />
+    <MESSAGE value="Добавил изменение циклов кадра. Работает без сбоев. Попробую остальные спиннеры сделать так же" />
     <MESSAGE value="Починил дефект прыгающих кнопок -- дефект FlowPane" />
-    <option name="LAST_COMMIT_MESSAGE" value="Починил дефект прыгающих кнопок -- дефект FlowPane" />
+    <MESSAGE value="Окончательно починил прыгающие кнопки - нужно задавать id.&#10;Добавил редактор циклов.&#10;Остальные фабрики пока не оптимизирую, всё работает." />
+    <option name="LAST_COMMIT_MESSAGE" value="Окончательно починил прыгающие кнопки - нужно задавать id.&#10;Добавил редактор циклов.&#10;Остальные фабрики пока не оптимизирую, всё работает." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1052,19 +1053,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/ru/isled/controlit/view/MainController.java</url>
-          <line>514</line>
+          <line>512</line>
           <properties />
           <option name="timeStamp" value="89" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/ru/isled/controlit/view/MainController.java</url>
-          <line>485</line>
-          <properties />
-          <option name="timeStamp" value="95" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/ru/isled/controlit/view/MainController.java</url>
-          <line>247</line>
+          <line>222</line>
           <properties />
           <option name="timeStamp" value="98" />
         </line-breakpoint>
@@ -1089,24 +1084,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="uml://JAVA/ru.isled.controlit.view.MainController">
-      <provider selected="true" editor-type-id="UmlEditorProvider">
-        <state>
-          <ID>JAVA</ID>
-          <OriginalElement>ru.isled.controlit.view.MainController</OriginalElement>
-          <nodes>
-            <node x="" y="">ru.isled.controlit.view.MainController</node>
-          </nodes>
-          <notes />
-          <edges />
-          <settings layout="Hierarchic Group" zoom="1.0" x="83.0" y="19.0" />
-          <SelectedNodes />
-          <Categories />
-          <SCOPE>All</SCOPE>
-          <VISIBILITY>private</VISIBILITY>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/ru/isled/controlit/model/Effect.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1407">
@@ -1114,13 +1091,6 @@
           <folding>
             <element signature="imports" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_152/javafx-src.zip!/javafx/event/EventType.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="69" column="29" lean-forward="true" selection-start-line="69" selection-start-column="29" selection-end-line="69" selection-end-column="29" />
         </state>
       </provider>
     </entry>
@@ -1187,6 +1157,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="664">
           <caret line="109" column="68" lean-forward="true" selection-start-line="109" selection-start-column="68" selection-end-line="109" selection-end-column="68" />
+          <folding>
+            <element signature="e#1601#1602#0" expanded="false" />
+            <element signature="e#1656#1657#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1249,13 +1223,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-211">
           <caret line="16" column="10" lean-forward="false" selection-start-line="16" selection-start-column="10" selection-end-line="16" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="104">
-          <caret line="26" column="7" lean-forward="true" selection-start-line="26" selection-start-column="7" selection-end-line="26" selection-end-column="7" />
         </state>
       </provider>
     </entry>
@@ -1326,6 +1293,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="276">
           <caret line="348" column="45" lean-forward="false" selection-start-line="348" selection-start-column="45" selection-end-line="348" selection-end-column="45" />
+          <folding>
+            <element signature="e#51313#51314#0" expanded="false" />
+            <element signature="e#51383#51384#0" expanded="false" />
+            <element signature="e#51421#51422#0" expanded="false" />
+            <element signature="e#51468#51469#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1458,14 +1431,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/ru/isled/controlit/model/LedFrameTableCell.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="735">
-          <caret line="38" column="40" lean-forward="false" selection-start-line="38" selection-start-column="40" selection-end-line="38" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/ru/isled/controlit/model/LedFrame.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1485,43 +1450,81 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_152/javafx-src.zip!/javafx/event/EventType.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="179">
+          <caret line="71" column="39" lean-forward="false" selection-start-line="71" selection-start-column="39" selection-end-line="71" selection-end-column="39" />
+          <folding>
+            <element signature="e#2585#2586#0" expanded="false" />
+            <element signature="e#2617#2618#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/ru/isled/controlit/model/LedFrameTableCell.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="735">
+          <caret line="38" column="40" lean-forward="false" selection-start-line="38" selection-start-column="40" selection-end-line="38" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_152/javafx-src.zip!/javafx/scene/input/KeyEvent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="918">
+          <caret line="441" column="5" lean-forward="true" selection-start-line="441" selection-start-column="5" selection-end-line="441" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/ru/isled/controlit/view/MainController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="636" column="18" lean-forward="true" selection-start-line="636" selection-start-column="18" selection-end-line="636" selection-end-column="18" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#3150#3151#0" expanded="true" />
+            <element signature="e#3192#3193#0" expanded="true" />
+            <element signature="method#initZoomSlider#0;class#MainController#0" expanded="false" />
+            <element signature="method#initializePreviewZone#0;class#MainController#0" expanded="false" />
+            <element signature="e#10705#10706#0" expanded="true" />
+            <element signature="e#10747#10748#0" expanded="true" />
+            <element signature="e#10796#10797#0" expanded="true" />
+            <element signature="e#10839#10840#0" expanded="true" />
+            <element signature="e#10887#10888#0" expanded="true" />
+            <element signature="e#10929#10930#0" expanded="true" />
+            <element signature="e#10978#10979#0" expanded="true" />
+            <element signature="e#11021#11022#0" expanded="true" />
+            <element signature="e#12166#12167#0" expanded="true" />
+            <element signature="e#12233#12234#0" expanded="true" />
+            <element signature="e#13776#13924#0" expanded="false" />
+            <element signature="e#21504#21505#0" expanded="true" />
+            <element signature="e#21534#21535#0" expanded="true" />
+            <element signature="e#21586#21587#0" expanded="true" />
+            <element signature="e#21625#21626#0" expanded="true" />
+            <element signature="e#23002#23003#0" expanded="true" />
+            <element signature="e#23049#23050#0" expanded="true" />
+            <element signature="e#23095#23096#0" expanded="true" />
+            <element signature="e#23125#23126#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/ru/isled/controlit/Controlit.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="63" column="6" lean-forward="false" selection-start-line="63" selection-start-column="6" selection-end-line="63" selection-end-column="6" />
+        <state relative-caret-position="189">
+          <caret line="42" column="0" lean-forward="true" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
           <folding>
             <element signature="method#registerProjToControllerAndListener#0;class#Controlit#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/ru/isled/controlit/view/MainController.java">
+    <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="544">
-          <caret line="254" column="17" lean-forward="false" selection-start-line="254" selection-start-column="17" selection-end-line="254" selection-end-column="17" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#initZoomSlider#0;class#MainController#0" expanded="false" />
-            <element signature="method#initializePreviewZone#0;class#MainController#0" expanded="false" />
-            <element signature="e#11454#11455#0" expanded="true" />
-            <element signature="e#11496#11497#0" expanded="true" />
-            <element signature="e#11545#11546#0" expanded="true" />
-            <element signature="e#11588#11589#0" expanded="true" />
-            <element signature="e#11636#11637#0" expanded="true" />
-            <element signature="e#11678#11679#0" expanded="true" />
-            <element signature="e#11727#11728#0" expanded="true" />
-            <element signature="e#11770#11771#0" expanded="true" />
-            <element signature="e#12915#12916#0" expanded="true" />
-            <element signature="e#12982#12983#0" expanded="true" />
-            <element signature="method#loadAndSetDefaultEffects#0;class#MainController#0" expanded="false" />
-            <element signature="method#exitHandler#0;class#MainController#0" expanded="false" />
-            <element signature="e#21189#21190#0" expanded="true" />
-            <element signature="e#21228#21229#0" expanded="true" />
-            <element signature="e#22605#22606#0" expanded="true" />
-            <element signature="e#22652#22653#0" expanded="true" />
-            <element signature="e#22698#22699#0" expanded="true" />
-            <element signature="e#22728#22729#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="286">
+          <caret line="28" column="0" lean-forward="true" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>

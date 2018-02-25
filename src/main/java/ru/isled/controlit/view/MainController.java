@@ -113,46 +113,20 @@ public class MainController {
 
     @FXML
     public void newFile() {
-        if (project.hasUnsavedChanges())
-            if (!continueAfterAskSaveFile()) {
-                return;
-            }
         mainApp.createNewProject();
     }
 
-    private boolean continueAfterAskSaveFile() {
-        switch (Dialogs.askSaveProject()) {
-            case YES:
-                saveFile();
-            case NO:
-                return true;
-
-            case CANCEL_CLOSE:
-            default:
-                return false;
-        }
-
-    }
 
     @FXML
     public void saveFile() {
-        if (!project.hasName()) {
-            File file = Dialogs.saveAs(project.getFile());
-            if (file == null) return;
-            project.setFileName(file);
-        }
-
         mainApp.saveProject();
 
     }
 
     @FXML
     public void loadFile() {
-        if (project.hasUnsavedChanges())
-            if (!continueAfterAskSaveFile()) return;
-        File fileForLoad = Dialogs.loadFile();
-        if (fileForLoad != null)
-            mainApp.loadProject(fileForLoad);
+
+            mainApp.loadProject();
     }
 
 
@@ -660,12 +634,6 @@ public class MainController {
 
     @FXML
     public void exitHandler() {
-        if (project.hasUnsavedChanges()) {
-            if (continueAfterAskSaveFile())
-                mainApp.exit();
-            else
-                return;
-        }
         mainApp.exit();
     }
 

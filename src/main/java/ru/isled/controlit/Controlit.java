@@ -49,7 +49,10 @@ public class Controlit extends Application {
         mainStage.setScene(new Scene(root));
         mainStage.getIcons().add(new Image(getClass().getResourceAsStream("images/play.png")));
         mainStage.getScene().getStylesheets().addAll(getClass().getResource("css/custom.css").toExternalForm());
-
+        mainStage.setMinWidth(800);
+        mainStage.setMinHeight(720);
+        mainStage.centerOnScreen();
+        mainStage.setOnCloseRequest(event -> exit());
         controller = loader.getController();
         controller.setMainApp(this);
 
@@ -69,7 +72,12 @@ public class Controlit extends Application {
         }
     }
 
-    public void loadProject(File fileForLoad) {
+    public void loadProject() {
+        if (project.hasUnsavedChanges())
+            if (!continueAfterAskSaveFile()) return;
+        File fileForLoad = Dialogs.loadFile();
+        if (fileForLoad == null) return;
+
         //todo
         Project newProject = ProjectLoader.load(fileForLoad);
         if (newProject == null) {
@@ -79,7 +87,28 @@ public class Controlit extends Application {
         registerProjToControllerAndListener();
     }
 
+    private boolean continueAfterAskSaveFile() {
+        switch (Dialogs.askSaveProject()) {
+            case YES:
+                saveProject();
+            case NO:
+                return true;
+
+            case CANCEL_CLOSE:
+            default:
+                return false;
+        }
+
+    }
+
+
     public void saveProject() {
+        if (!project.hasName()) {
+            File file = Dialogs.saveAs(project.getFile());
+            if (file == null) return;
+            project.setFileName(file);
+        }
+
         // todo
         String json = JSON.toJSONString(project);
         System.out.println("json = " + json);
@@ -88,6 +117,11 @@ public class Controlit extends Application {
     }
 
     public void createNewProject() {
+        if (project != null && project.hasUnsavedChanges())
+            if (!continueAfterAskSaveFile()) {
+                return;
+            }
+
         project = new Project();
         for (int i = 0; i < DEFAULT_FRAMES_COUNT; i++) {
             project.addRow(new LedFrame());
@@ -106,6 +140,8 @@ public class Controlit extends Application {
     }
 
     public void exit() {
+        if (project.hasUnsavedChanges())
+            if (!continueAfterAskSaveFile()) return;
         System.exit(0);
     }
 }
