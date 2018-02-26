@@ -14,11 +14,23 @@ import static ru.isled.controlit.Constants.MAX_PIXELS;
 public class LedFrame {
     private IntegerProperty frameLength = new SimpleIntegerProperty(DEFAULT_FRAME_LENGTH);
     private IntegerProperty cycles = new SimpleIntegerProperty(1);
-    private List<IntegerProperty> frames = new ArrayList<>(MAX_PIXELS);
+    private List<IntegerProperty> pixels = new ArrayList<>(MAX_PIXELS);
 
     public LedFrame() {
         for (int i = 0; i < MAX_PIXELS; i++) {
-            frames.add(new SimpleIntegerProperty(0));
+            pixels.add(new SimpleIntegerProperty(0));
+        }
+    }
+
+    public List<Integer> getPixels() {
+        return pixels.stream()
+                .map(pixel -> pixel.getValue())
+                .collect(Collectors.toList());
+    }
+
+    public void setPixels(List<Integer> pixels) {
+        for (int i = 0; i < this.pixels.size(); i++) {
+            this.pixels.get(i).set(pixels.get(i));
         }
     }
 
@@ -39,15 +51,15 @@ public class LedFrame {
     }
 
     public int getInt(int num) {
-        return frames.get(num).getValue();
+        return pixels.get(num).getValue();
     }
 
     public ObjectProperty<Integer> get(int num) {
-        return frames.get(num).asObject();
+        return pixels.get(num).asObject();
     }
 
     public IntegerProperty getProperty(int num) {
-        return frames.get(num);
+        return pixels.get(num);
     }
 
     public void setLength(int length) {
@@ -56,37 +68,10 @@ public class LedFrame {
     }
 
     public void setPixel(int num, int value) {
-        frames.get(num).setValue(value);
-    }
-
-/*    public int set(List<Byte> src) {
-        int lastNotNullValue = 0;
-        for (int i = 0; i < MAX_PIXELS; i++) {
-
-            // если коллекция пуста или  недостаточно данных, используем для заполнения нули
-            int srcVal = (src != null) && (src.size() > i)
-                    ? src.get(i) & 0XFF
-                    : 0;
-
-            if (srcVal != 0) lastNotNullValue = i + 1;
-//            IntegerProperty target = frames.size() > i && frames.get(i)
-
-            if (frames.size() > i && frames.get(i) != null) {
-                frames.get(i).setValue(srcVal);
-            } else {
-                frames.add(new SimpleIntegerProperty(srcVal));
-            }
-        }
-        return lastNotNullValue;
-    }*/
-
-    public List<Byte> asByteList() {
-        return frames.stream()
-                .map(x -> x.getValue().byteValue())
-                .collect(Collectors.toList());
+        pixels.get(num).setValue(value);
     }
 
     public void set(int pixel, int val) {
-        frames.get(pixel).setValue(val);
+        pixels.get(pixel).setValue(val);
     }
 }

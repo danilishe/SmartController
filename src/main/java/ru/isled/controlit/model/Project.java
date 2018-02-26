@@ -15,10 +15,35 @@ import static ru.isled.controlit.Constants.UNSAVED_FILE_NAME;
 public class Project {
     private BooleanProperty hasChanges;
     private ObjectProperty<File> file;
+
+    public void setData(List<LedFrame> data) {
+        this.data = data;
+    }
+
     private List<LedFrame> data;
+    //todo переделать в Enum
+    private int frameCount;
+    private int pixelCount;
+
     public Project() {
         hasChanges = new SimpleBooleanProperty(false);
         data = new ArrayList<>(MAX_FRAMES);
+    }
+
+    public int getFrameCount() {
+        return frameCount;
+    }
+
+    public void setFrameCount(int frameCount) {
+        this.frameCount = frameCount;
+    }
+
+    public int getPixelCount() {
+        return pixelCount;
+    }
+
+    public void setPixelCount(int pixelCount) {
+        this.pixelCount = pixelCount;
     }
 
     public BooleanProperty hasChangesProperty() {
@@ -63,6 +88,7 @@ public class Project {
     public int size() {
         return data.size();
     }
+
 
     public List<LedFrame> getData() {
         return data;
