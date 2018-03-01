@@ -119,19 +119,22 @@ public class MainController {
 
     @FXML
     public void saveFile() {
+        project.setFrameCount(framesSpinner.getValue());
+        project.setPixelCount(pixelSpinner.getValue());
         mainApp.saveProject();
 
     }
 
     @FXML
     public void loadFile() {
-
-            mainApp.loadProject();
+        mainApp.loadProject();
     }
 
 
     @FXML
     public void saveFileAs() {
+        project.setFrameCount(framesSpinner.getValue());
+        project.setPixelCount(pixelSpinner.getValue());
         File saveAs = Dialogs.saveAs(project.getFile());
         if (saveAs == null) return;
         project.setFileName(saveAs);

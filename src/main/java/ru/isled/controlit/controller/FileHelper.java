@@ -1,29 +1,34 @@
 package ru.isled.controlit.controller;
 
+import ru.isled.controlit.view.Dialogs;
+
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class FileHelper {
-    public static void save(File file, List<Byte> data) throws Exception {
-        OutputStream bw = new BufferedOutputStream(new FileOutputStream(file));
-        for (int i = 0; i < data.size(); i++) {
-            bw.write(data.get(i));
+    public static boolean save(File file, byte[] data) {
+        try (OutputStream bw = new BufferedOutputStream(new FileOutputStream(file))) {
+            bw.write(data);
+            bw.flush();
+            bw.close();
+        } catch (IOException ioe) {
+            System.err.println();
+            Dialogs.showErrorAlert("Ошибка при записи файла!");
+            ioe.printStackTrace();
+            return false;
         }
-        bw.flush();
-        bw.close();
+        return true;
     }
 
-    public static List<Byte> load(File file) throws Exception {
+    public static byte[] load(File file) {
         byte[] data = new byte[(int) file.length()];
-        InputStream is = new BufferedInputStream(new FileInputStream(file));
-        is.read(data);
-        is.close();
-
-        List<Byte> result = new ArrayList<>();
-        for (byte b : data) {
-            result.add(b);
+        try(InputStream is = new BufferedInputStream(new FileInputStream(file))) {
+            is.read(data);
+            is.close();
+        } catch (IOException ioe) {
+            Dialogs.showErrorAlert("Ошибка загрузки файла!");
+            ioe.printStackTrace();
+            return null;
         }
-        return result;
+        return data;
     }
 }

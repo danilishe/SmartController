@@ -7,7 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import ru.isled.controlit.controller.ProjectLoader;
+import ru.isled.controlit.controller.ProjectIO;
 import ru.isled.controlit.model.LedFrame;
 import ru.isled.controlit.model.Project;
 import ru.isled.controlit.view.Dialogs;
@@ -79,11 +79,12 @@ public class Controlit extends Application {
         if (fileForLoad == null) return;
 
         //todo
-        Project newProject = ProjectLoader.load(fileForLoad);
+        Project newProject = ProjectIO.load(fileForLoad);
         if (newProject == null) {
             Dialogs.showErrorAlert("Неверный формат файла или данная версия не поддерживается программой!");
             return;
         }
+        project = newProject;
         registerProjToControllerAndListener();
     }
 
@@ -109,9 +110,7 @@ public class Controlit extends Application {
             project.setFileName(file);
         }
 
-        // todo
-        String json = JSON.toJSONString(project);
-        System.out.println("json = " + json);
+        ProjectIO.save(project, project.getFile());
         project.setHasChanges(false);
         updateHeader();
     }

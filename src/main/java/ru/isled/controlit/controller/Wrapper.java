@@ -16,7 +16,7 @@ public class Wrapper {
         wrappedProject.setFrames(project.getData().stream()
                 .map(this::wrapLedFrame)
                 .collect(Collectors.toList()));
-        return new WrappedProject();
+        return wrappedProject;
     }
 
     public Project unwrap(WrappedProject wrappedProject) {
