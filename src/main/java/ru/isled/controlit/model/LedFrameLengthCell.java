@@ -17,7 +17,7 @@ public class LedFrameLengthCell extends TableCell<LedFrame, Integer> {
             setStyle("-fx-min-height: " + height + "px;" +
                     "-fx-pref-height: " + height + "px;" +
                     "-fx-max-height: " + height + "px;");
-            setText(item > 999 ? String.format("%.01fс", ((double) item / 1000)) : item.toString());
+            setText(item > 999 ? String.format("%.1f с", ((double) item / 1000)).replace(",0", "") : item.toString());
         }
     }
 }

@@ -8,7 +8,8 @@ import javafx.stage.Stage;
 import java.io.File;
 
 import static javafx.scene.control.ButtonType.*;
-import static ru.isled.controlit.Constants.DEFAULT_FILE_NAME;
+import static ru.isled.controlit.Constants.DEFAULT_EXPORT_FILE_NAME;
+import static ru.isled.controlit.Constants.DEFAULT_PROJECT_FILE_NAME;
 import static ru.isled.controlit.Constants.DEFAULT_WORK_DIRECTORY;
 
 public class Dialogs {
@@ -41,7 +42,7 @@ public class Dialogs {
     }
 
     public static File saveAs(File file) {
-        String fileName = file == null ? DEFAULT_FILE_NAME : file.getName();
+        String fileName = file == null ? DEFAULT_PROJECT_FILE_NAME : file.getName();
         File parentDirectory = file == null ? new File(DEFAULT_WORK_DIRECTORY) : file.getParentFile();
 
         FileChooser fileChooser = new FileChooser();
@@ -51,6 +52,19 @@ public class Dialogs {
         fileChooser.setTitle("Сохранить как...");
 
         fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("ISLed проект для контроллера", "*.isd"));
+        return fileChooser.showSaveDialog(stage);
+    }
+    public static File export(File file) {
+        String fileName = file == null ? DEFAULT_EXPORT_FILE_NAME : file.getName();
+        File parentDirectory = file == null ? new File(DEFAULT_WORK_DIRECTORY) : file.getParentFile();
+
+        FileChooser fileChooser = new FileChooser();
+
+        fileChooser.setInitialFileName(fileName);
+        fileChooser.setInitialDirectory(parentDirectory);
+        fileChooser.setTitle("Экспорт...");
+
+        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("ISLed файл для контроллера", "*.dat"));
         return fileChooser.showSaveDialog(stage);
     }
 

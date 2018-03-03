@@ -66,7 +66,7 @@ public class MainController {
 
     private ObservableList<LedFrame> frames = FXCollections.observableArrayList();
     private Project project;
-    private List<Shape> previewPixels = new ArrayList<>(MAX_PIXELS);
+    private List<Shape> previewPixels = new ArrayList<>(MAX_PIXELS_COUNT);
     private Controlit mainApp;
     //    public Button setBlinkingFadeOutEffect;
     //    @FXML
@@ -119,10 +119,9 @@ public class MainController {
 
     @FXML
     public void saveFile() {
-        project.setFrameCount(framesSpinner.getValue());
-        project.setPixelCount(pixelSpinner.getValue());
+//        project.setFrameCount(framesSpinner.getValue());
+//        project.setPixelCount(pixelSpinner.getValue());
         mainApp.saveProject();
-
     }
 
     @FXML
@@ -133,8 +132,8 @@ public class MainController {
 
     @FXML
     public void saveFileAs() {
-        project.setFrameCount(framesSpinner.getValue());
-        project.setPixelCount(pixelSpinner.getValue());
+//        project.setFrameCount(framesSpinner.getValue());
+//        project.setPixelCount(pixelSpinner.getValue());
         File saveAs = Dialogs.saveAs(project.getFile());
         if (saveAs == null) return;
         project.setFileName(saveAs);
@@ -169,14 +168,14 @@ public class MainController {
 
 
     private void initializePreviewZone() {
-        for (int i = 0; i < MAX_PIXELS; i++) {
+        for (int i = 0; i < MAX_PIXELS_COUNT; i++) {
             Shape pixel = new Circle(10, Color.rgb(0xFF, 0xFF, 0, 0));
             Text pixelText = new Text("" + (i + 1));
             StackPane stack = new StackPane(pixel, pixelText);
             pixel.setStroke(Color.BLACK);
             pixel.setStrokeWidth(0.7);
 
-            if (i >= INIT_PIXELS) stack.setVisible(false);
+            if (i >= DEFAULT_PIXEL_COUNT) stack.setVisible(false);
             previewPixels.add(pixel);
             previewBox.getChildren().add(stack);
         }
@@ -208,6 +207,11 @@ public class MainController {
     }
 
 
+    @FXML
+    public void exportHandler() {
+        mainApp.exportProject();
+    }
+
     private void setBrightSelectedCells(int val) {
         for (TablePosition cell : getSelectedDataCells()) {
             int pixel = cell.getColumn() - SYS_COLS;
@@ -222,7 +226,7 @@ public class MainController {
 
     private void setLengthSelectedFrames(int length) {
         for (LedFrame frame : frameTableView.getSelectionModel().getSelectedItems()) {
-            System.out.println("was=" + frame.getFrameLength() + " become=" + length);
+//            System.out.println("was=" + frame.getFrameLength() + " become=" + length);
             frames.get(frames.indexOf(frame)).setLength(length);
             project.setHasChanges(true);
 
@@ -485,7 +489,7 @@ public class MainController {
                     val = MAX_FRAME_LENGTH;
                 else if (val < MIN_FRAME_LENGTH)
                     val = MIN_FRAME_LENGTH;
-//todo наблюдается дефект при подтверждении ввода в поле, тогда не происходит обновления статуса tableview
+
                 // чётко обновляет внешний вид таблицы, так как после скрытия столбца, его значение меняется
                 if (frameLengthSpinner.getValue() != val) {
                     frameTableView.getColumns().get(SYS_COLS - 1).setVisible(false);
@@ -499,28 +503,38 @@ public class MainController {
 
     private void initPixelSpinner() {
         pixelSpinner.getStyleClass().add(Spinner.STYLE_CLASS_ARROWS_ON_RIGHT_HORIZONTAL);
+
         pixelSpinner.setValueFactory(
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(MIN_PIXELS, MAX_PIXELS, INIT_PIXELS)
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(MIN_PIXELS_COUNT, MAX_PIXELS_COUNT, DEFAULT_PIXEL_COUNT)
         );
+
         pixelSpinner.getEditor().textProperty().addListener((ov, oldValue, newValue) -> {
-            try {
-                int val = Integer.parseInt(newValue);
-
-                if (val < MIN_PIXELS)
-                    pixelSpinner.getEditor().textProperty().setValue(String.valueOf(MIN_PIXELS));
-                if (val > MAX_PIXELS)
-                    pixelSpinner.getEditor().textProperty().setValue(String.valueOf(MAX_PIXELS));
-
-
-                // хак для вызова обработчика событий спиннера
-                pixelSpinner.getValueFactory().setValue(
-                        Integer.parseInt(pixelSpinner.getEditor().textProperty().getValue()
-                        ));
-                refreshPixelCount();
-            } catch (NumberFormatException nfe) {
+            if (!newValue.matches("\\d+")) {
                 pixelSpinner.getEditor().textProperty().setValue(oldValue);
             }
         });
+
+        pixelSpinner.getValueFactory().valueProperty().addListener((ov, o, n) -> {
+            if (n < MIN_PIXELS_COUNT)
+                pixelSpinner.getValueFactory().setValue(MIN_PIXELS_COUNT);
+            else if (n > MAX_PIXELS_COUNT)
+                pixelSpinner.getValueFactory().setValue(MAX_PIXELS_COUNT);
+            else {
+                project.setPixelCount(n);
+                refreshPixelCount();
+            }
+        });
+
+        pixelSpinner.getEditor().focusedProperty().addListener((ov, o, n) -> {
+            if (!n) {
+                pixelSpinner.getValueFactory().setValue(
+                        Integer.parseInt(
+                                pixelSpinner.getEditor().textProperty().get()
+                        )
+                );
+            }
+        });
+
     }
 
     private void initFrameSpinner() {
@@ -529,25 +543,29 @@ public class MainController {
         );
 
         framesSpinner.getEditor().textProperty().addListener((ov, oldValue, newValue) -> {
-            try {
-                int val = Integer.parseInt(newValue);
-
-                if (val < MIN_FRAMES) {
-                    framesSpinner.getEditor().textProperty().setValue(String.valueOf(MIN_FRAMES));
-                } else if (val > MAX_FRAMES)
-                    framesSpinner.getEditor().textProperty().setValue(String.valueOf(MAX_FRAMES));
-
-                // хак для вызова обновления спиннера
-                framesSpinner.getValueFactory().setValue(
-                        Integer.parseInt(framesSpinner.getEditor().textProperty().getValue())
-                );
-
-
-                updateFramesCount();
-//                refresh();
-
-            } catch (NumberFormatException nfe) {
+            if (!newValue.matches("\\d+")) {
                 framesSpinner.getEditor().textProperty().setValue(oldValue);
+            }
+        });
+
+        framesSpinner.getValueFactory().valueProperty().addListener((ov, o, n) -> {
+            if (n < MIN_FRAMES)
+                framesSpinner.getValueFactory().setValue(MIN_FRAMES);
+            else if (n > MAX_FRAMES)
+                framesSpinner.getValueFactory().setValue(MAX_FRAMES);
+            else {
+                project.setFrameCount(n);
+                updateFramesCount();
+            }
+        });
+
+        framesSpinner.getEditor().focusedProperty().addListener((ov, o, n) -> {
+            if (!n) {
+                framesSpinner.getValueFactory().setValue(
+                        Integer.parseInt(
+                                framesSpinner.getEditor().textProperty().get()
+                        )
+                );
             }
         });
 
@@ -571,7 +589,7 @@ public class MainController {
     // скрывает колонки
     private void refreshPixelCount() {
         int selectedPixelNumber = pixelSpinner.getValue();
-        for (int i = 0; i < MAX_PIXELS; i++) {
+        for (int i = 0; i < MAX_PIXELS_COUNT; i++) {
 
             frameTableView.getColumns().get(i + SYS_COLS).visibleProperty().setValue(
                     i < selectedPixelNumber);
@@ -596,12 +614,12 @@ public class MainController {
         disableColumnReordering();
 
         // пиксели/каналы
-        for (int i = 0; i < MAX_PIXELS; i++) {
+        for (int i = 0; i < MAX_PIXELS_COUNT; i++) {
             TableColumn<LedFrame, Integer> column = new TableColumn<>(String.valueOf(i + 1));
 
             setDefaultColumnProperties(column);
 
-            if (i >= INIT_PIXELS) column.visibleProperty().setValue(false);
+            if (i >= DEFAULT_PIXEL_COUNT) column.visibleProperty().setValue(false);
             final int in = i;
 
             column.setCellFactory(cell -> new LedFrameTableCell(showDigits.selectedProperty(), showBright.selectedProperty()));

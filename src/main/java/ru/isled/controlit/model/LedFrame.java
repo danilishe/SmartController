@@ -9,15 +9,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static ru.isled.controlit.Constants.DEFAULT_FRAME_LENGTH;
-import static ru.isled.controlit.Constants.MAX_PIXELS;
+import static ru.isled.controlit.Constants.MAX_PIXELS_COUNT;
 
 public class LedFrame {
     private IntegerProperty frameLength = new SimpleIntegerProperty(DEFAULT_FRAME_LENGTH);
     private IntegerProperty cycles = new SimpleIntegerProperty(1);
-    private List<IntegerProperty> pixels = new ArrayList<>(MAX_PIXELS);
+    private List<IntegerProperty> pixels = new ArrayList<>(MAX_PIXELS_COUNT);
 
     public LedFrame() {
-        for (int i = 0; i < MAX_PIXELS; i++) {
+        for (int i = 0; i < MAX_PIXELS_COUNT; i++) {
             pixels.add(new SimpleIntegerProperty(0));
         }
     }

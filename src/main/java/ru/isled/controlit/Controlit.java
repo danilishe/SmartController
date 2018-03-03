@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 
 import static ru.isled.controlit.Constants.DEFAULT_FRAMES_COUNT;
+import static ru.isled.controlit.Constants.DEFAULT_PIXEL_COUNT;
 
 public class Controlit extends Application {
     private Stage mainStage = null;
@@ -24,7 +25,12 @@ public class Controlit extends Application {
     private MainController controller = null;
 
     public static void main(String[] args) {
+        loadDefaults();
         launch(args);
+    }
+
+    private static void loadDefaults() {
+        //TODO
     }
 
     @Override
@@ -78,7 +84,6 @@ public class Controlit extends Application {
         File fileForLoad = Dialogs.loadFile();
         if (fileForLoad == null) return;
 
-        //todo
         Project newProject = ProjectIO.load(fileForLoad);
         if (newProject == null) {
             Dialogs.showErrorAlert("Неверный формат файла или данная версия не поддерживается программой!");
@@ -122,6 +127,8 @@ public class Controlit extends Application {
             }
 
         project = new Project();
+        project.setFrameCount(DEFAULT_FRAMES_COUNT);
+        project.setPixelCount(DEFAULT_PIXEL_COUNT);
         for (int i = 0; i < DEFAULT_FRAMES_COUNT; i++) {
             project.addRow(new LedFrame());
         }
@@ -135,12 +142,19 @@ public class Controlit extends Application {
     }
 
     public void exportProject() {
-        // todo
+        File exportFile = Dialogs.export(project.getFile());
+        if (exportFile == null) return;
+        ProjectIO.export(project, exportFile);
     }
 
     public void exit() {
         if (project.hasUnsavedChanges())
             if (!continueAfterAskSaveFile()) return;
+        saveDefaults();
         System.exit(0);
+    }
+
+    private void saveDefaults() {
+        //TODO сохранение текущих значений в properties
     }
 }

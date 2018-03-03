@@ -12,26 +12,22 @@ public class ProjectIO {
 //        String projectData = new String(data);
         WrappedProject wrappedProject = JSON.parseObject(data, WrappedProject.class);
 
-        Wrapper wrapper = new Wrapper();
-        Project project = wrapper.unwrap(wrappedProject);
+        Project project = Wrapper.unwrap(wrappedProject);
         project.setFileName(file);
         return project;
     }
 
-    public static Project importPrj(File file) {
-        throw new RuntimeException("Метод не реализован");
-    }
-
     public static void save(Project project, File file) {
-        Wrapper wrapper = new Wrapper();
-        WrappedProject wrappedProject = wrapper.wrap(project);
+        WrappedProject wrappedProject = Wrapper.wrap(project);
         String json = JSON.toJSONString(wrappedProject);
         boolean result = FileHelper.save(file, json.getBytes());
         project.setFileName(file);
         project.setHasChanges(false);
     }
 
-    public void export(Project project, File file) {
-        throw new RuntimeException("Метод не реализован");
+    public static void export(Project project, File file) {
+        WrappedProject wrappedProject = Wrapper.wrap(project);
+        byte[] export = Converter.encode(wrappedProject);
+        FileHelper.save(file, export);
     }
 }
