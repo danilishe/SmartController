@@ -33,4 +33,5 @@ public interface Constants {
     int INIT_COL_WIDTH = 40;
     int MIN_COL_WIDTH = 25;
     int MAX_COL_WIDTH = 80;
+    String PROGRAM_VERSION = "0.9";
 }

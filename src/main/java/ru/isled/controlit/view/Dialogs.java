@@ -4,6 +4,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import ru.isled.controlit.Constants;
 
 import java.io.File;
 
@@ -73,7 +74,7 @@ public class Dialogs {
         alert.initOwner(stage);
         alert.setTitle("О программе");
         alert.setHeaderText(null);
-        alert.setContentText("Программа для создания программ для контроллера ISLed. ЗнакСвет (C) 2018");
+        alert.setContentText("Программа для создания программ для контроллера ISLed. ЗнакСвет (C) 2018\nhttp://is-led.ru\nВерсия " + Constants.PROGRAM_VERSION);
         alert.showAndWait();
     }
 

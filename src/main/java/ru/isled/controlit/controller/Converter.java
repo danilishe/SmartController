@@ -40,7 +40,9 @@ public class Converter {
                 }
             }
 
-            copyArrayToList(frameInterpolatedData, allData);
+            for (int i = 0; i < frame.getFrameCycles(); i++) {
+                copyArrayToList(frameInterpolatedData, allData);
+            }
         }
 
         byte[] result = new byte[allData.size()];
