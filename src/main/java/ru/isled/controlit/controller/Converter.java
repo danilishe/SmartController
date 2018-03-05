@@ -20,7 +20,7 @@ public class Converter {
         List<Byte> allData = new ArrayList<>();
         for (WrappedLedFrame frame : frames) {
             int baseLengthCount = frame.getFrameLength() / BASE_FRAME_LENGTH;
-            int[][] frameInterpolatedData = new int[baseLengthCount][MAX_PIXELS_COUNT];
+            int[][] subFrames = new int[baseLengthCount][MAX_PIXELS_COUNT];
 
             // перебираем каждый пиксель текущего кадра
             for (int pixel = 0; pixel < MAX_PIXELS_COUNT; pixel++) {
@@ -28,20 +28,20 @@ public class Converter {
                 if (pixelBright <= MAX_BRIGHT) {
                     // заполняем статичной яркостью
                     for (int i = 0; i < baseLengthCount; i++) {
-                        frameInterpolatedData[i][pixel] = pixelBright;
+                        subFrames[i][pixel] = pixelBright;
                     }
                 } else {
                     // применяем интерполированную цепочку из класса пиксельных эффектов
                     PixelEffect effect = PixelEffect.byIndex(pixelBright);
-                    int[] inerpolatedPixel = effect.getInterpolatedPixel(baseLengthCount);
+                    int[] interpolatedPixel = effect.getInterpolatedPixel(baseLengthCount);
                     for (int i = 0; i < baseLengthCount; i++) {
-                        frameInterpolatedData[i][pixel] = inerpolatedPixel[i];
+                        subFrames[i][pixel] = interpolatedPixel[i];
                     }
                 }
             }
 
             for (int i = 0; i < frame.getFrameCycles(); i++) {
-                copyArrayToList(frameInterpolatedData, allData);
+                copyArrayToList(subFrames, allData);
             }
         }
 
@@ -58,10 +58,10 @@ public class Converter {
             frames.remove(framesCount);
     }
 
-    private static void copyArrayToList(int[][] frameInterpolatedData, List<Byte> allData) {
-        for (int i = 0; i < frameInterpolatedData.length; i++) {
-            for (int j = 0; j < frameInterpolatedData[i].length; j++) {
-                allData.add((byte) frameInterpolatedData[i][j]);
+    private static void copyArrayToList(int[][] subFrames, List<Byte> allData) {
+        for (int[] subFrame : subFrames) {
+            for (int j = 0; j < subFrame.length; j++) {
+                allData.add((byte) subFrame[j]);
             }
         }
     }

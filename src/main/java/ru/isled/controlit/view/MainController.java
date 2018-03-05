@@ -16,6 +16,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
+import javafx.util.Pair;
+import org.controlsfx.control.RangeSlider;
 import ru.isled.controlit.Controlit;
 import ru.isled.controlit.model.*;
 
@@ -678,7 +680,8 @@ public class MainController {
 
             String selectedEffect = effectsSelector.getValue();
             if (selectedEffect.equals(Effect.Разгорание.name())) {
-                Effect.Разгорание.apply(values, cols, rows, null, null);
+                Pair<Integer, Integer> props = Dialogs.getFadeInProperties();
+                Effect.Разгорание.apply(values, cols, rows, props.getKey(), props.getValue());
 
             } else if (selectedEffect.equals(Effect.Угасание.name())) {
                 Effect.Угасание.apply(values, cols, rows, null, null);

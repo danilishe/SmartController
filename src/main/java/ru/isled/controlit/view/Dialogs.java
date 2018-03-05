@@ -2,16 +2,19 @@ package ru.isled.controlit.view;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Pair;
+import org.controlsfx.control.RangeSlider;
 import ru.isled.controlit.Constants;
 
 import java.io.File;
 
 import static javafx.scene.control.ButtonType.*;
-import static ru.isled.controlit.Constants.DEFAULT_EXPORT_FILE_NAME;
-import static ru.isled.controlit.Constants.DEFAULT_PROJECT_FILE_NAME;
-import static ru.isled.controlit.Constants.DEFAULT_WORK_DIRECTORY;
+import static ru.isled.controlit.Constants.*;
 
 public class Dialogs {
 
@@ -29,6 +32,18 @@ public class Dialogs {
 
         return fileChooser.showOpenDialog(stage);
 
+    }
+
+    public static Pair<Integer, Integer> getFadeInProperties() {
+        Dialog dialog = new Dialog();
+        dialog.initOwner(stage);
+        RangeSlider rangeSlider = new RangeSlider(0, 255, 0, 255);
+        VBox box = new VBox(5, rangeSlider);
+        dialog.getDialogPane().setContent(box);
+        dialog.setContentText("Выберите максимум/минимум эффекта");
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK);
+        dialog.showAndWait();
+        return new Pair<>((int) rangeSlider.getLowValue(), (int) rangeSlider.getHighValue());
     }
 
     public static ButtonBar.ButtonData askSaveProject() {
@@ -52,20 +67,20 @@ public class Dialogs {
         fileChooser.setInitialDirectory(parentDirectory);
         fileChooser.setTitle("Сохранить как...");
 
-        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("ISLed проект для контроллера", "*.isd"));
+        fileChooser.setSelectedExtensionFilter(Constants.PROJECT_EXT);
         return fileChooser.showSaveDialog(stage);
     }
+
     public static File export(File file) {
-        String fileName = file == null ? DEFAULT_EXPORT_FILE_NAME : file.getName();
         File parentDirectory = file == null ? new File(DEFAULT_WORK_DIRECTORY) : file.getParentFile();
 
         FileChooser fileChooser = new FileChooser();
 
-        fileChooser.setInitialFileName(fileName);
+        fileChooser.setInitialFileName(DEFAULT_EXPORT_FILE_NAME);
         fileChooser.setInitialDirectory(parentDirectory);
         fileChooser.setTitle("Экспорт...");
 
-        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("ISLed файл для контроллера", "*.dat"));
+        fileChooser.setSelectedExtensionFilter(Constants.BIN_EXT);
         return fileChooser.showSaveDialog(stage);
     }
 

@@ -10,8 +10,12 @@ public class ProjectIO {
     public static Project load(File file) {
         byte[] data = FileHelper.load(file);
 //        String projectData = new String(data);
-        WrappedProject wrappedProject = JSON.parseObject(data, WrappedProject.class);
-
+        WrappedProject wrappedProject = null;
+        try {
+            wrappedProject = JSON.parseObject(data, WrappedProject.class);
+        } catch (RuntimeException ignore) {
+        }
+        if (wrappedProject == null) return null;
         Project project = Wrapper.unwrap(wrappedProject);
         project.setFileName(file);
         return project;
