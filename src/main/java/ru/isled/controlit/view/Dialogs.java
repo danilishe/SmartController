@@ -1,12 +1,13 @@
 package ru.isled.controlit.view;
 
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
+import javafx.beans.binding.Bindings;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Pair;
 import org.controlsfx.control.RangeSlider;
 import ru.isled.controlit.Constants;
@@ -38,9 +39,27 @@ public class Dialogs {
         Dialog dialog = new Dialog();
         dialog.initOwner(stage);
         RangeSlider rangeSlider = new RangeSlider(0, 255, 0, 255);
-        VBox box = new VBox(5, rangeSlider);
-        dialog.getDialogPane().setContent(box);
-        dialog.setContentText("Выберите максимум/минимум эффекта");
+        rangeSlider.setShowTickLabels(true);
+        rangeSlider.setShowTickMarks(true);
+
+        Label hLabel = new Label("255");
+        hLabel.setMinWidth(30);
+        hLabel.textProperty().bind(
+                Bindings.format("%.0f", rangeSlider.highValueProperty())
+        );
+
+        Label lLabel = new Label("0");
+        lLabel.setMinWidth(30);
+        lLabel.textProperty().bind(
+                Bindings.format("%.0f", rangeSlider.lowValueProperty())
+        );
+
+
+        HBox hBox = new HBox(5, lLabel, rangeSlider, hLabel);
+        hBox.setMinWidth(250);
+
+        dialog.setHeaderText("Выберите максимум/минимум эффекта");
+        dialog.getDialogPane().setContent(hBox);
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK);
         dialog.showAndWait();
         return new Pair<>((int) rangeSlider.getLowValue(), (int) rangeSlider.getHighValue());

@@ -38,4 +38,6 @@ public interface Constants {
     String PROGRAM_VERSION = "0.9";
     FileChooser.ExtensionFilter PROJECT_EXT = new FileChooser.ExtensionFilter("ISLed проект для контроллера", "*.isc");
     FileChooser.ExtensionFilter BIN_EXT = new FileChooser.ExtensionFilter("ISLed файл для контроллера", "*.bin");
+    int MAX_CYCLES = 100;
+    int MIN_CYCLES = 0;
 }

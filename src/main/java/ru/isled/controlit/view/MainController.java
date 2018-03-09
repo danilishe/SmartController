@@ -17,7 +17,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.util.Pair;
-import org.controlsfx.control.RangeSlider;
 import ru.isled.controlit.Controlit;
 import ru.isled.controlit.model.*;
 
@@ -30,10 +29,8 @@ import static ru.isled.controlit.Constants.*;
 
 public class MainController {
 
-    private static final int MAX_CYCLES = 100;
-    private static final int MIN_CYCLES = 0;
     @FXML
-    public HBox previewBox;
+    public HBox previewZone;
     @FXML
     public Button maxBright;
     @FXML
@@ -55,9 +52,9 @@ public class MainController {
     @FXML
     public TextField brightField;
     @FXML
-    public CheckBox showDigits;
+    public ToggleButton showDigits;
     @FXML
-    public CheckBox showBright;
+    public ToggleButton showBright;
     @FXML
     public Spinner<Integer> frameLengthSpinner;
     @FXML
@@ -70,12 +67,6 @@ public class MainController {
     private Project project;
     private List<Shape> previewPixels = new ArrayList<>(MAX_PIXELS_COUNT);
     private Controlit mainApp;
-    //    public Button setBlinkingFadeOutEffect;
-    //    @FXML
-    //    public Button setChaosEffect;
-    //    @FXML
-    //    public Button setBlinkingFadeInEffect;
-    //    @FXML
 
     @FXML
     public void setFadeInEffect() {
@@ -179,13 +170,15 @@ public class MainController {
 
             if (i >= DEFAULT_PIXEL_COUNT) stack.setVisible(false);
             previewPixels.add(pixel);
-            previewBox.getChildren().add(stack);
+            previewZone.getChildren().add(stack);
         }
     }
 
     private void initializeBrightHandlers() {
         maxBright.setText(String.valueOf(MAX_BRIGHT));
-
+        brightSlider.valueProperty().addListener((ov, o, n) -> {
+            brightField.setText(String.valueOf(n.intValue()));
+        });
         brightField.textProperty().addListener((ol, oldValue, newValue) -> {
             if ("".equals(newValue)) return;
             try {
@@ -258,13 +251,13 @@ public class MainController {
 
             int cellValue = frames.get(position.getRow()).getInt(position.getColumn() - SYS_COLS);
 
-            String frameLeng = frames.get(position.getRow()).getFrameLength().get().toString();
-            String frameCycl = frames.get(position.getRow()).getCycles().get().toString();
+            int frameLeng = frames.get(position.getRow()).getFrameLength().get();
+            int frameCycl = frames.get(position.getRow()).getCycles().get();
 
             if (selectedDataCells.size() == 1) {
 
-                frameLengthSpinner.getEditor().setText(frameLeng);
-                frameCyclesSpinner.getEditor().setText(frameCycl);
+                frameLengthSpinner.getValueFactory().setValue(frameLeng);
+                frameCyclesSpinner.getValueFactory().setValue(frameCycl);
 
                 if (cellValue <= MAX_BRIGHT) {
                     brightField.textProperty().setValue("" + cellValue);
@@ -389,21 +382,31 @@ public class MainController {
 
     @FXML
     public void setMaxBright() {
-        brightField.textProperty().setValue(String.valueOf(MAX_BRIGHT));
+//        brightField.textProperty().setValue(String.valueOf(MAX_BRIGHT));
         setBrightSelectedCells(MAX_BRIGHT);
     }
 
     @FXML
-    public void setMinBright() {
-        brightField.textProperty().setValue(String.valueOf(MIN_BRIGHT));
-        setBrightSelectedCells(MIN_BRIGHT);
+    public void set25Bright() {
+        setBrightSelectedCells((int) (MAX_BRIGHT * 0.25));
     }
 
     @FXML
-    public void setRandomBright() {
-        int rnd = Math.round((int) (Math.random() * (MAX_BRIGHT + 1)));
-        brightField.textProperty().setValue(String.valueOf(rnd));
+    public void set75Bright() {
+        setBrightSelectedCells((int) (MAX_BRIGHT * 0.75));
     }
+
+    @FXML
+    public void set50Bright() {
+        setBrightSelectedCells((int) (MAX_BRIGHT * 0.5));
+    }
+
+    @FXML
+    public void setMinBright() {
+//        brightField.textProperty().setValue(String.valueOf(MIN_BRIGHT));
+        setBrightSelectedCells(MIN_BRIGHT);
+    }
+
 
     @FXML
     public void clearSelection() {
@@ -460,24 +463,33 @@ public class MainController {
 
         // отслеживает корректность значения спиннера (не текстового поля, входящего в его состав)
         frameLengthSpinner.getValueFactory().valueProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println("oldValue = " + oldValue);
+            System.out.println("newValue = " + newValue);
+            System.out.println();
+            
             if (newValue % FRAME_LENGTH_STEP != 0)
-                frameLengthSpinner.getEditor().setText("" + (newValue / FRAME_LENGTH_STEP * FRAME_LENGTH_STEP));
+                frameLengthSpinner.getValueFactory().setValue((newValue / FRAME_LENGTH_STEP * FRAME_LENGTH_STEP));
 
             if (newValue > MAX_FRAME_LENGTH)
-                frameLengthSpinner.getEditor().setText("" + MAX_FRAME_LENGTH);
+                frameLengthSpinner.getValueFactory().setValue(MAX_FRAME_LENGTH);
             else if (newValue < MIN_FRAME_LENGTH)
-                frameLengthSpinner.getEditor().setText("" + MIN_FRAME_LENGTH);
+                frameLengthSpinner.getValueFactory().setValue(MIN_FRAME_LENGTH);
 
-            if (newValue % MIN_FRAME_LENGTH == 0 || newValue > MAX_FRAME_LENGTH || newValue < MIN_FRAME_LENGTH) {
+            if (newValue % MIN_FRAME_LENGTH == 0 && newValue < MAX_FRAME_LENGTH && newValue > MIN_FRAME_LENGTH) {
                 setLengthSelectedFrames(newValue);
+            } else {
+//                frameLengthSpinner.getValueFactory().getValue());
             }
 
         });
 
-        frameLengthSpinner.getEditor().addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+        frameLengthSpinner.getEditor().addEventHandler(KeyEvent.KEY_RELEASED, event -> {
             if (event.getCode() == KeyCode.ENTER) {
+                System.out.println("frameLengthSpinner.val = " + frameLengthSpinner.getValue());
                 frameTableView.getColumns().get(SYS_COLS - 1).setVisible(false);
+                frameLengthSpinner.getEditor().commitValue();
                 frameTableView.getColumns().get(SYS_COLS - 1).setVisible(true);
+                event.consume();
             }
         });
         // применяет значение после потери фокуса

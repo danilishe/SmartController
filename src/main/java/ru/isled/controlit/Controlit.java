@@ -1,6 +1,5 @@
 package ru.isled.controlit;
 
-import com.alibaba.fastjson.JSON;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -58,7 +57,10 @@ public class Controlit extends Application {
         mainStage.setMinWidth(800);
         mainStage.setMinHeight(720);
         mainStage.centerOnScreen();
-        mainStage.setOnCloseRequest(event -> exit());
+        mainStage.setOnCloseRequest(event -> {
+            event.consume();
+            exit();
+        });
         controller = loader.getController();
         controller.setMainApp(this);
 
@@ -97,6 +99,7 @@ public class Controlit extends Application {
         switch (Dialogs.askSaveProject()) {
             case YES:
                 saveProject();
+                if (project.hasUnsavedChanges()) return false;
             case NO:
                 return true;
 
