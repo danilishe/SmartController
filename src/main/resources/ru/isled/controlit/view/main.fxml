@@ -106,7 +106,7 @@
                                 <Tooltip text="75% яркость" />
                             </tooltip>
                         </Button>
-                        <Button fx:id="maxBright" accessibleHelp="Отключение пиксела" accessibleText="Отключение пиксела" alignment="BOTTOM_CENTER" layoutX="184.0" layoutY="10.0" minHeight="30.0" mnemonicParsing="false" onAction="#setMaxBright" prefWidth="500.0">
+                        <Button fx:id="maxBright" accessibleHelp="Отключение пиксела" accessibleText="Отключение пиксела" alignment="BOTTOM_CENTER" layoutX="184.0" layoutY="10.0" minHeight="30.0" mnemonicParsing="false" onAction="#setMaxBright" prefWidth="500.0" textOverrun="CLIP">
                             <graphic>
                                 <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true">
                                     <image>
@@ -272,7 +272,7 @@
             <children>
                 <HBox spacing="5.0">
                     <children>
-                        <Label fx:id="fullTime" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="60.0">
+                        <Label fx:id="fullTime" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="100.0">
                             <graphic>
                                 <Label text="⏰">
                                     <font>

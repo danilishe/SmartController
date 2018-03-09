@@ -21,6 +21,9 @@ import ru.isled.controlit.Controlit;
 import ru.isled.controlit.model.*;
 
 import java.io.File;
+import java.time.DateTimeException;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -149,6 +152,7 @@ public class MainController {
         frameTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         frameTableView.addEventHandler(MouseEvent.MOUSE_CLICKED, x -> handleCellSelection());
         frameTableView.setItems(frames);
+//        frames.addListener((ListChangeListener<LedFrame>) c -> updateProgramLength());
     }
 
     private void initZoomSlider() {
@@ -227,12 +231,41 @@ public class MainController {
 
 //            frame.setLength(length);
         }
+        updateProgramLength();
+    }
+
+    @FXML
+    private Label fullTime;
+
+    private void updateProgramLength() {
+        System.out.println("update prog length");
+        long time = frameTableView.getItems().stream()
+                .mapToLong(item -> item.getCycles().get() * item.getFrameLength().get())
+                .sum();
+
+        String aTime = millisectondsToProgramLength(time);
+        fullTime.setText(aTime);
+    }
+
+    private String millisectondsToProgramLength(long time) {
+
+        try {
+            LocalTime dateTime = LocalTime.ofNanoOfDay(time * 1000_000);
+            return dateTime.format(DateTimeFormatter.ISO_TIME);
+        } catch (DateTimeException dte) {
+//            synchronized (this) {
+//                Dialogs.showErrorAlert("Максимально допустимая длина программы - 24 часа. Необходимо уменьшить длительность программы.");
+//            }
+            return "> 24 ч";
+        }
+
     }
 
     private void setCyclesSelectedFrames(int cycles) {
         for (LedFrame frame : frameTableView.getSelectionModel().getSelectedItems()) {
             frame.setLength(cycles);
         }
+        updateProgramLength();
     }
 
     private void handleCellSelection() {
@@ -448,6 +481,7 @@ public class MainController {
     private void setCyclesSelectedFrames() {
         int cycles = frameCyclesSpinner.getValue();
         frameTableView.getSelectionModel().getSelectedItems().forEach(frame -> frame.setCycles(cycles));
+        updateProgramLength();
     }
 
     private void initLengthSpinner() {
@@ -466,7 +500,7 @@ public class MainController {
             System.out.println("oldValue = " + oldValue);
             System.out.println("newValue = " + newValue);
             System.out.println();
-            
+
             if (newValue % FRAME_LENGTH_STEP != 0)
                 frameLengthSpinner.getValueFactory().setValue((newValue / FRAME_LENGTH_STEP * FRAME_LENGTH_STEP));
 
@@ -475,7 +509,7 @@ public class MainController {
             else if (newValue < MIN_FRAME_LENGTH)
                 frameLengthSpinner.getValueFactory().setValue(MIN_FRAME_LENGTH);
 
-            if (newValue % MIN_FRAME_LENGTH == 0 && newValue < MAX_FRAME_LENGTH && newValue > MIN_FRAME_LENGTH) {
+            if (newValue % MIN_FRAME_LENGTH == 0 && newValue <= MAX_FRAME_LENGTH && newValue >= MIN_FRAME_LENGTH) {
                 setLengthSelectedFrames(newValue);
             } else {
 //                frameLengthSpinner.getValueFactory().getValue());
@@ -592,11 +626,13 @@ public class MainController {
             for (int i = existsFrames; i > needFrames; i--) {
                 frames.remove(frames.size() - 1);
             }
+            updateProgramLength();
         } else if (existsFrames < needFrames) {
             for (int i = existsFrames; i < needFrames; i++) {
                 if (project.size() == i) project.addRow(new LedFrame());
                 frames.add(project.getRow(i));
             }
+            updateProgramLength();
         }
     }
 
@@ -693,13 +729,15 @@ public class MainController {
             String selectedEffect = effectsSelector.getValue();
             if (selectedEffect.equals(Effect.Разгорание.name())) {
                 Pair<Integer, Integer> props = Dialogs.getFadeInProperties();
-                Effect.Разгорание.apply(values, cols, rows, props.getKey(), props.getValue());
+                Effect.Разгорание.apply(values, cols, rows, props.getKey(), props.getValue(), 0);
 
             } else if (selectedEffect.equals(Effect.Угасание.name())) {
-                Effect.Угасание.apply(values, cols, rows, null, null);
+                Pair<Integer, Integer> props = Dialogs.getFadeOutProperties();
+                Effect.Угасание.apply(values, cols, rows, props.getKey(), props.getValue(), 0);
 
             } else if (selectedEffect.equals(Effect.Случайно.name())) {
-                Effect.Случайно.apply(values, null, null, null, null);
+                Pair<Integer, Integer> props = Dialogs.getFadeInProperties();
+                Effect.Случайно.apply(values, null, null, props.getKey(), props.getValue(), 0);
             }
 
         }

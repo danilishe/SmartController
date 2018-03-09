@@ -1,18 +1,16 @@
 package ru.isled.controlit.view;
 
 import javafx.beans.binding.Bindings;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Pair;
 import org.controlsfx.control.RangeSlider;
 import ru.isled.controlit.Constants;
 
 import java.io.File;
+import java.util.Optional;
 
 import static javafx.scene.control.ButtonType.*;
 import static ru.isled.controlit.Constants.*;
@@ -20,6 +18,7 @@ import static ru.isled.controlit.Constants.*;
 public class Dialogs {
 
     private static Stage stage;
+    private static Alert alert;
 
     public static void setStage(Stage stage) {
         Dialogs.stage = stage;
@@ -38,17 +37,17 @@ public class Dialogs {
     public static Pair<Integer, Integer> getFadeInProperties() {
         Dialog dialog = new Dialog();
         dialog.initOwner(stage);
-        RangeSlider rangeSlider = new RangeSlider(0, 255, 0, 255);
+        RangeSlider rangeSlider = new RangeSlider(MIN_BRIGHT, MAX_BRIGHT, MIN_BRIGHT, MAX_BRIGHT);
         rangeSlider.setShowTickLabels(true);
         rangeSlider.setShowTickMarks(true);
 
-        Label hLabel = new Label("255");
+        Label hLabel = new Label("" + MAX_BRIGHT);
         hLabel.setMinWidth(30);
         hLabel.textProperty().bind(
                 Bindings.format("%.0f", rangeSlider.highValueProperty())
         );
 
-        Label lLabel = new Label("0");
+        Label lLabel = new Label("" + MIN_BRIGHT);
         lLabel.setMinWidth(30);
         lLabel.textProperty().bind(
                 Bindings.format("%.0f", rangeSlider.lowValueProperty())
@@ -64,9 +63,38 @@ public class Dialogs {
         dialog.showAndWait();
         return new Pair<>((int) rangeSlider.getLowValue(), (int) rangeSlider.getHighValue());
     }
+    public static Pair<Integer, Integer> getFadeOutProperties() {
+        Dialog dialog = new Dialog();
+        dialog.initOwner(stage);
+        RangeSlider rangeSlider = new RangeSlider(-MAX_BRIGHT, MIN_BRIGHT, -MAX_BRIGHT, MIN_BRIGHT);
+        rangeSlider.setShowTickLabels(true);
+        rangeSlider.setShowTickMarks(true);
+
+        Label hLabel = new Label("" + MIN_BRIGHT);
+        hLabel.setMinWidth(30);
+        hLabel.textProperty().bind(
+                Bindings.format("%.0f", rangeSlider.highValueProperty())
+        );
+
+        Label lLabel = new Label("" + MAX_BRIGHT);
+        lLabel.setMinWidth(30);
+        lLabel.textProperty().bind(
+                Bindings.format("%.0f", rangeSlider.lowValueProperty())
+        );
+
+
+        HBox hBox = new HBox(5, lLabel, rangeSlider, hLabel);
+        hBox.setMinWidth(250);
+
+        dialog.setHeaderText("Выберите максимум/минимум эффекта");
+        dialog.getDialogPane().setContent(hBox);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK);
+        dialog.showAndWait();
+        return new Pair<>((int) -rangeSlider.getLowValue(), (int) -rangeSlider.getHighValue());
+    }
 
     public static ButtonBar.ButtonData askSaveProject() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.initOwner(stage);
         alert.setTitle("Сохраненить изменения?");
         alert.setHeaderText("Имеются несохранённые изменения. Сохранить?");
@@ -104,7 +132,7 @@ public class Dialogs {
     }
 
     public static void showAboutInfo() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert = new Alert(Alert.AlertType.INFORMATION);
         alert.initOwner(stage);
         alert.setTitle("О программе");
         alert.setHeaderText(null);
@@ -113,13 +141,13 @@ public class Dialogs {
     }
 
 
-    public static void showErrorAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
+    public static Optional<ButtonType> showErrorAlert(String message) {
+        alert = new Alert(Alert.AlertType.ERROR);
         alert.initOwner(stage);
         alert.setTitle("Ошибка!");
         alert.setHeaderText(null);
         alert.setContentText(message);
-        alert.showAndWait();
+        return alert.showAndWait();
     }
 
 }

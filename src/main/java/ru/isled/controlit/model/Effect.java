@@ -1,6 +1,7 @@
 package ru.isled.controlit.model;
 
 import javafx.beans.property.IntegerProperty;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.List;
 import java.util.Random;
@@ -13,7 +14,8 @@ public enum Effect {
         @Override
         public void apply(List<IntegerProperty> list,
                           Integer col, Integer row,
-                          Integer startVal, Integer endVal) {
+                          Integer startVal, Integer endVal,
+                          int var) {
 
             if (startVal == null) startVal = MIN_BRIGHT;
             if (endVal == null) endVal = MAX_BRIGHT;
@@ -39,12 +41,12 @@ public enum Effect {
         @Override
         public void apply(List<IntegerProperty> list,
                           Integer col, Integer row,
-                          Integer startVal, Integer endVal) {
+                          Integer startVal, Integer endVal, int variant) {
 
             if (startVal == null) startVal = MAX_BRIGHT;
             if (endVal == null) endVal = MIN_BRIGHT;
 
-            Разгорание.apply(list, col, row, startVal, endVal);
+            Разгорание.apply(list, col, row, startVal, endVal, variant);
 
         }
     },
@@ -53,7 +55,8 @@ public enum Effect {
         @Override
         public void apply(List<IntegerProperty> list,
                           Integer col, Integer row,
-                          Integer min, Integer max) {
+                          Integer min, Integer max,
+                          int variant) {
 
             if (min == null) min = MIN_BRIGHT;
             int range = max == null ? MAX_BRIGHT - min : max - min;
@@ -65,11 +68,27 @@ public enum Effect {
         }
     },
 
-    Блик;
+    Блик {
+        @Override
+        public void apply(List<IntegerProperty> list, Integer col, Integer row, Integer startVal, Integer endVal, int variant) {
+            throw new NotImplementedException();
+        }
+    },
 
-    public void apply(List<IntegerProperty> list,
-                      Integer col, Integer row,
-                      Integer startVal, Integer endVal) {
-        throw new UnsupportedOperationException("This effect didn't ready yet... :(");
-    }
+    Наполнение {
+        public static final int ВЛЕВО = 1;
+        public static final int ВПРАВО = 2;
+        public static final int В_ЦЕНТР = 3;
+        public static final int К_КРАЯМ = 4;
+
+        @Override
+        public void apply(List<IntegerProperty> list, Integer col, Integer row, Integer startVal, Integer endVal, int effectVariant) {
+            throw new NotImplementedException();
+        }
+    };
+
+    public abstract void apply(List<IntegerProperty> list,
+                               Integer col, Integer row,
+                               Integer startVal, Integer endVal,
+                               int effectVariant);
 }
