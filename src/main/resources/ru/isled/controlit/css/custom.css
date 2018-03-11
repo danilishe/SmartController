@@ -13,6 +13,21 @@
     -fx-background-size: 100% 100%;
     -fx-background-position: center center;
 }
+.fadeInOut {
+    -fx-fill: image-pattern("/ru/isled/controlit/images/fadeInOut.gif");
+    -fx-background-image: url("../images/fadeInOut.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 100% 100%;
+    -fx-background-position: center center;
+}
+
+.fadeOutIn {
+    -fx-fill: image-pattern("/ru/isled/controlit/images/fadeOutIn.gif");
+    -fx-background-image: url("../images/fadeOutIn.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 100% 100%;
+    -fx-background-position: center center;
+}
 
 .blink {
     -fx-fill: image-pattern("/ru/isled/controlit/images/blink.gif");

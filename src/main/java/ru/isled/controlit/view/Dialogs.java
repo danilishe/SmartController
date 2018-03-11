@@ -68,7 +68,7 @@ public class Dialogs {
 
 
         HBox hBox = new HBox(5, lLabel, rangeSlider, hLabel);
-        hBox.setMinWidth(250);
+        hBox.setPrefWidth(250);
 
         dialog.setHeaderText("Выберите максимум/минимум эффекта");
         dialog.getDialogPane().setContent(hBox);
@@ -122,7 +122,7 @@ public class Dialogs {
         preview.initOwner(stage);
         preview.show();
         Thread thread = new Thread(timer);
-//        thread.setDaemon(true);
+        thread.setDaemon(true);
         thread.start();
 
 
@@ -201,8 +201,14 @@ public class Dialogs {
         alert = new Alert(Alert.AlertType.INFORMATION);
         alert.initOwner(stage);
         alert.setTitle("О программе");
-        alert.setHeaderText(null);
-        alert.setContentText("Программа для создания программ для контроллера ISLed. ЗнакСвет (C) 2018\nhttp://is-led.ru\nВерсия " + Constants.PROGRAM_VERSION);
+        alert.setHeaderText("Control It! 2018");
+        alert.setContentText(
+                "Программа для создания и редактирования эффектов для контроллера ISLed" +
+                "\nЗнакСвет (C) 2018\nСуетин Д.Е. (C) 2018" +
+                "\nhttp://is-led.ru/" +
+                "\nВерсия " + Constants.PROGRAM_VERSION +
+                "\nПамяти JVM свободно/всего: " + Runtime.getRuntime().freeMemory() / 1_000_000 + "МБ / " + Runtime.getRuntime().totalMemory() / 1_000_000 + "МБ"
+        );
         alert.showAndWait();
     }
 

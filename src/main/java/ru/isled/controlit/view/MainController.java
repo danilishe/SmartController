@@ -89,6 +89,15 @@ public class MainController {
     }
 
     @FXML
+    public void setFadeInOutEffect() {
+        setBrightSelectedCells(PixelEffect.Вспышка.index());
+    }
+    @FXML
+    public void setFadeOutInEffect() {
+        setBrightSelectedCells(PixelEffect.Миг.index());
+    }
+
+    @FXML
     public void setBlinkingFadeInEffect() {
         setBrightSelectedCells(PixelEffect.МерцающееРазгорание.index());
     }
@@ -240,7 +249,6 @@ public class MainController {
     private Label fullTime;
 
     private void updateProgramLength() {
-        System.out.println("update prog length");
         long time = frameTableView.getItems().stream()
                 .mapToLong(item -> item.getCycles().get() * item.getFrameLength().get())
                 .sum();
@@ -255,9 +263,6 @@ public class MainController {
             LocalTime dateTime = LocalTime.ofNanoOfDay(time * 1_000_000);
             return dateTime.format(DateTimeFormatter.ISO_TIME);
         } catch (DateTimeException dte) {
-//            synchronized (this) {
-//                Dialogs.showErrorAlert("Максимально допустимая длина программы - 24 часа. Необходимо уменьшить длительность программы.");
-//            }
             return "> 24 ч";
         }
 
@@ -507,9 +512,6 @@ public class MainController {
 
         // отслеживает корректность значения спиннера (не текстового поля, входящего в его состав)
         frameLengthSpinner.getValueFactory().valueProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("oldValue = " + oldValue);
-            System.out.println("newValue = " + newValue);
-            System.out.println();
 
             if (newValue % FRAME_LENGTH_STEP != 0)
                 frameLengthSpinner.getValueFactory().setValue((newValue / FRAME_LENGTH_STEP * FRAME_LENGTH_STEP));
@@ -529,7 +531,6 @@ public class MainController {
 
         frameLengthSpinner.getEditor().addEventHandler(KeyEvent.KEY_RELEASED, event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                System.out.println("frameLengthSpinner.val = " + frameLengthSpinner.getValue());
                 frameTableView.getColumns().get(SYS_COLS - 1).setVisible(false);
                 frameLengthSpinner.getEditor().commitValue();
                 frameTableView.getColumns().get(SYS_COLS - 1).setVisible(true);

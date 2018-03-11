@@ -23,6 +23,34 @@ public enum PixelEffect {
         }
     },
 
+    Миг(53135, "fadeOutIn") {
+        @Override
+        public int[] getInterpolatedPixel(int baseLengthCount) {
+            int middle = baseLengthCount / 2;
+            int[] fadeOut = Угасание.getInterpolatedPixel(middle + 1);
+            int[] fadeIn = Разгорание.getInterpolatedPixel(baseLengthCount - middle);
+            int[] ints = Arrays.copyOf(fadeOut, baseLengthCount);
+            for (int i : fadeIn) {
+                ints[middle++] = i;
+            }
+            return ints;
+        }
+    },
+    Вспышка(13531, "fadeInOut") {
+        @Override
+        public int[] getInterpolatedPixel(int baseLengthCount) {
+            int middle = baseLengthCount / 2;
+            int[] fadeIn = Разгорание.getInterpolatedPixel(middle + 1);
+            int[] fadeOut = Угасание.getInterpolatedPixel(baseLengthCount - middle);
+            int[] ints = Arrays.copyOf(fadeIn, baseLengthCount);
+            for (int i : fadeOut) {
+                ints[middle++] = i;
+            }
+            return ints;
+        }
+    },
+
+
     Угасание(54321, "fadeOut") {
         @Override
         public int[] getInterpolatedPixel(int baseLengthCount) {
