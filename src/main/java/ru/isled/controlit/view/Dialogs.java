@@ -1,8 +1,14 @@
 package ru.isled.controlit.view;
 
 import javafx.beans.binding.Bindings;
+import javafx.concurrent.Task;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Shape;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -10,7 +16,14 @@ import org.controlsfx.control.RangeSlider;
 import ru.isled.controlit.Constants;
 
 import java.io.File;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static javafx.scene.control.ButtonType.*;
 import static ru.isled.controlit.Constants.*;
@@ -63,6 +76,59 @@ public class Dialogs {
         dialog.showAndWait();
         return new Pair<>((int) rangeSlider.getLowValue(), (int) rangeSlider.getHighValue());
     }
+
+    public static void preview(final byte[] data, int width) {
+        Dialog preview = new Dialog();
+        preview.setTitle("Предпросмотр");
+        List<Shape> px = Stream
+                .generate(() -> new Circle(15, Color.YELLOW))
+                .limit(width)
+                .collect(Collectors.toList());
+        HBox hbox = new HBox(5);
+        hbox.setStyle("-fx-background-color: black; -fx-padding: 20px;");
+        List<StackPane> objects = IntStream.range(0, width).mapToObj(i ->
+                new StackPane(px.get(i), new Label("" + (i + 1)))
+        ).collect(Collectors.toList());
+
+        hbox.getChildren().addAll(objects);
+
+
+        Task<Void> timer = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                while (preview.isShowing()) {
+                    long stepStartTime = new Date().getTime();
+                    for (int i = 0; i < data.length; i += MAX_PIXELS_COUNT) {
+                        long stepEndTime = new Date().getTime() - stepStartTime;
+                        updateMessage(LocalTime.ofNanoOfDay(stepEndTime * 1_000_000).format(DateTimeFormatter.ISO_TIME));
+                        for (int j = 0; j < width; j++) {
+                            double opacity = (double) ((int) data[i + j] & 0xFF) / MAX_BRIGHT;
+                            px.get(j).setOpacity(opacity);
+                        }
+                        Thread.sleep(BASE_FRAME_LENGTH);
+                    }
+                }
+                return null;
+            }
+        };
+
+        Label label = new Label();
+        label.textProperty().bind(timer.messageProperty());
+//        timer.setOnSucceeded((s) -> label.textProperty().unbind());
+        VBox vBox = new VBox(5, label, hbox);
+        preview.getDialogPane().setContent(vBox);
+        preview.getDialogPane().getButtonTypes().addAll(ButtonType.OK);
+
+        preview.initOwner(stage);
+        preview.show();
+        Thread thread = new Thread(timer);
+//        thread.setDaemon(true);
+        thread.start();
+
+
+    }
+
+
     public static Pair<Integer, Integer> getFadeOutProperties() {
         Dialog dialog = new Dialog();
         dialog.initOwner(stage);

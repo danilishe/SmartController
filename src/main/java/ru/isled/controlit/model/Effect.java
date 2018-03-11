@@ -69,6 +69,15 @@ public enum Effect {
     },
 
     Блик {
+        /**
+         *
+         * @param list
+         * @param col
+         * @param row
+         * @param startVal
+         * @param endVal
+         * @param variant при отрицательной величине, рисуется чёрный блик на горящем фоне
+         */
         @Override
         public void apply(List<IntegerProperty> list, Integer col, Integer row, Integer startVal, Integer endVal, int variant) {
             throw new NotImplementedException();

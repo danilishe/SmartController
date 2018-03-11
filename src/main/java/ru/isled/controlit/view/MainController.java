@@ -18,6 +18,8 @@ import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.util.Pair;
 import ru.isled.controlit.Controlit;
+import ru.isled.controlit.controller.Converter;
+import ru.isled.controlit.controller.Wrapper;
 import ru.isled.controlit.model.*;
 
 import java.io.File;
@@ -250,7 +252,7 @@ public class MainController {
     private String millisectondsToProgramLength(long time) {
 
         try {
-            LocalTime dateTime = LocalTime.ofNanoOfDay(time * 1000_000);
+            LocalTime dateTime = LocalTime.ofNanoOfDay(time * 1_000_000);
             return dateTime.format(DateTimeFormatter.ISO_TIME);
         } catch (DateTimeException dte) {
 //            synchronized (this) {
@@ -374,6 +376,14 @@ public class MainController {
                 .stream()
                 .filter(x -> x.getColumn() >= SYS_COLS)
                 .collect(Collectors.toList());
+    }
+
+    @FXML
+    public void startPreview() {
+        Dialogs.preview(
+                Converter.encode(Wrapper.wrap(project)),
+                project.getPixelCount()
+        );
     }
 
     @FXML
@@ -717,6 +727,8 @@ public class MainController {
     public void applyEffectHandler() {
         List<TablePosition> cells = getSelectedDataCells();
         if (cells != null && cells.size() > 0) {
+            project.setHasChanges(true);
+
             TablePosition lastCell = cells.get(cells.size() - 1);
             TablePosition firstCell = cells.get(0);
             int cols = lastCell.getColumn() - firstCell.getColumn() + 1;
@@ -769,9 +781,7 @@ public class MainController {
     private void setColumnsWidth(double columnsWidth) {
         frameTableView.getColumns().stream()
                 .skip(SYS_COLS).forEach(col -> {
-//            col.setMinWidth(columnsWidth);
             col.setPrefWidth(columnsWidth);
-//            col.setMaxWidth(columnsWidth);
         });
     }
 }
