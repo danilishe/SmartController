@@ -13,13 +13,57 @@ public enum PixelEffect {
             ints[0] = MIN_BRIGHT;
             ints[ints.length - 1] = MAX_BRIGHT;
             double step = (double) MAX_BRIGHT / baseLengthCount;
+            double bright = ints[0];
+
             for (int i = 1; i < ints.length - 1; i++) {
-                ints[i] = (int) (ints[i - 1] + step);
+                bright += step;
+                ints[i] = (int) bright;
             }
             return ints;
         }
     },
 
+    Угасание(54321, "fadeOut") {
+        @Override
+        public int[] getInterpolatedPixel(int baseLengthCount) {
+            int[] ints = new int[baseLengthCount];
+            ints[0] = MAX_BRIGHT;
+            ints[ints.length - 1] = MIN_BRIGHT;
+            double step = (double) MAX_BRIGHT / baseLengthCount;
+            double bright = ints[0];
+            for (int i = 1; i < ints.length - 1; i++) {
+                bright -= step;
+                ints[i] = (int) bright;
+            }
+            return ints;
+
+        }
+    },
+
+    МерцающееРазгорание(19395, "mFadeIn") {
+        @Override
+        public int[] getInterpolatedPixel(int baseLengthCount) {
+            int[] ints = Разгорание.getInterpolatedPixel(baseLengthCount);
+            for (int i = 0; i < ints.length; i++) {
+                if (i % 4 == 0) {
+                    ints[i] = i < ints.length / 2 ? MIN_BRIGHT : MAX_BRIGHT;
+                }
+            }
+            return ints;
+        }
+    },
+    МерцающееУгасание(59391, "mFadeOut") {
+        @Override
+        public int[] getInterpolatedPixel(int baseLengthCount) {
+            int[] ints = Угасание.getInterpolatedPixel(baseLengthCount);
+            for (int i = 0; i < ints.length; i++) {
+                if (i % 4 == 0) {
+                    ints[i] = i > ints.length / 2 ? MIN_BRIGHT : MAX_BRIGHT;
+                }
+            }
+            return ints;
+        }
+    },
     Мерцание(90909, "blink") {
         @Override
         public int[] getInterpolatedPixel(int baseLengthCount) {
@@ -40,32 +84,6 @@ public enum PixelEffect {
             return ints;
         }
     },
-    Угасание(54321, "fadeOut") {
-        @Override
-        public int[] getInterpolatedPixel(int baseLengthCount) {
-            int[] ints = new int[baseLengthCount];
-            ints[0] = MAX_BRIGHT;
-            ints[ints.length - 1] = MIN_BRIGHT;
-            double step = (double) MAX_BRIGHT / baseLengthCount;
-            for (int i = 1; i < ints.length - 1; i++) {
-                ints[i] = (int) (ints[i - 1] - step);
-            }
-            return ints;
-
-        }
-    },
-    МерцающееРазгорание(19395, "mFadeIn") {
-        @Override
-        public int[] getInterpolatedPixel(int baseLengthCount) {
-            int[] ints = Разгорание.getInterpolatedPixel(baseLengthCount);
-            for (int i = 0; i < ints.length; i++) {
-                if (i % 3 == 0) {
-                    ints[i] = i > ints.length / 2 ? MIN_BRIGHT : MAX_BRIGHT;
-                }
-            }
-            return ints;
-        }
-    },
     Хаос(75381, "chaos") {
         @Override
         public int[] getInterpolatedPixel(int baseLengthCount) {
@@ -77,18 +95,6 @@ public enum PixelEffect {
                     ints[i] = (int) (Math.random() * (MAX_BRIGHT + 1));
                 } else {
                     ints[i] = ints[i - 1];
-                }
-            }
-            return ints;
-        }
-    },
-    МерцающееУгасание(59391, "mFadeOut") {
-        @Override
-        public int[] getInterpolatedPixel(int baseLengthCount) {
-            int[] ints = Угасание.getInterpolatedPixel(baseLengthCount);
-            for (int i = 0; i < ints.length; i++) {
-                if (i % 3 == 0) {
-                    ints[i] = i < ints.length / 2 ? MIN_BRIGHT : MAX_BRIGHT;
                 }
             }
             return ints;
