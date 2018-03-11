@@ -3,6 +3,7 @@ package ru.isled.controlit;
 import javafx.stage.FileChooser;
 
 public interface Constants {
+    String PROGRAM_VERSION = "1.0";
     int MIN_FRAMES = 1;
     int MAX_FRAMES = 200;
     int MIN_PIXELS_COUNT = 1;
@@ -24,8 +25,8 @@ public interface Constants {
     int FRAME_LENGTH_STEP = MIN_FRAME_LENGTH;
 
     int MAX_FRAME_LENGTH = 20000;
-    String DEFAULT_PROJECT_FILE_NAME = "project.isc";
-    String DEFAULT_EXPORT_FILE_NAME = "data.bin";
+    String DEFAULT_PROJECT_FILE_NAME = "project";
+    String DEFAULT_EXPORT_FILE_NAME = "data";
 
     String UNSAVED_FILE_NAME = " <несохранённый проект> ";
     String DEFAULT_WORK_DIRECTORY = System.getProperty("user.home");// + "/Documents/";
@@ -35,7 +36,6 @@ public interface Constants {
     int INIT_COL_WIDTH = 40;
     int MIN_COL_WIDTH = 25;
     int MAX_COL_WIDTH = 80;
-    String PROGRAM_VERSION = "0.9";
     FileChooser.ExtensionFilter PROJECT_EXT = new FileChooser.ExtensionFilter("ISLed проект для контроллера", "*.isc");
     FileChooser.ExtensionFilter BIN_EXT = new FileChooser.ExtensionFilter("ISLed файл для контроллера", "*.bin");
     int MAX_CYCLES = 100;

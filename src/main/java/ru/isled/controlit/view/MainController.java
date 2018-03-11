@@ -28,9 +28,11 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static ru.isled.controlit.Constants.*;
+import static ru.isled.controlit.view.Dialogs.*;
 
 public class MainController {
 
@@ -92,6 +94,7 @@ public class MainController {
     public void setFadeInOutEffect() {
         setBrightSelectedCells(PixelEffect.Вспышка.index());
     }
+
     @FXML
     public void setFadeOutInEffect() {
         setBrightSelectedCells(PixelEffect.Миг.index());
@@ -742,19 +745,35 @@ public class MainController {
             String selectedEffect = effectsSelector.getValue();
             if (selectedEffect.equals(Effect.Разгорание.name())) {
                 Pair<Integer, Integer> props = Dialogs.getFadeInProperties();
-                Effect.Разгорание.apply(values, cols, rows, props.getKey(), props.getValue(), 0);
+                Effect.Разгорание.apply(values, cols, rows, props.getKey(), props.getValue());
 
             } else if (selectedEffect.equals(Effect.Угасание.name())) {
                 Pair<Integer, Integer> props = Dialogs.getFadeOutProperties();
-                Effect.Угасание.apply(values, cols, rows, props.getKey(), props.getValue(), 0);
+                Effect.Угасание.apply(values, cols, rows, props.getKey(), props.getValue());
 
             } else if (selectedEffect.equals(Effect.Случайно.name())) {
                 Pair<Integer, Integer> props = Dialogs.getFadeInProperties();
-                Effect.Случайно.apply(values, null, null, props.getKey(), props.getValue(), 0);
+                Effect.Случайно.apply(values, null, null, props.getKey(), props.getValue());
+            } else if (selectedEffect.equals(Effect.Блик.name())) {
+                Map<String, Integer> options = Dialogs.getGlareOptions();
+                int max = options.get(MAX);
+                int min = options.get(MIN);
+                int dir = options.get(DIRECTION);
+                Effect.Блик.apply(values, cols, rows, min, max, dir < 0 ? Effect.Options.Негативный : null,
+                        Math.abs(dir) == Effect.Options.Вправо.ordinal() ? Effect.Options.Вправо : Effect.Options.Влево,
+                        options.get(ONLY_NEW) != null ? Effect.Options.Поверх : null);
+            } else  if (selectedEffect.equals(Effect.Наполнение.name())) {
+                Map<String, Integer> options = Dialogs.getFillOptions();
+                int max = options.get(MAX);
+                int min = options.get(MIN);
+                int dir = options.get(DIRECTION);
+                Effect.Options effect = Effect.Options.values()[Math.abs(dir)];
+                Effect.Наполнение.apply(values, cols, rows, min, max, effect,
+                        dir < 0 ? Effect.Options.Негативный : null,
+                        options.get(ONLY_NEW) != null ? Effect.Options.Поверх : null);
             }
 
         }
-//        redrawPreviewRow();
     }
 
     private List<IntegerProperty> getValuesList(List<TablePosition> cells) {
@@ -776,6 +795,8 @@ public class MainController {
     public void setProject(Project project) {
         this.project = project;
         frames.clear();
+        pixelSpinner.getValueFactory().setValue(project.getPixelCount());
+        framesSpinner.getValueFactory().setValue(project.getFrameCount());
         updateFramesCount();
     }
 

@@ -14,13 +14,12 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 import org.controlsfx.control.RangeSlider;
 import ru.isled.controlit.Constants;
+import ru.isled.controlit.model.Effect;
 
 import java.io.File;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -30,6 +29,10 @@ import static ru.isled.controlit.Constants.*;
 
 public class Dialogs {
 
+    public static final String MAX = "max";
+    public static final String DIRECTION = "direction";
+    public static final String MIN = "min";
+    public static final String ONLY_NEW = "only new";
     private static Stage stage;
     private static Alert alert;
 
@@ -75,6 +78,121 @@ public class Dialogs {
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK);
         dialog.showAndWait();
         return new Pair<>((int) rangeSlider.getLowValue(), (int) rangeSlider.getHighValue());
+    }
+
+    public static Map<String, Integer> getGlareOptions() {
+        Dialog dialog = new Dialog();
+        dialog.initOwner(stage);
+
+        CheckBox inverse = new CheckBox("Негативный блик");
+        CheckBox onlyGlare = new CheckBox("Наложить только блик");
+
+        ToggleGroup direction = new ToggleGroup();
+        RadioButton rightToLeft = new RadioButton("Справа налево");
+        RadioButton leftToRight = new RadioButton("Слева направо");
+        leftToRight.setSelected(true);
+        rightToLeft.setToggleGroup(direction);
+        leftToRight.setToggleGroup(direction);
+        HBox radioButtons = new HBox(5, leftToRight, rightToLeft);
+
+        RangeSlider rangeSlider = new RangeSlider(MIN_BRIGHT, MAX_BRIGHT, MIN_BRIGHT, MAX_BRIGHT);
+        rangeSlider.setShowTickMarks(true);
+        rangeSlider.setShowTickLabels(true);
+
+        Label hLabel = new Label("" + MAX_BRIGHT);
+        hLabel.setMinWidth(30);
+        hLabel.textProperty().bind(
+                Bindings.format("%.0f", rangeSlider.highValueProperty())
+        );
+
+        Label lLabel = new Label("" + MIN_BRIGHT);
+        lLabel.setMinWidth(30);
+        lLabel.textProperty().bind(
+                Bindings.format("%.0f", rangeSlider.lowValueProperty())
+        );
+
+
+        HBox rangeControls = new HBox(5, lLabel, rangeSlider, hLabel);
+        rangeControls.setPrefWidth(250);
+
+        VBox optionsContent = new VBox(5, inverse, onlyGlare, radioButtons, rangeControls);
+        dialog.setHeaderText("Выберите параметры эффекта");
+        dialog.getDialogPane().setContent(optionsContent);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK);
+        dialog.showAndWait();
+
+        Map<String, Integer> result = new HashMap<>();
+        result.put(MIN, (int) rangeSlider.getLowValue());
+        result.put(MAX, (int) rangeSlider.getHighValue());
+        int dir = leftToRight.isSelected() ? Effect.Options.Вправо.ordinal() : Effect.Options.Влево.ordinal();
+        dir = inverse.isSelected() ? -dir : dir;
+
+        result.put(DIRECTION, dir);
+
+        if (onlyGlare.isSelected()) result.put(ONLY_NEW, 1);
+
+        return result;
+    }
+
+    public static Map<String, Integer> getFillOptions() {
+        Dialog dialog = new Dialog();
+        dialog.initOwner(stage);
+
+        CheckBox inverse = new CheckBox("Негативное наполнение");
+        CheckBox onlyGlare = new CheckBox("Только наполнение");
+
+        ToggleGroup direction = new ToggleGroup();
+        RadioButton toLeft = new RadioButton("Налево");
+        RadioButton toRight = new RadioButton("Направо");
+        RadioButton toCenter = new RadioButton("К центру");
+        RadioButton fromCenter = new RadioButton("Из центра");
+        toRight.setSelected(true);
+        toLeft.setToggleGroup(direction);
+        toRight.setToggleGroup(direction);
+        toCenter.setToggleGroup(direction);
+        fromCenter.setToggleGroup(direction);
+        HBox radioButtons = new HBox(5, toRight, toLeft, toCenter, fromCenter);
+
+        RangeSlider rangeSlider = new RangeSlider(MIN_BRIGHT, MAX_BRIGHT, MIN_BRIGHT, MAX_BRIGHT);
+        rangeSlider.setShowTickMarks(true);
+        rangeSlider.setShowTickLabels(true);
+
+        Label hLabel = new Label("" + MAX_BRIGHT);
+        hLabel.setMinWidth(30);
+        hLabel.textProperty().bind(
+                Bindings.format("%.0f", rangeSlider.highValueProperty())
+        );
+
+        Label lLabel = new Label("" + MIN_BRIGHT);
+        lLabel.setMinWidth(30);
+        lLabel.textProperty().bind(
+                Bindings.format("%.0f", rangeSlider.lowValueProperty())
+        );
+
+
+        HBox rangeControls = new HBox(5, lLabel, rangeSlider, hLabel);
+        rangeControls.setPrefWidth(250);
+
+        VBox optionsContent = new VBox(5, inverse, onlyGlare, radioButtons, rangeControls);
+        dialog.setHeaderText("Параметры эффекта \"Наполнение\"");
+        dialog.getDialogPane().setContent(optionsContent);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK);
+        dialog.showAndWait();
+
+        Map<String, Integer> result = new HashMap<>();
+        result.put(MIN, (int) rangeSlider.getLowValue());
+        result.put(MAX, (int) rangeSlider.getHighValue());
+        int dir = toRight.isSelected() ? Effect.Options.Вправо.ordinal() :
+                toLeft.isSelected() ? Effect.Options.Влево.ordinal() :
+                toCenter.isSelected() ? Effect.Options.В_центр.ordinal() :
+                Effect.Options.Из_центра.ordinal();
+        dir = inverse.isSelected() ? -dir : dir;
+
+        result.put(DIRECTION, dir);
+
+        if (onlyGlare.isSelected()) result.put(ONLY_NEW, 1);
+
+        return result;
     }
 
     public static void preview(final byte[] data, int width) {
@@ -204,10 +322,10 @@ public class Dialogs {
         alert.setHeaderText("Control It! 2018");
         alert.setContentText(
                 "Программа для создания и редактирования эффектов для контроллера ISLed" +
-                "\nЗнакСвет (C) 2018\nСуетин Д.Е. (C) 2018" +
-                "\nhttp://is-led.ru/" +
-                "\nВерсия " + Constants.PROGRAM_VERSION +
-                "\nПамяти JVM свободно/всего: " + Runtime.getRuntime().freeMemory() / 1_000_000 + "МБ / " + Runtime.getRuntime().totalMemory() / 1_000_000 + "МБ"
+                        "\nЗнакСвет (C) 2018\nСуетин Д.Е. (C) 2018" +
+                        "\nhttp://is-led.ru/" +
+                        "\nВерсия " + Constants.PROGRAM_VERSION +
+                        "\nПамяти JVM свободно/всего: " + Runtime.getRuntime().freeMemory() / 1_000_000 + "МБ / " + Runtime.getRuntime().totalMemory() / 1_000_000 + "МБ"
         );
         alert.showAndWait();
     }
