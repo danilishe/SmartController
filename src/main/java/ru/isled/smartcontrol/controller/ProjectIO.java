@@ -1,8 +1,8 @@
-package ru.isled.controlit.controller;
+package ru.isled.smartcontrol.controller;
 
 import com.alibaba.fastjson.JSON;
-import ru.isled.controlit.model.Project;
-import ru.isled.controlit.model.WrappedProject;
+import ru.isled.smartcontrol.model.Project;
+import ru.isled.smartcontrol.model.WrappedProject;
 
 import java.io.File;
 

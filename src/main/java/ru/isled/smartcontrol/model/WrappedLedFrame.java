@@ -1,4 +1,4 @@
-package ru.isled.controlit.model;
+package ru.isled.smartcontrol.model;
 
 import java.util.List;
 

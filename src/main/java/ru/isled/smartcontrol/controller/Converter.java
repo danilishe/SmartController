@@ -1,13 +1,13 @@
-package ru.isled.controlit.controller;
+package ru.isled.smartcontrol.controller;
 
-import ru.isled.controlit.model.PixelEffect;
-import ru.isled.controlit.model.WrappedLedFrame;
-import ru.isled.controlit.model.WrappedProject;
+import ru.isled.smartcontrol.model.PixelEffect;
+import ru.isled.smartcontrol.model.WrappedLedFrame;
+import ru.isled.smartcontrol.model.WrappedProject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.isled.controlit.Constants.*;
+import static ru.isled.smartcontrol.Constants.*;
 
 public class Converter {
 

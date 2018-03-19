@@ -28,7 +28,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane cacheShape="false" centerShape="false" scaleShape="false" stylesheets="@../css/custom.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.isled.controlit.view.MainController">
+<BorderPane cacheShape="false" centerShape="false" scaleShape="false" stylesheets="@../css/custom.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.isled.smartcontrol.view.MainController">
     <top>
         <VBox BorderPane.alignment="CENTER">
             <children>
@@ -36,7 +36,7 @@
                     <Menu mnemonicParsing="false" text="Файл">
                         <MenuItem mnemonicParsing="false" onAction="#newFile" text="Новый" />
                         <MenuItem mnemonicParsing="false" onAction="#loadFile" text="Открыть..." />
-                        <Menu mnemonicParsing="false" text="Открыть недавние" />
+                        <Menu fx:id="lastFiles" mnemonicParsing="false" text="Открыть недавние" />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem mnemonicParsing="false" onAction="#saveFile" text="Сохранить" />
                         <MenuItem mnemonicParsing="false" onAction="#saveFileAs" text="Сохранить как..." />

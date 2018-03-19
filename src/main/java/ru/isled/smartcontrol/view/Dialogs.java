@@ -1,4 +1,4 @@
-package ru.isled.controlit.view;
+package ru.isled.smartcontrol.view;
 
 import javafx.beans.binding.Bindings;
 import javafx.concurrent.Task;
@@ -13,8 +13,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import org.controlsfx.control.RangeSlider;
-import ru.isled.controlit.Constants;
-import ru.isled.controlit.model.Effect;
+import ru.isled.smartcontrol.Constants;
+import ru.isled.smartcontrol.model.Effect;
 
 import java.io.File;
 import java.time.LocalTime;
@@ -25,7 +25,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static javafx.scene.control.ButtonType.*;
-import static ru.isled.controlit.Constants.*;
+import static ru.isled.smartcontrol.Constants.*;
 
 public class Dialogs {
 

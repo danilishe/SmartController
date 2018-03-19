@@ -1,9 +1,9 @@
-package ru.isled.controlit.controller;
+package ru.isled.smartcontrol.controller;
 
-import ru.isled.controlit.model.LedFrame;
-import ru.isled.controlit.model.Project;
-import ru.isled.controlit.model.WrappedLedFrame;
-import ru.isled.controlit.model.WrappedProject;
+import ru.isled.smartcontrol.model.LedFrame;
+import ru.isled.smartcontrol.model.Project;
+import ru.isled.smartcontrol.model.WrappedLedFrame;
+import ru.isled.smartcontrol.model.WrappedProject;
 
 import java.util.stream.Collectors;
 

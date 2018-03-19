@@ -1,9 +1,9 @@
-package ru.isled.controlit.model;
+package ru.isled.smartcontrol.model;
 
 import javafx.beans.property.BooleanProperty;
 
-import static ru.isled.controlit.Constants.DEFAULT_CELL_STYLE;
-import static ru.isled.controlit.Constants.MAX_BRIGHT;
+import static ru.isled.smartcontrol.Constants.DEFAULT_CELL_STYLE;
+import static ru.isled.smartcontrol.Constants.MAX_BRIGHT;
 
 public class LedFrameTableCell extends javafx.scene.control.TableCell<LedFrame, Integer> {
 

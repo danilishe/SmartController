@@ -1,8 +1,8 @@
-package ru.isled.controlit.model;
+package ru.isled.smartcontrol.model;
 
 import javafx.scene.control.TableCell;
 
-import static ru.isled.controlit.Constants.MAX_FRAME_LENGTH;
+import static ru.isled.smartcontrol.Constants.MAX_FRAME_LENGTH;
 
 public class LedFrameLengthCell extends TableCell<LedFrame, Integer> {
     @Override

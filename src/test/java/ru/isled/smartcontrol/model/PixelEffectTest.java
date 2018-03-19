@@ -1,10 +1,10 @@
-package ru.isled.controlit.model;
+package ru.isled.smartcontrol.model;
 
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static ru.isled.controlit.Constants.MAX_BRIGHT;
-import static ru.isled.controlit.Constants.MIN_BRIGHT;
+import static ru.isled.smartcontrol.Constants.MAX_BRIGHT;
+import static ru.isled.smartcontrol.Constants.MIN_BRIGHT;
 
 class PixelEffectTest {
     @Test

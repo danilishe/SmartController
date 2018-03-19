@@ -1,6 +1,6 @@
-package ru.isled.controlit.controller;
+package ru.isled.smartcontrol.controller;
 
-import ru.isled.controlit.view.Dialogs;
+import ru.isled.smartcontrol.view.Dialogs;
 
 import java.io.*;
 

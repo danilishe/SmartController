@@ -1,4 +1,4 @@
-package ru.isled.controlit.model;
+package ru.isled.smartcontrol.model;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ru.isled.controlit.Constants.DEFAULT_FRAME_LENGTH;
-import static ru.isled.controlit.Constants.MAX_PIXELS_COUNT;
+import static ru.isled.smartcontrol.Constants.DEFAULT_FRAME_LENGTH;
+import static ru.isled.smartcontrol.Constants.MAX_PIXELS_COUNT;
 
 public class LedFrame {
     private IntegerProperty frameLength = new SimpleIntegerProperty(DEFAULT_FRAME_LENGTH);

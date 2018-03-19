@@ -1,4 +1,4 @@
-package ru.isled.controlit.view;
+package ru.isled.smartcontrol.view;
 
 import com.sun.javafx.scene.control.skin.TableHeaderRow;
 import javafx.beans.property.IntegerProperty;
@@ -17,10 +17,10 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.util.Pair;
-import ru.isled.controlit.Controlit;
-import ru.isled.controlit.controller.Converter;
-import ru.isled.controlit.controller.Wrapper;
-import ru.isled.controlit.model.*;
+import ru.isled.smartcontrol.SmartControl;
+import ru.isled.smartcontrol.controller.Converter;
+import ru.isled.smartcontrol.controller.Wrapper;
+import ru.isled.smartcontrol.model.*;
 
 import java.io.File;
 import java.time.DateTimeException;
@@ -31,8 +31,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static ru.isled.controlit.Constants.*;
-import static ru.isled.controlit.view.Dialogs.*;
+import static ru.isled.smartcontrol.Constants.*;
+import static ru.isled.smartcontrol.view.Dialogs.*;
 
 public class MainController {
 
@@ -73,7 +73,7 @@ public class MainController {
     private ObservableList<LedFrame> frames = FXCollections.observableArrayList();
     private Project project;
     private List<Shape> previewPixels = new ArrayList<>(MAX_PIXELS_COUNT);
-    private Controlit mainApp;
+    private SmartControl mainApp;
 
     @FXML
     public void setFadeInEffect() {
@@ -136,7 +136,7 @@ public class MainController {
 
     @FXML
     public void loadFile() {
-        mainApp.loadProject();
+        mainApp.loadProject(Dialogs.loadFile());
     }
 
 
@@ -151,6 +151,10 @@ public class MainController {
     }
 
     @FXML
+    public Menu lastFiles;
+
+
+    @FXML
     public void initialize() {
         initializeRowHeader();
         loadAndSetDefaultEffects();
@@ -161,6 +165,7 @@ public class MainController {
         initDataColumns();
         initializePreviewZone();
         initializeBrightHandlers();
+
 
         frameTableView.getSelectionModel().setCellSelectionEnabled(true);
         frameTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -762,7 +767,7 @@ public class MainController {
                 Effect.Блик.apply(values, cols, rows, min, max, dir < 0 ? Effect.Options.Негативный : null,
                         Math.abs(dir) == Effect.Options.Вправо.ordinal() ? Effect.Options.Вправо : Effect.Options.Влево,
                         options.get(ONLY_NEW) != null ? Effect.Options.Поверх : null);
-            } else  if (selectedEffect.equals(Effect.Наполнение.name())) {
+            } else if (selectedEffect.equals(Effect.Наполнение.name())) {
                 Map<String, Integer> options = Dialogs.getFillOptions();
                 int max = options.get(MAX);
                 int min = options.get(MIN);
@@ -788,7 +793,7 @@ public class MainController {
         setPreviewRow(getSelectedRow());
     }
 
-    public void setMainApp(Controlit main) {
+    public void setMainApp(SmartControl main) {
         mainApp = main;
     }
 

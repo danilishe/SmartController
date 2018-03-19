@@ -1,4 +1,4 @@
-package ru.isled.controlit.model;
+package ru.isled.smartcontrol.model;
 
 import javafx.beans.property.IntegerProperty;
 
@@ -6,8 +6,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import static ru.isled.controlit.Constants.MAX_BRIGHT;
-import static ru.isled.controlit.Constants.MIN_BRIGHT;
+import static ru.isled.smartcontrol.Constants.MAX_BRIGHT;
+import static ru.isled.smartcontrol.Constants.MIN_BRIGHT;
 
 public enum Effect {
     Разгорание {

@@ -1,4 +1,4 @@
-package ru.isled.controlit.model;
+package ru.isled.smartcontrol.model;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
@@ -9,8 +9,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.isled.controlit.Constants.MAX_FRAMES;
-import static ru.isled.controlit.Constants.UNSAVED_FILE_NAME;
+import static ru.isled.smartcontrol.Constants.MAX_FRAMES;
+import static ru.isled.smartcontrol.Constants.UNSAVED_FILE_NAME;
 
 public class Project {
     private BooleanProperty hasChanges;

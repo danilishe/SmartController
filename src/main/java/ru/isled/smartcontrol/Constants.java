@@ -1,4 +1,4 @@
-package ru.isled.controlit;
+package ru.isled.smartcontrol;
 
 import javafx.stage.FileChooser;
 
@@ -25,8 +25,8 @@ public interface Constants {
     int FRAME_LENGTH_STEP = MIN_FRAME_LENGTH;
 
     int MAX_FRAME_LENGTH = 20000;
-    String DEFAULT_PROJECT_FILE_NAME = "project";
-    String DEFAULT_EXPORT_FILE_NAME = "data";
+    String DEFAULT_PROJECT_FILE_NAME = "project.isc";
+    String DEFAULT_EXPORT_FILE_NAME = "data.bin";
 
     String UNSAVED_FILE_NAME = " <несохранённый проект> ";
     String DEFAULT_WORK_DIRECTORY = System.getProperty("user.home");// + "/Documents/";
@@ -40,4 +40,5 @@ public interface Constants {
     FileChooser.ExtensionFilter BIN_EXT = new FileChooser.ExtensionFilter("ISLed файл для контроллера", "*.bin");
     int MAX_CYCLES = 100;
     int MIN_CYCLES = 0;
+    String PROPS_PATH = System.getProperty("user.home") + "/smartcontrol/properties.ini";
 }

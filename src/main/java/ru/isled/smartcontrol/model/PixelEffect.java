@@ -1,9 +1,9 @@
-package ru.isled.controlit.model;
+package ru.isled.smartcontrol.model;
 
 import java.security.InvalidParameterException;
 import java.util.Arrays;
 
-import static ru.isled.controlit.Constants.*;
+import static ru.isled.smartcontrol.Constants.*;
 
 public enum PixelEffect {
     Разгорание(12345, "fadeIn") {
