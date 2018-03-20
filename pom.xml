@@ -7,7 +7,10 @@
     <groupId>ISLed</groupId>
     <artifactId>Controller</artifactId>
     <version>${project.version}</version>
-
+    <organization>
+        <name>IS-Led</name>
+        <url>http://is-led.ru/</url>
+    </organization>
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -23,7 +26,6 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <mainClass>ru.isled.smartcontrol.SmartControl</mainClass>
-
                         </manifest>
                     </archive>
                 </configuration>
@@ -36,6 +38,55 @@
                     <vendor>ISLed</vendor>
                     <mainClass>ru.isled.smartcontrol.SmartControl</mainClass>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>unpack-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <excludeScope>system</excludeScope>
+                            <excludeGroupIds>junit,org.mockito,org.hamcrest</excludeGroupIds>
+                            <outputDirectory>${project.build.directory}/classes</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <executions>
+                    <execution>
+                        <id>unpack-dependencies</id>
+
+                        <phase>package</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>${java.home}/../bin/javafxpackager</executable>
+                            <arguments>
+                                <argument>-createjar</argument>
+                                <argument>-nocss2bin</argument>
+                                <argument>-appclass</argument>
+                                <argument>ru.isled.smartcontrol.SmartControl</argument>
+                                <argument>-srcdir</argument>
+                                <argument>${project.build.directory}/classes</argument>
+                                <argument>-outdir</argument>
+                                <argument>${project.build.directory}</argument>
+                                <argument>-outfile</argument>
+                                <argument>${project.build.finalName}.jar</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

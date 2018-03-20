@@ -319,7 +319,7 @@ public class Dialogs {
         alert = new Alert(Alert.AlertType.INFORMATION);
         alert.initOwner(stage);
         alert.setTitle("О программе");
-        alert.setHeaderText("Control It! 2018");
+        alert.setHeaderText("SMART Control 2018");
         alert.setContentText(
                 "Программа для создания и редактирования эффектов для контроллера ISLed" +
                         "\nЗнакСвет (C) 2018\nСуетин Д.Е. (C) 2018" +

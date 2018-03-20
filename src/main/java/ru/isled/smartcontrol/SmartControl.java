@@ -107,7 +107,7 @@ public class SmartControl extends Application {
     public void updateHeader() {
         String name = project.getName() == null ? "- несохранённый проект -" : project.getName();
         String unsavedMark = project.hasUnsavedChanges() ? "*" : "";
-        mainStage.setTitle("ISLed Control It! " + name + unsavedMark);
+        mainStage.setTitle("ISLed SMART Control " + name + unsavedMark);
     }
 
 
