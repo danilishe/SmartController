@@ -219,14 +219,25 @@
                      </tooltip>
                   </Button>
                     </HBox>
-                    <HBox alignment="CENTER_LEFT" layoutX="20.0" layoutY="80.0" spacing="5.0">
-                        <Label prefHeight="17.0" prefWidth="99.0" text="Длина кадра, мс" />
-                        <Spinner fx:id="frameLengthSpinner" editable="true" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="125.0" />
-                    </HBox>
-                    <HBox alignment="CENTER_LEFT" layoutX="20.0" layoutY="110.0" spacing="5.0">
-                        <Label prefWidth="99.0" text="Повторов кадра" />
-                        <Spinner fx:id="frameCyclesSpinner" editable="true" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="125.0" />
-                    </HBox>
+               <GridPane alignment="CENTER">
+                  <columnConstraints>
+                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                  </columnConstraints>
+                  <rowConstraints>
+                     <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  </rowConstraints>
+                  <children>
+                           <Label prefHeight="17.0" prefWidth="99.0" text="Длина кадра, мс" />
+                           <Spinner fx:id="frameLengthSpinner" editable="true" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="125.0" GridPane.columnIndex="1" />
+                           <Label prefWidth="99.0" text="Повторов кадра" GridPane.rowIndex="1" />
+                           <Spinner fx:id="frameCyclesSpinner" editable="true" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="125.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                     <Label layoutX="10.0" layoutY="42.0" prefWidth="99.0" text="Кратность канала" GridPane.rowIndex="2" />
+                     <Spinner fx:id="chanelQuantifier" layoutX="116.0" layoutY="38.0" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="125.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  </children>
+               </GridPane>
                 </VBox>
             </TitledPane>
             <TitledPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Многошаговые эффекты">

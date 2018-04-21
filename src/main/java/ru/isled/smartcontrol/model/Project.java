@@ -10,17 +10,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ru.isled.smartcontrol.Constants.MAX_FRAMES;
+import static ru.isled.smartcontrol.Constants.MAX_PIXELS_COUNT;
 import static ru.isled.smartcontrol.Constants.UNSAVED_FILE_NAME;
 
 public class Project {
     private BooleanProperty hasChanges;
     private ObjectProperty<File> file;
-
-    public void setData(List<LedFrame> data) {
-        this.data = data;
-    }
-
+    private List<Integer> quantifiers;
     private List<LedFrame> data;
+
     //todo переделать в Enum
     private int frameCount;
     private int pixelCount;
@@ -28,6 +26,10 @@ public class Project {
     public Project() {
         hasChanges = new SimpleBooleanProperty(false);
         data = new ArrayList<>(MAX_FRAMES);
+        quantifiers = new ArrayList<>(MAX_PIXELS_COUNT);
+        for (int i = 0; i < MAX_PIXELS_COUNT; i++) {
+            quantifiers.add(1);
+        }
     }
 
     public int getFrameCount() {
@@ -89,8 +91,19 @@ public class Project {
         return data.size();
     }
 
-
     public List<LedFrame> getData() {
         return data;
+    }
+
+    public void setData(List<LedFrame> data) {
+        this.data = data;
+    }
+
+    public List<Integer> getQuantifiers() {
+        return quantifiers;
+    }
+    public void setQuantifiers(List<Integer> list) {
+        quantifiers.clear();
+        quantifiers.addAll(list);
     }
 }

@@ -3,6 +3,15 @@ package ru.isled.smartcontrol.model;
 import java.util.List;
 
 public class WrappedProject {
+    public List<Integer> getQuantifiers() {
+        return quantifiers;
+    }
+
+    public void setQuantifiers(List<Integer> quantifiers) {
+        this.quantifiers = quantifiers;
+    }
+
+    private List<Integer> quantifiers;
     private List<WrappedLedFrame> frames;
     private int frameCount;
     private int pixelCount;

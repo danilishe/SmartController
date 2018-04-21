@@ -68,12 +68,16 @@ public class MainController {
     public Spinner<Integer> frameCyclesSpinner;
     @FXML
     public Slider zoomSlider;
-
-
+    @FXML
+    public Menu lastFiles;
     private ObservableList<LedFrame> frames = FXCollections.observableArrayList();
     private Project project;
     private List<Shape> previewPixels = new ArrayList<>(MAX_PIXELS_COUNT);
     private SmartControl mainApp;
+    @FXML
+    private Label fullTime;
+    @FXML
+    private Spinner<Integer> chanelQuantifier;
 
     @FXML
     public void setFadeInEffect() {
@@ -126,7 +130,6 @@ public class MainController {
         mainApp.createNewProject();
     }
 
-
     @FXML
     public void saveFile() {
 //        project.setFrameCount(framesSpinner.getValue());
@@ -139,7 +142,6 @@ public class MainController {
         mainApp.loadProject(Dialogs.loadFile());
     }
 
-
     @FXML
     public void saveFileAs() {
 //        project.setFrameCount(framesSpinner.getValue());
@@ -149,10 +151,6 @@ public class MainController {
         project.setFileName(saveAs);
         mainApp.saveProject();
     }
-
-    @FXML
-    public Menu lastFiles;
-
 
     @FXML
     public void initialize() {
@@ -181,7 +179,6 @@ public class MainController {
         zoomSlider.setBlockIncrement((MAX_BRIGHT - MIN_BRIGHT) / 10);
         zoomSlider.valueProperty().addListener((o, ov, nv) -> setColumnsWidth(nv.doubleValue()));
     }
-
 
     private void initializePreviewZone() {
         for (int i = 0; i < MAX_PIXELS_COUNT; i++) {
@@ -224,7 +221,6 @@ public class MainController {
         });
     }
 
-
     @FXML
     public void exportHandler() {
         mainApp.exportProject();
@@ -252,9 +248,6 @@ public class MainController {
         }
         updateProgramLength();
     }
-
-    @FXML
-    private Label fullTime;
 
     private void updateProgramLength() {
         long time = frameTableView.getItems().stream()
@@ -380,7 +373,6 @@ public class MainController {
         }
     }
 
-
     /**
      * @return возвращает все выбранные ячейки списком кроме заголовочных
      */
@@ -463,12 +455,10 @@ public class MainController {
         setBrightSelectedCells(MIN_BRIGHT);
     }
 
-
     @FXML
     public void clearSelection() {
         frameTableView.getSelectionModel().clearSelection();
     }
-
 
     private void initSpinners() {
 
@@ -480,6 +470,13 @@ public class MainController {
 
         initCyclesSpinner();
 
+        initPixelQuantifierSpinner();
+
+    }
+
+    private void initPixelQuantifierSpinner() {
+        chanelQuantifier.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10, 1));
+        chanelQuantifier.getValueFactory().valueProperty().addListener((val, ov, nv) -> changePixelQuatities());
     }
 
     private void initCyclesSpinner() {
@@ -684,8 +681,16 @@ public class MainController {
 
         // пиксели/каналы
         for (int i = 0; i < MAX_PIXELS_COUNT; i++) {
-            TableColumn<LedFrame, Integer> column = new TableColumn<>(String.valueOf(i + 1));
+            final int absNum = i + SYS_COLS;
+            TableColumn<LedFrame, Integer> column = new TableColumn<>(String.valueOf(i + 1) + "\n[1]");
 
+//            column.addEventHandler(MouseEvent.ANY,
+//                    event -> {
+//                        frameTableView.getSelectionModel()
+//                                .selectRange(0, frameTableView.getColumns().get(absNum),
+//                                        framesSpinner.getValue(), frameTableView.getColumns().get(absNum + 1));
+//                        event.consume();
+//                    });
             setDefaultColumnProperties(column);
 
             if (i >= DEFAULT_PIXEL_COUNT) column.visibleProperty().setValue(false);
@@ -699,6 +704,26 @@ public class MainController {
         }
     }
 
+    private void changePixelQuatities() {
+        final int value = chanelQuantifier.getValue();
+        frameTableView.getSelectionModel().getSelectedCells().stream().mapToInt(TablePosition::getColumn)
+                .distinct()
+                .forEach(col -> {
+                    project.getQuantifiers().set(col - SYS_COLS, value);
+                    TableColumn<LedFrame, ?> column = frameTableView.getColumns().get(col);
+                    String text = column.getText();
+                    column.setText(text.replaceAll("\\[\\d+]", "[" + value + "]"));
+                });
+        project.setHasChanges(true);
+    }
+
+    public void updateQuantifiers() {
+        List<Integer> quantifiers = project.getQuantifiers();
+        for (int i = 0; i < quantifiers.size(); i++) {
+            TableColumn<LedFrame, ?> column = frameTableView.getColumns().get(i + SYS_COLS - 1);
+            column.setText(column.getText().replaceAll("\\[\\d+]", "[" + quantifiers.get(i) + "]"));
+        }
+    }
 
     private void setDefaultColumnProperties(TableColumn<LedFrame, Integer> column) {
         column.setPrefWidth(INIT_COL_WIDTH);
@@ -803,6 +828,7 @@ public class MainController {
         pixelSpinner.getValueFactory().setValue(project.getPixelCount());
         framesSpinner.getValueFactory().setValue(project.getFrameCount());
         updateFramesCount();
+        if (frameTableView.getColumns().size() > SYS_COLS) updateQuantifiers();
     }
 
     private void setColumnsWidth(double columnsWidth) {

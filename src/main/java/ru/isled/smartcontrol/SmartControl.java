@@ -189,6 +189,7 @@ public class SmartControl extends Application {
         project = new Project();
         project.setFrameCount(DEFAULT_FRAMES_COUNT);
         project.setPixelCount(DEFAULT_PIXEL_COUNT);
+
         for (int i = 0; i < DEFAULT_FRAMES_COUNT; i++) {
             project.addRow(new LedFrame());
         }

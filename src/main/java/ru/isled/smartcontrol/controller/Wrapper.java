@@ -12,7 +12,7 @@ public class Wrapper {
         WrappedProject wrappedProject = new WrappedProject();
         wrappedProject.setFrameCount(project.getFrameCount());
         wrappedProject.setPixelCount(project.getPixelCount());
-
+        wrappedProject.setQuantifiers(project.getQuantifiers());
         wrappedProject.setFrames(project.getData().stream()
                 .map(Wrapper::wrapLedFrame)
                 .collect(Collectors.toList()));
@@ -23,6 +23,9 @@ public class Wrapper {
         Project project = new Project();
         project.setPixelCount(wrappedProject.getPixelCount());
         project.setFrameCount(wrappedProject.getFrameCount());
+        if (wrappedProject.getQuantifiers() != null) {
+            project.setQuantifiers(wrappedProject.getQuantifiers());
+        }
         project.setData(
                 wrappedProject.getFrames().stream()
                         .map(wrappedLedFrame -> unwrapLedFrame(wrappedLedFrame))
