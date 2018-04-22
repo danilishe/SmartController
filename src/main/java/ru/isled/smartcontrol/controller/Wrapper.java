@@ -11,7 +11,7 @@ public class Wrapper {
     public static WrappedProject wrap(Project project) {
         WrappedProject wrappedProject = new WrappedProject();
         wrappedProject.setFrameCount(project.getFrameCount());
-        wrappedProject.setPixelCount(project.getPixelCount());
+        wrappedProject.setPixelCount(project.getChanelCount());
         wrappedProject.setQuantifiers(project.getQuantifiers());
         wrappedProject.setFrames(project.getData().stream()
                 .map(Wrapper::wrapLedFrame)
@@ -21,7 +21,7 @@ public class Wrapper {
 
     public static Project unwrap(WrappedProject wrappedProject) {
         Project project = new Project();
-        project.setPixelCount(wrappedProject.getPixelCount());
+        project.setChanelCount(wrappedProject.getPixelCount());
         project.setFrameCount(wrappedProject.getFrameCount());
         if (wrappedProject.getQuantifiers() != null) {
             project.setQuantifiers(wrappedProject.getQuantifiers());

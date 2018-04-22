@@ -8,6 +8,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -184,8 +185,8 @@ public class Dialogs {
         result.put(MAX, (int) rangeSlider.getHighValue());
         int dir = toRight.isSelected() ? Effect.Options.Вправо.ordinal() :
                 toLeft.isSelected() ? Effect.Options.Влево.ordinal() :
-                toCenter.isSelected() ? Effect.Options.В_центр.ordinal() :
-                Effect.Options.Из_центра.ordinal();
+                        toCenter.isSelected() ? Effect.Options.В_центр.ordinal() :
+                                Effect.Options.Из_центра.ordinal();
         dir = inverse.isSelected() ? -dir : dir;
 
         result.put(DIRECTION, dir);
@@ -195,20 +196,38 @@ public class Dialogs {
         return result;
     }
 
-    public static void preview(final byte[] data, int width) {
+    public static void preview(final byte[] data, int width, List<Integer> quantifiers) {
         Dialog preview = new Dialog();
         preview.setTitle("Предпросмотр");
         List<Shape> px = Stream
                 .generate(() -> new Circle(15, Color.YELLOW))
                 .limit(width)
                 .collect(Collectors.toList());
-        HBox hbox = new HBox(5);
-        hbox.setStyle("-fx-background-color: black; -fx-padding: 20px;");
+
         List<StackPane> objects = IntStream.range(0, width).mapToObj(i ->
                 new StackPane(px.get(i), new Label("" + (i + 1)))
         ).collect(Collectors.toList());
 
-        hbox.getChildren().addAll(objects);
+        List<VBox> vBoxes = new ArrayList<>();
+        int currentPixel = 0;
+
+        vboxCycle:
+        for (int q : quantifiers) {
+            VBox vBox = new VBox(0);
+            for (int i = 0; i < q; i++) {
+                vBox.getChildren().add(objects.get(currentPixel));
+                currentPixel++;
+                if (currentPixel == width) {
+                    vBoxes.add(vBox);
+                    break vboxCycle;
+                }
+            }
+            vBoxes.add(vBox);
+        }
+
+        HBox hbox = new HBox(5);
+        hbox.setStyle("-fx-background-color: black; -fx-padding: 20px;");
+        hbox.getChildren().addAll(vBoxes);
 
 
         Task<Void> timer = new Task<Void>() {
@@ -245,6 +264,70 @@ public class Dialogs {
 
 
     }
+/* //todo метод учитывает "сложение пикселей", но визуализация получается очень корявая, лучше пока по-старому оставлю
+    public static void preview(final byte[] data, int width, List<Integer> quantifiers) {
+        Dialog preview = new Dialog();
+        preview.setTitle("Предпросмотр");
+
+        HBox hbox = new HBox(5);
+        hbox.setStyle("-fx-background-color: black; -fx-padding: 20px;");
+        List<Shape> px = new ArrayList<>();
+
+        int startPixel = 1;
+        int endPixel = 0;
+        for (Integer q : quantifiers) {
+            endPixel += q;
+            if (startPixel > width) break;
+
+            if (endPixel > width) {
+                endPixel = width;
+            }
+
+            Shape figure = new Rectangle(25, 25 + Math.sqrt(endPixel - startPixel) * 10, Color.YELLOW);
+
+            String pixelLabel = startPixel < endPixel ? String.format("%d\n%d", startPixel, endPixel) : "" + startPixel;
+            hbox.getChildren().add(new StackPane(figure, new Label(pixelLabel)));
+            px.add(figure);
+
+            startPixel = endPixel + 1;
+        }
+
+
+        Task<Void> timer = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                while (preview.isShowing()) {
+                    long stepStartTime = new Date().getTime();
+                    for (int i = 0; i < data.length; i += MAX_PIXELS_COUNT) {
+                        long stepEndTime = new Date().getTime() - stepStartTime;
+                        updateMessage(LocalTime.ofNanoOfDay(stepEndTime * 1_000_000).format(DateTimeFormatter.ISO_TIME));
+                        for (int j = 0; j < width; j++) {
+                            double opacity = (double) ((int) data[i + j] & 0xFF) / MAX_BRIGHT;
+                            px.get(j).setOpacity(opacity);
+                        }
+                        Thread.sleep(BASE_FRAME_LENGTH);
+                    }
+                }
+                return null;
+            }
+        };
+
+        Label label = new Label();
+        label.textProperty().bind(timer.messageProperty());
+//        timer.setOnSucceeded((s) -> label.textProperty().unbind());
+        VBox vBox = new VBox(5, label, hbox);
+        preview.getDialogPane().setContent(vBox);
+        preview.getDialogPane().getButtonTypes().addAll(ButtonType.OK);
+
+        preview.initOwner(stage);
+        preview.show();
+        Thread thread = new Thread(timer);
+        thread.setDaemon(true);
+        thread.start();
+
+
+    }
+*/
 
 
     public static Pair<Integer, Integer> getFadeOutProperties() {

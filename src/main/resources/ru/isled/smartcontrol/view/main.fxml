@@ -316,6 +316,24 @@
                                 </Label>
                             </graphic>
                         </Label>
+                  <Separator layoutX="175.0" layoutY="10.0" maxHeight="1.7976931348623157E308" orientation="VERTICAL" />
+                  <Label fx:id="totalPixels" layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="50.0">
+                     <graphic>
+                        <Label fx:id="bulbIcon" text="💡">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <tooltip>
+                              <Tooltip fx:id="errorTooltip">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Tooltip>
+                           </tooltip>
+                        </Label>
+                     </graphic>
+                  </Label>
+                  <Label fx:id="errorMessage" opacity="0.0" textFill="RED" />
                         <Separator maxHeight="1.7976931348623157E308" orientation="VERTICAL" />
                         <ToggleButton fx:id="showDigits" maxHeight="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#refresh" selected="true" text="Число" />
                         <ToggleButton fx:id="showBright" maxHeight="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#refresh" selected="true" text="Яркость" />
@@ -332,11 +350,11 @@
                         </Slider>
                     </children>
                 </HBox>
-                <HBox spacing="5.0">
+                <HBox alignment="CENTER_LEFT" spacing="5.0">
                     <children>
-                        <Button fx:id="startPreview" mnemonicParsing="false" onAction="#startPreview" text="Предпросмотр">
+                        <Button fx:id="startPreview" minWidth="123.0" mnemonicParsing="false" onAction="#startPreview" text="Предпросмотр">
                             <graphic>
-                                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
                                         <Image url="@../images/play.png" />
                                     </image>
@@ -344,7 +362,7 @@
                             </graphic>
                         </Button>
                         <Separator maxHeight="1.7976931348623157E308" orientation="VERTICAL" />
-                        <HBox fx:id="previewZone" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="300.0" spacing="5.0" />
+                        <HBox fx:id="previewZone" alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="45.0" minWidth="300.0" spacing="5.0" />
                     </children>
                 </HBox>
             </children>

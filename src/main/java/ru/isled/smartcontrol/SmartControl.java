@@ -8,7 +8,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import ru.isled.smartcontrol.controller.FileHelper;
 import ru.isled.smartcontrol.controller.ProjectIO;
@@ -188,7 +187,7 @@ public class SmartControl extends Application {
 
         project = new Project();
         project.setFrameCount(DEFAULT_FRAMES_COUNT);
-        project.setPixelCount(DEFAULT_PIXEL_COUNT);
+        project.setChanelCount(DEFAULT_PIXEL_COUNT);
 
         for (int i = 0; i < DEFAULT_FRAMES_COUNT; i++) {
             project.addRow(new LedFrame());

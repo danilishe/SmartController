@@ -21,7 +21,7 @@ public class Project {
 
     //todo переделать в Enum
     private int frameCount;
-    private int pixelCount;
+    private int chanelCount;
 
     public Project() {
         hasChanges = new SimpleBooleanProperty(false);
@@ -40,12 +40,12 @@ public class Project {
         this.frameCount = frameCount;
     }
 
-    public int getPixelCount() {
-        return pixelCount;
+    public int getChanelCount() {
+        return chanelCount;
     }
 
-    public void setPixelCount(int pixelCount) {
-        this.pixelCount = pixelCount;
+    public void setChanelCount(int chanelCount) {
+        this.chanelCount = chanelCount;
     }
 
     public BooleanProperty hasChangesProperty() {
@@ -105,5 +105,10 @@ public class Project {
     public void setQuantifiers(List<Integer> list) {
         quantifiers.clear();
         quantifiers.addAll(list);
+    }
+
+    public int getTotalPixelCount() {
+        int sum = getQuantifiers().stream().limit(chanelCount).mapToInt(q -> q).sum();
+        return sum > MAX_PIXELS_COUNT ? MAX_PIXELS_COUNT : sum;
     }
 }

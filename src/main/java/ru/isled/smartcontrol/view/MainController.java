@@ -13,7 +13,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.util.Pair;
@@ -133,7 +133,7 @@ public class MainController {
     @FXML
     public void saveFile() {
 //        project.setFrameCount(framesSpinner.getValue());
-//        project.setPixelCount(pixelSpinner.getValue());
+//        project.setChanelCount(pixelSpinner.getValue());
         mainApp.saveProject();
     }
 
@@ -145,7 +145,7 @@ public class MainController {
     @FXML
     public void saveFileAs() {
 //        project.setFrameCount(framesSpinner.getValue());
-//        project.setPixelCount(pixelSpinner.getValue());
+//        project.setChanelCount(pixelSpinner.getValue());
         File saveAs = Dialogs.saveAs(project.getFile());
         if (saveAs == null) return;
         project.setFileName(saveAs);
@@ -182,7 +182,7 @@ public class MainController {
 
     private void initializePreviewZone() {
         for (int i = 0; i < MAX_PIXELS_COUNT; i++) {
-            Shape pixel = new Circle(10, Color.rgb(0xFF, 0xFF, 0, 0));
+            Shape pixel = new Rectangle(20, 20, Color.rgb(0xFF, 0xFF, 0, 0));
             Text pixelText = new Text("" + (i + 1));
             StackPane stack = new StackPane(pixel, pixelText);
             pixel.setStroke(Color.BLACK);
@@ -235,7 +235,7 @@ public class MainController {
                 project.setHasChanges(true);
             }
         }
-        redrawPreviewRow();
+        updatePreviewRow();
     }
 
     private void setLengthSelectedFrames(int length) {
@@ -286,7 +286,7 @@ public class MainController {
 
         if (!selectedDataCells.isEmpty()) {
 
-            redrawPreviewRow();
+            updatePreviewRow();
 
             TablePosition position = selectedDataCells.get(0);
 
@@ -357,6 +357,7 @@ public class MainController {
 
             if (frame.getInt(i) <= MAX_BRIGHT) {
                 pixel.getStyleClass().clear();
+                pixel.scaleYProperty().set(1 + .1 * project.getQuantifiers().get(i));
                 pixel.fillProperty().setValue(
                         Color.rgb(0xFF, 0xFF, 0, ((double) frame.getInt(i) / MAX_BRIGHT)));
             } else {
@@ -387,7 +388,8 @@ public class MainController {
     public void startPreview() {
         Dialogs.preview(
                 Converter.encode(Wrapper.wrap(project)),
-                project.getPixelCount()
+                project.getTotalPixelCount(),
+                project.getQuantifiers()   //todo понадобится для отображения "склееных" пикселей
         );
     }
 
@@ -476,7 +478,10 @@ public class MainController {
 
     private void initPixelQuantifierSpinner() {
         chanelQuantifier.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10, 1));
-        chanelQuantifier.getValueFactory().valueProperty().addListener((val, ov, nv) -> changePixelQuatities());
+        chanelQuantifier.getValueFactory().valueProperty().addListener((val, ov, nv) ->  {
+            changePixelQuantities();
+            updatePreviewRow();
+        });
     }
 
     private void initCyclesSpinner() {
@@ -584,8 +589,9 @@ public class MainController {
             else if (n > MAX_PIXELS_COUNT)
                 pixelSpinner.getValueFactory().setValue(MAX_PIXELS_COUNT);
             else {
-                project.setPixelCount(n);
-                refreshPixelCount();
+                project.setChanelCount(n);
+                refreshVisibleColumnsCount();
+                updateTotalPixelCount();
             }
         });
 
@@ -653,7 +659,7 @@ public class MainController {
     }
 
     // скрывает колонки
-    private void refreshPixelCount() {
+    private void refreshVisibleColumnsCount() {
         int selectedPixelNumber = pixelSpinner.getValue();
         for (int i = 0; i < MAX_PIXELS_COUNT; i++) {
 
@@ -704,7 +710,7 @@ public class MainController {
         }
     }
 
-    private void changePixelQuatities() {
+    private void changePixelQuantities() {
         final int value = chanelQuantifier.getValue();
         frameTableView.getSelectionModel().getSelectedCells().stream().mapToInt(TablePosition::getColumn)
                 .distinct()
@@ -715,9 +721,30 @@ public class MainController {
                     column.setText(text.replaceAll("\\[\\d+]", "[" + value + "]"));
                 });
         project.setHasChanges(true);
+        updateTotalPixelCount();
     }
 
-    public void updateQuantifiers() {
+    @FXML
+    private Label bulbIcon;
+    @FXML
+    private Tooltip errorTooltip;
+    @FXML
+    private Label totalPixels;
+
+    private void updateTotalPixelCount() {
+        int pixelCount = project.getChanelCount();
+        int sum = project.getTotalPixelCount();
+        if (sum > MAX_PIXELS_COUNT) {
+            bulbIcon.setTextFill(Color.RED);
+            errorTooltip.setText("Экспортируется максимум " + MAX_PIXELS_COUNT + " пикселей, остальные пиксели будут проигнорированы");
+        } else {
+            bulbIcon.setTextFill(Color.BLACK);
+            errorTooltip.setText("Общее количество пикселей, включая кратные каналы");
+        }
+        totalPixels.setText(String.valueOf(sum));
+    }
+
+    public void updateHeaderQuantifiers() {
         List<Integer> quantifiers = project.getQuantifiers();
         for (int i = 0; i < quantifiers.size(); i++) {
             TableColumn<LedFrame, ?> column = frameTableView.getColumns().get(i + SYS_COLS - 1);
@@ -814,7 +841,7 @@ public class MainController {
                 .collect(Collectors.toList());
     }
 
-    private void redrawPreviewRow() {
+    private void updatePreviewRow() {
         setPreviewRow(getSelectedRow());
     }
 
@@ -825,10 +852,10 @@ public class MainController {
     public void setProject(Project project) {
         this.project = project;
         frames.clear();
-        pixelSpinner.getValueFactory().setValue(project.getPixelCount());
+        pixelSpinner.getValueFactory().setValue(project.getChanelCount());
         framesSpinner.getValueFactory().setValue(project.getFrameCount());
         updateFramesCount();
-        if (frameTableView.getColumns().size() > SYS_COLS) updateQuantifiers();
+        if (frameTableView.getColumns().size() > SYS_COLS) updateHeaderQuantifiers();
     }
 
     private void setColumnsWidth(double columnsWidth) {
