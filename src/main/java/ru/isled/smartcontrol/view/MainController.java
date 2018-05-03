@@ -5,6 +5,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
@@ -167,7 +168,7 @@ public class MainController {
 
         frameTableView.getSelectionModel().setCellSelectionEnabled(true);
         frameTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        frameTableView.addEventHandler(MouseEvent.MOUSE_CLICKED, x -> handleCellSelection());
+        frameTableView.addEventHandler(EventType.ROOT, x -> handleCellSelection());
         frameTableView.setItems(frames);
 //        frames.addListener((ListChangeListener<LedFrame>) c -> updateProgramLength());
     }
@@ -790,6 +791,9 @@ public class MainController {
         if (cells != null && cells.size() > 0) {
             project.setHasChanges(true);
 
+            //fixme ПЕРЕДЕЛАТЬ МЕТОД, ЧТОБЫ ВОЗВРАЩАЛ ДВУМЕРНЫЙ МАССИВ
+            //todo СДЕЛАТЬ НАСТРОЙКУ В ЭФФЕКТАХ, ЧТОБЫ МОЖНО БЫЛО ДОБАВИТЬ КАДРЫ ДО ОКОНЧАНИЯ ЭФФЕКТА
+
             TablePosition lastCell = cells.get(cells.size() - 1);
             TablePosition firstCell = cells.get(0);
             int cols = lastCell.getColumn() - firstCell.getColumn() + 1;
@@ -800,35 +804,7 @@ public class MainController {
 
 
             String selectedEffect = effectsSelector.getValue();
-            if (selectedEffect.equals(Effect.Разгорание.name())) {
-                Pair<Integer, Integer> props = Dialogs.getFadeInProperties();
-                Effect.Разгорание.apply(values, cols, rows, props.getKey(), props.getValue());
-
-            } else if (selectedEffect.equals(Effect.Угасание.name())) {
-                Pair<Integer, Integer> props = Dialogs.getFadeOutProperties();
-                Effect.Угасание.apply(values, cols, rows, props.getKey(), props.getValue());
-
-            } else if (selectedEffect.equals(Effect.Случайно.name())) {
-                Pair<Integer, Integer> props = Dialogs.getFadeInProperties();
-                Effect.Случайно.apply(values, null, null, props.getKey(), props.getValue());
-            } else if (selectedEffect.equals(Effect.Блик.name())) {
-                Map<String, Integer> options = Dialogs.getGlareOptions();
-                int max = options.get(MAX);
-                int min = options.get(MIN);
-                int dir = options.get(DIRECTION);
-                Effect.Блик.apply(values, cols, rows, min, max, dir < 0 ? Effect.Options.Негативный : null,
-                        Math.abs(dir) == Effect.Options.Вправо.ordinal() ? Effect.Options.Вправо : Effect.Options.Влево,
-                        options.get(ONLY_NEW) != null ? Effect.Options.Поверх : null);
-            } else if (selectedEffect.equals(Effect.Наполнение.name())) {
-                Map<String, Integer> options = Dialogs.getFillOptions();
-                int max = options.get(MAX);
-                int min = options.get(MIN);
-                int dir = options.get(DIRECTION);
-                Effect.Options effect = Effect.Options.values()[Math.abs(dir)];
-                Effect.Наполнение.apply(values, cols, rows, min, max, effect,
-                        dir < 0 ? Effect.Options.Негативный : null,
-                        options.get(ONLY_NEW) != null ? Effect.Options.Поверх : null);
-            }
+            Effect.valueOf(selectedEffect).apply(values, cols, rows);
 
         }
     }
@@ -856,6 +832,7 @@ public class MainController {
         framesSpinner.getValueFactory().setValue(project.getFrameCount());
         updateFramesCount();
         if (frameTableView.getColumns().size() > SYS_COLS) updateHeaderQuantifiers();
+        updateTotalPixelCount();
     }
 
     private void setColumnsWidth(double columnsWidth) {

@@ -1,7 +1,9 @@
 package ru.isled.smartcontrol.view;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.IntegerProperty;
 import javafx.concurrent.Task;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -49,151 +51,6 @@ public class Dialogs {
 
         return fileChooser.showOpenDialog(stage);
 
-    }
-
-    public static Pair<Integer, Integer> getFadeInProperties() {
-        Dialog dialog = new Dialog();
-        dialog.initOwner(stage);
-        RangeSlider rangeSlider = new RangeSlider(MIN_BRIGHT, MAX_BRIGHT, MIN_BRIGHT, MAX_BRIGHT);
-        rangeSlider.setShowTickLabels(true);
-        rangeSlider.setShowTickMarks(true);
-
-        Label hLabel = new Label("" + MAX_BRIGHT);
-        hLabel.setMinWidth(30);
-        hLabel.textProperty().bind(
-                Bindings.format("%.0f", rangeSlider.highValueProperty())
-        );
-
-        Label lLabel = new Label("" + MIN_BRIGHT);
-        lLabel.setMinWidth(30);
-        lLabel.textProperty().bind(
-                Bindings.format("%.0f", rangeSlider.lowValueProperty())
-        );
-
-
-        HBox hBox = new HBox(5, lLabel, rangeSlider, hLabel);
-        hBox.setPrefWidth(250);
-
-        dialog.setHeaderText("Выберите максимум/минимум эффекта");
-        dialog.getDialogPane().setContent(hBox);
-        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK);
-        dialog.showAndWait();
-        return new Pair<>((int) rangeSlider.getLowValue(), (int) rangeSlider.getHighValue());
-    }
-
-    public static Map<String, Integer> getGlareOptions() {
-        Dialog dialog = new Dialog();
-        dialog.initOwner(stage);
-
-        CheckBox inverse = new CheckBox("Негативный блик");
-        CheckBox onlyGlare = new CheckBox("Наложить только блик");
-
-        ToggleGroup direction = new ToggleGroup();
-        RadioButton rightToLeft = new RadioButton("Справа налево");
-        RadioButton leftToRight = new RadioButton("Слева направо");
-        leftToRight.setSelected(true);
-        rightToLeft.setToggleGroup(direction);
-        leftToRight.setToggleGroup(direction);
-        HBox radioButtons = new HBox(5, leftToRight, rightToLeft);
-
-        RangeSlider rangeSlider = new RangeSlider(MIN_BRIGHT, MAX_BRIGHT, MIN_BRIGHT, MAX_BRIGHT);
-        rangeSlider.setShowTickMarks(true);
-        rangeSlider.setShowTickLabels(true);
-
-        Label hLabel = new Label("" + MAX_BRIGHT);
-        hLabel.setMinWidth(30);
-        hLabel.textProperty().bind(
-                Bindings.format("%.0f", rangeSlider.highValueProperty())
-        );
-
-        Label lLabel = new Label("" + MIN_BRIGHT);
-        lLabel.setMinWidth(30);
-        lLabel.textProperty().bind(
-                Bindings.format("%.0f", rangeSlider.lowValueProperty())
-        );
-
-
-        HBox rangeControls = new HBox(5, lLabel, rangeSlider, hLabel);
-        rangeControls.setPrefWidth(250);
-
-        VBox optionsContent = new VBox(5, inverse, onlyGlare, radioButtons, rangeControls);
-        dialog.setHeaderText("Выберите параметры эффекта");
-        dialog.getDialogPane().setContent(optionsContent);
-        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK);
-        dialog.showAndWait();
-
-        Map<String, Integer> result = new HashMap<>();
-        result.put(MIN, (int) rangeSlider.getLowValue());
-        result.put(MAX, (int) rangeSlider.getHighValue());
-        int dir = leftToRight.isSelected() ? Effect.Options.Вправо.ordinal() : Effect.Options.Влево.ordinal();
-        dir = inverse.isSelected() ? -dir : dir;
-
-        result.put(DIRECTION, dir);
-
-        if (onlyGlare.isSelected()) result.put(ONLY_NEW, 1);
-
-        return result;
-    }
-
-    public static Map<String, Integer> getFillOptions() {
-        Dialog dialog = new Dialog();
-        dialog.initOwner(stage);
-
-        CheckBox inverse = new CheckBox("Негативное наполнение");
-        CheckBox onlyGlare = new CheckBox("Только наполнение");
-
-        ToggleGroup direction = new ToggleGroup();
-        RadioButton toLeft = new RadioButton("Налево");
-        RadioButton toRight = new RadioButton("Направо");
-        RadioButton toCenter = new RadioButton("К центру");
-        RadioButton fromCenter = new RadioButton("Из центра");
-        toRight.setSelected(true);
-        toLeft.setToggleGroup(direction);
-        toRight.setToggleGroup(direction);
-        toCenter.setToggleGroup(direction);
-        fromCenter.setToggleGroup(direction);
-        HBox radioButtons = new HBox(5, toRight, toLeft, toCenter, fromCenter);
-
-        RangeSlider rangeSlider = new RangeSlider(MIN_BRIGHT, MAX_BRIGHT, MIN_BRIGHT, MAX_BRIGHT);
-        rangeSlider.setShowTickMarks(true);
-        rangeSlider.setShowTickLabels(true);
-
-        Label hLabel = new Label("" + MAX_BRIGHT);
-        hLabel.setMinWidth(30);
-        hLabel.textProperty().bind(
-                Bindings.format("%.0f", rangeSlider.highValueProperty())
-        );
-
-        Label lLabel = new Label("" + MIN_BRIGHT);
-        lLabel.setMinWidth(30);
-        lLabel.textProperty().bind(
-                Bindings.format("%.0f", rangeSlider.lowValueProperty())
-        );
-
-
-        HBox rangeControls = new HBox(5, lLabel, rangeSlider, hLabel);
-        rangeControls.setPrefWidth(250);
-
-        VBox optionsContent = new VBox(5, inverse, onlyGlare, radioButtons, rangeControls);
-        dialog.setHeaderText("Параметры эффекта \"Наполнение\"");
-        dialog.getDialogPane().setContent(optionsContent);
-        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK);
-        dialog.showAndWait();
-
-        Map<String, Integer> result = new HashMap<>();
-        result.put(MIN, (int) rangeSlider.getLowValue());
-        result.put(MAX, (int) rangeSlider.getHighValue());
-        int dir = toRight.isSelected() ? Effect.Options.Вправо.ordinal() :
-                toLeft.isSelected() ? Effect.Options.Влево.ordinal() :
-                        toCenter.isSelected() ? Effect.Options.В_центр.ordinal() :
-                                Effect.Options.Из_центра.ordinal();
-        dir = inverse.isSelected() ? -dir : dir;
-
-        result.put(DIRECTION, dir);
-
-        if (onlyGlare.isSelected()) result.put(ONLY_NEW, 1);
-
-        return result;
     }
 
     public static void preview(final byte[] data, int width, List<Integer> quantifiers) {
@@ -264,101 +121,6 @@ public class Dialogs {
 
 
     }
-/* //todo метод учитывает "сложение пикселей", но визуализация получается очень корявая, лучше пока по-старому оставлю
-    public static void preview(final byte[] data, int width, List<Integer> quantifiers) {
-        Dialog preview = new Dialog();
-        preview.setTitle("Предпросмотр");
-
-        HBox hbox = new HBox(5);
-        hbox.setStyle("-fx-background-color: black; -fx-padding: 20px;");
-        List<Shape> px = new ArrayList<>();
-
-        int startPixel = 1;
-        int endPixel = 0;
-        for (Integer q : quantifiers) {
-            endPixel += q;
-            if (startPixel > width) break;
-
-            if (endPixel > width) {
-                endPixel = width;
-            }
-
-            Shape figure = new Rectangle(25, 25 + Math.sqrt(endPixel - startPixel) * 10, Color.YELLOW);
-
-            String pixelLabel = startPixel < endPixel ? String.format("%d\n%d", startPixel, endPixel) : "" + startPixel;
-            hbox.getChildren().add(new StackPane(figure, new Label(pixelLabel)));
-            px.add(figure);
-
-            startPixel = endPixel + 1;
-        }
-
-
-        Task<Void> timer = new Task<Void>() {
-            @Override
-            protected Void call() throws Exception {
-                while (preview.isShowing()) {
-                    long stepStartTime = new Date().getTime();
-                    for (int i = 0; i < data.length; i += MAX_PIXELS_COUNT) {
-                        long stepEndTime = new Date().getTime() - stepStartTime;
-                        updateMessage(LocalTime.ofNanoOfDay(stepEndTime * 1_000_000).format(DateTimeFormatter.ISO_TIME));
-                        for (int j = 0; j < width; j++) {
-                            double opacity = (double) ((int) data[i + j] & 0xFF) / MAX_BRIGHT;
-                            px.get(j).setOpacity(opacity);
-                        }
-                        Thread.sleep(BASE_FRAME_LENGTH);
-                    }
-                }
-                return null;
-            }
-        };
-
-        Label label = new Label();
-        label.textProperty().bind(timer.messageProperty());
-//        timer.setOnSucceeded((s) -> label.textProperty().unbind());
-        VBox vBox = new VBox(5, label, hbox);
-        preview.getDialogPane().setContent(vBox);
-        preview.getDialogPane().getButtonTypes().addAll(ButtonType.OK);
-
-        preview.initOwner(stage);
-        preview.show();
-        Thread thread = new Thread(timer);
-        thread.setDaemon(true);
-        thread.start();
-
-
-    }
-*/
-
-
-    public static Pair<Integer, Integer> getFadeOutProperties() {
-        Dialog dialog = new Dialog();
-        dialog.initOwner(stage);
-        RangeSlider rangeSlider = new RangeSlider(-MAX_BRIGHT, MIN_BRIGHT, -MAX_BRIGHT, MIN_BRIGHT);
-        rangeSlider.setShowTickLabels(true);
-        rangeSlider.setShowTickMarks(true);
-
-        Label hLabel = new Label("" + MIN_BRIGHT);
-        hLabel.setMinWidth(30);
-        hLabel.textProperty().bind(
-                Bindings.format("%.0f", rangeSlider.highValueProperty())
-        );
-
-        Label lLabel = new Label("" + MAX_BRIGHT);
-        lLabel.setMinWidth(30);
-        lLabel.textProperty().bind(
-                Bindings.format("%.0f", rangeSlider.lowValueProperty())
-        );
-
-
-        HBox hBox = new HBox(5, lLabel, rangeSlider, hLabel);
-        hBox.setMinWidth(250);
-
-        dialog.setHeaderText("Выберите максимум/минимум эффекта");
-        dialog.getDialogPane().setContent(hBox);
-        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK);
-        dialog.showAndWait();
-        return new Pair<>((int) -rangeSlider.getLowValue(), (int) -rangeSlider.getHighValue());
-    }
 
     public static ButtonBar.ButtonData askSaveProject() {
         alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -422,5 +184,4 @@ public class Dialogs {
         alert.setContentText(message);
         return alert.showAndWait();
     }
-
 }
