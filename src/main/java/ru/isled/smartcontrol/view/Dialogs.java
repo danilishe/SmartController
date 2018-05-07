@@ -44,6 +44,7 @@ public class Dialogs {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(new File(DEFAULT_WORK_DIRECTORY));
         fileChooser.setTitle("Открыть...");
+        fileChooser.getExtensionFilters().setAll(PROJECT_EXT);
 
         return fileChooser.showOpenDialog(stage);
 
@@ -139,7 +140,7 @@ public class Dialogs {
         fileChooser.setInitialDirectory(parentDirectory);
         fileChooser.setTitle("Сохранить как...");
 
-        fileChooser.setSelectedExtensionFilter(Constants.PROJECT_EXT);
+        fileChooser.getExtensionFilters().setAll(Constants.PROJECT_EXT);
         return fileChooser.showSaveDialog(stage);
     }
 
@@ -152,7 +153,7 @@ public class Dialogs {
         fileChooser.setInitialDirectory(parentDirectory);
         fileChooser.setTitle("Экспорт...");
 
-        fileChooser.setSelectedExtensionFilter(Constants.BIN_EXT);
+        fileChooser.getExtensionFilters().setAll(Constants.BIN_EXT);
         return fileChooser.showSaveDialog(stage);
     }
 

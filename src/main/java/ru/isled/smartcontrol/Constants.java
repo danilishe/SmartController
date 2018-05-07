@@ -3,7 +3,7 @@ package ru.isled.smartcontrol;
 import javafx.stage.FileChooser;
 
 public interface Constants {
-    String PROGRAM_VERSION = "1.1";
+    String PROGRAM_VERSION = "1.1.2";
     int MIN_FRAMES = 1;
     int MAX_FRAMES = 200;
     int MIN_PIXELS_COUNT = 1;
@@ -26,7 +26,7 @@ public interface Constants {
 
     int MAX_FRAME_LENGTH = 20000;
     String DEFAULT_PROJECT_FILE_NAME = "project.isc";
-    String DEFAULT_EXPORT_FILE_NAME = "data.bin";
+    String DEFAULT_EXPORT_FILE_NAME = "0.bin";
 
     String UNSAVED_FILE_NAME = " <несохранённый проект> ";
     String DEFAULT_WORK_DIRECTORY = System.getProperty("user.home");// + "/Documents/";

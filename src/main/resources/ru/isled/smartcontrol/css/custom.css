@@ -64,7 +64,7 @@
 .base {
     -fx-background-image: url("../images/base.png");
     -fx-background-repeat: stretch;
-    -fx-background-size: 100% 0%;
+    -fx-background-size: 0% 100%;
     -fx-background-position: center center;
 }
 

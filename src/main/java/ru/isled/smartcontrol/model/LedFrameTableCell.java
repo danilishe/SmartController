@@ -39,7 +39,7 @@ public class LedFrameTableCell extends javafx.scene.control.TableCell<LedFrame, 
             if (isBrightEnabled.get()) {
                 if (item <= MAX_BRIGHT) {
                     int brightPerc = item * 100 / MAX_BRIGHT;
-                    styleProperty().setValue(DEFAULT_CELL_STYLE + "   -fx-background-size:100% " + brightPerc + "%;");
+                    styleProperty().setValue(DEFAULT_CELL_STYLE + "   -fx-background-size:"+brightPerc+"% 100%;");
                     getStyleClass().set(0, "base");
                 } else {
                     styleProperty().setValue(DEFAULT_CELL_STYLE);

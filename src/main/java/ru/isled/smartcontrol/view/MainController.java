@@ -196,7 +196,6 @@ public class MainController {
     }
 
     private void initializeBrightHandlers() {
-        maxBright.setText(String.valueOf(MAX_BRIGHT));
         brightSlider.valueProperty().addListener((ov, o, n) -> {
             brightField.setText(String.valueOf(n.intValue()));
         });
