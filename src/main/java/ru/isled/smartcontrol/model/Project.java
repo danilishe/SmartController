@@ -107,8 +107,14 @@ public class Project {
         quantifiers.addAll(list);
     }
 
+    /**
+     *
+     * @return количество пикселей с учётом квантификаторов (кратных каналов)
+     */
     public int getTotalPixelCount() {
-        int sum = getQuantifiers().stream().limit(chanelCount).mapToInt(q -> q).sum();
-        return sum > MAX_PIXELS_COUNT ? MAX_PIXELS_COUNT : sum;
+        return getQuantifiers().stream()
+                .limit(chanelCount)
+                .mapToInt(q -> q)
+                .sum();
     }
 }

@@ -10,14 +10,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
-import javafx.util.Pair;
 import ru.isled.smartcontrol.SmartControl;
 import ru.isled.smartcontrol.controller.Converter;
 import ru.isled.smartcontrol.controller.Wrapper;
@@ -29,11 +27,9 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import static ru.isled.smartcontrol.Constants.*;
-import static ru.isled.smartcontrol.view.Dialogs.*;
 
 public class MainController {
 
@@ -254,11 +250,11 @@ public class MainController {
                 .mapToLong(item -> item.getCycles().get() * item.getFrameLength().get())
                 .sum();
 
-        String aTime = millisectondsToProgramLength(time);
+        String aTime = mSecToProgramLength(time);
         fullTime.setText(aTime);
     }
 
-    private String millisectondsToProgramLength(long time) {
+    private String mSecToProgramLength(long time) {
 
         try {
             LocalTime dateTime = LocalTime.ofNanoOfDay(time * 1_000_000);
@@ -386,9 +382,12 @@ public class MainController {
 
     @FXML
     public void startPreview() {
+        int totalPixelCount = project.getTotalPixelCount();
+        // если сумма пикселей с учётом кратных каналов будет > макс, в предпросмотре будет макс пикселй
+        int actualPixelCount = totalPixelCount > MAX_PIXELS_COUNT ? MAX_PIXELS_COUNT : totalPixelCount;
         Dialogs.preview(
                 Converter.encode(Wrapper.wrap(project)),
-                project.getTotalPixelCount(),
+                actualPixelCount,
                 project.getQuantifiers()   //todo понадобится для отображения "склееных" пикселей
         );
     }
