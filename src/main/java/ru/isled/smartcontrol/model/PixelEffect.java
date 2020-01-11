@@ -95,6 +95,7 @@ public enum PixelEffect {
     Мерцание(90909, "blink") {
         @Override
         public int[] getInterpolatedPixel(int baseLengthCount) {
+            if (baseLengthCount == 1) return new int[]{MIN_BRIGHT, MAX_BRIGHT};
             int[] ints = new int[baseLengthCount];
             int step = baseLengthCount * BASE_FRAME_LENGTH > VISIBLE_PERIOD ?
                     VISIBLE_PERIOD / BASE_FRAME_LENGTH :

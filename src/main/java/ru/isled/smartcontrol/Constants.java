@@ -3,11 +3,11 @@ package ru.isled.smartcontrol;
 import javafx.stage.FileChooser;
 
 public interface Constants {
-    String PROGRAM_VERSION = "1.1.3";
+    String PROGRAM_VERSION = "1.2.0";
     int MIN_FRAMES = 1;
     int MAX_FRAMES = 20000;
     int MIN_PIXELS_COUNT = 1;
-    int MAX_PIXELS_COUNT = 40;
+    int MAX_PIXELS_COUNT = 45;
     int DEFAULT_PIXEL_COUNT = 8;
     int MIN_BRIGHT = 0;
     int MAX_BRIGHT = 255;
