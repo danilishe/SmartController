@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import javafx.application.Application;
 import javafx.event.EventType;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
@@ -25,7 +24,10 @@ import java.util.List;
 import static ru.isled.smartcontrol.Constants.*;
 
 public class SmartControl extends Application {
-    public static final int MAX_LAST_FILES_COUNT = 10;
+    public Stage getMainStage() {
+        return mainStage;
+    }
+
     private Stage mainStage = null;
     private Project project = null;
     private MainController controller = null;
@@ -47,6 +49,8 @@ public class SmartControl extends Application {
                 controller.zoomSlider.setValue(props.getZoom());
                 controller.showBright.setSelected(props.isShowBright());
                 controller.showDigits.setSelected(props.isShowDigits());
+                mainStage.setMinHeight(MIN_HEIGHT);
+                mainStage.setMinWidth(MIN_WIDTH);
                 mainStage.setWidth(props.getWidth());
                 mainStage.setHeight(props.getHeight());
                 lastFiles.addAll(props.getLastFiles());
@@ -188,7 +192,6 @@ public class SmartControl extends Application {
         project = new Project();
         project.setFrameCount(DEFAULT_FRAMES_COUNT);
         project.setChanelCount(DEFAULT_PIXEL_COUNT);
-
         for (int i = 0; i < DEFAULT_FRAMES_COUNT; i++) {
             project.addRow(new LedFrame());
         }

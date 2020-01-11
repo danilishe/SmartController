@@ -10,12 +10,17 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.isled.smartcontrol.SmartControl;
 import ru.isled.smartcontrol.controller.Converter;
 import ru.isled.smartcontrol.controller.Wrapper;
@@ -32,6 +37,7 @@ import java.util.stream.Collectors;
 import static ru.isled.smartcontrol.Constants.*;
 
 public class MainController {
+    private static final Logger log = LogManager.getLogger();
 
     @FXML
     public HBox previewZone;
@@ -150,24 +156,7 @@ public class MainController {
     }
 
     @FXML
-    public void initialize() {
-        initializeRowHeader();
-        loadAndSetDefaultEffects();
-
-        initZoomSlider();
-
-        initSpinners();
-        initDataColumns();
-        initializePreviewZone();
-        initializeBrightHandlers();
-
-
-        frameTableView.getSelectionModel().setCellSelectionEnabled(true);
-        frameTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        frameTableView.addEventHandler(EventType.ROOT, x -> handleCellSelection());
-        frameTableView.setItems(frames);
-//        frames.addListener((ListChangeListener<LedFrame>) c -> updateProgramLength());
-    }
+    private TitledPane hintPane;
 
     private void initZoomSlider() {
         zoomSlider.setMin(MIN_COL_WIDTH);
@@ -384,7 +373,7 @@ public class MainController {
     public void startPreview() {
         int totalPixelCount = project.getTotalPixelCount();
         // если сумма пикселей с учётом кратных каналов будет > макс, в предпросмотре будет макс пикселй
-        int actualPixelCount = totalPixelCount > MAX_PIXELS_COUNT ? MAX_PIXELS_COUNT : totalPixelCount;
+        int actualPixelCount = Math.min(totalPixelCount, MAX_PIXELS_COUNT);
         Dialogs.preview(
                 Converter.encode(Wrapper.wrap(project)),
                 actualPixelCount,
@@ -477,7 +466,7 @@ public class MainController {
 
     private void initPixelQuantifierSpinner() {
         chanelQuantifier.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10, 1));
-        chanelQuantifier.getValueFactory().valueProperty().addListener((val, ov, nv) ->  {
+        chanelQuantifier.getValueFactory().valueProperty().addListener((val, ov, nv) -> {
             changePixelQuantities();
             updatePreviewRow();
         });
@@ -729,19 +718,10 @@ public class MainController {
     private Tooltip errorTooltip;
     @FXML
     private Label totalPixels;
-
-    private void updateTotalPixelCount() {
-        int pixelCount = project.getChanelCount();
-        int sum = project.getTotalPixelCount();
-        if (sum > MAX_PIXELS_COUNT) {
-            bulbIcon.setTextFill(Color.RED);
-            errorTooltip.setText("Экспортируется максимум " + MAX_PIXELS_COUNT + " пикселей, остальные пиксели будут проигнорированы");
-        } else {
-            bulbIcon.setTextFill(Color.BLACK);
-            errorTooltip.setText("Общее количество пикселей, включая кратные каналы");
-        }
-        totalPixels.setText(String.valueOf(sum));
-    }
+    @FXML
+    Label hintLabel;
+    @FXML
+    private Label errorMessage;
 
     public void updateHeaderQuantifiers() {
         List<Integer> quantifiers = project.getQuantifiers();
@@ -780,7 +760,22 @@ public class MainController {
 
     @FXML
     public void showAboutInfoHandler() {
-        Dialogs.showAboutInfo();
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.initOwner(mainApp.getMainStage());
+
+        alert.setTitle("О программе");
+        alert.setHeaderText("SMART Control " + PROGRAM_VERSION);
+        final Label label = new Label("Программа для создания и редактирования эффектов для контроллера ISLed" +
+                "\nЗнакСвет © 2018-2020" +
+                "\nСуетин Д.Е. © 2018-2020" +
+                "\nВерсия " + PROGRAM_VERSION +
+                "\nПамяти JVM свободно/всего: " + Runtime.getRuntime().freeMemory() / 1_000_000 + "МБ / " + Runtime.getRuntime().totalMemory() / 1_000_000 + "МБ"
+        );
+        final Hyperlink isLedLink = new Hyperlink(CONTROLLER_PAGE_URL);
+        isLedLink.setOnAction(event -> mainApp.getHostServices().showDocument(CONTROLLER_PAGE_URL));
+
+        alert.getDialogPane().setContent(new VBox(label, isLedLink));
+        alert.showAndWait();
     }
 
     @FXML
@@ -838,5 +833,172 @@ public class MainController {
                 .skip(SYS_COLS).forEach(col -> {
             col.setPrefWidth(columnsWidth);
         });
+    }
+
+    @FXML
+    public void initialize() {
+        initializeRowHeader();
+        loadAndSetDefaultEffects();
+
+        initZoomSlider();
+
+        initSpinners();
+        initDataColumns();
+        initializePreviewZone();
+        initializeBrightHandlers();
+
+        errorMessage.setText(TOO_MUCH_CHANNELS_ERROR_HINT);
+
+        frameTableView.getSelectionModel().setCellSelectionEnabled(true);
+        frameTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        frameTableView.addEventHandler(EventType.ROOT, x -> handleCellSelection());
+        frameTableView.setItems(frames);
+//        frames.addListener((ListChangeListener<LedFrame>) c -> updateProgramLength());
+    }
+
+    private void updateTotalPixelCount() {
+        int sum = project.getTotalPixelCount();
+        if (sum > MAX_PIXELS_COUNT) {
+            errorMessage.scaleYProperty().setValue(1);
+            hintPane.setTextFill(Color.RED);
+            bulbIcon.setTextFill(Color.RED);
+            errorTooltip.setText(TOO_MUCH_CHANNELS_ERROR_HINT);
+        } else {
+            errorMessage.scaleYProperty().setValue(0);
+            bulbIcon.setTextFill(Color.BLACK);
+            hintPane.setTextFill(Color.BLACK);
+            errorTooltip.setText(CHANNELS_COUNTER_HINT);
+        }
+        totalPixels.setText(String.valueOf(sum));
+    }
+
+    public void scrollZoom(ScrollEvent scrollEvent) {
+        final double currentValue = zoomSlider.getValue();
+        zoomSlider.setValue(currentValue + scrollEvent.getTextDeltaY());
+    }
+
+    public void scrollBright(ScrollEvent scrollEvent) {
+        brightSlider.setValue(brightSlider.getValue() + scrollEvent.getTextDeltaY());
+    }
+
+    public void scrollFrameLength(ScrollEvent scrollEvent) {
+        final int delta = (int) scrollEvent.getTextDeltaY();
+        frameLengthSpinner.increment(delta);
+    }
+
+    public void scrollFrames(ScrollEvent scrollEvent) {
+        final int delta = (int) scrollEvent.getTextDeltaY();
+        framesSpinner.increment(delta);
+    }
+
+    public void scrollPixels(ScrollEvent scrollEvent) {
+        final int delta = (int) scrollEvent.getTextDeltaY();
+        pixelSpinner.increment(delta);
+    }
+
+    public void scrollRepeats(ScrollEvent scrollEvent) {
+        final int delta = (int) scrollEvent.getTextDeltaY();
+        frameCyclesSpinner.increment(delta);
+    }
+
+    public void scrollQuantifier(ScrollEvent scrollEvent) {
+        final int delta = (int) scrollEvent.getTextDeltaY();
+        chanelQuantifier.increment(delta);
+    }
+
+    public void hintSetBright(MouseEvent mouseEvent) {
+        hintLabel.setText(HINT_SET_BRIGHT);
+    }
+
+    public void hintInEffect(MouseEvent mouseEvent) {
+        hintLabel.setText(HINT_IN_EFFECT);
+    }
+
+    public void hintBlinkInEffect(MouseEvent mouseEvent) {
+        hintLabel.setText(HINT_BLINK_IN_EFFECT);
+    }
+
+    public void hintBlinkEffect(MouseEvent mouseEvent) {
+        hintLabel.setText(HINT_BLINK_EFFECT);
+    }
+
+    public void hintOutInEffect(MouseEvent mouseEvent) {
+        hintLabel.setText(HINT_OUT_IN_EFFECT);
+    }
+
+    public void hintOutEffect(MouseEvent mouseEvent) {
+        hintLabel.setText(HINT_OUT_EFFECT);
+    }
+
+    public void hintBlinkOutEffect(MouseEvent mouseEvent) {
+        hintLabel.setText(HINT_BLINK_OUT_EFFECT);
+    }
+
+    public void hintRandomEffect(MouseEvent mouseEvent) {
+        hintLabel.setText(HINT_RANDOM_EFFECT);
+    }
+
+    public void hintInOutEffect(MouseEvent mouseEvent) {
+        hintLabel.setText(HINT_IN_OUT_EFFECT);
+    }
+
+    public void hintFrameLength(MouseEvent mouseEvent) {
+        hintLabel.setText(HINT_FRAME_LENGTH);
+    }
+
+    public void hintRepeats(MouseEvent mouseEvent) {
+        hintLabel.setText(HINT_REPEATS);
+    }
+
+    public void hintQuantifier(MouseEvent mouseEvent) {
+        hintLabel.setText(HINT_QUANTIFIER);
+    }
+
+    public void hintMultiframeEffect(MouseEvent mouseEvent) {
+        hintLabel.setText(HINT_MULTIFRAME_EFFECT);
+    }
+
+    public void hintDeselect(MouseEvent mouseEvent) {
+        hintLabel.setText(HINT_DESELECT);
+    }
+
+    public void hintSelectAll(MouseEvent mouseEvent) {
+        hintLabel.setText(HINT_SELECT_ALL);
+    }
+
+    public void hintFrameCount(MouseEvent mouseEvent) {
+        hintLabel.setText(HINT_FRAME_COUNT);
+    }
+
+    public void hintPixelsCount(MouseEvent mouseEvent) {
+        hintLabel.setText(HINT_PIXELS_COUNT);
+    }
+
+    public void hintProgramLength(MouseEvent mouseEvent) {
+        hintLabel.setText(HINT_PROGRAM_LENGTH);
+    }
+
+    public void hintChannelCounter(MouseEvent mouseEvent) {
+        hintLabel.setText(HINT_CHANNEL_COUNTER);
+    }
+
+    public void hintShowDigits(MouseEvent mouseEvent) {
+        hintLabel.setText(HINT_SHOW_DIGITS);
+    }
+
+    public void hintShowBright(MouseEvent mouseEvent) {
+        hintLabel.setText(HINT_SHOW_BRIGHT);
+    }
+
+    public void hintZoom(MouseEvent mouseEvent) {
+        hintLabel.setText(HINT_ZOOM);
+    }
+
+    public void hintPreview(MouseEvent mouseEvent) {
+        hintLabel.setText(HINT_PREVIEW);
+    }
+
+    public void hintFramePixelTable(MouseEvent mouseEvent) {
+        hintLabel.setText(HINT_FRAME_PIXEL_TABE);
     }
 }

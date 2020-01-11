@@ -157,22 +157,6 @@ public class Dialogs {
         return fileChooser.showSaveDialog(stage);
     }
 
-    public static void showAboutInfo() {
-        alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.initOwner(stage);
-        alert.setTitle("О программе");
-        alert.setHeaderText("SMART Control 2018");
-        alert.setContentText(
-                "Программа для создания и редактирования эффектов для контроллера ISLed" +
-                        "\nЗнакСвет (C) 2018\nСуетин Д.Е. (C) 2018" +
-                        "\nhttp://is-led.ru/" +
-                        "\nВерсия " + Constants.PROGRAM_VERSION +
-                        "\nПамяти JVM свободно/всего: " + Runtime.getRuntime().freeMemory() / 1_000_000 + "МБ / " + Runtime.getRuntime().totalMemory() / 1_000_000 + "МБ"
-        );
-        alert.showAndWait();
-    }
-
-
     public static Optional<ButtonType> showErrorAlert(String message) {
         alert = new Alert(Alert.AlertType.ERROR);
         alert.initOwner(stage);
