@@ -21,8 +21,6 @@ import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.isled.smartcontrol.SmartControl;
-import ru.isled.smartcontrol.controller.Converter;
-import ru.isled.smartcontrol.controller.Wrapper;
 import ru.isled.smartcontrol.model.*;
 
 import java.io.File;
@@ -75,7 +73,7 @@ public class MainController {
     public Menu lastFiles;
     private ObservableList<LedFrame> frames = FXCollections.observableArrayList();
     private Project project;
-    private List<Shape> previewPixels = new ArrayList<>(MAX_PIXELS_COUNT);
+    private List<Shape> previewPixels = new ArrayList<>(MAX_CHANNELS_COUNT);
     private SmartControl mainApp;
     @FXML
     private Label fullTime;
@@ -159,12 +157,12 @@ public class MainController {
         zoomSlider.setMin(MIN_COL_WIDTH);
         zoomSlider.setMax(MAX_COL_WIDTH);
         zoomSlider.setValue(INIT_COL_WIDTH);
-        zoomSlider.setBlockIncrement((MAX_BRIGHT - MIN_BRIGHT) / 10);
+        zoomSlider.setBlockIncrement((MAX_BRIGHT - MIN_BRIGHT) / 10d);
         zoomSlider.valueProperty().addListener((o, ov, nv) -> setColumnsWidth(nv.doubleValue()));
     }
 
     private void initializePreviewZone() {
-        for (int i = 0; i < MAX_PIXELS_COUNT; i++) {
+        for (int i = 0; i < MAX_CHANNELS_COUNT; i++) {
             Shape pixel = new Rectangle(20, 20, Color.rgb(0xFF, 0xFF, 0, 0));
             Text pixelText = new Text("" + (i + 1));
             StackPane stack = new StackPane(pixel, pixelText);
@@ -208,12 +206,12 @@ public class MainController {
         mainApp.exportProject();
     }
 
-    private void setBrightSelectedCells(int val) {
-        for (TablePosition cell : getSelectedDataCells()) {
-            int pixel = cell.getColumn() - SYS_COLS;
-            int frame = cell.getRow();
-            if (frames.get(frame).getInt(pixel) != val) {
-                frames.get(frame).set(pixel, val);
+    private void setBrightSelectedCells(int bright) {
+        for (TablePosition<LedFrame, FramePixel> cell : getSelectedDataCells()) {
+            int pixelNo = cell.getColumn() - HEADER_COLUMNS;
+            int frameNo = cell.getRow();
+            if (!project.getPixels().get(pixelNo).isRgb() && project.getFrames().get(frameNo).getPixel(pixelNo).getStartColor().getB) {
+                project.getFrames().get(frameNo).getPixel(pixelNo).setBright(bright);
                 project.setHasChanges(true);
             }
         }
@@ -264,15 +262,15 @@ public class MainController {
 
         selectAllRowsWhereHeaderIsSelected();
 
-        List<TablePosition> selectedDataCells = getSelectedDataCells();
+        List<TablePosition<LedFrame, FramePixel>> selectedDataCells = getSelectedDataCells();
 
         if (!selectedDataCells.isEmpty()) {
 
             updatePreviewRow();
 
-            TablePosition position = selectedDataCells.get(0);
+            TablePosition<LedFrame, FramePixel> position = selectedDataCells.get(0);
 
-            int cellValue = frames.get(position.getRow()).getInt(position.getColumn() - SYS_COLS);
+            int cellValue = frames.get(position.getRow()).getPixel(position.getColumn() - HEADER_COLUMNS);
 
             int frameLeng = frames.get(position.getRow()).getFrameLength().get();
             int frameCycl = frames.get(position.getRow()).getCycles().get();
@@ -306,15 +304,15 @@ public class MainController {
 
             clearSelection();
             frameTableView.getSelectionModel().selectRange(firstRow,
-                    frameTableView.getColumns().get(SYS_COLS),
+                    frameTableView.getColumns().get(HEADER_COLUMNS),
                     lastRow,
-                    frameTableView.getColumns().get(pixelSpinner.getValue() + SYS_COLS - 1));
+                    frameTableView.getColumns().get(pixelSpinner.getValue() + HEADER_COLUMNS - 1));
         }
     }
 
     private List<TablePosition> getSelectedHeaderCells() {
         return frameTableView.getSelectionModel().getSelectedCells()
-                .stream().filter(x -> x.getColumn() < SYS_COLS)
+                .stream().filter(x -> x.getColumn() < HEADER_COLUMNS)
                 .collect(Collectors.toList());
     }
 
@@ -337,20 +335,20 @@ public class MainController {
 
             pixel.getStyleClass().clear();
 
-            if (frame.getInt(i) <= MAX_BRIGHT) {
+            if (frame.getPixel(i) <= MAX_BRIGHT) {
                 pixel.getStyleClass().clear();
-                pixel.scaleYProperty().set(1 + .1 * project.getQuantifiers().get(i));
+                pixel.scaleYProperty().set(1 + .1 * project.getPixels().get(i));
                 pixel.fillProperty().setValue(
-                        Color.rgb(0xFF, 0xFF, 0, ((double) frame.getInt(i) / MAX_BRIGHT)));
+                        Color.rgb(0xFF, 0xFF, 0, ((double) frame.getPixel(i) / MAX_BRIGHT)));
             } else {
 //                pixel.fillProperty().setValue(
 //                        null
 //                );
 
                 if (pixel.getStyleClass().isEmpty())
-                    pixel.getStyleClass().add(PixelEffect.cssByIndex(frame.getInt(i)));
+                    pixel.getStyleClass().add(PixelEffect.cssByIndex(frame.getPixel(i)));
                 else
-                    pixel.getStyleClass().set(0, PixelEffect.cssByIndex(frame.getInt(i)));
+                    pixel.getStyleClass().set(0, PixelEffect.cssByIndex(frame.getPixel(i)));
 
             }
         }
@@ -359,23 +357,17 @@ public class MainController {
     /**
      * @return возвращает все выбранные ячейки списком кроме заголовочных
      */
-    private List<TablePosition> getSelectedDataCells() {
-        return frameTableView.getSelectionModel().getSelectedCells()
+    private List<TablePosition<LedFrame, FramePixel>> getSelectedDataCells() {
+        return frameTableView.getSelectionModel()
+                .getSelectedCells()
                 .stream()
-                .filter(x -> x.getColumn() >= SYS_COLS)
-                .collect(Collectors.toList());
+                .filter(x -> x.getColumn() >= HEADER_COLUMNS)
+                .collect(Collectors.<TablePosition<LedFrame, FramePixel>>toList());
     }
 
     @FXML
     public void startPreview() {
-        int totalPixelCount = project.getTotalPixelCount();
-        // если сумма пикселей с учётом кратных каналов будет > макс, в предпросмотре будет макс пикселй
-        int actualPixelCount = Math.min(totalPixelCount, MAX_PIXELS_COUNT);
-        Dialogs.preview(
-                Converter.encode(Wrapper.wrap(project)),
-                actualPixelCount,
-                project.getQuantifiers()   //todo понадобится для отображения "склееных" пикселей
-        );
+        Dialogs.preview(project);
     }
 
     @FXML
@@ -406,8 +398,8 @@ public class MainController {
 
         clearSelection();
 
-        frameTableView.getSelectionModel().selectRange(0, colsList.get(SYS_COLS),
-                rows - 1, colsList.get(lastVisibleColNumber + SYS_COLS - 1));
+        frameTableView.getSelectionModel().selectRange(0, colsList.get(HEADER_COLUMNS),
+                rows - 1, colsList.get(lastVisibleColNumber + HEADER_COLUMNS - 1));
     }
 
     @FXML
@@ -526,9 +518,9 @@ public class MainController {
 
         frameLengthSpinner.getEditor().addEventHandler(KeyEvent.KEY_RELEASED, event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                frameTableView.getColumns().get(SYS_COLS - 1).setVisible(false);
+                frameTableView.getColumns().get(HEADER_COLUMNS - 1).setVisible(false);
                 frameLengthSpinner.getEditor().commitValue();
-                frameTableView.getColumns().get(SYS_COLS - 1).setVisible(true);
+                frameTableView.getColumns().get(HEADER_COLUMNS - 1).setVisible(true);
                 event.consume();
             }
         });
@@ -546,9 +538,9 @@ public class MainController {
 
                 // чётко обновляет внешний вид таблицы, так как после скрытия столбца, его значение меняется
                 if (frameLengthSpinner.getValue() != val) {
-                    frameTableView.getColumns().get(SYS_COLS - 1).setVisible(false);
+                    frameTableView.getColumns().get(HEADER_COLUMNS - 1).setVisible(false);
                     frameLengthSpinner.getValueFactory().setValue(val);
-                    frameTableView.getColumns().get(SYS_COLS - 1).setVisible(true);
+                    frameTableView.getColumns().get(HEADER_COLUMNS - 1).setVisible(true);
                 }
             }
         });
@@ -559,7 +551,7 @@ public class MainController {
         pixelSpinner.getStyleClass().add(Spinner.STYLE_CLASS_ARROWS_ON_RIGHT_HORIZONTAL);
 
         pixelSpinner.setValueFactory(
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(MIN_PIXELS_COUNT, MAX_PIXELS_COUNT, DEFAULT_PIXEL_COUNT)
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(MIN_PIXELS_COUNT, MAX_CHANNELS_COUNT, DEFAULT_PIXEL_COUNT)
         );
 
         pixelSpinner.getEditor().textProperty().addListener((ov, oldValue, newValue) -> {
@@ -571,10 +563,10 @@ public class MainController {
         pixelSpinner.getValueFactory().valueProperty().addListener((ov, o, n) -> {
             if (n < MIN_PIXELS_COUNT)
                 pixelSpinner.getValueFactory().setValue(MIN_PIXELS_COUNT);
-            else if (n > MAX_PIXELS_COUNT)
-                pixelSpinner.getValueFactory().setValue(MAX_PIXELS_COUNT);
+            else if (n > MAX_CHANNELS_COUNT)
+                pixelSpinner.getValueFactory().setValue(MAX_CHANNELS_COUNT);
             else {
-                project.setChanelCount(n);
+                project.setPixelCount(n);
                 refreshVisibleColumnsCount();
                 updateTotalPixelCount();
             }
@@ -658,9 +650,9 @@ public class MainController {
     // скрывает колонки
     private void refreshVisibleColumnsCount() {
         int selectedPixelNumber = pixelSpinner.getValue();
-        for (int i = 0; i < MAX_PIXELS_COUNT; i++) {
+        for (int i = 0; i < MAX_CHANNELS_COUNT; i++) {
 
-            frameTableView.getColumns().get(i + SYS_COLS).visibleProperty().setValue(
+            frameTableView.getColumns().get(i + HEADER_COLUMNS).visibleProperty().setValue(
                     i < selectedPixelNumber);
 
             previewPixels.get(i).getParent().setVisible(
@@ -683,8 +675,8 @@ public class MainController {
         disableColumnReordering();
 
         // пиксели/каналы
-        for (int i = 0; i < MAX_PIXELS_COUNT; i++) {
-            final int absNum = i + SYS_COLS;
+        for (int i = 0; i < MAX_CHANNELS_COUNT; i++) {
+            final int absNum = i + HEADER_COLUMNS;
             TableColumn<LedFrame, Integer> column = new TableColumn<>(String.valueOf(i + 1) + "\n[1]");
 
 //            column.addEventHandler(MouseEvent.ANY,
@@ -712,7 +704,7 @@ public class MainController {
         frameTableView.getSelectionModel().getSelectedCells().stream().mapToInt(TablePosition::getColumn)
                 .distinct()
                 .forEach(col -> {
-                    project.getQuantifiers().set(col - SYS_COLS, value);
+                    project.getPixels().set(col - HEADER_COLUMNS, value);
                     TableColumn<LedFrame, ?> column = frameTableView.getColumns().get(col);
                     String text = column.getText();
                     column.setText(text.replaceAll("\\[\\d+]", "[" + value + "]"));
@@ -729,9 +721,9 @@ public class MainController {
     private Label totalPixels;
 
     public void updateHeaderQuantifiers() {
-        List<Integer> quantifiers = project.getQuantifiers();
+        List<Integer> quantifiers = project.getPixels();
         for (int i = 0; i < quantifiers.size(); i++) {
-            TableColumn<LedFrame, ?> column = frameTableView.getColumns().get(i + SYS_COLS - 1);
+            TableColumn<LedFrame, ?> column = frameTableView.getColumns().get(i + HEADER_COLUMNS - 1);
             column.setText(column.getText().replaceAll("\\[\\d+]", "[" + quantifiers.get(i) + "]"));
         }
     }
@@ -813,7 +805,7 @@ public class MainController {
         return cells.stream()
                 .map(c -> frames.get(
                         c.getRow()).getProperty(
-                        c.getColumn() - SYS_COLS))
+                        c.getColumn() - HEADER_COLUMNS))
                 .collect(Collectors.toList());
     }
 
@@ -828,10 +820,10 @@ public class MainController {
     public void setProject(Project project) {
         this.project = project;
         frames.clear();
-        pixelSpinner.getValueFactory().setValue(project.getChanelCount());
+        pixelSpinner.getValueFactory().setValue(project.getPixelCount());
         framesSpinner.getValueFactory().setValue(project.getFrameCount());
         updateFramesCount();
-        if (frameTableView.getColumns().size() > SYS_COLS) updateHeaderQuantifiers();
+        if (frameTableView.getColumns().size() > HEADER_COLUMNS) updateHeaderQuantifiers();
         updateTotalPixelCount();
     }
 
@@ -841,7 +833,7 @@ public class MainController {
 
     private void setColumnsWidth(double columnsWidth) {
         frameTableView.getColumns().stream()
-                .skip(SYS_COLS).forEach(col -> {
+                .skip(HEADER_COLUMNS).forEach(col -> {
             col.setPrefWidth(columnsWidth);
         });
     }
@@ -867,8 +859,8 @@ public class MainController {
     }
 
     private void updateTotalPixelCount() {
-        int sum = project.getTotalPixelCount();
-        if (sum > MAX_PIXELS_COUNT) {
+        int sum = project.getChannelsCount();
+        if (sum > MAX_CHANNELS_COUNT) {
             bulbIcon.setTextFill(Color.RED);
             errorTooltip.setText(TOO_MUCH_CHANNELS_ERROR_HINT);
         } else {

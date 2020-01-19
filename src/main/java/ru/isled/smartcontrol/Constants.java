@@ -7,7 +7,7 @@ public interface Constants {
     int MIN_FRAMES = 1;
     int MAX_FRAMES = 20000;
     int MIN_PIXELS_COUNT = 1;
-    int MAX_PIXELS_COUNT = 45;
+    int MAX_CHANNELS_COUNT = 45;
     int DEFAULT_PIXEL_COUNT = 8;
     int MIN_BRIGHT = 0;
     int MAX_BRIGHT = 255;
@@ -31,7 +31,7 @@ public interface Constants {
     String UNSAVED_FILE_NAME = " <несохранённый проект> ";
     String DEFAULT_WORK_DIRECTORY = System.getProperty("user.home");// + "/Documents/";
     int DEFAULT_FRAMES_COUNT = 10;
-    int SYS_COLS = 3;
+    int HEADER_COLUMNS = 3;
     String DEFAULT_CELL_STYLE = "-fx-alignment: CENTER;";
     int INIT_COL_WIDTH = 40;
     int MIN_COL_WIDTH = 25;
@@ -70,6 +70,6 @@ public interface Constants {
     String HINT_BLINK_OUT_EFFECT = "Однокадровый эффект с плавным угасанием и мерцанием с максимальной яркостью." + HINT_FRAME_EFFECT;
     String HINT_RANDOM_EFFECT = "Однокадровый эффект с произвольной сменой яркости. Яркость меняется у каждого пикселя индивидуально." + HINT_FRAME_EFFECT;
     String HINT_IN_OUT_EFFECT = "Однокадровый эффект с плавным разгоранием и затем плавным угасанием." + HINT_FRAME_EFFECT;
-    String TOO_MUCH_CHANNELS_ERROR_HINT = "Экспортируется максимум " + MAX_PIXELS_COUNT + " пикселей, остальные пиксели будут проигнорированы";
+    String TOO_MUCH_CHANNELS_ERROR_HINT = "Экспортируется максимум " + MAX_CHANNELS_COUNT + " пикселей, остальные пиксели будут проигнорированы";
     String CHANNELS_COUNTER_HINT = "Общее количество пикселей, включая кратные каналы";
 }

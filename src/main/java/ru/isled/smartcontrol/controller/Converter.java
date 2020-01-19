@@ -20,12 +20,12 @@ public class Converter {
         List<Byte> allData = new ArrayList<>();
         for (WrappedLedFrame frame : frames) {
             int baseLengthCount = frame.getFrameLength() / BASE_FRAME_LENGTH;
-            int[][] subFrames = new int[baseLengthCount][MAX_PIXELS_COUNT];
+            int[][] subFrames = new int[baseLengthCount][MAX_CHANNELS_COUNT];
             int channelsHead = 0;
 
             // перебираем каждый пиксель текущего кадра
             mainCycle:
-            for (int pixel = 0; pixel < MAX_PIXELS_COUNT; pixel++) {
+            for (int pixel = 0; pixel < MAX_CHANNELS_COUNT; pixel++) {
                 int pixelBright = frame.getPixels().get(pixel);
                 int pixelQuantifier = wrappedProject.getQuantifiers().get(pixel);
 
@@ -46,7 +46,7 @@ public class Converter {
                     }
 
                     channelsHead++;
-                    if (channelsHead == MAX_PIXELS_COUNT) break mainCycle;
+                    if (channelsHead == MAX_CHANNELS_COUNT) break mainCycle;
 
                 }
             }

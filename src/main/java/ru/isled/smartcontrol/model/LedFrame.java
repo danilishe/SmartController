@@ -1,6 +1,5 @@
 package ru.isled.smartcontrol.model;
 
-import javafx.beans.binding.IntegerExpression;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -8,32 +7,27 @@ import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static ru.isled.smartcontrol.Constants.DEFAULT_FRAME_LENGTH;
-import static ru.isled.smartcontrol.Constants.MAX_PIXELS_COUNT;
+import static ru.isled.smartcontrol.Constants.MAX_CHANNELS_COUNT;
 
 public class LedFrame {
     private IntegerProperty frameLength = new SimpleIntegerProperty(DEFAULT_FRAME_LENGTH);
     private IntegerProperty cycles = new SimpleIntegerProperty(1);
-    private List<FramePixel> pixels = new ArrayList<>(MAX_PIXELS_COUNT);
+    private List<FramePixel> pixels = new ArrayList<>(MAX_CHANNELS_COUNT);
 
     public LedFrame() {
-        for (int i = 0; i < MAX_PIXELS_COUNT; i++) {
+        for (int i = 0; i < MAX_CHANNELS_COUNT; i++) {
             pixels.add(new FramePixel(Color.BLACK, PixelEffect.Solid));
         }
     }
 
-    public List<Integer> getPixels() {
-        return pixels.stream()
-                .map(IntegerExpression::getValue)
-                .collect(Collectors.toList());
+    public List<FramePixel> getPixels() {
+        return pixels;
     }
 
-    public LedFrame setPixels(List<Integer> pixels) {
-        for (int i = 0; i < this.pixels.size(); i++) {
-            this.pixels.get(i).set(pixels.get(i));
-        }
+    public LedFrame setPixels(List<FramePixel> pixels) {
+        this.pixels = pixels;
         return this;
     }
 
@@ -55,30 +49,12 @@ public class LedFrame {
         return this;
     }
 
-    public int getInt(int num) {
-        return pixels.get(num).getValue();
-    }
-
-    public ObjectProperty<Integer> get(int num) {
-        return pixels.get(num).asObject();
-    }
-
-    public IntegerProperty getProperty(int num) {
+    public FramePixel getPixel(int num) {
         return pixels.get(num);
     }
 
     public LedFrame setLength(int length) {
         frameLength.setValue(length);
-        return this;
-    }
-
-    public LedFrame setPixel(int num, int value) {
-        pixels.get(num).setValue(value);
-        return this;
-    }
-
-    public LedFrame set(int pixel, int val) {
-        pixels.get(pixel).setValue(val);
         return this;
     }
 }

@@ -11,20 +11,20 @@ public class Wrapper {
     public static WrappedProject wrap(Project project) {
         return new WrappedProject()
                 .setFrameCount(project.getFrameCount())
-                .setPixelCount(project.getChanelCount())
-                .setQuantifiers(project.getQuantifiers())
+                .setPixelCount(project.getPixelCount())
+                .setQuantifiers(project.getPixels())
                 .setGamma(project.getGamma())
-                .setFrames(project.getData().stream()
+                .setFrames(project.getFrames().stream()
                         .map(Wrapper::wrapLedFrame)
                         .collect(Collectors.toList()));
     }
 
     public static Project unwrap(WrappedProject wrappedProject) {
         return new Project()
-                .setChanelCount(wrappedProject.getPixelCount())
+                .setPixelCount(wrappedProject.getPixelCount())
                 .setFrameCount(wrappedProject.getFrameCount())
-                .setQuantifiers(wrappedProject.getQuantifiers())
-                .setData(
+                .setPixels(wrappedProject.getQuantifiers())
+                .setFrames(
                         wrappedProject.getFrames().stream()
                                 .map(Wrapper::unwrapLedFrame)
                                 .collect(Collectors.toList())

@@ -11,6 +11,8 @@ import javafx.scene.shape.Shape;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import ru.isled.smartcontrol.Constants;
+import ru.isled.smartcontrol.model.Pixel;
+import ru.isled.smartcontrol.model.Project;
 
 import java.io.File;
 import java.time.LocalTime;
@@ -50,33 +52,39 @@ public class Dialogs {
 
     }
 
-    public static void preview(final byte[] data, int width, List<Integer> quantifiers) {
-        Dialog preview = new Dialog();
+    public static void preview(Project project) {
+        Dialog<Void> preview = new Dialog<>();
         preview.setTitle("Предпросмотр");
+        // fixme как считать цветные пиксели?
+        final int channelsCount = Math.min(project.getChannelsCount(), MAX_CHANNELS_COUNT);
+
         List<Shape> px = Stream
-                .generate(() -> new Circle(15, Color.YELLOW))
-                .limit(width)
+                .generate(() -> new VBox(5))
+                .limit(channelsCount)
                 .collect(Collectors.toList());
 
-        List<StackPane> objects = IntStream.range(0, width).mapToObj(i ->
-                new StackPane(px.get(i), new Label("" + (i + 1)))
-        ).collect(Collectors.toList());
+        List<StackPane> objects = IntStream
+                .range(0, channelsCount)
+                .mapToObj(i -> {
+                            Circle circle = new Circle(15, Color.BLACK);
+                            Label label = new Label("" + (i + 1));
+                            label.setTextFill(Color.DEEPSKYBLUE);
+                            return new StackPane(circle, label);
+                        }
+                ).collect(Collectors.toList());
 
         List<VBox> vBoxes = new ArrayList<>();
         int currentPixel = 0;
-
-        vboxCycle:
-        for (int q : quantifiers) {
-            VBox vBox = new VBox(0);
-            for (int i = 0; i < q; i++) {
-                vBox.getChildren().add(objects.get(currentPixel));
-                currentPixel++;
-                if (currentPixel == width) {
-                    vBoxes.add(vBox);
-                    break vboxCycle;
+        groupPixels:
+        for (int i = 0; i < project.getPixelCount(); i++) {
+            final Pixel pixel = project.getPixels().get(i);
+            for (int j = 0; j < pixel.getQuantifier(); j++) {
+                currentPixel += pixel.isRgb() ? 3 : 1;
+                if (currentPixel > channelsCount) break groupPixels;
+                if (pixel.isRgb()) {
+                    vBoxes.add(new)
                 }
             }
-            vBoxes.add(vBox);
         }
 
         HBox hbox = new HBox(5);
@@ -89,7 +97,7 @@ public class Dialogs {
             protected Void call() throws Exception {
                 while (preview.isShowing()) {
                     long stepStartTime = new Date().getTime();
-                    for (int i = 0; i < data.length; i += MAX_PIXELS_COUNT) {
+                    for (int i = 0; i < data.length; i += MAX_CHANNELS_COUNT) {
                         long stepEndTime = new Date().getTime() - stepStartTime;
                         updateMessage(LocalTime.ofNanoOfDay(stepEndTime * 1_000_000).format(DateTimeFormatter.ISO_TIME));
                         for (int j = 0; j < width; j++) {

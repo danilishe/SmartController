@@ -15,18 +15,17 @@ public class Project {
     private double gamma = 2.2;
     private BooleanProperty hasChanges;
     private ObjectProperty<File> file;
-    private List<Integer> quantifiers;
-    private List<LedFrame> data;
-    //todo переделать в Enum
+    private List<Pixel> pixels;
+    private List<LedFrame> frames;
     private int frameCount;
-    private int chanelCount;
+    private int pixelCount;
 
     public Project() {
         hasChanges = new SimpleBooleanProperty(false);
-        data = new ArrayList<>(MAX_FRAMES);
-        quantifiers = new ArrayList<>(MAX_PIXELS_COUNT);
-        for (int i = 0; i < MAX_PIXELS_COUNT; i++) {
-            quantifiers.add(1);
+        frames = new ArrayList<>(MAX_FRAMES);
+        pixels = new ArrayList<>(MAX_CHANNELS_COUNT);
+        for (int i = 0; i < MAX_CHANNELS_COUNT; i++) {
+            pixels.add(new Pixel());
         }
     }
 
@@ -48,12 +47,12 @@ public class Project {
         return this;
     }
 
-    public int getChanelCount() {
-        return chanelCount;
+    public int getPixelCount() {
+        return pixelCount;
     }
 
-    public Project setChanelCount(int chanelCount) {
-        this.chanelCount = chanelCount;
+    public Project setPixelCount(int pixelCount) {
+        this.pixelCount = pixelCount;
         return this;
     }
 
@@ -87,11 +86,11 @@ public class Project {
     }
 
     public LedFrame getRow(int row) {
-        return data.get(row);
+        return frames.get(row);
     }
 
     public boolean addRow(LedFrame frame) {
-        return data.add(frame);
+        return frames.add(frame);
     }
 
     public File getFile() {
@@ -99,35 +98,35 @@ public class Project {
     }
 
     public int size() {
-        return data.size();
+        return frames.size();
     }
 
-    public List<LedFrame> getData() {
-        return data;
+    public List<LedFrame> getFrames() {
+        return frames;
     }
 
-    public Project setData(List<LedFrame> data) {
-        this.data = data;
+    public Project setFrames(List<LedFrame> frames) {
+        this.frames = frames;
         return this;
     }
 
-    public List<Integer> getQuantifiers() {
-        return quantifiers;
+    public List<Pixel> getPixels() {
+        return pixels;
     }
 
-    public Project setQuantifiers(List<Integer> list) {
-        quantifiers.clear();
-        quantifiers.addAll(list);
+    public Project setPixels(List<Pixel> list) {
+        pixels = list;
         return this;
     }
 
     /**
      * @return количество пикселей с учётом квантификаторов (кратных каналов)
      */
-    public int getTotalPixelCount() {
-        return getQuantifiers().stream()
-                .limit(chanelCount)
-                .mapToInt(q -> q)
-                .sum();
+    public int getChannelsCount() {
+        int result = 0;
+        for (Pixel pixel : pixels) {
+            result += pixel.getQuantity();
+        }
+        return result;
     }
 }

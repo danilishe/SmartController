@@ -2,6 +2,8 @@ package ru.isled.smartcontrol.model;
 
 import javafx.scene.paint.Color;
 
+import static ru.isled.smartcontrol.Constants.MAX_BRIGHT;
+
 /**
  * Frame Pixel is logical unit of each frame of program. Each Frame Pixel knows only own colors and effect
  */
@@ -49,5 +51,15 @@ public class FramePixel {
     public FramePixel setEffect(PixelEffect effect) {
         this.effect = effect;
         return this;
+    }
+
+    public FramePixel setBright(double bright) {
+        startColor = Color.hsb(startColor.getHue(), startColor.getSaturation(), bright);
+        startColor = Color.hsb(endColor.getHue(), endColor.getSaturation(), bright);
+        return this;
+    }
+
+    public FramePixel setBright(int bright) {
+        return setBright((double) bright / MAX_BRIGHT);
     }
 }

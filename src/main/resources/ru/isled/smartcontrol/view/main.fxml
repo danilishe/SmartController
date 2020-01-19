@@ -41,6 +41,12 @@
                         minHeight="-Infinity" minWidth="-Infinity" prefWidth="320.0" text="Пиксель">
                 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
                       prefWidth="320.0" spacing="5.0">
+                    <HBox spacing="5.0">
+                        <children>
+                            <ColorPicker fx:id="startColor" editable="true"/>
+                            <ColorPicker fx:id="endColor" editable="true"/>
+                        </children>
+                    </HBox>
                     <HBox onScroll="#scrollBright" spacing="5.0">
                         <Slider fx:id="brightSlider" majorTickUnit="100.0" max="255.0"
                                 maxHeight="1.7976931348623157E308" minorTickCount="50" prefWidth="999.0"
@@ -355,11 +361,6 @@
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
             </padding>
             <HBox prefHeight="32.0" spacing="5.0">
-                <ToggleButton fx:id="showDigits" maxHeight="1.7976931348623157E308" mnemonicParsing="false"
-                              onMouseClicked="#refresh" selected="true" text="Число"/>
-                <ToggleButton fx:id="showBright" maxHeight="1.7976931348623157E308" mnemonicParsing="false"
-                              onMouseClicked="#refresh" selected="true" text="Яркость"/>
-                <Separator maxHeight="1.7976931348623157E308" orientation="VERTICAL"/>
                 <Label text="🔎">
                     <font>
                         <Font size="18.0"/>
