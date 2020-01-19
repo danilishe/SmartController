@@ -32,16 +32,16 @@ public class Wrapper {
     }
 
     private static WrappedLedFrame wrapLedFrame(LedFrame ledFrame) {
-        return new WrappedLedFrame().setFrameCycles(ledFrame.getCycles().get())
+        return new WrappedLedFrame()
+                .setFrameCycles(ledFrame.getCycles().get())
                 .setFrameLength(ledFrame.getFrameLength().get())
                 .setPixels(ledFrame.getPixels());
     }
 
     private static LedFrame unwrapLedFrame(WrappedLedFrame wrappedLedFrame) {
-        LedFrame ledFrame = new LedFrame();
-        ledFrame.setCycles(wrappedLedFrame.getFrameCycles());
-        ledFrame.setFrameLength(wrappedLedFrame.getFrameLength());
-        ledFrame.setPixels(wrappedLedFrame.getPixels());
-        return ledFrame;
+        return new LedFrame()
+                .setCycles(wrappedLedFrame.getFrameCycles())
+                .setFrameLength(wrappedLedFrame.getFrameLength())
+                .setPixels(wrappedLedFrame.getPixels());
     }
 }

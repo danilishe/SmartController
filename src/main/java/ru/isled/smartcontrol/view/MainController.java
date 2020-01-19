@@ -84,42 +84,42 @@ public class MainController {
 
     @FXML
     public void setFadeInEffect() {
-        setBrightSelectedCells(PixelEffect.Разгорание.index());
+        setBrightSelectedCells(PixelEffect.FadeIn.index());
     }
 
     @FXML
     public void setBlinkEffect() {
-        setBrightSelectedCells(PixelEffect.Мерцание.index());
+        setBrightSelectedCells(PixelEffect.Blinking.index());
     }
 
     @FXML
     public void setFadeOutEffect() {
-        setBrightSelectedCells(PixelEffect.Угасание.index());
+        setBrightSelectedCells(PixelEffect.FadeOut.index());
     }
 
     @FXML
     public void setFadeInOutEffect() {
-        setBrightSelectedCells(PixelEffect.Вспышка.index());
+        setBrightSelectedCells(PixelEffect.FadeInOut.index());
     }
 
     @FXML
     public void setFadeOutInEffect() {
-        setBrightSelectedCells(PixelEffect.Миг.index());
+        setBrightSelectedCells(PixelEffect.FadeOutIn.index());
     }
 
     @FXML
     public void setBlinkingFadeInEffect() {
-        setBrightSelectedCells(PixelEffect.МерцающееРазгорание.index());
+        setBrightSelectedCells(PixelEffect.BlinkingFadeIn.index());
     }
 
     @FXML
     public void setChaosEffect() {
-        setBrightSelectedCells(PixelEffect.Хаос.index());
+        setBrightSelectedCells(PixelEffect.Chaos.index());
     }
 
     @FXML
     public void setBlinkingFadeOutEffect() {
-        setBrightSelectedCells(PixelEffect.МерцающееУгасание.index());
+        setBrightSelectedCells(PixelEffect.BlinkingFadeOut.index());
     }
 
     @FXML

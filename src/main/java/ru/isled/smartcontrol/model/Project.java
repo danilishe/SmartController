@@ -30,21 +30,6 @@ public class Project {
         }
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Project)) return false;
-
-        Project project = (Project) o;
-
-        if (Double.compare(project.getGamma(), getGamma()) != 0) return false;
-        if (getFrameCount() != project.getFrameCount()) return false;
-        if (getChanelCount() != project.getChanelCount()) return false;
-        if (getQuantifiers() != null ? !getQuantifiers().equals(project.getQuantifiers()) : project.getQuantifiers() != null)
-            return false;
-        return getData().equals(project.getData());
-    }
-
     public double getGamma() {
         return gamma;
     }

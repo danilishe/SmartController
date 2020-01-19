@@ -4,6 +4,7 @@ import javafx.beans.binding.IntegerExpression;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,26 +16,12 @@ import static ru.isled.smartcontrol.Constants.MAX_PIXELS_COUNT;
 public class LedFrame {
     private IntegerProperty frameLength = new SimpleIntegerProperty(DEFAULT_FRAME_LENGTH);
     private IntegerProperty cycles = new SimpleIntegerProperty(1);
-    private List<IntegerProperty> pixels = new ArrayList<>(MAX_PIXELS_COUNT);
+    private List<FramePixel> pixels = new ArrayList<>(MAX_PIXELS_COUNT);
 
     public LedFrame() {
         for (int i = 0; i < MAX_PIXELS_COUNT; i++) {
-            pixels.add(new SimpleIntegerProperty(0));
+            pixels.add(new FramePixel(Color.BLACK, PixelEffect.Solid));
         }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof LedFrame)) return false;
-
-        LedFrame ledFrame = (LedFrame) o;
-
-        if (getFrameLength() != null ? !getFrameLength().equals(ledFrame.getFrameLength()) : ledFrame.getFrameLength() != null)
-            return false;
-        if (getCycles() != null ? !getCycles().equals(ledFrame.getCycles()) : ledFrame.getCycles() != null)
-            return false;
-        return getPixels() != null ? getPixels().equals(ledFrame.getPixels()) : ledFrame.getPixels() == null;
     }
 
     public List<Integer> getPixels() {
