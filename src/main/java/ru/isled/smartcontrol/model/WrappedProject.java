@@ -3,40 +3,54 @@ package ru.isled.smartcontrol.model;
 import java.util.List;
 
 public class WrappedProject {
-    public List<Integer> getQuantifiers() {
-        return quantifiers;
-    }
-
-    public void setQuantifiers(List<Integer> quantifiers) {
-        this.quantifiers = quantifiers;
-    }
-
     private List<Integer> quantifiers;
     private List<WrappedLedFrame> frames;
     private int frameCount;
     private int pixelCount;
+    private double gamma;
+
+    public List<Integer> getQuantifiers() {
+        return quantifiers;
+    }
+
+    public WrappedProject setQuantifiers(List<Integer> quantifiers) {
+        this.quantifiers = quantifiers;
+        return this;
+    }
 
     public List<WrappedLedFrame> getFrames() {
         return frames;
     }
 
-    public void setFrames(List<WrappedLedFrame> frames) {
+    public WrappedProject setFrames(List<WrappedLedFrame> frames) {
         this.frames = frames;
+        return this;
     }
 
     public int getFrameCount() {
         return frameCount;
     }
 
-    public void setFrameCount(int frameCount) {
+    public WrappedProject setFrameCount(int frameCount) {
         this.frameCount = frameCount;
+        return this;
     }
 
     public int getPixelCount() {
         return pixelCount;
     }
 
-    public void setPixelCount(int pixelCount) {
+    public WrappedProject setPixelCount(int pixelCount) {
         this.pixelCount = pixelCount;
+        return this;
+    }
+
+    public double getGamma() {
+        return gamma;
+    }
+
+    public WrappedProject setGamma(double gamma) {
+        this.gamma = gamma;
+        return this;
     }
 }

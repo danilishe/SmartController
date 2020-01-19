@@ -10,7 +10,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -32,6 +31,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import static ru.isled.smartcontrol.Constants.*;
@@ -154,9 +154,6 @@ public class MainController {
         project.setFileName(saveAs);
         mainApp.saveProject();
     }
-
-    @FXML
-    private TitledPane hintPane;
 
     private void initZoomSlider() {
         zoomSlider.setMin(MIN_COL_WIDTH);
@@ -592,7 +589,19 @@ public class MainController {
                 );
             }
         });
+    }
 
+    @FXML
+    private Slider gammaSlider;
+    @FXML
+    private Label gammaLabel;
+
+    private void initGammaHandlers() {
+        gammaSlider.valueProperty().addListener((ov, oldValue, newValue) -> {
+            final String value = String.format(Locale.US, "%.1f", (double) newValue);
+            gammaLabel.textProperty().set(value);
+            getProject().setGamma(Double.parseDouble(value));
+        });
     }
 
     private void initFrameSpinner() {
@@ -718,10 +727,6 @@ public class MainController {
     private Tooltip errorTooltip;
     @FXML
     private Label totalPixels;
-    @FXML
-    Label hintLabel;
-    @FXML
-    private Label errorMessage;
 
     public void updateHeaderQuantifiers() {
         List<Integer> quantifiers = project.getQuantifiers();
@@ -781,6 +786,8 @@ public class MainController {
     @FXML
     public void applyEffectHandler() {
         List<TablePosition> cells = getSelectedDataCells();
+        new ColorPicker(Color.WHITE).getValue();
+
         if (cells != null && cells.size() > 0) {
             project.setHasChanges(true);
 
@@ -828,6 +835,10 @@ public class MainController {
         updateTotalPixelCount();
     }
 
+    public Project getProject() {
+        return project;
+    }
+
     private void setColumnsWidth(double columnsWidth) {
         frameTableView.getColumns().stream()
                 .skip(SYS_COLS).forEach(col -> {
@@ -841,13 +852,12 @@ public class MainController {
         loadAndSetDefaultEffects();
 
         initZoomSlider();
+        initGammaHandlers();
 
         initSpinners();
         initDataColumns();
         initializePreviewZone();
         initializeBrightHandlers();
-
-        errorMessage.setText(TOO_MUCH_CHANNELS_ERROR_HINT);
 
         frameTableView.getSelectionModel().setCellSelectionEnabled(true);
         frameTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -859,14 +869,10 @@ public class MainController {
     private void updateTotalPixelCount() {
         int sum = project.getTotalPixelCount();
         if (sum > MAX_PIXELS_COUNT) {
-            errorMessage.scaleYProperty().setValue(1);
-            hintPane.setTextFill(Color.RED);
             bulbIcon.setTextFill(Color.RED);
             errorTooltip.setText(TOO_MUCH_CHANNELS_ERROR_HINT);
         } else {
-            errorMessage.scaleYProperty().setValue(0);
             bulbIcon.setTextFill(Color.BLACK);
-            hintPane.setTextFill(Color.BLACK);
             errorTooltip.setText(CHANNELS_COUNTER_HINT);
         }
         totalPixels.setText(String.valueOf(sum));
@@ -906,99 +912,11 @@ public class MainController {
         chanelQuantifier.increment(delta);
     }
 
-    public void hintSetBright(MouseEvent mouseEvent) {
-        hintLabel.setText(HINT_SET_BRIGHT);
-    }
-
-    public void hintInEffect(MouseEvent mouseEvent) {
-        hintLabel.setText(HINT_IN_EFFECT);
-    }
-
-    public void hintBlinkInEffect(MouseEvent mouseEvent) {
-        hintLabel.setText(HINT_BLINK_IN_EFFECT);
-    }
-
-    public void hintBlinkEffect(MouseEvent mouseEvent) {
-        hintLabel.setText(HINT_BLINK_EFFECT);
-    }
-
-    public void hintOutInEffect(MouseEvent mouseEvent) {
-        hintLabel.setText(HINT_OUT_IN_EFFECT);
-    }
-
-    public void hintOutEffect(MouseEvent mouseEvent) {
-        hintLabel.setText(HINT_OUT_EFFECT);
-    }
-
-    public void hintBlinkOutEffect(MouseEvent mouseEvent) {
-        hintLabel.setText(HINT_BLINK_OUT_EFFECT);
-    }
-
-    public void hintRandomEffect(MouseEvent mouseEvent) {
-        hintLabel.setText(HINT_RANDOM_EFFECT);
-    }
-
-    public void hintInOutEffect(MouseEvent mouseEvent) {
-        hintLabel.setText(HINT_IN_OUT_EFFECT);
-    }
-
-    public void hintFrameLength(MouseEvent mouseEvent) {
-        hintLabel.setText(HINT_FRAME_LENGTH);
-    }
-
-    public void hintRepeats(MouseEvent mouseEvent) {
-        hintLabel.setText(HINT_REPEATS);
-    }
-
-    public void hintQuantifier(MouseEvent mouseEvent) {
-        hintLabel.setText(HINT_QUANTIFIER);
-    }
-
-    public void hintMultiframeEffect(MouseEvent mouseEvent) {
-        hintLabel.setText(HINT_MULTIFRAME_EFFECT);
-    }
-
-    public void hintDeselect(MouseEvent mouseEvent) {
-        hintLabel.setText(HINT_DESELECT);
-    }
-
-    public void hintSelectAll(MouseEvent mouseEvent) {
-        hintLabel.setText(HINT_SELECT_ALL);
-    }
-
-    public void hintFrameCount(MouseEvent mouseEvent) {
-        hintLabel.setText(HINT_FRAME_COUNT);
-    }
-
-    public void hintPixelsCount(MouseEvent mouseEvent) {
-        hintLabel.setText(HINT_PIXELS_COUNT);
-    }
-
-    public void hintProgramLength(MouseEvent mouseEvent) {
-        hintLabel.setText(HINT_PROGRAM_LENGTH);
-    }
-
-    public void hintChannelCounter(MouseEvent mouseEvent) {
-        hintLabel.setText(HINT_CHANNEL_COUNTER);
-    }
-
-    public void hintShowDigits(MouseEvent mouseEvent) {
-        hintLabel.setText(HINT_SHOW_DIGITS);
-    }
-
-    public void hintShowBright(MouseEvent mouseEvent) {
-        hintLabel.setText(HINT_SHOW_BRIGHT);
-    }
-
-    public void hintZoom(MouseEvent mouseEvent) {
-        hintLabel.setText(HINT_ZOOM);
-    }
-
-    public void hintPreview(MouseEvent mouseEvent) {
-        hintLabel.setText(HINT_PREVIEW);
-    }
-
-    public void hintFramePixelTable(MouseEvent mouseEvent) {
-        hintLabel.setText(HINT_FRAME_PIXEL_TABE);
+    public void scrollGamma(ScrollEvent scrollEvent) {
+        if (scrollEvent.getDeltaY() > 0) {
+            gammaSlider.increment();
+        } else {
+            gammaSlider.decrement();
+        }
     }
 }

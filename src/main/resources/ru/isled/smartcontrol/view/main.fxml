@@ -5,9 +5,11 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" cacheShape="false" centerShape="false" prefHeight="1009.0"
-            prefWidth="737.0" scaleShape="false" stylesheets="@../css/custom.css"
-            xmlns="http://javafx.com/javafx/8.0.171" fx:controller="ru.isled.smartcontrol.view.MainController">
+<?import java.net.URL?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" cacheShape="false" centerShape="false"
+            maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="900.0" minWidth="800.0"
+            prefHeight="900.0" prefWidth="800.0" scaleShape="false" xmlns="http://javafx.com/javafx/8.0.171"
+            fx:controller="ru.isled.smartcontrol.view.MainController">
     <top>
         <VBox BorderPane.alignment="CENTER">
             <MenuBar>
@@ -35,15 +37,17 @@
     </top>
     <right>
         <VBox maxWidth="330.0" minWidth="330.0" prefWidth="330.0" spacing="5.0">
-            <TitledPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Свойства">
-                <VBox spacing="5.0">
-                    <HBox onMouseEntered="#hintSetBright" onScroll="#scrollBright" spacing="5.0">
+            <TitledPane animated="false" collapsible="false" maxHeight="-Infinity" maxWidth="-Infinity"
+                        minHeight="-Infinity" minWidth="-Infinity" prefWidth="320.0" text="Пиксель">
+                <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+                      prefWidth="320.0" spacing="5.0">
+                    <HBox onScroll="#scrollBright" spacing="5.0">
                         <Slider fx:id="brightSlider" majorTickUnit="100.0" max="255.0"
                                 maxHeight="1.7976931348623157E308" minorTickCount="50" prefWidth="999.0"
                                 showTickLabels="true" showTickMarks="true"/>
                         <TextField fx:id="brightField" minWidth="60.0" text="0"/>
                     </HBox>
-                    <HBox onMouseEntered="#hintSetBright" spacing="5.0">
+                    <HBox spacing="5.0">
                         <Button fx:id="minBright" accessibleHelp="Отключение пиксела" alignment="BOTTOM_CENTER"
                                 minHeight="30.0" mnemonicParsing="false" onAction="#setMinBright" prefWidth="500.0">
                             <tooltip>
@@ -94,8 +98,7 @@
                     </HBox>
                     <HBox layoutX="20.0" layoutY="50.0" spacing="5.0">
                         <Button fx:id="fadeIn" accessibleHelp="Плавное разгорание пиксела" accessibleText="Разгорание"
-                                minHeight="30.0" mnemonicParsing="false" onAction="#setFadeInEffect"
-                                onMouseEntered="#hintInEffect" prefWidth="500.0">
+                                minHeight="30.0" mnemonicParsing="false" onAction="#setFadeInEffect" prefWidth="500.0">
                             <graphic>
                                 <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true">
                                     <Image url="@../images/fadeIn.png"/>
@@ -107,8 +110,7 @@
                         </Button>
                         <Button fx:id="mFadeIn" accessibleHelp="Мерцающее увеличение яркости пиксела"
                                 accessibleText="Мерцающее разгорание" minHeight="30.0" mnemonicParsing="false"
-                                onAction="#setBlinkingFadeInEffect" onMouseEntered="#hintBlinkInEffect"
-                                prefWidth="500.0">
+                                onAction="#setBlinkingFadeInEffect" prefWidth="500.0">
                             <graphic>
                                 <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true">
                                     <Image url="@../images/mFadeIn.png"/>
@@ -120,7 +122,7 @@
                         </Button>
                         <Button fx:id="blink" accessibleHelp="Мерцание пиксела от минимальной до максимальной яркости"
                                 accessibleText="Мерцание" minHeight="30.0" mnemonicParsing="false"
-                                onAction="#setBlinkEffect" onMouseEntered="#hintBlinkEffect" prefWidth="500.0">
+                                onAction="#setBlinkEffect" prefWidth="500.0">
                             <graphic>
                                 <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true">
                                     <Image url="@../images/blink.png"/>
@@ -132,8 +134,7 @@
                         </Button>
                         <Button fx:id="fadeOutIn" accessibleHelp="Мерцающее увеличение яркости пиксела"
                                 accessibleText="Мерцающее разгорание" layoutX="91.0" layoutY="10.0" minHeight="30.0"
-                                mnemonicParsing="false" onAction="#setFadeOutInEffect" onMouseEntered="#hintOutInEffect"
-                                prefWidth="500.0">
+                                mnemonicParsing="false" onAction="#setFadeOutInEffect" prefWidth="500.0">
                             <graphic>
                                 <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true">
                                     <Image url="@../images/fadeOutIn.png"/>
@@ -147,7 +148,7 @@
                     <HBox fillHeight="false" spacing="5.0">
                         <Button fx:id="fadeOut" accessibleHelp="Медленное уменьшение яркости пиксела"
                                 accessibleText="Угасани" minHeight="30.0" mnemonicParsing="false"
-                                onAction="#setFadeOutEffect" onMouseEntered="#hintOutEffect" prefWidth="500.0">
+                                onAction="#setFadeOutEffect" prefWidth="500.0">
                             <graphic>
                                 <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true">
                                     <Image url="@../images/fadeOut.png"/>
@@ -159,8 +160,7 @@
                         </Button>
                         <Button fx:id="mFadeOut" accessibleHelp="Мерцающее уменьшение яркости пиксела"
                                 accessibleText="Мерцающее угасание" minHeight="30.0" mnemonicParsing="false"
-                                onAction="#setBlinkingFadeOutEffect" onMouseEntered="#hintBlinkOutEffect"
-                                prefWidth="500.0">
+                                onAction="#setBlinkingFadeOutEffect" prefWidth="500.0">
                             <graphic>
                                 <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true">
                                     <Image url="@../images/mFadeOut.png"/>
@@ -171,8 +171,7 @@
                             </tooltip>
                         </Button>
                         <Button fx:id="chaos" accessibleHelp="Хаотичное изменение яркости пиксела" accessibleText="Хаос"
-                                minHeight="30.0" mnemonicParsing="false" onAction="#setChaosEffect"
-                                onMouseEntered="#hintRandomEffect" prefWidth="500.0">
+                                minHeight="30.0" mnemonicParsing="false" onAction="#setChaosEffect" prefWidth="500.0">
                             <graphic>
                                 <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true">
                                     <Image url="@../images/chaos.png"/>
@@ -184,8 +183,7 @@
                         </Button>
                         <Button fx:id="fadeInOut" accessibleHelp="Мерцающее уменьшение яркости пиксела"
                                 accessibleText="Мерцающее угасание" layoutX="91.0" layoutY="10.0" minHeight="30.0"
-                                mnemonicParsing="false" onAction="#setFadeInOutEffect" onMouseEntered="#hintInOutEffect"
-                                prefWidth="500.0">
+                                mnemonicParsing="false" onAction="#setFadeInOutEffect" prefWidth="500.0">
                             <graphic>
                                 <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true">
                                     <Image url="@../images/fadeInOut.png"/>
@@ -204,33 +202,53 @@
                         <rowConstraints>
                             <RowConstraints vgrow="SOMETIMES"/>
                             <RowConstraints vgrow="SOMETIMES"/>
-                            <RowConstraints vgrow="SOMETIMES"/>
                         </rowConstraints>
-                        <Label onMouseEntered="#hintFrameLength" text="Длина кадра, мс"/>
-                        <Spinner fx:id="frameLengthSpinner" editable="true" maxWidth="1.7976931348623157E308"
-                                 onMouseEntered="#hintFrameLength" onScroll="#scrollFrameLength" prefWidth="125.0"
-                                 GridPane.columnIndex="1"/>
-                        <Label text="Повторов кадра" GridPane.rowIndex="1"/>
-                        <Spinner fx:id="frameCyclesSpinner" editable="true" maxWidth="1.7976931348623157E308"
-                                 onMouseEntered="#hintRepeats" onScroll="#scrollRepeats" prefWidth="125.0"
-                                 GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-                        <Label layoutX="10.0" layoutY="42.0" text="Кратность канала" GridPane.rowIndex="2"/>
-                        <Spinner fx:id="chanelQuantifier" layoutX="116.0" layoutY="38.0"
-                                 maxWidth="1.7976931348623157E308" onMouseEntered="#hintQuantifier"
-                                 onScroll="#scrollQuantifier" prefWidth="125.0" GridPane.columnIndex="1"
-                                 GridPane.rowIndex="2"/>
+                        <Label layoutX="10.0" layoutY="42.0" text="Каналов на пиксель"/>
+                        <Spinner fx:id="chanelQuantifier" layoutX="116.0" layoutY="38.0" maxHeight="-Infinity"
+                                 maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+                                 onScroll="#scrollQuantifier" prefWidth="150.0" GridPane.columnIndex="1"/>
                     </GridPane>
                 </VBox>
             </TitledPane>
-            <TitledPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Многошаговые эффекты">
-                <VBox onMouseEntered="#hintMultiframeEffect" spacing="10.0">
+            <TitledPane animated="false" collapsible="false" layoutX="15.0" layoutY="15.0" maxHeight="-Infinity"
+                        maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="320.0" text="Кадр">
+                <content>
+                    <VBox maxHeight="-Infinity" maxWidth="-Infinity" spacing="5.0">
+                        <children>
+                            <GridPane alignment="CENTER" hgap="5.0" vgap="5.0">
+                                <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
+                                </columnConstraints>
+                                <rowConstraints>
+                                    <RowConstraints vgrow="SOMETIMES"/>
+                                    <RowConstraints vgrow="SOMETIMES"/>
+                                    <RowConstraints vgrow="SOMETIMES"/>
+                                </rowConstraints>
+                                <children>
+                                    <Label text="Длина кадра, мс"/>
+                                    <Spinner fx:id="frameLengthSpinner" editable="true" maxHeight="-Infinity"
+                                             maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+                                             onScroll="#scrollFrameLength" prefWidth="150.0" GridPane.columnIndex="1"/>
+                                    <Label text="Повторов кадра" GridPane.rowIndex="1"/>
+                                    <Spinner fx:id="frameCyclesSpinner" editable="true" maxHeight="-Infinity"
+                                             maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+                                             onScroll="#scrollRepeats" prefWidth="150.0" GridPane.columnIndex="1"
+                                             GridPane.rowIndex="1"/>
+                                </children>
+                            </GridPane>
+                        </children>
+                    </VBox>
+                </content>
+            </TitledPane>
+            <TitledPane animated="false" collapsible="false" maxHeight="-Infinity" maxWidth="-Infinity"
+                        minHeight="-Infinity" minWidth="-Infinity" prefWidth="320.0" text="Многокадровые эффекты">
+                <VBox spacing="10.0">
                     <HBox spacing="10.0">
                         <Button fx:id="clearSelection" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
-                                onAction="#clearSelection" onMouseEntered="#hintDeselect" prefWidth="300.0"
-                                text="Снять выделение"/>
+                                onAction="#clearSelection" prefWidth="300.0" text="Снять выделение"/>
                         <Button fx:id="selectAll" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
-                                onAction="#selectAll" onMouseEntered="#hintSelectAll" prefWidth="300.0"
-                                text="Выделить всё">
+                                onAction="#selectAll" prefWidth="300.0" text="Выделить всё">
                             <opaqueInsets>
                                 <Insets/>
                             </opaqueInsets>
@@ -249,29 +267,57 @@
                     </Button>
                 </VBox>
             </TitledPane>
-            <TitledPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Настройки программы">
+            <TitledPane animated="false" collapsible="false" maxHeight="240.0" prefHeight="240.0"
+                        text="Настройки программы">
                 <VBox spacing="10.0">
+                    <HBox alignment="CENTER_LEFT" spacing="10.0" VBox.vgrow="NEVER">
+                        <children>
+                            <Label text="⏰">
+                                <font>
+                                    <Font size="18.0"/>
+                                </font>
+                            </Label>
+                            <Label fx:id="fullTime" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                                   minWidth="-Infinity" prefWidth="100.0"/>
+                            <Label fx:id="bulbIcon" text="🔌">
+                                <tooltip>
+                                    <Tooltip fx:id="errorTooltip">
+                                        <font>
+                                            <Font size="14.0"/>
+                                        </font>
+                                    </Tooltip>
+                                </tooltip>
+                                <font>
+                                    <Font size="18.0"/>
+                                </font>
+                            </Label>
+                            <Label fx:id="totalPixels" maxHeight="-Infinity" maxWidth="-Infinity" prefWidth="80.0"
+                                   text="10"/>
+                        </children>
+                    </HBox>
                     <GridPane hgap="5.0" minHeight="55.0" vgap="15.0">
                         <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" />
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308"/>
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0"
+                                               prefWidth="100.0"/>
                         </columnConstraints>
                         <rowConstraints>
-                            <RowConstraints minHeight="15.0" prefHeight="20.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="15.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="15.0" prefHeight="20.0" vgrow="SOMETIMES"/>
+                            <RowConstraints minHeight="15.0" prefHeight="20.0" vgrow="SOMETIMES"/>
                         </rowConstraints>
                         <VBox.margin>
-                            <Insets bottom="5.0" top="5.0" />
+                            <Insets bottom="5.0" top="5.0"/>
                         </VBox.margin>
-                        <Spinner fx:id="framesSpinner" editable="true" onMouseEntered="#hintFrameCount"
-                                 onScroll="#scrollFrames" prefWidth="150.0" GridPane.columnIndex="1"
-                                 GridPane.rowIndex="1"/>
-                        <Label text="Кадров" GridPane.rowIndex="1" />
-                        <Spinner fx:id="pixelSpinner" editable="true" onMouseEntered="#hintPixelsCount"
-                                 onScroll="#scrollPixels" prefWidth="150.0" GridPane.columnIndex="1"/>
-                        <Label text="Пикселей" />
+                        <Spinner fx:id="framesSpinner" editable="true" maxHeight="-Infinity" maxWidth="-Infinity"
+                                 minHeight="-Infinity" minWidth="-Infinity" onScroll="#scrollFrames" prefWidth="150.0"
+                                 GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                        <Label text="Кадров" GridPane.rowIndex="1"/>
+                        <Spinner fx:id="pixelSpinner" editable="true" maxHeight="-Infinity" maxWidth="-Infinity"
+                                 minHeight="-Infinity" minWidth="-Infinity" onScroll="#scrollPixels" prefWidth="150.0"
+                                 GridPane.columnIndex="1"/>
+                        <Label text="Пикселей"/>
                     </GridPane>
-                    <HBox onMouseEntered="#hintFrameCount" spacing="5.0">
+                    <HBox spacing="5.0">
                         <Button fx:id="dec5" mnemonicParsing="false" onAction="#decrement5Frames" prefWidth="150.0"
                                 text="-5"/>
                         <Button fx:id="dec15" mnemonicParsing="false" onAction="#decrement15Frames" prefWidth="150.0"
@@ -280,6 +326,17 @@
                                 text="+15"/>
                         <Button fx:id="inc5" mnemonicParsing="false" onAction="#increment5Frames" prefWidth="150.0"
                                 text="+5"/>
+                    </HBox>
+                    <HBox onScroll="#scrollGamma" spacing="5.0">
+                        <children>
+                            <Label contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity"
+                                   minHeight="-Infinity" minWidth="-Infinity" prefWidth="60.0" text="Гамма"
+                                   HBox.hgrow="NEVER"/>
+                            <Slider fx:id="gammaSlider" blockIncrement="0.1" majorTickUnit="10.0" max="4.0" min="-4.0"
+                                    minorTickCount="5" prefHeight="38.0" prefWidth="229.0" showTickMarks="true"
+                                    value="2.2"/>
+                            <Label fx:id="gammaLabel" prefHeight="21.0" prefWidth="125.0" text="2.2"/>
+                        </children>
                     </HBox>
                 </VBox>
             </TitledPane>
@@ -297,49 +354,18 @@
             <padding>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
             </padding>
-            <HBox spacing="5.0">
-                <Label fx:id="fullTime" maxWidth="1.7976931348623157E308" onMouseEntered="#hintProgramLength"
-                       prefWidth="100.0">
-                    <graphic>
-                        <Label text="⏰">
-                            <font>
-                                <Font size="18.0"/>
-                            </font>
-                        </Label>
-                    </graphic>
-                </Label>
-                <Separator layoutX="175.0" layoutY="10.0" maxHeight="1.7976931348623157E308" orientation="VERTICAL" />
-                <Label fx:id="totalPixels" layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308"
-                       onMouseEntered="#hintChannelCounter" prefWidth="50.0">
-                    <graphic>
-                        <Label fx:id="bulbIcon" text="💡">
-                            <font>
-                                <Font size="18.0"/>
-                            </font>
-                            <tooltip>
-                                <Tooltip fx:id="errorTooltip">
-                                    <font>
-                                        <Font size="14.0"/>
-                                    </font>
-                                </Tooltip>
-                            </tooltip>
-                        </Label>
-                    </graphic>
-                </Label>
-                <Separator maxHeight="1.7976931348623157E308" orientation="VERTICAL"/>
+            <HBox prefHeight="32.0" spacing="5.0">
                 <ToggleButton fx:id="showDigits" maxHeight="1.7976931348623157E308" mnemonicParsing="false"
-                              onMouseClicked="#refresh" onMouseEntered="#hintShowDigits" selected="true" text="Число"/>
+                              onMouseClicked="#refresh" selected="true" text="Число"/>
                 <ToggleButton fx:id="showBright" maxHeight="1.7976931348623157E308" mnemonicParsing="false"
-                              onMouseClicked="#refresh" onMouseEntered="#hintShowBright" selected="true"
-                              text="Яркость"/>
+                              onMouseClicked="#refresh" selected="true" text="Яркость"/>
                 <Separator maxHeight="1.7976931348623157E308" orientation="VERTICAL"/>
                 <Label text="🔎">
                     <font>
                         <Font size="18.0"/>
                     </font>
                 </Label>
-                <Slider fx:id="zoomSlider" maxHeight="1.7976931348623157E308" onMouseEntered="#hintZoom"
-                        onScroll="#scrollZoom">
+                <Slider fx:id="zoomSlider" maxHeight="1.7976931348623157E308" onScroll="#scrollZoom">
                     <tooltip>
                         <Tooltip text="Ширина колонок"/>
                     </tooltip>
@@ -347,7 +373,7 @@
             </HBox>
             <HBox alignment="CENTER_LEFT" spacing="5.0">
                 <Button fx:id="startPreview" minWidth="150.0" mnemonicParsing="false" onAction="#startPreview"
-                        onMouseEntered="#hintPreview" text="Предпросмотр">
+                        text="Предпросмотр">
                     <graphic>
                         <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -357,7 +383,8 @@
                     </graphic>
                 </Button>
                 <Separator maxHeight="1.7976931348623157E308" orientation="VERTICAL" />
-                <HBox fx:id="previewZone" alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="45.0" minWidth="300.0" spacing="5.0" />
+                <HBox fx:id="previewZone" alignment="CENTER_LEFT" disable="true" maxHeight="1.7976931348623157E308"
+                      maxWidth="1.7976931348623157E308" minHeight="45.0" minWidth="300.0" spacing="5.0"/>
             </HBox>
         </VBox>
     </bottom>
@@ -366,9 +393,8 @@
             <children>
                 <TableView fx:id="frameTableView" accessibleRole="IMAGE_VIEW" cache="true" cacheShape="false"
                            centerShape="false" editable="true" fixedCellSize="0.0" focusTraversable="false"
-                           maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="500.0"
-                           nodeOrientation="LEFT_TO_RIGHT" onMouseEntered="#hintFramePixelTable" pickOnBounds="false"
-                           scaleShape="false" VBox.vgrow="ALWAYS">
+                           maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="450.0"
+                           nodeOrientation="LEFT_TO_RIGHT" pickOnBounds="false" scaleShape="false" VBox.vgrow="ALWAYS">
                     <columns>
                         <TableColumn fx:id="frameNumColumn" editable="false" maxWidth="1.7976931348623157E308"
                                      minWidth="-Infinity" prefWidth="60.0" resizable="false" sortable="false"
@@ -379,28 +405,10 @@
                                      prefWidth="50.0" resizable="false" sortable="false" styleClass="header" text="⏰"/>
                     </columns>
                 </TableView>
-                <TitledPane fx:id="hintPane" alignment="TOP_LEFT" animated="false" expanded="false"
-                            maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Подсказки"
-                            wrapText="true" VBox.vgrow="NEVER">
-                    <content>
-                        <VBox>
-                            <children>
-                                <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0"
-                                            style="-fx-background-color: rgba(245,241,29,0.31);">
-                                    <content>
-                                        <Label fx:id="hintLabel" alignment="CENTER"
-                                               text="Здесь будут появляться подсказки относительно компонентов программы"
-                                               textOverrun="CENTER_WORD_ELLIPSIS" wrapText="true"/>
-                                    </content>
-                                </ScrollPane>
-                                <Label fx:id="errorMessage" alignment="CENTER" scaleY="0.0"
-                                       text="Внимание! Экспортированы будут не все пиксели!" textAlignment="CENTER"
-                                       textFill="RED" wrapText="true"/>
-                            </children>
-                        </VBox>
-                    </content>
-                </TitledPane>
             </children>
         </VBox>
     </center>
+    <stylesheets>
+        <URL value="@../css/custom.css"/>
+    </stylesheets>
 </BorderPane>

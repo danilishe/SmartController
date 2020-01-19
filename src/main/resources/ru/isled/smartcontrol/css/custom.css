@@ -1,6 +1,6 @@
 .fadeIn {
     -fx-fill: image-pattern("/ru/isled/smartcontrol/images/fadeIn.gif");
-    -fx-background-image: url("../images/fadeIn.png");
+    -fx-background-image: url("/ru/isled/smartcontrol/images/fadeIn.png");
     -fx-background-repeat: stretch;
     -fx-background-size: 100% 100%;
     -fx-background-position: center center;
@@ -8,14 +8,14 @@
 
 .fadeOut {
     -fx-fill: image-pattern("/ru/isled/smartcontrol/images/fadeOut.gif");
-    -fx-background-image: url("../images/fadeOut.png");
+    -fx-background-image: url("/ru/isled/smartcontrol/images/fadeOut.png");
     -fx-background-repeat: stretch;
     -fx-background-size: 100% 100%;
     -fx-background-position: center center;
 }
 .fadeInOut {
     -fx-fill: image-pattern("/ru/isled/smartcontrol/images/fadeInOut.gif");
-    -fx-background-image: url("../images/fadeInOut.png");
+    -fx-background-image: url("/ru/isled/smartcontrol/images/fadeInOut.png");
     -fx-background-repeat: stretch;
     -fx-background-size: 100% 100%;
     -fx-background-position: center center;
@@ -23,7 +23,7 @@
 
 .fadeOutIn {
     -fx-fill: image-pattern("/ru/isled/smartcontrol/images/fadeOutIn.gif");
-    -fx-background-image: url("../images/fadeOutIn.png");
+    -fx-background-image: url("/ru/isled/smartcontrol/images/fadeOutIn.png");
     -fx-background-repeat: stretch;
     -fx-background-size: 100% 100%;
     -fx-background-position: center center;
@@ -31,7 +31,7 @@
 
 .blink {
     -fx-fill: image-pattern("/ru/isled/smartcontrol/images/blink.gif");
-    -fx-background-image: url("../images/blink.png");
+    -fx-background-image: url("/ru/isled/smartcontrol/images/blink.png");
     -fx-background-repeat: stretch;
     -fx-background-size: 100% 100%;
     -fx-background-position: center center;
@@ -39,7 +39,7 @@
 
 .mFadeIn {
     -fx-fill: image-pattern("/ru/isled/smartcontrol/images/mFadeIn.gif");
-    -fx-background-image: url("../images/mFadeIn.png");
+    -fx-background-image: url("/ru/isled/smartcontrol/images/mFadeIn.png");
     -fx-background-repeat: stretch;
     -fx-background-size: 100% 100%;
     -fx-background-position: center center;
@@ -47,7 +47,7 @@
 
 .chaos {
     -fx-fill: image-pattern("/ru/isled/smartcontrol/images/chaos.gif");
-    -fx-background-image: url("../images/chaos.png");
+    -fx-background-image: url("/ru/isled/smartcontrol/images/chaos.png");
     -fx-background-repeat: stretch;
     -fx-background-size: 100% 100%;
     -fx-background-position: center center;
@@ -55,14 +55,14 @@
 
 .mFadeOut {
     -fx-fill: image-pattern("/ru/isled/smartcontrol/images/mFadeOut.gif");
-    -fx-background-image: url("../images/mFadeOut.png");
+    -fx-background-image: url("/ru/isled/smartcontrol/images/mFadeOut.png");
     -fx-background-repeat: stretch;
     -fx-background-size: 100% 100%;
     -fx-background-position: center center;
 }
 
 .base {
-    -fx-background-image: url("../images/base.png");
+    -fx-background-image: url("/ru/isled/smartcontrol/images/base.png");
     -fx-background-repeat: stretch;
     -fx-background-size: 0% 100%;
     -fx-background-position: center center;

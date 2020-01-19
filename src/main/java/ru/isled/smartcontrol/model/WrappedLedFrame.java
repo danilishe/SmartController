@@ -11,23 +11,26 @@ public class WrappedLedFrame {
         return frameLength;
     }
 
-    public void setFrameLength(int frameLength) {
+    public WrappedLedFrame setFrameLength(int frameLength) {
         this.frameLength = frameLength;
+        return this;
     }
 
     public int getFrameCycles() {
         return frameCycles;
     }
 
-    public void setFrameCycles(int frameCycles) {
+    public WrappedLedFrame setFrameCycles(int frameCycles) {
         this.frameCycles = frameCycles;
+        return this;
     }
 
     public List<Integer> getPixels() {
         return pixels;
     }
 
-    public void setPixels(List<Integer> pixels) {
+    public WrappedLedFrame setPixels(List<Integer> pixels) {
         this.pixels = pixels;
+        return this;
     }
 }

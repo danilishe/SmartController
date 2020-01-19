@@ -1,18 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.Slider?>
-<?import javafx.scene.control.Spinner?>
-<?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
-
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <VBox spacing="15.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox alignment="CENTER_LEFT" layoutX="15.0" layoutY="75.0" spacing="10.0">
@@ -65,16 +55,22 @@
                   <Insets />
                </opaqueInsets>
                <padding>
-                  <Insets left="5.0" />
+                  <Insets left="5.0"/>
                </padding>
             </Label>
-            <Spinner fx:id="traceAfter" prefHeight="25.0" prefWidth="76.0" />
-            <Label text="перед:" />
-            <Spinner fx:id="traceBefore" prefHeight="25.0" prefWidth="76.0" />
+            <Spinner fx:id="traceAfter" prefHeight="25.0" prefWidth="76.0"/>
+            <Label text="перед:"/>
+            <Spinner fx:id="traceBefore" prefHeight="25.0" prefWidth="76.0"/>
          </children>
       </HBox>
    </children>
+   <children>
+      <CheckBox fx:id="onlyEmpty" mnemonicParsing="false" text="Менять только пустые"/>
+   </children>
+   <children>
+      <CheckBox fx:id="autoFrame" selected="true" text="Автодобавление кадров"/>
+   </children>
    <padding>
-      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
    </padding>
 </VBox>

@@ -15,7 +15,7 @@ public class Converter {
         int framesCount = wrappedProject.getFrameCount();
         List<WrappedLedFrame> frames = wrappedProject.getFrames();
 
-        removeUnusedFrames(framesCount, frames);
+        frames = frames.subList(0, framesCount);
 
         List<Byte> allData = new ArrayList<>();
         for (WrappedLedFrame frame : frames) {
@@ -39,9 +39,9 @@ public class Converter {
                     } else {
                         // применяем интерполированную цепочку из класса пиксельных эффектов
                         PixelEffect effect = PixelEffect.byIndex(pixelBright);
-                        int[] interpolatedPixel = effect.getInterpolatedPixel(baseLengthCount);
+                        int[] currentPixelFrames = effect.getInterpolatedPixel(baseLengthCount);
                         for (int i = 0; i < baseLengthCount; i++) {
-                            subFrames[i][channelsHead] = interpolatedPixel[i];
+                            subFrames[i][channelsHead] = currentPixelFrames[i];
                         }
                     }
 
@@ -58,15 +58,11 @@ public class Converter {
 
         byte[] result = new byte[allData.size()];
         for (int i = 0; i < allData.size(); i++) {
-            result[i] = (byte) allData.get(i);
+            // copy list to raw array and apply gamma value
+            result[i] = (byte) (Math.pow((double) allData.get(i) / MAX_BRIGHT, wrappedProject.getGamma()) * MAX_BRIGHT);
         }
 
         return result;
-    }
-
-    private static void removeUnusedFrames(int framesCount, List<WrappedLedFrame> frames) {
-        while (framesCount < frames.size())
-            frames.remove(framesCount);
     }
 
     private static void copyArrayToList(int[][] subFrames, List<Byte> allData) {

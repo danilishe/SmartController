@@ -9,16 +9,14 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.isled.smartcontrol.Constants.MAX_FRAMES;
-import static ru.isled.smartcontrol.Constants.MAX_PIXELS_COUNT;
-import static ru.isled.smartcontrol.Constants.UNSAVED_FILE_NAME;
+import static ru.isled.smartcontrol.Constants.*;
 
 public class Project {
+    private double gamma = 2.2;
     private BooleanProperty hasChanges;
     private ObjectProperty<File> file;
     private List<Integer> quantifiers;
     private List<LedFrame> data;
-
     //todo переделать в Enum
     private int frameCount;
     private int chanelCount;
@@ -32,20 +30,46 @@ public class Project {
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Project)) return false;
+
+        Project project = (Project) o;
+
+        if (Double.compare(project.getGamma(), getGamma()) != 0) return false;
+        if (getFrameCount() != project.getFrameCount()) return false;
+        if (getChanelCount() != project.getChanelCount()) return false;
+        if (getQuantifiers() != null ? !getQuantifiers().equals(project.getQuantifiers()) : project.getQuantifiers() != null)
+            return false;
+        return getData().equals(project.getData());
+    }
+
+    public double getGamma() {
+        return gamma;
+    }
+
+    public Project setGamma(double gamma) {
+        this.gamma = gamma;
+        return this;
+    }
+
     public int getFrameCount() {
         return frameCount;
     }
 
-    public void setFrameCount(int frameCount) {
+    public Project setFrameCount(int frameCount) {
         this.frameCount = frameCount;
+        return this;
     }
 
     public int getChanelCount() {
         return chanelCount;
     }
 
-    public void setChanelCount(int chanelCount) {
+    public Project setChanelCount(int chanelCount) {
         this.chanelCount = chanelCount;
+        return this;
     }
 
     public BooleanProperty hasChangesProperty() {
@@ -64,15 +88,17 @@ public class Project {
         return file != null;
     }
 
-    public void setFileName(File newName) {
+    public Project setFileName(File newName) {
         if (file == null)
             file = new SimpleObjectProperty<>(newName);
         else
             file.setValue(newName);
+        return this;
     }
 
-    public void setHasChanges(boolean changed) {
+    public Project setHasChanges(boolean changed) {
         hasChanges.setValue(changed);
+        return this;
     }
 
     public LedFrame getRow(int row) {
@@ -95,20 +121,22 @@ public class Project {
         return data;
     }
 
-    public void setData(List<LedFrame> data) {
+    public Project setData(List<LedFrame> data) {
         this.data = data;
+        return this;
     }
 
     public List<Integer> getQuantifiers() {
         return quantifiers;
     }
-    public void setQuantifiers(List<Integer> list) {
+
+    public Project setQuantifiers(List<Integer> list) {
         quantifiers.clear();
         quantifiers.addAll(list);
+        return this;
     }
 
     /**
-     *
      * @return количество пикселей с учётом квантификаторов (кратных каналов)
      */
     public int getTotalPixelCount() {
