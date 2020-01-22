@@ -8,15 +8,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class PixelEffectTest {
     @Test
     public void testFlashLength() {
-        assertEquals(PixelEffect.FadeInOut.getColors(2, Color.BLACK, Color.WHITE).length, 2);
-        assertEquals(PixelEffect.FadeInOut.getColors(3, Color.BLACK, Color.WHITE).length, 3);
+        assertEquals(PixelEffect.FadeInOut.interpolate(2, Color.BLACK, Color.WHITE).length, 2);
+        assertEquals(PixelEffect.FadeInOut.interpolate(3, Color.BLACK, Color.WHITE).length, 3);
     }
 
     @Test
     public void testFlashExtrems() {
-        assertEquals(PixelEffect.FadeInOut.getColors(3, Color.WHITE, Color.WHITE)[0], Color.BLACK);
-        assertEquals(PixelEffect.FadeInOut.getColors(3, Color.WHITE, Color.WHITE)[0], Color.WHITE);
-        assertEquals(PixelEffect.FadeInOut.getColors(3, Color.WHITE, Color.WHITE)[2], Color.BLACK);
+        assertEquals(PixelEffect.FadeInOut.interpolate(3, Color.WHITE, Color.WHITE)[0], Color.BLACK);
+        assertEquals(PixelEffect.FadeInOut.interpolate(3, Color.WHITE, Color.WHITE)[0], Color.WHITE);
+        assertEquals(PixelEffect.FadeInOut.interpolate(3, Color.WHITE, Color.WHITE)[2], Color.BLACK);
     }
 //    @Test
 //    public void testFlashMiddle() {

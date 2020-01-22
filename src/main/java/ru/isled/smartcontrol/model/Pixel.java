@@ -40,7 +40,7 @@ public class Pixel {
         return this;
     }
 
-    public int getQuantity() {
+    public int getChannelsQuantity() {
         return rgb ? quantifier : quantifier * 3;
     }
 }

@@ -10,9 +10,9 @@ import static ru.isled.smartcontrol.Constants.*;
 public enum PixelEffect {
     FadeIn(12345, "fadeIn") {
         @Override
-        public Color[] getColors(int baseLengthCount, Color start, Color end) {
-            return PixelEffect.Solid.getColors(
-                    baseLengthCount,
+        public Color[] interpolate(int iterations, Color start, Color end) {
+            return PixelEffect.Solid.interpolate(
+                    iterations,
                     Color.hsb(start.getHue(), start.getSaturation(), 0),
                     end);
         }
@@ -20,12 +20,12 @@ public enum PixelEffect {
 
     FadeOutIn(53135, "fadeOutIn") {
         @Override
-        public Color[] getColors(int baseLengthCount, Color start, Color end) {
-            int middle = baseLengthCount / 2;
+        public Color[] interpolate(int iterations, Color start, Color end) {
+            int middle = iterations / 2;
             final Color middleColor = start.interpolate(end, .5);
-            final Color[] fadeOut = FadeOut.getColors(middle + 1, start, middleColor);
-            final Color[] fadeIn = FadeIn.getColors(baseLengthCount - middle, middleColor, end);
-            Color[] colors = Arrays.copyOf(fadeOut, baseLengthCount);
+            final Color[] fadeOut = FadeOut.interpolate(middle + 1, start, middleColor);
+            final Color[] fadeIn = FadeIn.interpolate(iterations - middle, middleColor, end);
+            Color[] colors = Arrays.copyOf(fadeOut, iterations);
             for (Color i : fadeIn) {
                 colors[middle++] = i;
             }
@@ -34,12 +34,12 @@ public enum PixelEffect {
     },
     FadeInOut(13531, "fadeInOut") {
         @Override
-        public Color[] getColors(int baseLengthCount, Color start, Color end) {
-            int middle = baseLengthCount / 2;
+        public Color[] interpolate(int iterations, Color start, Color end) {
+            int middle = iterations / 2;
             final Color middleColor = start.interpolate(end, .5);
-            final Color[] fadeIn = FadeIn.getColors(middle + 1, start, middleColor);
-            final Color[] fadeOut = FadeOut.getColors(baseLengthCount - middle, middleColor, end);
-            Color[] colors = Arrays.copyOf(fadeIn, baseLengthCount);
+            final Color[] fadeIn = FadeIn.interpolate(middle + 1, start, middleColor);
+            final Color[] fadeOut = FadeOut.interpolate(iterations - middle, middleColor, end);
+            Color[] colors = Arrays.copyOf(fadeIn, iterations);
             for (Color i : fadeOut) {
                 colors[middle++] = i;
             }
@@ -50,19 +50,19 @@ public enum PixelEffect {
 
     FadeOut(54321, "fadeOut") {
         @Override
-        public Color[] getColors(int baseLengthCount, Color start, Color end) {
-            return PixelEffect.Solid.getColors(baseLengthCount, start,
+        public Color[] interpolate(int iterations, Color start, Color end) {
+            return PixelEffect.Solid.interpolate(iterations, start,
                     Color.hsb(end.getHue(), end.getSaturation(), MIN_BRIGHT));
         }
     },
 
     BlinkingFadeIn(19395, "mFadeIn") {
         @Override
-        public Color[] getColors(int baseLengthCount, Color start, Color end) {
-            Color[] colors = FadeIn.getColors(baseLengthCount, start, end);
-            for (int i = 0; i < baseLengthCount; i++) {
+        public Color[] interpolate(int iterations, Color start, Color end) {
+            Color[] colors = FadeIn.interpolate(iterations, start, end);
+            for (int i = 0; i < iterations; i++) {
                 if (i % 4 == 0) {
-                    colors[i] = i < baseLengthCount / 2
+                    colors[i] = i < iterations / 2
                             ? Color.hsb(colors[i].getHue(), colors[i].getSaturation(), MAX_BRIGHT)
                             : Color.hsb(colors[i].getHue(), colors[i].getSaturation(), MIN_BRIGHT);
                 }
@@ -72,11 +72,11 @@ public enum PixelEffect {
     },
     BlinkingFadeOut(59391, "mFadeOut") {
         @Override
-        public Color[] getColors(int baseLengthCount, Color start, Color end) {
-            Color[] colors = FadeOut.getColors(baseLengthCount, start, end);
-            for (int i = 0; i < baseLengthCount; i++) {
+        public Color[] interpolate(int iterations, Color start, Color end) {
+            Color[] colors = FadeOut.interpolate(iterations, start, end);
+            for (int i = 0; i < iterations; i++) {
                 if (i % 4 == 0) {
-                    colors[i] = i < baseLengthCount / 2
+                    colors[i] = i < iterations / 2
                             ? Color.hsb(colors[i].getHue(), colors[i].getSaturation(), MIN_BRIGHT)
                             : Color.hsb(colors[i].getHue(), colors[i].getSaturation(), MAX_BRIGHT);
                 }
@@ -87,15 +87,15 @@ public enum PixelEffect {
     // при мерцании главное, чтобы вспышка была не менее VISIBLE_PERIOD, иначе её сложно разглядеть как вспышку
     Blinking(90909, "blink") {
         @Override
-        public Color[] getColors(int baseLengthCount, Color start, Color end) {
-            if (baseLengthCount < 3) return new Color[]{Color.hsb(start.getHue(), start.getSaturation(), 0), end};
-            final Color[] colors = PixelEffect.Solid.getColors(baseLengthCount, start, end);
-            int step = baseLengthCount * BASE_FRAME_LENGTH > VISIBLE_PERIOD
+        public Color[] interpolate(int iterations, Color start, Color end) {
+            if (iterations < 3) return new Color[]{Color.hsb(start.getHue(), start.getSaturation(), 0), end};
+            final Color[] colors = PixelEffect.Solid.interpolate(iterations, start, end);
+            int step = iterations * BASE_FRAME_LENGTH > VISIBLE_PERIOD
                     ? VISIBLE_PERIOD / BASE_FRAME_LENGTH  // переключение в с видимым мерцанием
                     : 1; // переключение с минимально возможной скоростью = MIN_FRAME_LENGTH
             int phaseChanger = 0;
             boolean darkPhase = true;
-            for (int i = 0; i < baseLengthCount; i++) {
+            for (int i = 0; i < iterations; i++) {
                 if (darkPhase) colors[i] = Color.hsb(colors[i].getHue(), colors[i].getSaturation(), 0);
                 if (phaseChanger++ > step) {
                     phaseChanger = 0;
@@ -107,12 +107,12 @@ public enum PixelEffect {
     },
     Chaos(75381, "chaos") {
         @Override
-        public Color[] getColors(int baseLengthCount, Color start, Color end) {
-            final Color[] colors = PixelEffect.Solid.getColors(baseLengthCount, start, end);
-            final int changeBrightTimeThreshold = VISIBLE_PERIOD / baseLengthCount;
+        public Color[] interpolate(int iterations, Color start, Color end) {
+            final Color[] colors = PixelEffect.Solid.interpolate(iterations, start, end);
+            final int changeBrightTimeThreshold = VISIBLE_PERIOD / iterations;
             int counter = changeBrightTimeThreshold;
             double currentBright = 0;
-            for (int i = 0; i < baseLengthCount; i++) {
+            for (int i = 0; i < iterations; i++) {
                 if (++counter > changeBrightTimeThreshold) {
                     currentBright = Math.random();
                     counter = 0;
@@ -124,10 +124,10 @@ public enum PixelEffect {
     },
     Solid(0, "base") {
         @Override
-        public Color[] getColors(int baseLengthCount, Color start, Color end) {
-            final Color[] colors = new Color[baseLengthCount];
-            for (int i = 0; i < baseLengthCount; i++) {
-                colors[i] = start.interpolate(end, (double) i / baseLengthCount);
+        public Color[] interpolate(int iterations, Color start, Color end) {
+            final Color[] colors = new Color[iterations];
+            for (int i = 0; i < iterations; i++) {
+                colors[i] = start.interpolate(end, (double) i / iterations);
             }
             return colors;
         }
@@ -169,10 +169,10 @@ public enum PixelEffect {
     /**
      * Возвращает интерполяцию эффекта
      *
-     * @param baseLengthCount количество шагов за которое закончится кадр
-     * @param start           начальный цвет
-     * @param end             конечный цвет
-     * @return интерполяцию цветового ряда в зависимости от выбранного эфекта длиной baseLengthCount
+     * @param iterations количество шагов за которое закончится кадр
+     * @param start      начальный цвет
+     * @param end        конечный цвет
+     * @return интерполяцию цветового ряда в зависимости от выбранного эфекта длиной iterations
      */
-    public abstract Color[] getColors(int baseLengthCount, Color start, Color end);
+    public abstract Color[] interpolate(int iterations, Color start, Color end);
 }

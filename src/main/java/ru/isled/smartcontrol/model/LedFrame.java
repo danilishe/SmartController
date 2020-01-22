@@ -1,7 +1,6 @@
 package ru.isled.smartcontrol.model;
 
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.paint.Color;
 
@@ -31,17 +30,22 @@ public class LedFrame {
         return this;
     }
 
+    public int getFrameLength() {
+        return frameLength.asObject().get();
+    }
+/* // todo возможно можно обойтись без этого
     public ObjectProperty<Integer> getFrameLength() {
         return frameLength.asObject();
     }
+*/
 
     public LedFrame setFrameLength(int frameLength) {
         this.frameLength.set(frameLength);
         return this;
     }
 
-    public ObjectProperty<Integer> getCycles() {
-        return cycles.asObject();
+    public int getCycles() {
+        return cycles.asObject().get();
     }
 
     public LedFrame setCycles(int cycles) {

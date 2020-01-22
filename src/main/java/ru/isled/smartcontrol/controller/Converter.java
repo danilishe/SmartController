@@ -39,7 +39,7 @@ public class Converter {
                     } else {
                         // применяем интерполированную цепочку из класса пиксельных эффектов
                         PixelEffect effect = PixelEffect.byIndex(pixelBright);
-                        int[] currentPixelFrames = effect.getColors(baseLengthCount);
+                        int[] currentPixelFrames = effect.interpolate(baseLengthCount);
                         for (int i = 0; i < baseLengthCount; i++) {
                             subFrames[i][channelsHead] = currentPixelFrames[i];
                         }

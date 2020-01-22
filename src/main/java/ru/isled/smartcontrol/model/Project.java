@@ -85,11 +85,11 @@ public class Project {
         return this;
     }
 
-    public LedFrame getRow(int row) {
-        return frames.get(row);
+    public LedFrame getFrame(int frameNo) {
+        return frames.get(frameNo);
     }
 
-    public boolean addRow(LedFrame frame) {
+    public boolean addFrame(LedFrame frame) {
         return frames.add(frame);
     }
 
@@ -101,17 +101,9 @@ public class Project {
         return frames.size();
     }
 
-    public List<LedFrame> getFrames() {
-        return frames;
-    }
-
     public Project setFrames(List<LedFrame> frames) {
         this.frames = frames;
         return this;
-    }
-
-    public List<Pixel> getPixels() {
-        return pixels;
     }
 
     public Project setPixels(List<Pixel> list) {
@@ -125,8 +117,16 @@ public class Project {
     public int getChannelsCount() {
         int result = 0;
         for (Pixel pixel : pixels) {
-            result += pixel.getQuantity();
+            result += pixel.getChannelsQuantity();
         }
         return result;
+    }
+
+    public Pixel getPixel(int pixelNo) {
+        return pixels.get(pixelNo);
+    }
+
+    public FramePixel getPixel(int frameNo, int pixelNo) {
+        return frames.get(frameNo).getPixel(pixelNo);
     }
 }

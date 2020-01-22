@@ -3,8 +3,6 @@ package ru.isled.smartcontrol.view;
 import com.sun.javafx.scene.control.skin.TableHeaderRow;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -71,7 +69,7 @@ public class MainController {
     public Slider zoomSlider;
     @FXML
     public Menu lastFiles;
-    private ObservableList<LedFrame> frames = FXCollections.observableArrayList();
+//    private ObservableList<LedFrame> frames = FXCollections.observableArrayList();
     private Project project;
     private List<Shape> previewPixels = new ArrayList<>(MAX_CHANNELS_COUNT);
     private SmartControl mainApp;
@@ -215,7 +213,7 @@ public class MainController {
                 project.setHasChanges(true);
             }
         }
-        updatePreviewRow();
+        previewFrame(getSelectedFrame());
     }
 
     private void setLengthSelectedFrames(int length) {
@@ -231,7 +229,7 @@ public class MainController {
 
     private void updateProgramLength() {
         long time = frameTableView.getItems().stream()
-                .mapToLong(item -> item.getCycles().get() * item.getFrameLength().get())
+                .mapToLong(item -> item.getCycles() * item.getFrameLength())
                 .sum();
 
         String aTime = mSecToProgramLength(time);
@@ -266,19 +264,17 @@ public class MainController {
 
         if (!selectedDataCells.isEmpty()) {
 
-            updatePreviewRow();
-
             TablePosition<LedFrame, FramePixel> position = selectedDataCells.get(0);
 
-            int cellValue = frames.get(position.getRow()).getPixel(position.getColumn() - HEADER_COLUMNS);
+            final int frameNo = position.getRow();
+            final int pixelNo = position.getColumn() - HEADER_COLUMNS;
+            LedFrame frame = project.getFrame(frameNo);
+            FramePixel pixel = frame.getPixel(pixelNo);
 
-            int frameLeng = frames.get(position.getRow()).getFrameLength().get();
-            int frameCycl = frames.get(position.getRow()).getCycles().get();
+            previewFrame(frame);
 
             if (selectedDataCells.size() == 1) {
 
-                frameLengthSpinner.getValueFactory().setValue(frameLeng);
-                frameCyclesSpinner.getValueFactory().setValue(frameCycl);
 
                 if (cellValue <= MAX_BRIGHT) {
                     brightField.textProperty().setValue("" + cellValue);
@@ -316,15 +312,19 @@ public class MainController {
                 .collect(Collectors.toList());
     }
 
-    private int getSelectedRow() {
+    private LedFrame getSelectedFrame() {
         try {
-            return frameTableView.getSelectionModel().getSelectedCells().get(0).getRow();
+            final int frameNo = frameTableView.getSelectionModel().getSelectedCells().get(0).getRow();
+            return project.getFrame(frameNo);
         } catch (IndexOutOfBoundsException out) {
-            return -1;
+            return project.getFrame(0);
         }
     }
 
-    private void setPreviewRow(int row) {
+    private void previewFrame(LedFrame frame) {
+        frameLengthSpinner.getValueFactory().setValue(frame.getFrameLength());
+        frameCyclesSpinner.getValueFactory().setValue(frame.getCycles());
+
         // защита от попытки перерисовки при отсутствии выделенных ячеек
         if (row < 0) return;
 
@@ -457,7 +457,7 @@ public class MainController {
         chanelQuantifier.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10, 1));
         chanelQuantifier.getValueFactory().valueProperty().addListener((val, ov, nv) -> {
             changePixelQuantities();
-            updatePreviewRow();
+            previewFrame(getSelectedFrame());
         });
     }
 
@@ -640,8 +640,8 @@ public class MainController {
             updateProgramLength();
         } else if (existsFrames < needFrames) {
             for (int i = existsFrames; i < needFrames; i++) {
-                if (project.size() == i) project.addRow(new LedFrame());
-                frames.add(project.getRow(i));
+                if (project.size() == i) project.addFrame(new LedFrame());
+                frames.add(project.getFrame(i));
             }
             updateProgramLength();
         }
@@ -807,10 +807,6 @@ public class MainController {
                         c.getRow()).getProperty(
                         c.getColumn() - HEADER_COLUMNS))
                 .collect(Collectors.toList());
-    }
-
-    private void updatePreviewRow() {
-        setPreviewRow(getSelectedRow());
     }
 
     public void setMainApp(SmartControl main) {

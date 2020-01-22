@@ -72,4 +72,5 @@ public interface Constants {
     String HINT_IN_OUT_EFFECT = "Однокадровый эффект с плавным разгоранием и затем плавным угасанием." + HINT_FRAME_EFFECT;
     String TOO_MUCH_CHANNELS_ERROR_HINT = "Экспортируется максимум " + MAX_CHANNELS_COUNT + " пикселей, остальные пиксели будут проигнорированы";
     String CHANNELS_COUNTER_HINT = "Общее количество пикселей, включая кратные каналы";
+    double CHANNEL_PREVIEW_SIZE = 15.0;
 }

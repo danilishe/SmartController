@@ -62,4 +62,8 @@ public class FramePixel {
     public FramePixel setBright(int bright) {
         return setBright((double) bright / MAX_BRIGHT);
     }
+
+    public Color[] getInterpolated(int frameLength) {
+        return effect.interpolate(frameLength, getStartColor(), getEndColor());
+    }
 }
