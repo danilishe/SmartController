@@ -9,10 +9,10 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import ru.isled.smartcontrol.Constants;
-import ru.isled.smartcontrol.cache.BgCache;
 import ru.isled.smartcontrol.model.Pixel;
 import ru.isled.smartcontrol.model.Project;
-import ru.isled.smartcontrol.model.RgbOrder;
+import ru.isled.smartcontrol.model.effect.RgbMode;
+import ru.isled.smartcontrol.util.BgCache;
 
 import java.io.File;
 import java.time.LocalTime;
@@ -52,9 +52,9 @@ public class Dialogs {
         int lastChannel = 0;
         Pixel pixel = null;
         // this list for next color changing in preview
-        List<VBox> leds = new ArrayList<>(project.getFrameCount());
+        List<VBox> leds = new ArrayList<>(project.getFramesCount());
         buildPixels:
-        for (int i = 0; i < project.getPixelCount(); i++) {
+        for (int i = 0; i < project.getPixelsCount(); i++) {
             pixel = project.getPixel(i);
             leds.add(new VBox(0));
             // inserting quantified pixels into 'stack' until it less than maxChannelsCount
@@ -68,7 +68,7 @@ public class Dialogs {
                 // adding different quantified pixel depending on RGB/mono
                 leds.get(i).getChildren().add(
                         pixel.isRgb() ?
-                                getColorLabels(pixel.getRgbOrder(), lastChannel - 2) :
+                                getColorLabels(pixel.getRgbMode(), lastChannel - 2) :
                                 getMonoLabels(lastChannel)
                 );
             }
@@ -79,7 +79,7 @@ public class Dialogs {
         hbox.getChildren().addAll(leds);
 
         List<List<Color[]>> data = new ArrayList<>();
-        for (int i = 0; i < project.getFrameCount(); i++) {
+        for (int i = 0; i < project.getFramesCount(); i++) {
             List<Color[]> interpolatedFrame = project.getInterpolatedFrame(i, leds.size());
             for (int j = 0; j < project.getFrame(i).getCycles(); j++) {
                 data.add(interpolatedFrame);
@@ -94,7 +94,7 @@ public class Dialogs {
                     long stepStartTime = new Date().getTime();
                     for (List<Color[]> interpolatedFrame : data)
                         for (int subFrameNo = 0; subFrameNo < interpolatedFrame.get(0).length; subFrameNo++) {
-                            for (int pixel = 0; pixel < project.getFrameCount(); pixel++) {
+                            for (int pixel = 0; pixel < project.getFramesCount(); pixel++) {
                                 for (int j = 0; j < leds.size(); j++) {
                                     color = interpolatedFrame.get(pixel)[subFrameNo];
                                     leds.get(j).setBackground(BgCache.INSTANCE.get(color));
@@ -130,16 +130,16 @@ public class Dialogs {
         return new HBox(label);
     }
 
-    private static Node getColorLabels(RgbOrder rgbOrder, int i) {
-        Node[] result = new Label[3];
+    private static Node getColorLabels(RgbMode rgbMode, int channel) {
+        Node[] labels = new Label[3];
         for (int j = 0; j < 3; j++) {
-            Label label = new Label(String.valueOf(i + j));
-            label.setTextFill(rgbOrder.getColors()[j]);
+            Label label = new Label(String.valueOf(channel + j));
+            label.setTextFill(rgbMode.getColors()[j]);
             label.setMinWidth(CHANNEL_PREVIEW_SIZE);
             label.setMinHeight(CHANNEL_PREVIEW_SIZE);
-            result[i] = label;
+            labels[channel + j] = label;
         }
-        return new HBox(result);
+        return new HBox(labels);
     }
 
     public static ButtonBar.ButtonData askSaveProject() {

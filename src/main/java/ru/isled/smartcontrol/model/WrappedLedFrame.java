@@ -1,3 +1,4 @@
+/*
 package ru.isled.smartcontrol.model;
 
 import java.util.List;
@@ -34,3 +35,4 @@ public class WrappedLedFrame {
         return this;
     }
 }
+*/

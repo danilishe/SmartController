@@ -1,6 +1,8 @@
-package ru.isled.smartcontrol.model;
+package ru.isled.smartcontrol.view.cell;
 
 import javafx.beans.property.BooleanProperty;
+import ru.isled.smartcontrol.model.LedFrame;
+import ru.isled.smartcontrol.model.effect.PixelEffect;
 
 import static ru.isled.smartcontrol.Constants.DEFAULT_CELL_STYLE;
 import static ru.isled.smartcontrol.Constants.MAX_BRIGHT;

@@ -1,10 +1,10 @@
-package ru.isled.smartcontrol.model;
+package ru.isled.smartcontrol.model.effect;
 
 import javafx.scene.paint.Color;
 
 import static ru.isled.smartcontrol.Constants.MAX_BRIGHT;
 
-public enum RgbOrder {
+public enum RgbMode {
     RGB {
         @Override
         byte[] getChannels(Color color) {
@@ -64,6 +64,19 @@ public enum RgbOrder {
                     toByte(color.getGreen()),
             };
         }
+    },
+    MONO {
+        @Override
+        byte[] getChannels(Color color) {
+            return new byte[]{
+                    toByte(color.getBrightness())
+            };
+        }
+
+        @Override
+        public Color[] getColors() {
+            return new Color[]{Color.WHITE};
+        }
     };
 
     private static byte toByte(double bright) {
@@ -85,7 +98,7 @@ public enum RgbOrder {
             case 'R':
                 return Color.RED;
             case 'G':
-                return Color.GREEN;
+                return Color.LIME;
             default:
                 return Color.BLUE;
         }

@@ -9,9 +9,8 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import ru.isled.smartcontrol.controller.FileHelper;
-import ru.isled.smartcontrol.controller.ProjectIO;
+import ru.isled.smartcontrol.controller.ProgramProperties;
 import ru.isled.smartcontrol.model.LedFrame;
-import ru.isled.smartcontrol.model.ProgramProperties;
 import ru.isled.smartcontrol.model.Project;
 import ru.isled.smartcontrol.view.Dialogs;
 import ru.isled.smartcontrol.view.MainController;
@@ -22,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ru.isled.smartcontrol.Constants.*;
+
+//import ru.isled.smartcontrol.controller.ProjectIO;
 
 public class SmartControl extends Application {
     public Stage getMainStage() {
@@ -119,17 +120,17 @@ public class SmartControl extends Application {
             if (!continueAfterAskSaveFile()) return;
 
         if (fileForLoad == null) return;
+// TODO
+//        Project newProject = ProjectIO.load(fileForLoad);
+//        if (newProject == null) {
+//            Dialogs.showErrorAlert("Неверный формат файла или данная версия не поддерживается программой!");
+//            return;
+//        }
 
-        Project newProject = ProjectIO.load(fileForLoad);
-        if (newProject == null) {
-            Dialogs.showErrorAlert("Неверный формат файла или данная версия не поддерживается программой!");
-            return;
-        }
-
-        addItemToLastFiles(newProject.getFile());
-
-        project = newProject;
-        registerProjToControllerAndListener();
+//        addItemToLastFiles(newProject.getFile());
+//
+//        project = newProject;
+//        registerProjToControllerAndListener();
     }
 
     private void addItemToLastFiles(File file) {
@@ -171,16 +172,17 @@ public class SmartControl extends Application {
 
 
     public void saveProject() {
-        if (!project.hasName()) {
-            File file = Dialogs.saveAs(project.getFile());
-            if (file == null) return;
-            project.setFileName(file);
-        }
-
-        ProjectIO.save(project, project.getFile());
-        addItemToLastFiles(project.getFile());
-        project.setHasChanges(false);
-        updateHeader();
+        // TODO
+//        if (!project.hasName()) {
+//            File file = Dialogs.saveAs(project.getFile());
+//            if (file == null) return;
+//            project.setFileName(file);
+//        }
+//
+//        ProjectIO.save(project, project.getFile());
+//        addItemToLastFiles(project.getFile());
+//        project.setHasChanges(false);
+//        updateHeader();
     }
 
     public void createNewProject() {
@@ -190,8 +192,8 @@ public class SmartControl extends Application {
             }
 
         project = new Project();
-        project.setFrameCount(DEFAULT_FRAMES_COUNT);
-        project.setPixelCount(DEFAULT_PIXEL_COUNT);
+        project.setFramesCount(DEFAULT_FRAMES_COUNT);
+        project.setPixelsCount(DEFAULT_PIXEL_COUNT);
         for (int i = 0; i < DEFAULT_FRAMES_COUNT; i++) {
             project.addFrame(new LedFrame());
         }
@@ -207,7 +209,8 @@ public class SmartControl extends Application {
     public void exportProject() {
         File exportFile = Dialogs.export(project.getFile());
         if (exportFile == null) return;
-        ProjectIO.export(project, exportFile);
+        // TODO
+//        ProjectIO.export(project, exportFile);
     }
 
     public void exit() {

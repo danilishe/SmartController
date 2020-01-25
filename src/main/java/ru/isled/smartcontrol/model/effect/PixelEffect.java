@@ -1,4 +1,4 @@
-package ru.isled.smartcontrol.model;
+package ru.isled.smartcontrol.model.effect;
 
 import javafx.scene.paint.Color;
 

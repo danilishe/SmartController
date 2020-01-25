@@ -73,4 +73,5 @@ public interface Constants {
     String TOO_MUCH_CHANNELS_ERROR_HINT = "Экспортируется максимум " + MAX_CHANNELS_COUNT + " пикселей, остальные пиксели будут проигнорированы";
     String CHANNELS_COUNTER_HINT = "Общее количество пикселей, включая кратные каналы";
     double CHANNEL_PREVIEW_SIZE = 15.0;
+    double DEFAULT_GAMMA = 2.2;
 }

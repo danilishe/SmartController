@@ -19,7 +19,12 @@ import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.isled.smartcontrol.SmartControl;
-import ru.isled.smartcontrol.model.*;
+import ru.isled.smartcontrol.model.LedFrame;
+import ru.isled.smartcontrol.model.Project;
+import ru.isled.smartcontrol.model.effect.Effect;
+import ru.isled.smartcontrol.model.effect.PixelEffect;
+import ru.isled.smartcontrol.view.cell.LedFrameLengthCell;
+import ru.isled.smartcontrol.view.cell.LedFrameTableCell;
 
 import java.io.File;
 import java.time.DateTimeException;
@@ -328,7 +333,7 @@ public class MainController {
             Shape pixel = previewPixels.get(i);
 
             pixel.getStyleClass().clear();
-
+            new TableColumn<>().visibleProperty()
             if (frame.getPixelValue(i) <= MAX_BRIGHT) {
                 pixel.getStyleClass().clear();
                 pixel.scaleYProperty().set(1 + .1 * project.getPixels().get(i));
@@ -560,7 +565,7 @@ public class MainController {
             else if (n > MAX_CHANNELS_COUNT)
                 pixelSpinner.getValueFactory().setValue(MAX_CHANNELS_COUNT);
             else {
-                project.setPixelCount(n);
+                project.setPixelsCount(n);
                 refreshVisibleColumnsCount();
                 updateTotalPixelCount();
             }
@@ -607,7 +612,7 @@ public class MainController {
             else if (n > MAX_FRAMES)
                 framesSpinner.getValueFactory().setValue(MAX_FRAMES);
             else {
-                project.setFrameCount(n);
+                project.setFramesCount(n);
                 updateFramesCount();
             }
         });
@@ -655,7 +660,6 @@ public class MainController {
     }
 
     private void initializeRowHeader() {
-
         frameNumColumn.setCellValueFactory(
                 cellData -> new SimpleObjectProperty<>(frames.indexOf(cellData.getValue()) + 1));
 
@@ -810,8 +814,8 @@ public class MainController {
     public void setProject(Project project) {
         this.project = project;
         frames.clear();
-        pixelSpinner.getValueFactory().setValue(project.getPixelCount());
-        framesSpinner.getValueFactory().setValue(project.getFrameCount());
+        pixelSpinner.getValueFactory().setValue(project.getPixelsCount());
+        framesSpinner.getValueFactory().setValue(project.getFramesCount());
         updateFramesCount();
         if (frameTableView.getColumns().size() > HEADER_COLUMNS) updateHeaderQuantifiers();
         updateTotalPixelCount();

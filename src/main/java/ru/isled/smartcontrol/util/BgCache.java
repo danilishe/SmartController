@@ -1,4 +1,4 @@
-package ru.isled.smartcontrol.cache;
+package ru.isled.smartcontrol.util;
 
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;

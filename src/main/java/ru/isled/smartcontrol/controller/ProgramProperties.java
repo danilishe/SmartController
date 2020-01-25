@@ -1,4 +1,4 @@
-package ru.isled.smartcontrol.model;
+package ru.isled.smartcontrol.controller;
 
 import java.util.List;
 
@@ -57,6 +57,4 @@ public class ProgramProperties {
     public void setZoom(double zoom) {
         this.zoom = zoom;
     }
-
-
 }

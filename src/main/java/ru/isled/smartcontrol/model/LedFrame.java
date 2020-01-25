@@ -1,42 +1,38 @@
 package ru.isled.smartcontrol.model;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.scene.paint.Color;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static ru.isled.smartcontrol.Constants.*;
+import static ru.isled.smartcontrol.Constants.DEFAULT_FRAME_LENGTH;
 
 public class LedFrame {
-    private IntegerProperty frameLength = new SimpleIntegerProperty(DEFAULT_FRAME_LENGTH);
-    private IntegerProperty cycles = new SimpleIntegerProperty(1);
-    private List<PixelValue> pixelValues = new ArrayList<>(MAX_CHANNELS_COUNT);
+    private final IntegerProperty frameLength;
+    private final IntegerProperty cycles;
+    private final BooleanProperty visible;
 
     public LedFrame() {
-        for (int i = 0; i < MAX_CHANNELS_COUNT; i++) {
-            pixelValues.add(new PixelValue(Color.BLACK, PixelEffect.Solid));
-        }
+        this(DEFAULT_FRAME_LENGTH, 1, false);
     }
 
-    public List<PixelValue> getPixelValues() {
-        return pixelValues;
+    public LedFrame(int frameLength, int cycles, boolean visible) {
+        this.frameLength = new SimpleIntegerProperty(frameLength);
+        this.cycles = new SimpleIntegerProperty(cycles);
+        this.visible = new SimpleBooleanProperty(visible);
     }
 
-    public LedFrame setPixelValues(List<PixelValue> pixelValues) {
-        this.pixelValues = pixelValues;
-        return this;
+    public boolean isVisible() {
+        return visible.get();
+    }
+
+    public BooleanProperty visibleProperty() {
+        return visible;
     }
 
     public int getFrameLength() {
         return frameLength.asObject().get();
     }
-/* // todo возможно можно обойтись без этого
-    public ObjectProperty<Integer> getFrameLength() {
-        return frameLength.asObject();
-    }
-*/
 
     public LedFrame setFrameLength(int frameLength) {
         this.frameLength.set(frameLength);
@@ -52,16 +48,16 @@ public class LedFrame {
         return this;
     }
 
-    public PixelValue getPixelValue(int num) {
-        return pixelValues.get(num);
+    public IntegerProperty frameLengthProperty() {
+        return frameLength;
+    }
+
+    public IntegerProperty cyclesProperty() {
+        return cycles;
     }
 
     public LedFrame setLength(int length) {
         frameLength.setValue(length);
         return this;
-    }
-
-    public int getFrameSubFrames() {
-        return getFrameLength() / BASE_FRAME_LENGTH;
     }
 }

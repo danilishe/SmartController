@@ -1,4 +1,4 @@
-package ru.isled.smartcontrol.model;
+package ru.isled.smartcontrol.model.effect;
 
 import javafx.beans.property.IntegerProperty;
 import ru.isled.smartcontrol.view.*;

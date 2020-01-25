@@ -1,3 +1,4 @@
+/*
 package ru.isled.smartcontrol.model;
 
 import java.util.List;
@@ -54,3 +55,4 @@ public class WrappedProject {
         return this;
     }
 }
+*/

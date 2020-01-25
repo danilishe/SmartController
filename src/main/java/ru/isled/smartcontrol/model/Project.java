@@ -1,9 +1,8 @@
 package ru.isled.smartcontrol.model;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.paint.Color;
 
 import java.io.File;
@@ -13,47 +12,56 @@ import java.util.List;
 import static ru.isled.smartcontrol.Constants.*;
 
 public class Project {
-    private double gamma = 2.2;
-    private BooleanProperty hasChanges;
-    private ObjectProperty<File> file;
-    private List<Pixel> pixels;
-    private List<LedFrame> frames;
-    private int frameCount;
-    private int pixelCount;
+    private final IntegerProperty framesCount;
+    private final IntegerProperty pixelsCount;
+    private final ObservableList<Pixel> pixels;
+    private final ObservableList<LedFrame> frames;
+    private final DoubleProperty gamma;
+    private final BooleanProperty hasChanges;
+    private final ObjectProperty<File> file;
 
     public Project() {
-        hasChanges = new SimpleBooleanProperty(false);
-        frames = new ArrayList<>(MAX_FRAMES);
-        pixels = new ArrayList<>(MAX_CHANNELS_COUNT);
+        this(DEFAULT_FRAMES_COUNT, DEFAULT_PIXEL_COUNT, new ArrayList<>(MAX_CHANNELS_COUNT), new ArrayList<>(MAX_FRAMES), DEFAULT_GAMMA, false, null);
         for (int i = 0; i < MAX_CHANNELS_COUNT; i++) {
             pixels.add(new Pixel());
         }
     }
 
+    public Project(int framesCount, int pixelsCount, ArrayList<Pixel> pixels, ArrayList<LedFrame> frames, double gamma, boolean hasChanges, File file) {
+        this.framesCount = new SimpleIntegerProperty(framesCount);
+        this.pixelsCount = new SimpleIntegerProperty(pixelsCount);
+        this.pixels = FXCollections.observableList(pixels);
+        this.frames = FXCollections.observableList(frames);
+        this.gamma = new SimpleDoubleProperty(gamma);
+        this.hasChanges = new SimpleBooleanProperty(hasChanges);
+        this.file = new SimpleObjectProperty<>(file);
+    }
+
+
     public double getGamma() {
-        return gamma;
+        return gamma.get();
     }
 
     public Project setGamma(double gamma) {
-        this.gamma = gamma;
+        this.gamma.set(gamma);
         return this;
     }
 
-    public int getFrameCount() {
-        return frameCount;
+    public int getFramesCount() {
+        return framesCount.get();
     }
 
-    public Project setFrameCount(int frameCount) {
-        this.frameCount = frameCount;
+    public Project setFramesCount(int framesCount) {
+        this.framesCount.set(framesCount);
         return this;
     }
 
-    public int getPixelCount() {
-        return pixelCount;
+    public int getPixelsCount() {
+        return pixelsCount.get();
     }
 
-    public Project setPixelCount(int pixelCount) {
-        this.pixelCount = pixelCount;
+    public Project setPixelsCount(int pixelsCount) {
+        this.pixelsCount.set(pixelsCount);
         return this;
     }
 
@@ -70,14 +78,11 @@ public class Project {
     }
 
     public boolean hasName() {
-        return file != null;
+        return file.get() != null;
     }
 
-    public Project setFileName(File newName) {
-        if (file == null)
-            file = new SimpleObjectProperty<>(newName);
-        else
-            file.setValue(newName);
+    public Project setFileName(File file) {
+        this.file.setValue(file);
         return this;
     }
 
@@ -95,7 +100,7 @@ public class Project {
     }
 
     public File getFile() {
-        return file == null ? null : file.getValue();
+        return file.get();
     }
 
     public int size() {
@@ -103,12 +108,14 @@ public class Project {
     }
 
     public Project setFrames(List<LedFrame> frames) {
-        this.frames = frames;
+        this.frames.clear();
+        this.frames.addAll(frames);
         return this;
     }
 
     public Project setPixels(List<Pixel> list) {
-        pixels = list;
+        pixels.clear();
+        pixels.addAll(list);
         return this;
     }
 
@@ -118,7 +125,7 @@ public class Project {
     public int getChannelsCount() {
         int result = 0;
         for (Pixel pixel : pixels) {
-            result += pixel.getChannelsQuantity();
+            result += pixel.getChannelsCount();
         }
         return result;
     }
@@ -127,15 +134,27 @@ public class Project {
         return pixels.get(pixelNo);
     }
 
-    public PixelValue getPixelValue(int frameNo, int pixelNo) {
-        return frames.get(frameNo).getPixelValue(pixelNo);
-    }
-
-    public List<Color[]> getInterpolatedFrame(int frameNo, int size) {
-        final List<Color[]> interpolatedFrame = new ArrayList<>();
-        for (int k = 0; k < size; k++) {
-            interpolatedFrame.add(getPixelValue(frameNo, k).getInterpolated(getFrame(frameNo).getFrameLength()));
+    /**
+     * Return interpolated frame without using cycles information and pixel quantifier
+     */
+    public List<Color[]> getInterpolatedFrame(int frameNo) {
+        final List<Color[]> interpolatedFrame = new ArrayList<>(getPixelsCount());
+        final int frameLength = getFrame(frameNo).getFrameLength();
+        for (int i = 0; i < getPixelsCount(); i++) {
+            interpolatedFrame.add(getPixel(i).getInterpolatedFrame(frameNo, frameLength));
         }
         return interpolatedFrame;
+    }
+
+    public List<List<Color[]>> getInterpolated() {
+        final List<List<Color[]>> interpolated = new ArrayList<>(getFramesCount());
+        for (int i = 0; i < getFramesCount(); i++) {
+            if (getFrame(i).getFrameLength() == 0) continue;
+            final List<Color[]> interpolatedFrame = getInterpolatedFrame(i);
+            for (int j = 0; j < getFrame(i).getCycles(); j++) {
+                interpolated.add(interpolatedFrame);
+            }
+        }
+        return interpolated;
     }
 }
