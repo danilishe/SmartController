@@ -1,3 +1,4 @@
+/*
 package ru.isled.smartcontrol.controller;
 
 import ru.isled.smartcontrol.model.PixelEffect;
@@ -73,3 +74,4 @@ public class Converter {
         }
     }
 }
+*/

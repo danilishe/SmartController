@@ -1,3 +1,4 @@
+/*
 package ru.isled.smartcontrol.controller;
 
 import ru.isled.smartcontrol.model.LedFrame;
@@ -45,3 +46,4 @@ public class Wrapper {
                 .setPixels(wrappedLedFrame.getPixels());
     }
 }
+*/

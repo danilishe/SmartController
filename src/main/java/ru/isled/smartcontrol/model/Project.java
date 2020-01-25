@@ -4,6 +4,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.paint.Color;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -126,7 +127,15 @@ public class Project {
         return pixels.get(pixelNo);
     }
 
-    public FramePixel getPixel(int frameNo, int pixelNo) {
-        return frames.get(frameNo).getPixel(pixelNo);
+    public PixelValue getPixelValue(int frameNo, int pixelNo) {
+        return frames.get(frameNo).getPixelValue(pixelNo);
+    }
+
+    public List<Color[]> getInterpolatedFrame(int frameNo, int size) {
+        final List<Color[]> interpolatedFrame = new ArrayList<>();
+        for (int k = 0; k < size; k++) {
+            interpolatedFrame.add(getPixelValue(frameNo, k).getInterpolated(getFrame(frameNo).getFrameLength()));
+        }
+        return interpolatedFrame;
     }
 }

@@ -69,7 +69,7 @@ public class MainController {
     public Slider zoomSlider;
     @FXML
     public Menu lastFiles;
-//    private ObservableList<LedFrame> frames = FXCollections.observableArrayList();
+    //    private ObservableList<LedFrame> frames = FXCollections.observableArrayList();
     private Project project;
     private List<Shape> previewPixels = new ArrayList<>(MAX_CHANNELS_COUNT);
     private SmartControl mainApp;
@@ -205,13 +205,11 @@ public class MainController {
     }
 
     private void setBrightSelectedCells(int bright) {
-        for (TablePosition<LedFrame, FramePixel> cell : getSelectedDataCells()) {
+        for (TablePosition<LedFrame, PixelValue> cell : getSelectedDataCells()) {
             int pixelNo = cell.getColumn() - HEADER_COLUMNS;
             int frameNo = cell.getRow();
-            if (!project.getPixels().get(pixelNo).isRgb() && project.getFrames().get(frameNo).getPixel(pixelNo).getStartColor().getB) {
-                project.getFrames().get(frameNo).getPixel(pixelNo).setBright(bright);
-                project.setHasChanges(true);
-            }
+            project.getPixelValue(frameNo, pixelNo).setBright(bright);
+            project.setHasChanges(true);
         }
         previewFrame(getSelectedFrame());
     }
@@ -260,16 +258,16 @@ public class MainController {
 
         selectAllRowsWhereHeaderIsSelected();
 
-        List<TablePosition<LedFrame, FramePixel>> selectedDataCells = getSelectedDataCells();
+        List<TablePosition<LedFrame, PixelValue>> selectedDataCells = getSelectedDataCells();
 
         if (!selectedDataCells.isEmpty()) {
 
-            TablePosition<LedFrame, FramePixel> position = selectedDataCells.get(0);
+            TablePosition<LedFrame, PixelValue> position = selectedDataCells.get(0);
 
             final int frameNo = position.getRow();
             final int pixelNo = position.getColumn() - HEADER_COLUMNS;
             LedFrame frame = project.getFrame(frameNo);
-            FramePixel pixel = frame.getPixel(pixelNo);
+            PixelValue pixel = frame.getPixelValue(pixelNo);
 
             previewFrame(frame);
 
@@ -324,31 +322,27 @@ public class MainController {
     private void previewFrame(LedFrame frame) {
         frameLengthSpinner.getValueFactory().setValue(frame.getFrameLength());
         frameCyclesSpinner.getValueFactory().setValue(frame.getCycles());
-
-        // защита от попытки перерисовки при отсутствии выделенных ячеек
-        if (row < 0) return;
-
-        LedFrame frame = frames.get(row);
+        previewZone.setPreview(project.getframe.getSubFrames())
         for (int i = 0; i < pixelSpinner.getValue(); i++) {
 
             Shape pixel = previewPixels.get(i);
 
             pixel.getStyleClass().clear();
 
-            if (frame.getPixel(i) <= MAX_BRIGHT) {
+            if (frame.getPixelValue(i) <= MAX_BRIGHT) {
                 pixel.getStyleClass().clear();
                 pixel.scaleYProperty().set(1 + .1 * project.getPixels().get(i));
                 pixel.fillProperty().setValue(
-                        Color.rgb(0xFF, 0xFF, 0, ((double) frame.getPixel(i) / MAX_BRIGHT)));
+                        Color.rgb(0xFF, 0xFF, 0, ((double) frame.getPixelValue(i) / MAX_BRIGHT)));
             } else {
 //                pixel.fillProperty().setValue(
 //                        null
 //                );
 
                 if (pixel.getStyleClass().isEmpty())
-                    pixel.getStyleClass().add(PixelEffect.cssByIndex(frame.getPixel(i)));
+                    pixel.getStyleClass().add(PixelEffect.cssByIndex(frame.getPixelValue(i)));
                 else
-                    pixel.getStyleClass().set(0, PixelEffect.cssByIndex(frame.getPixel(i)));
+                    pixel.getStyleClass().set(0, PixelEffect.cssByIndex(frame.getPixelValue(i)));
 
             }
         }
@@ -357,12 +351,12 @@ public class MainController {
     /**
      * @return возвращает все выбранные ячейки списком кроме заголовочных
      */
-    private List<TablePosition<LedFrame, FramePixel>> getSelectedDataCells() {
+    private List<TablePosition<LedFrame, PixelValue>> getSelectedDataCells() {
         return frameTableView.getSelectionModel()
                 .getSelectedCells()
                 .stream()
                 .filter(x -> x.getColumn() >= HEADER_COLUMNS)
-                .collect(Collectors.<TablePosition<LedFrame, FramePixel>>toList());
+                .collect(Collectors.<TablePosition<LedFrame, PixelValue>>toList());
     }
 
     @FXML

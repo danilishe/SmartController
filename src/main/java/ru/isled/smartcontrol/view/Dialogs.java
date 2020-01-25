@@ -3,14 +3,13 @@ package ru.isled.smartcontrol.view;
 import javafx.concurrent.Task;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import ru.isled.smartcontrol.Constants;
+import ru.isled.smartcontrol.cache.BgCache;
 import ru.isled.smartcontrol.model.Pixel;
 import ru.isled.smartcontrol.model.Project;
 import ru.isled.smartcontrol.model.RgbOrder;
@@ -18,7 +17,10 @@ import ru.isled.smartcontrol.model.RgbOrder;
 import java.io.File;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 import static javafx.scene.control.ButtonType.*;
 import static ru.isled.smartcontrol.Constants.*;
@@ -46,7 +48,6 @@ public class Dialogs {
     public static void preview(Project project) {
         Dialog<Void> preview = new Dialog<>();
         preview.setTitle("Предпросмотр");
-        // fixme как считать цветные пиксели?
         final int maxChannelsCount = Math.min(project.getChannelsCount(), MAX_CHANNELS_COUNT);
         int lastChannel = 0;
         Pixel pixel = null;
@@ -79,11 +80,7 @@ public class Dialogs {
 
         List<List<Color[]>> data = new ArrayList<>();
         for (int i = 0; i < project.getFrameCount(); i++) {
-            final int subFramesCount = project.getFrame(i).getFrameLength() / BASE_FRAME_LENGTH;
-            List<Color[]> interpolatedFrame = new ArrayList<>();
-            for (int k = 0; k < leds.size(); k++) {
-                interpolatedFrame.add(project.getPixel(i, k).getInterpolated(subFramesCount));
-            }
+            List<Color[]> interpolatedFrame = project.getInterpolatedFrame(i, leds.size());
             for (int j = 0; j < project.getFrame(i).getCycles(); j++) {
                 data.add(interpolatedFrame);
             }
@@ -92,31 +89,21 @@ public class Dialogs {
         Task<Void> timer = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
-                Map<Color, Background> cache = new HashMap<>();
-                Background background = null;
-                Color color = null;
+                Color color;
                 while (preview.isShowing()) {
                     long stepStartTime = new Date().getTime();
                     for (List<Color[]> interpolatedFrame : data)
                         for (int subFrameNo = 0; subFrameNo < interpolatedFrame.get(0).length; subFrameNo++) {
                             for (int pixel = 0; pixel < project.getFrameCount(); pixel++) {
                                 for (int j = 0; j < leds.size(); j++) {
-                                    // think this little cache would be useful
                                     color = interpolatedFrame.get(pixel)[subFrameNo];
-                                    if (cache.containsKey(color))
-                                        background = cache.get(color);
-                                    else {
-                                        background = new Background(new BackgroundFill(color, null, null));
-                                        cache.put(color, background);
-                                    }
-                                    leds.get(j).setBackground(background);
+                                    leds.get(j).setBackground(BgCache.INSTANCE.get(color));
                                 }
                                 Thread.sleep(BASE_FRAME_LENGTH);
                                 long stepEndTime = new Date().getTime() - stepStartTime;
                                 updateMessage(LocalTime.ofNanoOfDay(stepEndTime * 1_000_000).format(DateTimeFormatter.ISO_TIME));
                             }
                         }
-
                 }
                 return null;
             }
