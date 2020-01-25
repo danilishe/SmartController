@@ -3,9 +3,14 @@ package ru.isled.smartcontrol.model;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
 import ru.isled.smartcontrol.model.effect.PixelEffect;
 import ru.isled.smartcontrol.model.effect.RgbMode;
+import ru.isled.smartcontrol.util.BgCache;
 import ru.isled.smartcontrol.util.ColorToHex;
 
 import java.util.ArrayList;
@@ -14,23 +19,47 @@ import java.util.List;
 import static ru.isled.smartcontrol.Constants.*;
 
 public class Pixel implements ColorToHex {
+    private final IntegerProperty number;
     private final ObjectProperty<Color> color;
     private final ObjectProperty<RgbMode> rgbMode;
     private final IntegerProperty quantifier;
-    private final ObservableList<Frame> frames;
-
+    private final ObservableList<Pixel.Frame> frames;
     private final BooleanProperty visible;
+    private final ObjectProperty<Background> background;
 
-    public Pixel() {
-        this(Color.WHITE, RgbMode.MONO, 1, new ArrayList<>(MAX_FRAMES), false);
+    public Pixel(int number) {
+        this(number, Color.WHITE, RgbMode.MONO, 1, new ArrayList<>(MAX_FRAMES), false);
     }
 
-    public Pixel(Color color, RgbMode rgbMode, int quantifier, List<Frame> frames, boolean visible) {
+    public Pixel(int number, Color color, RgbMode rgbMode, int quantifier, List<Pixel.Frame> frames, boolean visible) {
+        this.number = new SimpleIntegerProperty(number);
         this.color = new SimpleObjectProperty<>(color);
         this.rgbMode = new SimpleObjectProperty<>(rgbMode);
         this.quantifier = new SimpleIntegerProperty(quantifier);
         this.frames = FXCollections.observableArrayList(frames);
         this.visible = new SimpleBooleanProperty(visible);
+        background = new SimpleObjectProperty<>(getBackground());
+        this.color.addListener((observable, oldValue, newValue) -> background.set(getBackground()));
+        this.rgbMode.addListener((observable, oldValue, newValue) -> background.set(getBackground()));
+    }
+
+    private Background getBackground() {
+        if (isRgb()) { // todo optimize this
+            final Color[] colors = getRgbMode().getColors();
+            return new Background(new BackgroundFill(
+                    new LinearGradient(0, 0,
+                            1, 0,
+                            true, null,
+                            new Stop(.25, colors[0]),
+                            new Stop(.5, colors[1]),
+                            new Stop(.75, colors[2]))
+                    , null, null));
+        }
+        return BgCache.INSTANCE.get(color.get());
+    }
+
+    public ObjectProperty<Background> backgroundProperty() {
+        return background;
     }
 
     /**
@@ -51,6 +80,18 @@ public class Pixel implements ColorToHex {
 
     public boolean isRgb() {
         return getRgbMode() == RgbMode.MONO;
+    }
+
+    public int getNumber() {
+        return number.get();
+    }
+
+    public void setNumber(int number) {
+        this.number.set(number);
+    }
+
+    public ObjectProperty<Integer> numberProperty() {
+        return number.asObject();
     }
 
     public int getChannelsCount() {
@@ -115,8 +156,8 @@ public class Pixel implements ColorToHex {
         return this;
     }
 
-    public IntegerProperty quantifierProperty() {
-        return quantifier;
+    public ObjectProperty<Integer> quantifierProperty() {
+        return quantifier.asObject();
     }
 
     public Color[] getInterpolatedFrame(int frameNo, int frameLength) {
@@ -130,6 +171,10 @@ public class Pixel implements ColorToHex {
         private final ObjectProperty<Color> startColor;
         private final ObjectProperty<Color> endColor;
         private final ObjectProperty<PixelEffect> effect;
+
+        public Frame() {
+            this(Color.BLACK, PixelEffect.Solid);
+        }
 
         public Frame(Color startColor, Color endColor, PixelEffect effect) {
             this.startColor = new SimpleObjectProperty<>(startColor);

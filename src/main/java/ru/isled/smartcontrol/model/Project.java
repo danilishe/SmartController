@@ -23,7 +23,11 @@ public class Project {
     public Project() {
         this(DEFAULT_FRAMES_COUNT, DEFAULT_PIXEL_COUNT, new ArrayList<>(MAX_CHANNELS_COUNT), new ArrayList<>(MAX_FRAMES), DEFAULT_GAMMA, false, null);
         for (int i = 0; i < MAX_CHANNELS_COUNT; i++) {
-            pixels.add(new Pixel());
+            pixels.add(new Pixel(i + 1)
+                    .setVisible(i < DEFAULT_PIXEL_COUNT));
+        }
+        for (int i = 0; i < DEFAULT_FRAMES_COUNT; i++) {
+            frames.add(new LedFrame(i + 1));
         }
     }
 
@@ -35,6 +39,8 @@ public class Project {
         this.gamma = new SimpleDoubleProperty(gamma);
         this.hasChanges = new SimpleBooleanProperty(hasChanges);
         this.file = new SimpleObjectProperty<>(file);
+        this.framesCount.addListener(c -> onFramesChanged());
+        this.pixelsCount.addListener(c -> onPixelChange());
     }
 
 
@@ -156,5 +162,30 @@ public class Project {
             }
         }
         return interpolated;
+    }
+
+    public long getLength() {
+        return frames.stream()
+                .limit(getFramesCount())
+                .mapToLong(f -> f.getFrameLength() * f.getCycles())
+                .sum();
+    }
+
+    private void onPixelChange() {
+        for (int i = 0; i < MAX_CHANNELS_COUNT; i++) {
+            getPixel(i).setVisible(i < getPixelsCount());
+        }
+    }
+
+    public void onFramesChanged() {
+        if (frames.size() < getFramesCount()) {
+            for (int i = frames.size() - 1; i < getFramesCount(); i++) {
+                addFrame(new LedFrame(i + 1).setVisible(true));
+            }
+        } else {
+            for (int i = frames.size() - 1; i < getFramesCount(); i++) {
+                getFrame(i).setVisible(false);
+            }
+        }
     }
 }

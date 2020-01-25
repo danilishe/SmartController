@@ -1,25 +1,43 @@
 package ru.isled.smartcontrol.model;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.*;
+import javafx.beans.value.ObservableValue;
 
 import static ru.isled.smartcontrol.Constants.DEFAULT_FRAME_LENGTH;
 
 public class LedFrame {
+    private final IntegerProperty number;
     private final IntegerProperty frameLength;
     private final IntegerProperty cycles;
     private final BooleanProperty visible;
 
-    public LedFrame() {
-        this(DEFAULT_FRAME_LENGTH, 1, false);
+    public LedFrame(int number) {
+        this(number, DEFAULT_FRAME_LENGTH, 1, false);
     }
 
-    public LedFrame(int frameLength, int cycles, boolean visible) {
+    public LedFrame(int number, int frameLength, int cycles, boolean visible) {
+        this.number = new SimpleIntegerProperty(number);
         this.frameLength = new SimpleIntegerProperty(frameLength);
         this.cycles = new SimpleIntegerProperty(cycles);
         this.visible = new SimpleBooleanProperty(visible);
+    }
+
+    public int getNumber() {
+        return number.get();
+    }
+
+    public LedFrame setNumber(int number) {
+        this.number.set(number);
+        return this;
+    }
+
+    public ObservableValue<Integer> numberProperty() {
+        return number.asObject();
+    }
+
+    public LedFrame setVisible(boolean visible) {
+        this.visible.set(visible);
+        return this;
     }
 
     public boolean isVisible() {
@@ -48,12 +66,16 @@ public class LedFrame {
         return this;
     }
 
-    public IntegerProperty frameLengthProperty() {
-        return frameLength;
+    public ObjectProperty<Integer> getCyclesProperty() {
+        return cycles.asObject();
     }
 
-    public IntegerProperty cyclesProperty() {
-        return cycles;
+    public ObjectProperty<Integer> frameLengthProperty() {
+        return frameLength.asObject();
+    }
+
+    public ObjectProperty<Integer> cyclesProperty() {
+        return cycles.asObject();
     }
 
     public LedFrame setLength(int length) {

@@ -7,6 +7,7 @@ import static ru.isled.smartcontrol.Constants.MAX_FRAME_LENGTH;
 
 public class LedFrameLengthCell extends TableCell<LedFrame, Integer> {
 
+
     @Override
     protected void updateItem(Integer item, boolean empty) {
         super.updateItem(item, empty);
