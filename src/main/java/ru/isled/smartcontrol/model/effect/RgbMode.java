@@ -1,13 +1,17 @@
 package ru.isled.smartcontrol.model.effect;
 
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
 
 import static ru.isled.smartcontrol.Constants.MAX_BRIGHT;
 
 public enum RgbMode {
     RGB {
         @Override
-        byte[] getChannels(Color color) {
+        byte[] exportChannels(Color color) {
             return new byte[]{
                     toByte(color.getRed()),
                     toByte(color.getGreen()),
@@ -17,7 +21,7 @@ public enum RgbMode {
     },
     RBG {
         @Override
-        byte[] getChannels(Color color) {
+        byte[] exportChannels(Color color) {
             return new byte[]{
                     toByte(color.getRed()),
                     toByte(color.getBlue()),
@@ -27,7 +31,7 @@ public enum RgbMode {
     },
     GBR {
         @Override
-        byte[] getChannels(Color color) {
+        byte[] exportChannels(Color color) {
             return new byte[]{
                     toByte(color.getGreen()),
                     toByte(color.getBlue()),
@@ -37,7 +41,7 @@ public enum RgbMode {
     },
     GRB {
         @Override
-        byte[] getChannels(Color color) {
+        byte[] exportChannels(Color color) {
             return new byte[]{
                     toByte(color.getGreen()),
                     toByte(color.getRed()),
@@ -47,7 +51,7 @@ public enum RgbMode {
     },
     BGR {
         @Override
-        byte[] getChannels(Color color) {
+        byte[] exportChannels(Color color) {
             return new byte[]{
                     toByte(color.getBlue()),
                     toByte(color.getGreen()),
@@ -57,7 +61,7 @@ public enum RgbMode {
     },
     BRG {
         @Override
-        byte[] getChannels(Color color) {
+        byte[] exportChannels(Color color) {
             return new byte[]{
                     toByte(color.getBlue()),
                     toByte(color.getRed()),
@@ -65,17 +69,22 @@ public enum RgbMode {
             };
         }
     },
-    MONO {
+    MONO_WHITE {
         @Override
-        byte[] getChannels(Color color) {
+        byte[] exportChannels(Color color) {
             return new byte[]{
                     toByte(color.getBrightness())
             };
         }
 
         @Override
-        public Color[] getColors() {
-            return new Color[]{Color.WHITE};
+        public Background getBackground() {
+            return new Background(new BackgroundFill(Color.WHITE, null, null));
+        }
+
+        @Override
+        public Color getVisibleColor(Color startColor) {
+            return startColor.grayscale();
         }
     };
 
@@ -83,7 +92,7 @@ public enum RgbMode {
         return (byte) (bright * MAX_BRIGHT);
     }
 
-    abstract byte[] getChannels(Color color);
+    abstract byte[] exportChannels(Color color);
 
     public Color[] getColors() {
         Color[] colors = new Color[3];
@@ -91,6 +100,19 @@ public enum RgbMode {
             colors[i] = getColorByLetter(name().charAt(i));
         }
         return colors;
+    }
+
+    // for rgb colors
+    public Background getBackground() {
+        final Color[] colors = getColors();
+        return new Background(new BackgroundFill(
+                new LinearGradient(0, 0,
+                        1, 0,
+                        true, null,
+                        new Stop(.20, colors[0]),
+                        new Stop(.5, colors[1]),
+                        new Stop(.80, colors[2])),
+                null, null));
     }
 
     private Color getColorByLetter(char c) {
@@ -102,5 +124,10 @@ public enum RgbMode {
             default:
                 return Color.BLUE;
         }
+    }
+
+    // for rgb color
+    public Color getVisibleColor(Color startColor) {
+        return startColor;
     }
 }

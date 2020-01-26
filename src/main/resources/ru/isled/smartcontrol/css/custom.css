@@ -1,3 +1,10 @@
+-fx-cell {
+    -fx-cursor: hand;
+    -fx-border-width: 2px;
+    -fx-border-style: dotted;
+    -fx-background-insets: 3px;
+}
+
 .fadeIn {
     -fx-fill: image-pattern("/ru/isled/smartcontrol/images/fadeIn.gif");
     -fx-background-image: url("/ru/isled/smartcontrol/images/fadeIn.png");

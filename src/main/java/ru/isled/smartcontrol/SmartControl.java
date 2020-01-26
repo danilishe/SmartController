@@ -86,7 +86,7 @@ public class SmartControl extends Application {
         mainStage.getIcons().add(new Image(getClass().getResourceAsStream("images/play.png")));
         mainStage.getScene().getStylesheets().addAll(getClass().getResource("css/custom.css").toExternalForm());
         mainStage.setMinWidth(800);
-        mainStage.setMinHeight(720);
+        mainStage.setMinHeight(800);
         mainStage.centerOnScreen();
         mainStage.setOnCloseRequest(event -> {
             event.consume();

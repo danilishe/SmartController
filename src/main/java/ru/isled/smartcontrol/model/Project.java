@@ -23,8 +23,7 @@ public class Project {
     public Project() {
         this(DEFAULT_FRAMES_COUNT, DEFAULT_PIXEL_COUNT, new ArrayList<>(MAX_CHANNELS_COUNT), new ArrayList<>(MAX_FRAMES), DEFAULT_GAMMA, false, null);
         for (int i = 0; i < MAX_CHANNELS_COUNT; i++) {
-            pixels.add(new Pixel(i + 1)
-                    .setVisible(i < DEFAULT_PIXEL_COUNT));
+            pixels.add(new Pixel(i + 1));
         }
         for (int i = 0; i < DEFAULT_FRAMES_COUNT; i++) {
             frames.add(new LedFrame(i + 1));
@@ -172,12 +171,18 @@ public class Project {
     }
 
     public void onFramesChanged() {
+        final int initIndex = frames.size() - 1;
         if (frames.size() < getFramesCount()) {
-            for (int i = frames.size() - 1; i < getFramesCount(); i++) {
+            for (int i = initIndex; i < getFramesCount(); i++) {
                 addFrame(new LedFrame(i + 1).setVisible(true));
             }
+            for (Pixel pixel : pixels) {
+                for (int i = initIndex; i < getFramesCount(); i++) {
+                    pixel.getFrames().add(new Pixel.Frame(i));
+                }
+            }
         } else {
-            for (int i = frames.size() - 1; i < getFramesCount(); i++) {
+            for (int i = initIndex; i < getFramesCount(); i++) {
                 getFrame(i).setVisible(false);
             }
         }

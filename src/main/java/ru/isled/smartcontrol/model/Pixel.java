@@ -1,16 +1,15 @@
 package ru.isled.smartcontrol.model;
 
-import javafx.beans.property.*;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
 import ru.isled.smartcontrol.model.effect.PixelEffect;
 import ru.isled.smartcontrol.model.effect.RgbMode;
-import ru.isled.smartcontrol.util.BgCache;
 import ru.isled.smartcontrol.util.ColorToHex;
 
 import java.util.ArrayList;
@@ -20,69 +19,33 @@ import static ru.isled.smartcontrol.Constants.*;
 
 public class Pixel implements ColorToHex {
     private final IntegerProperty number;
-    private final ObjectProperty<Color> color;
     private final ObjectProperty<RgbMode> rgbMode;
     private final IntegerProperty quantifier;
     private final ObservableList<Pixel.Frame> frames;
-    private final BooleanProperty visible;
     private final ObjectProperty<Background> background;
 
     public Pixel(int number) {
-        this(number, Color.WHITE, RgbMode.MONO, 1, new ArrayList<>(MAX_FRAMES), false);
+        this(number, RgbMode.MONO_WHITE, 1, new ArrayList<>(MAX_FRAMES));
         for (int i = 0; i < DEFAULT_FRAMES_COUNT; i++) {
             frames.add(new Frame(i));
         }
     }
 
-    public Pixel(int number, Color color, RgbMode rgbMode, int quantifier, List<Pixel.Frame> frames, boolean visible) {
+    public Pixel(int number, RgbMode rgbMode, int quantifier, List<Pixel.Frame> frames) {
         this.number = new SimpleIntegerProperty(number);
-        this.color = new SimpleObjectProperty<>(color);
         this.rgbMode = new SimpleObjectProperty<>(rgbMode);
         this.quantifier = new SimpleIntegerProperty(quantifier);
         this.frames = FXCollections.observableArrayList(frames);
-        this.visible = new SimpleBooleanProperty(visible);
-        background = new SimpleObjectProperty<>(getBackground());
-        this.color.addListener((observable, oldValue, newValue) -> background.set(getBackground()));
-        this.rgbMode.addListener((observable, oldValue, newValue) -> background.set(getBackground()));
-    }
-
-    private Background getBackground() {
-        if (isRgb()) { // todo optimize this
-            final Color[] colors = getRgbMode().getColors();
-            return new Background(new BackgroundFill(
-                    new LinearGradient(0, 0,
-                            1, 0,
-                            true, null,
-                            new Stop(.20, colors[0]),
-                            new Stop(.5, colors[1]),
-                            new Stop(.70, colors[2]))
-                    , null, null));
-        }
-        return BgCache.INSTANCE.get(color.get());
+        background = new SimpleObjectProperty<>(rgbMode.getBackground());
+        this.rgbMode.addListener((observable, oldValue, newValue) -> background.set(getRgbMode().getBackground()));
     }
 
     public ObjectProperty<Background> backgroundProperty() {
         return background;
     }
 
-    /**
-     * Returns color presentation of current pixel. If it monocolor will return solid color.
-     * In case of RGB it will return representation of current RGB mode
-     */
-    public String getCss() {
-        if (isRgb()) {
-            final Color[] colors = getRgbMode().getColors();
-            return String.format("linear-gradient(from 0%% 0%% to 100%% 0%%, #%s 25%%,  #%s 50%%, #%s 75%%)",
-                    toHex(colors[0]),
-                    toHex(colors[1]),
-                    toHex(colors[2]));
-        } else {
-            return String.format("#%s", toHex(getColor()));
-        }
-    }
-
     public boolean isRgb() {
-        return getRgbMode() != RgbMode.MONO;
+        return !getRgbMode().name().startsWith("M");
     }
 
     public int getNumber() {
@@ -99,32 +62,6 @@ public class Pixel implements ColorToHex {
 
     public int getChannelsCount() {
         return isRgb() ? getQuantifier() * 3 : getQuantifier();
-    }
-
-    public boolean isVisible() {
-        return visible.get();
-    }
-
-    public Pixel setVisible(boolean visible) {
-        this.visible.set(visible);
-        return this;
-    }
-
-    public BooleanProperty visibleProperty() {
-        return visible;
-    }
-
-    public Color getColor() {
-        return color.get();
-    }
-
-    public Pixel setColor(Color color) {
-        this.color.set(color);
-        return this;
-    }
-
-    public ObjectProperty<Color> colorProperty() {
-        return color;
     }
 
     public ObservableList<Frame> getFrames() {
@@ -167,13 +104,14 @@ public class Pixel implements ColorToHex {
         return getFrames().get(frameNo).getInterpolated(frameLength / MIN_FRAME_LENGTH);
     }
 
+
     public String getFrameStyle(Integer number) {
-        if (isRgb()) { // todo add effect style
-            return String.format("linear-gradient(from 0%% 0%% to 0%% 100%%, #%s 0%%, #%s 100%%)",
-                    toHex(getFrames().get(number).getStartColor()),
-                    toHex(getFrames().get(number).getEndColor()));
-        }
-        return String.format("#%s", toHex(getColor()));
+        final Frame frame = getFrames().get(number);
+        return String.format("-fx-background-color: linear-gradient(from 0%% 0%% to 0%% 100%%, #%s 0%%, #%s 100%%);"
+//                        + "-fx-background-insets: 5px;"
+                ,
+                toHex(getRgbMode().getVisibleColor(frame.getStartColor())),
+                toHex(getRgbMode().getVisibleColor(frame.getEndColor())));
     }
 
     /**

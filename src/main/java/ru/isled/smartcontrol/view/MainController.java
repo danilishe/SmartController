@@ -1,6 +1,7 @@
 package ru.isled.smartcontrol.view;
 
 import com.sun.javafx.scene.control.skin.TableHeaderRow;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
@@ -204,6 +205,7 @@ public class MainController {
     }
 
     private void setBrightSelectedCells(int bright) {
+        log.trace("updating bright to ");
         for (TablePosition<LedFrame, Pixel.Frame> cell : getSelectedDataCells()) {
             int pixelNo = cell.getColumn() - HEADER_COLUMNS;
             int frameNo = cell.getRow();
@@ -214,6 +216,7 @@ public class MainController {
     }
 
     private void setEffectSelectedCells(PixelEffect effect) {
+        log.trace("updating effect to " + effect);
         for (TablePosition<LedFrame, Pixel.Frame> cell : getSelectedDataCells()) {
             int pixelNo = cell.getColumn() - HEADER_COLUMNS;
             int frameNo = cell.getRow();
@@ -742,7 +745,7 @@ private Label bulbIcon;
 
         // пиксели/каналы
         for (int i = 0; i < MAX_CHANNELS_COUNT; i++) {
-            TableColumn<LedFrame, Pixel.Frame> column = new TableColumn<>();
+            TableColumn<LedFrame, String> column = new TableColumn<>();
             final Pixel pixel = project.getPixel(i);
             column.setGraphic(ColumnHeaderFactory.get(pixel));
 
@@ -760,8 +763,11 @@ private Label bulbIcon;
             column.setEditable(false);
             column.setStyle(DEFAULT_CELL_STYLE);
 
-            column.setCellFactory(cell -> new LedFrameTableCell(pixel));
-
+            column.setCellFactory(cell -> new LedFrameTableCell());
+            column.setCellValueFactory(data -> {
+                final int number = data.getValue().getNumber() - 1;
+                return new SimpleStringProperty(pixel.getFrameStyle(number));
+            });
             frameTableView.getColumns().add(column);
         }
     }
