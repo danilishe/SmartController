@@ -29,6 +29,9 @@ public class Pixel implements ColorToHex {
 
     public Pixel(int number) {
         this(number, Color.WHITE, RgbMode.MONO, 1, new ArrayList<>(MAX_FRAMES), false);
+        for (int i = 0; i < DEFAULT_FRAMES_COUNT; i++) {
+            frames.add(new Frame(i));
+        }
     }
 
     public Pixel(int number, Color color, RgbMode rgbMode, int quantifier, List<Pixel.Frame> frames, boolean visible) {
@@ -79,7 +82,7 @@ public class Pixel implements ColorToHex {
     }
 
     public boolean isRgb() {
-        return getRgbMode() == RgbMode.MONO;
+        return getRgbMode() != RgbMode.MONO;
     }
 
     public int getNumber() {
@@ -164,28 +167,37 @@ public class Pixel implements ColorToHex {
         return getFrames().get(frameNo).getInterpolated(frameLength / MIN_FRAME_LENGTH);
     }
 
+    public String getFrameStyle(Integer number) {
+        if (isRgb()) { // todo add effect style
+            return String.format("linear-gradient(from 0%% 0%% to 0%% 100%%, #%s 0%%, #%s 100%%)",
+                    toHex(getFrames().get(number).getStartColor()),
+                    toHex(getFrames().get(number).getEndColor()));
+        }
+        return String.format("#%s", toHex(getColor()));
+    }
+
     /**
      * Frame Pixel is logical unit of each frame of program. Each Frame Pixel knows only own colors and effect
      */
     public static class Frame {
+        private final ObjectProperty<Integer> number;
         private final ObjectProperty<Color> startColor;
         private final ObjectProperty<Color> endColor;
         private final ObjectProperty<PixelEffect> effect;
 
-        public Frame() {
-            this(Color.BLACK, PixelEffect.Solid);
+        public Frame(int number) {
+            this(number, Color.BLACK, PixelEffect.Solid);
         }
 
-        public Frame(Color startColor, Color endColor, PixelEffect effect) {
+        public Frame(int number, Color startColor, Color endColor, PixelEffect effect) {
+            this.number = new SimpleObjectProperty<>(number);
             this.startColor = new SimpleObjectProperty<>(startColor);
             this.endColor = new SimpleObjectProperty<>(endColor);
             this.effect = new SimpleObjectProperty<>(effect);
         }
 
-        public Frame(Color oneColor, PixelEffect effect) {
-            this.startColor = new SimpleObjectProperty<>(oneColor);
-            this.endColor = new SimpleObjectProperty<>(oneColor);
-            this.effect = new SimpleObjectProperty<>(effect);
+        public Frame(int number, Color oneColor, PixelEffect effect) {
+            this(number, oneColor, oneColor, effect);
         }
 
         public Frame setColor(Color startColor, Color endColor) {
@@ -210,6 +222,18 @@ public class Pixel implements ColorToHex {
 
         public PixelEffect getEffect() {
             return effect.get();
+        }
+
+        public Integer getNumber() {
+            return number.get();
+        }
+
+        public void setNumber(Integer number) {
+            this.number.set(number);
+        }
+
+        public ObjectProperty<Integer> numberProperty() {
+            return number;
         }
 
         public Frame setEffect(PixelEffect effect) {

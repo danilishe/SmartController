@@ -10,13 +10,11 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import ru.isled.smartcontrol.controller.FileHelper;
 import ru.isled.smartcontrol.controller.ProgramProperties;
-import ru.isled.smartcontrol.model.LedFrame;
 import ru.isled.smartcontrol.model.Project;
 import ru.isled.smartcontrol.view.Dialogs;
 import ru.isled.smartcontrol.view.MainController;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +29,7 @@ public class SmartControl extends Application {
 
     private Stage mainStage = null;
     private Project project = null;
-    private MainController controller = null;
+    private MainController controller;
     private List<String> lastFiles = new ArrayList<>();
 
     public static void main(String[] args) {
@@ -48,8 +46,6 @@ public class SmartControl extends Application {
                 ProgramProperties props = JSON.parseObject(data, ProgramProperties.class);
 
                 controller.zoomSlider.setValue(props.getZoom());
-                controller.showBright.setSelected(props.isShowBright());
-                controller.showDigits.setSelected(props.isShowDigits());
                 mainStage.setMinHeight(MIN_HEIGHT);
                 mainStage.setMinWidth(MIN_WIDTH);
                 mainStage.setWidth(props.getWidth());
@@ -78,20 +74,13 @@ public class SmartControl extends Application {
 
         Dialogs.setStage(stage);
 
-        loadViewAndSetIcons();
-
-        createNewProject();
-
-        loadDefaults();
-
-        mainStage.show();
-
-    }
-
-    private void loadViewAndSetIcons() throws IOException {
+        project = new Project();
+        project.hasChangesProperty().addListener(l -> updateHeader());
+        updateHeader();
+        controller = new MainController(project, this);
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("view/main.fxml"));
-
+        loader.setController(controller);
         Scene scene = new Scene(loader.load());
         mainStage.setScene(scene);
         mainStage.getIcons().add(new Image(getClass().getResourceAsStream("images/play.png")));
@@ -103,8 +92,9 @@ public class SmartControl extends Application {
             event.consume();
             exit();
         });
-        controller = loader.getController();
-        controller.setMainApp(this);
+        loadDefaults();
+
+        mainStage.show();
 
     }
 
@@ -192,15 +182,6 @@ public class SmartControl extends Application {
             }
 
         project = new Project();
-        project.setFramesCount(DEFAULT_FRAMES_COUNT);
-        project.setPixelsCount(DEFAULT_PIXEL_COUNT);
-        for (int i = 0; i < DEFAULT_FRAMES_COUNT; i++) {
-            project.addFrame(new LedFrame());
-        }
-        registerProjToControllerAndListener();
-    }
-
-    private void registerProjToControllerAndListener() {
         controller.setProject(project);
         project.hasChangesProperty().addListener(l -> updateHeader());
         updateHeader();
@@ -224,8 +205,6 @@ public class SmartControl extends Application {
         ProgramProperties props = new ProgramProperties();
         props.setHeight(mainStage.getHeight());
         props.setWidth(mainStage.getWidth());
-        props.setShowBright(controller.showBright.isSelected());
-        props.setShowDigits(controller.showDigits.isSelected());
         props.setZoom(controller.zoomSlider.getValue());
         props.setLastFiles(lastFiles);
 

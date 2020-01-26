@@ -1,8 +1,6 @@
 package ru.isled.smartcontrol.view;
 
 import com.sun.javafx.scene.control.skin.TableHeaderRow;
-import javafx.beans.property.IntegerProperty;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
@@ -343,20 +341,26 @@ public class MainController {
 */
     }
 
-    /**
-     * @return возвращает все выбранные ячейки списком кроме заголовочных
-     */
-    private List<TablePosition<LedFrame, Pixel.Frame>> getSelectedDataCells() {
-        return frameTableView.getSelectionModel()
-                .getSelectedCells()
-                .stream()
-                .filter(x -> x.getColumn() >= HEADER_COLUMNS)
-                .collect(Collectors.<TablePosition<LedFrame, Pixel.Frame>>toList());
-    }
+//    private void changePixelQuantities() {
+//        final int value = chanelQuantifier.getValue();
+//        frameTableView.getSelectionModel().getSelectedCells().stream().mapToInt(TablePosition::getColumn)
+//                .distinct()
+//                .forEach(col -> {
+//                    project.getPixels().set(col - HEADER_COLUMNS, value);
+//                    TableColumn<LedFrame, ?> column = frameTableView.getColumns().get(col);
+//                    String text = column.getText();
+//                    column.setText(text.replaceAll("\\[\\d+]", "[" + value + "]"));
+//                });
+//        project.setHasChanges(true);
+//        updateTotalPixelCount();
+//    }
+//
+@FXML
+private Label bulbIcon;
 
-    @FXML
-    public void startPreview() {
-        Dialogs.preview(project);
+    public MainController(Project project, SmartControl mainApp) {
+        this.project = project;
+        this.mainApp = mainApp;
     }
 
     @FXML
@@ -442,12 +446,15 @@ public class MainController {
 
     }
 
-    private void initPixelQuantifierSpinner() {
-        chanelQuantifier.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10, 1));
-        chanelQuantifier.getValueFactory().valueProperty().addListener((val, ov, nv) -> {
-            changePixelQuantities();
-            previewFrame(getSelectedFrame());
-        });
+    /**
+     * @return возвращает все выбранные ячейки списком кроме заголовочных
+     */
+    private List<TablePosition> getSelectedDataCells() {
+        return frameTableView.getSelectionModel()
+                .getSelectedCells()
+                .stream()
+                .filter(x -> x.getColumn() >= HEADER_COLUMNS)
+                .collect(Collectors.toList());
     }
 
     private void initCyclesSpinner() {
@@ -585,38 +592,9 @@ public class MainController {
         });
     }
 
-    private void initFrameSpinner() {
-        framesSpinner.setValueFactory(
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(MIN_FRAMES, MAX_FRAMES, DEFAULT_FRAMES_COUNT)
-        );
-
-        framesSpinner.getEditor().textProperty().addListener((ov, oldValue, newValue) -> {
-            if (!newValue.matches("\\d+")) {
-                framesSpinner.getEditor().textProperty().setValue(oldValue);
-            }
-        });
-
-        framesSpinner.getValueFactory().valueProperty().addListener((ov, o, n) -> {
-            if (n < MIN_FRAMES)
-                framesSpinner.getValueFactory().setValue(MIN_FRAMES);
-            else if (n > MAX_FRAMES)
-                framesSpinner.getValueFactory().setValue(MAX_FRAMES);
-            else {
-                project.setFramesCount(n);
-                updateFramesCount();
-            }
-        });
-
-        framesSpinner.getEditor().focusedProperty().addListener((ov, o, n) -> {
-            if (!n) {
-                framesSpinner.getValueFactory().setValue(
-                        Integer.parseInt(
-                                framesSpinner.getEditor().textProperty().get()
-                        )
-                );
-            }
-        });
-
+    @FXML
+    public void startPreview() {
+//        Dialogs.preview(project);
     }
 
 //    private void updateFramesCount() {
@@ -663,71 +641,60 @@ public class MainController {
         });
     }
 
-    private void initDataColumns() {
-        disableColumnReordering();
-
-        // пиксели/каналы
-        for (int i = 0; i < MAX_CHANNELS_COUNT; i++) {
-            TableColumn<LedFrame, Pixel> column = new TableColumn<>(String.valueOf(i + 1));
-            final Pixel pixel = project.getPixel(i);
-            column.visibleProperty().bind(pixel.visibleProperty());
-            column.setGraphic(ColumnHeaderFactory.get(pixel);
-
-
-//            column.addEventHandler(MouseEvent.ANY,
-//                    event -> {
-//                        frameTableView.getSelectionModel()
-//                                .selectRange(0, frameTableView.getColumns().get(absNum),
-//                                        framesSpinner.getValue(), frameTableView.getColumns().get(absNum + 1));
-//                        event.consume();
-//                    });
-            setDefaultColumnProperties(column);
-
-            if (i >= DEFAULT_PIXEL_COUNT) column.visibleProperty().setValue(false);
-            final int in = i;
-
-            column.setCellFactory(cell -> new LedFrameTableCell(showDigits.selectedProperty(), showBright.selectedProperty()));
-
-            frameTableView.getColumns().add(column);
-        }
+    private void initPixelQuantifierSpinner() {
+        chanelQuantifier.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10, 1));
+        chanelQuantifier.getValueFactory().valueProperty().addListener((val, ov, nv) -> {
+//            changePixelQuantities();
+            previewFrame(getSelectedFrame());
+        });
     }
 
-    private void changePixelQuantities() {
-        final int value = chanelQuantifier.getValue();
-        frameTableView.getSelectionModel().getSelectedCells().stream().mapToInt(TablePosition::getColumn)
-                .distinct()
-                .forEach(col -> {
-                    project.getPixels().set(col - HEADER_COLUMNS, value);
-                    TableColumn<LedFrame, ?> column = frameTableView.getColumns().get(col);
-                    String text = column.getText();
-                    column.setText(text.replaceAll("\\[\\d+]", "[" + value + "]"));
-                });
-        project.setHasChanges(true);
-        updateTotalPixelCount();
+    private void initFrameSpinner() {
+        framesSpinner.setValueFactory(
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(MIN_FRAMES, MAX_FRAMES, DEFAULT_FRAMES_COUNT)
+        );
+
+        framesSpinner.getEditor().textProperty().addListener((ov, oldValue, newValue) -> {
+            if (!newValue.matches("\\d+")) {
+                framesSpinner.getEditor().textProperty().setValue(oldValue);
+            }
+        });
+
+        framesSpinner.getValueFactory().valueProperty().addListener((ov, o, n) -> {
+            if (n < MIN_FRAMES)
+                framesSpinner.getValueFactory().setValue(MIN_FRAMES);
+            else if (n > MAX_FRAMES)
+                framesSpinner.getValueFactory().setValue(MAX_FRAMES);
+            else {
+                project.setFramesCount(n);
+//                updateFramesCount();
+            }
+        });
+
+        framesSpinner.getEditor().focusedProperty().addListener((ov, o, n) -> {
+            if (!n) {
+                framesSpinner.getValueFactory().setValue(
+                        Integer.parseInt(
+                                framesSpinner.getEditor().textProperty().get()
+                        )
+                );
+            }
+        });
+
     }
 
-    @FXML
-    private Label bulbIcon;
     @FXML
     private Tooltip errorTooltip;
     @FXML
     private Label totalPixels;
 
-    public void updateHeaderQuantifiers() {
-        List<Integer> quantifiers = project.getPixels();
-        for (int i = 0; i < quantifiers.size(); i++) {
-            TableColumn<LedFrame, ?> column = frameTableView.getColumns().get(i + HEADER_COLUMNS - 1);
-            column.setText(column.getText().replaceAll("\\[\\d+]", "[" + quantifiers.get(i) + "]"));
-        }
-    }
-
-    private void setDefaultColumnProperties(TableColumn<LedFrame, Integer> column) {
-        column.setPrefWidth(INIT_COL_WIDTH);
-        column.setResizable(false);
-        column.setSortable(false);
-        column.setEditable(false);
-        column.setStyle(DEFAULT_CELL_STYLE);
-    }
+//    public void updateHeaderQuantifiers() {
+//        List<Integer> quantifiers = project.getPixels();
+//        for (int i = 0; i < quantifiers.size(); i++) {
+//            TableColumn<LedFrame, ?> column = frameTableView.getColumns().get(i + HEADER_COLUMNS - 1);
+//            column.setText(column.getText().replaceAll("\\[\\d+]", "[" + quantifiers.get(i) + "]"));
+//        }
+//    }
 
     private void loadAndSetDefaultEffects() {
         for (Effect effect : Effect.values()) {
@@ -761,38 +728,60 @@ public class MainController {
         alert.showAndWait();
     }
 
-    @FXML
-    public void applyEffectHandler() {
-        List<TablePosition> cells = getSelectedDataCells();
-        new ColorPicker(Color.WHITE).getValue();
+    private void initDataColumns() {
+        disableColumnReordering();
 
-        if (cells != null && cells.size() > 0) {
-            project.setHasChanges(true);
-
-            //fixme ПЕРЕДЕЛАТЬ МЕТОД, ЧТОБЫ ВОЗВРАЩАЛ ДВУМЕРНЫЙ МАССИВ
-            //todo СДЕЛАТЬ НАСТРОЙКУ В ЭФФЕКТАХ, ЧТОБЫ МОЖНО БЫЛО ДОБАВИТЬ КАДРЫ ДО ОКОНЧАНИЯ ЭФФЕКТА
-
-            TablePosition lastCell = cells.get(cells.size() - 1);
-            TablePosition firstCell = cells.get(0);
-            int cols = lastCell.getColumn() - firstCell.getColumn() + 1;
-            int rows = lastCell.getRow() - firstCell.getRow() + 1;
+        // пиксели/каналы
+        for (int i = 0; i < MAX_CHANNELS_COUNT; i++) {
+            TableColumn<LedFrame, Pixel.Frame> column = new TableColumn<>(String.valueOf(i + 1));
+            final Pixel pixel = project.getPixel(i);
+            column.visibleProperty().bind(pixel.visibleProperty());
+            column.setGraphic(ColumnHeaderFactory.get(pixel));
 
 
-            List<IntegerProperty> values = getValuesList(cells);
+//            column.addEventHandler(MouseEvent.ANY,
+//                    event -> {
+//                        frameTableView.getSelectionModel()
+//                                .selectRange(0, frameTableView.getColumns().get(absNum),
+//                                        framesSpinner.getValue(), frameTableView.getColumns().get(absNum + 1));
+//                        event.consume();
+//                    });
+            column.setPrefWidth(INIT_COL_WIDTH);
+            column.setResizable(false);
+            column.setSortable(false);
+            column.setEditable(false);
+            column.setStyle(DEFAULT_CELL_STYLE);
 
+            column.setCellFactory(cell -> new LedFrameTableCell(pixel));
 
-            String selectedEffect = effectsSelector.getValue();
-            Effect.valueOf(selectedEffect).apply(values, cols, rows);
-
+            frameTableView.getColumns().add(column);
         }
     }
 
-    private List<IntegerProperty> getValuesList(List<TablePosition> cells) {
-        return cells.stream()
-                .map(c -> frames.get(
-                        c.getRow()).getProperty(
-                        c.getColumn() - HEADER_COLUMNS))
-                .collect(Collectors.toList());
+    @FXML
+    public void applyEffectHandler() {
+//        List<TablePosition> cells = getSelectedDataCells();
+//        new ColorPicker(Color.WHITE).getValue();
+//
+//        if (cells != null && cells.size() > 0) {
+//            project.setHasChanges(true);
+//
+//            //fixme ПЕРЕДЕЛАТЬ МЕТОД, ЧТОБЫ ВОЗВРАЩАЛ ДВУМЕРНЫЙ МАССИВ
+//            //todo СДЕЛАТЬ НАСТРОЙКУ В ЭФФЕКТАХ, ЧТОБЫ МОЖНО БЫЛО ДОБАВИТЬ КАДРЫ ДО ОКОНЧАНИЯ ЭФФЕКТА
+//
+//            TablePosition lastCell = cells.get(cells.size() - 1);
+//            TablePosition firstCell = cells.get(0);
+//            int cols = lastCell.getColumn() - firstCell.getColumn() + 1;
+//            int rows = lastCell.getRow() - firstCell.getRow() + 1;
+//
+//
+//            List<IntegerProperty> values = getValuesList(cells);
+//
+//
+//            String selectedEffect = effectsSelector.getValue();
+//            Effect.valueOf(selectedEffect).apply(values, cols, rows);
+//
+//        }
     }
 
     public void setMainApp(SmartControl main) {
@@ -801,11 +790,10 @@ public class MainController {
 
     public void setProject(Project project) {
         this.project = project;
-        frames.clear();
         pixelSpinner.getValueFactory().setValue(project.getPixelsCount());
         framesSpinner.getValueFactory().setValue(project.getFramesCount());
-        updateFramesCount();
-        if (frameTableView.getColumns().size() > HEADER_COLUMNS) updateHeaderQuantifiers();
+//        updateFramesCount();
+//        if (frameTableView.getColumns().size() > HEADER_COLUMNS) updateHeaderQuantifiers();
         updateTotalPixelCount();
     }
 
@@ -835,8 +823,8 @@ public class MainController {
 
         frameTableView.getSelectionModel().setCellSelectionEnabled(true);
         frameTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        frameTableView.addEventHandler(EventType.ROOT, x -> handleCellSelection());
-        frameTableView.setItems(frames);
+//        frameTableView.addEventHandler(EventType.ROOT, x -> handleCellSelection());
+        frameTableView.setItems(project.getFrames());
 //        frames.addListener((ListChangeListener<LedFrame>) c -> updateProgramLength());
     }
 

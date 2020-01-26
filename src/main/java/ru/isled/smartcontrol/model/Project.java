@@ -80,7 +80,8 @@ public class Project {
     }
 
     public String getName() {
-        return file == null ? UNSAVED_FILE_NAME : file.getValue().getName();
+        return UNSAVED_FILE_NAME;
+//        return file == null ? UNSAVED_FILE_NAME : file.getValue().getName();
     }
 
     public boolean hasName() {
@@ -187,5 +188,9 @@ public class Project {
                 getFrame(i).setVisible(false);
             }
         }
+    }
+
+    public ObservableList<LedFrame> getFrames() {
+        return frames;
     }
 }
