@@ -40,7 +40,6 @@ public class Project {
         this.hasChanges = new SimpleBooleanProperty(hasChanges);
         this.file = new SimpleObjectProperty<>(file);
         this.framesCount.addListener(c -> onFramesChanged());
-        this.pixelsCount.addListener(c -> onPixelChange());
     }
 
 
@@ -170,12 +169,6 @@ public class Project {
                 .limit(getFramesCount())
                 .mapToLong(f -> f.getFrameLength() * f.getCycles())
                 .sum();
-    }
-
-    private void onPixelChange() {
-        for (int i = 0; i < MAX_CHANNELS_COUNT; i++) {
-            getPixel(i).setVisible(i < getPixelsCount());
-        }
     }
 
     public void onFramesChanged() {

@@ -79,42 +79,42 @@ public class MainController {
 
     @FXML
     public void setFadeInEffect() {
-        setBrightSelectedCells(PixelEffect.FadeIn.index());
+        setEffectSelectedCells(PixelEffect.FadeIn);
     }
 
     @FXML
     public void setBlinkEffect() {
-        setBrightSelectedCells(PixelEffect.Blinking.index());
+        setEffectSelectedCells(PixelEffect.Blinking);
     }
 
     @FXML
     public void setFadeOutEffect() {
-        setBrightSelectedCells(PixelEffect.FadeOut.index());
+        setEffectSelectedCells(PixelEffect.FadeOut);
     }
 
     @FXML
     public void setFadeInOutEffect() {
-        setBrightSelectedCells(PixelEffect.FadeInOut.index());
+        setEffectSelectedCells(PixelEffect.FadeInOut);
     }
 
     @FXML
     public void setFadeOutInEffect() {
-        setBrightSelectedCells(PixelEffect.FadeOutIn.index());
+        setEffectSelectedCells(PixelEffect.FadeOutIn);
     }
 
     @FXML
     public void setBlinkingFadeInEffect() {
-        setBrightSelectedCells(PixelEffect.BlinkingFadeIn.index());
+        setEffectSelectedCells(PixelEffect.BlinkingFadeIn);
     }
 
     @FXML
     public void setChaosEffect() {
-        setBrightSelectedCells(PixelEffect.Chaos.index());
+        setEffectSelectedCells(PixelEffect.Chaos);
     }
 
     @FXML
     public void setBlinkingFadeOutEffect() {
-        setBrightSelectedCells(PixelEffect.BlinkingFadeOut.index());
+        setEffectSelectedCells(PixelEffect.BlinkingFadeOut);
     }
 
     @FXML
@@ -208,6 +208,16 @@ public class MainController {
             int pixelNo = cell.getColumn() - HEADER_COLUMNS;
             int frameNo = cell.getRow();
             project.getPixel(pixelNo).getFrames().get(frameNo).setBright(bright);
+            project.setHasChanges(true);
+        }
+        previewFrame(getSelectedFrame());
+    }
+
+    private void setEffectSelectedCells(PixelEffect effect) {
+        for (TablePosition<LedFrame, Pixel.Frame> cell : getSelectedDataCells()) {
+            int pixelNo = cell.getColumn() - HEADER_COLUMNS;
+            int frameNo = cell.getRow();
+            project.getPixel(pixelNo).getFrames().get(frameNo).setEffect(effect);
             project.setHasChanges(true);
         }
         previewFrame(getSelectedFrame());
@@ -320,7 +330,6 @@ public class MainController {
             Shape pixel = previewPixels.get(i);
 
             pixel.getStyleClass().clear();
-            new TableColumn<>().visibleProperty()
             if (frame.getPixelValue(i) <= MAX_BRIGHT) {
                 pixel.getStyleClass().clear();
                 pixel.scaleYProperty().set(1 + .1 * project.getPixels().get(i));
@@ -733,9 +742,8 @@ private Label bulbIcon;
 
         // пиксели/каналы
         for (int i = 0; i < MAX_CHANNELS_COUNT; i++) {
-            TableColumn<LedFrame, Pixel.Frame> column = new TableColumn<>(String.valueOf(i + 1));
+            TableColumn<LedFrame, Pixel.Frame> column = new TableColumn<>();
             final Pixel pixel = project.getPixel(i);
-            column.visibleProperty().bind(pixel.visibleProperty());
             column.setGraphic(ColumnHeaderFactory.get(pixel));
 
 
