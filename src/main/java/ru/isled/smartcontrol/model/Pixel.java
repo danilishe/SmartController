@@ -4,15 +4,20 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
 import ru.isled.smartcontrol.model.effect.PixelEffect;
 import ru.isled.smartcontrol.model.effect.RgbMode;
 import ru.isled.smartcontrol.util.ColorToHex;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static ru.isled.smartcontrol.Constants.*;
@@ -21,13 +26,13 @@ public class Pixel implements ColorToHex {
     private final IntegerProperty number;
     private final ObjectProperty<RgbMode> rgbMode;
     private final IntegerProperty quantifier;
-    private final ObservableList<Pixel.Frame> frames;
-    private final ObjectProperty<Background> background;
+    private final ObservableList<Frame> frames;
+    public final ObjectProperty<Background> background;
 
     public Pixel(int number) {
         this(number, RgbMode.MONO_WHITE, 1, new ArrayList<>(MAX_FRAMES));
         for (int i = 0; i < DEFAULT_FRAMES_COUNT; i++) {
-            frames.add(new Frame(i));
+            frames.add(new Frame(rgbMode));
         }
     }
 
@@ -37,15 +42,16 @@ public class Pixel implements ColorToHex {
         this.quantifier = new SimpleIntegerProperty(quantifier);
         this.frames = FXCollections.observableArrayList(frames);
         background = new SimpleObjectProperty<>(rgbMode.getBackground());
-        this.rgbMode.addListener((observable, oldValue, newValue) -> background.set(getRgbMode().getBackground()));
+        // if rgbMode changes, background changes too
+        this.rgbMode.addListener((v, o, n) -> background.set(getRgbMode().getBackground()));
     }
 
-    public ObjectProperty<Background> backgroundProperty() {
-        return background;
+    public boolean isMultichannel() {
+        return getRgbMode().isMultichannel();
     }
 
-    public boolean isRgb() {
-        return !getRgbMode().name().startsWith("M");
+    public int channels() {
+        return getRgbMode().channels();
     }
 
     public int getNumber() {
@@ -61,10 +67,10 @@ public class Pixel implements ColorToHex {
     }
 
     public int getChannelsCount() {
-        return isRgb() ? getQuantifier() * 3 : getQuantifier();
+        return getRgbMode().channels() * getQuantifier();
     }
 
-    public ObservableList<Frame> getFrames() {
+    public List<Frame> getFrames() {
         return frames;
     }
 
@@ -104,78 +110,83 @@ public class Pixel implements ColorToHex {
         return getFrames().get(frameNo).getInterpolated(frameLength / MIN_FRAME_LENGTH);
     }
 
-
-    public String getFrameStyle(Integer number) {
-        final Frame frame = getFrames().get(number);
-        return String.format("-fx-background-color: linear-gradient(from 0%% 0%% to 0%% 100%%, #%s 0%%, #%s 100%%);"
-//                        + "-fx-background-insets: 5px;"
-                ,
-                toHex(getRgbMode().getVisibleColor(frame.getStartColor())),
-                toHex(getRgbMode().getVisibleColor(frame.getEndColor())));
-    }
+// fixme delete this if all background values are from pixel frames
+//    public String getFrameStyle(Integer number) {
+//        final Frame frame = getFrames().get(number);
+//        return String.format("-fx-background-color: linear-gradient(from 0%% 0%% to 0%% 100%%, #%s 0%%, #%s 100%%);"
+////                        + "-fx-background-insets: 5px;"
+//                ,
+//                toHex(getRgbMode().getVisibleColor(frame.getStartColor())),
+//                toHex(getRgbMode().getVisibleColor(frame.getEndColor())));
+//    }
 
     /**
-     * Frame Pixel is logical unit of each frame of program. Each Frame Pixel knows only own colors and effect
+     * Frame Pixel is logical unit of each frame of program. Each Frame Pixel knows only own colors, rgbMode and effect
      */
     public static class Frame {
-        private final ObjectProperty<Integer> number;
-        private final ObjectProperty<Color> startColor;
-        private final ObjectProperty<Color> endColor;
-        private final ObjectProperty<PixelEffect> effect;
+        private Color startColor;
+        private Color endColor;
+        private PixelEffect effect;
+        private final ObjectProperty<RgbMode> rgbMode;
+        private final ObjectProperty<Background> background;
+        private final ChangeListener<RgbMode> changeModeListener = (v, o, n) -> {
+            if (o.channels() != n.channels()) this.updateBackground();
+        };
 
-        public Frame(int number) {
-            this(number, Color.BLACK, PixelEffect.Solid);
+        private void updateBackground() {
+            background.setValue(
+                    new Background(Arrays.asList(
+                            effect.gradient, // effect
+                            new BackgroundFill( // color mode
+                                    new LinearGradient(0, 0, 0, 1, true, null,
+                                            new Stop(0, rgbMode.get().getVisibleColor(startColor)),
+                                            new Stop(1, rgbMode.get().getVisibleColor(endColor))), null, null)
+                    ), null));
         }
 
-        public Frame(int number, Color startColor, Color endColor, PixelEffect effect) {
-            this.number = new SimpleObjectProperty<>(number);
-            this.startColor = new SimpleObjectProperty<>(startColor);
-            this.endColor = new SimpleObjectProperty<>(endColor);
-            this.effect = new SimpleObjectProperty<>(effect);
+        public Frame(ObjectProperty<RgbMode> rgbMode) {
+            this(Color.BLACK, PixelEffect.Solid, rgbMode);
         }
 
-        public Frame(int number, Color oneColor, PixelEffect effect) {
-            this(number, oneColor, oneColor, effect);
+        public Frame(Color startColor, Color endColor, PixelEffect effect, ObjectProperty<RgbMode> rgbMode) {
+            this.startColor = startColor;
+            this.endColor = endColor;
+            this.effect = effect;
+            this.background = new SimpleObjectProperty<>();
+            this.rgbMode = rgbMode;
+            rgbMode.addListener(changeModeListener);
+        }
+
+        public Frame(Color oneColor, PixelEffect effect, ObjectProperty<RgbMode> rgbMode) {
+            this(oneColor, oneColor, effect, rgbMode);
         }
 
         public Frame setColor(Color startColor, Color endColor) {
-            this.startColor.set(startColor);
-            this.endColor.set(endColor);
+            if (startColor != null) this.startColor = startColor;
+            if (endColor != null) this.endColor = endColor;
+            updateBackground();
             return this;
         }
 
         public Frame setColor(Color oneColor) {
-            startColor.set(oneColor);
-            endColor.set(oneColor);
-            return this;
+            return setColor(oneColor, oneColor);
         }
 
         public Color getStartColor() {
-            return startColor.get();
+            return startColor;
         }
 
         public Color getEndColor() {
-            return endColor.get();
+            return endColor;
         }
 
         public PixelEffect getEffect() {
-            return effect.get();
-        }
-
-        public Integer getNumber() {
-            return number.get();
-        }
-
-        public void setNumber(Integer number) {
-            this.number.set(number);
-        }
-
-        public ObjectProperty<Integer> numberProperty() {
-            return number;
+            return effect;
         }
 
         public Frame setEffect(PixelEffect effect) {
-            this.effect.set(effect);
+            this.effect = effect;
+            updateBackground();
             return this;
         }
 
@@ -193,6 +204,9 @@ public class Pixel implements ColorToHex {
         private Color[] getInterpolated(int frameLength) {
             return getEffect().interpolate(frameLength, getStartColor(), getEndColor());
         }
-    }
 
+        public ObjectProperty<Background> backgroundProperty() {
+            return background;
+        }
+    }
 }

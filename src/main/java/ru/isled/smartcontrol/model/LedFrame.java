@@ -2,6 +2,9 @@ package ru.isled.smartcontrol.model;
 
 import javafx.beans.property.*;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.layout.Background;
+
+import java.util.List;
 
 import static ru.isled.smartcontrol.Constants.DEFAULT_FRAME_LENGTH;
 
@@ -9,17 +12,21 @@ public class LedFrame {
     private final IntegerProperty number;
     private final IntegerProperty frameLength;
     private final IntegerProperty cycles;
-    private final BooleanProperty visible;
+    private final List<ObservableValue<Background>> values;
 
-    public LedFrame(int number) {
-        this(number, DEFAULT_FRAME_LENGTH, 1, false);
+    public LedFrame(int number, List<ObservableValue<Background>> values) {
+        this(number, DEFAULT_FRAME_LENGTH, 1, values);
     }
 
-    public LedFrame(int number, int frameLength, int cycles, boolean visible) {
+    public LedFrame(int number, int frameLength, int cycles, List<ObservableValue<Background>> values) {
         this.number = new SimpleIntegerProperty(number);
         this.frameLength = new SimpleIntegerProperty(frameLength);
         this.cycles = new SimpleIntegerProperty(cycles);
-        this.visible = new SimpleBooleanProperty(visible);
+        this.values = values;
+    }
+
+    public ObservableValue<Background> getValue(int index) {
+        return values.get(index);
     }
 
     public int getNumber() {
@@ -33,19 +40,6 @@ public class LedFrame {
 
     public ObservableValue<Integer> numberProperty() {
         return number.asObject();
-    }
-
-    public LedFrame setVisible(boolean visible) {
-        this.visible.set(visible);
-        return this;
-    }
-
-    public boolean isVisible() {
-        return visible.get();
-    }
-
-    public BooleanProperty visibleProperty() {
-        return visible;
     }
 
     public int getFrameLength() {

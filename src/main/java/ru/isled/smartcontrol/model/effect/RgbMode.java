@@ -11,7 +11,7 @@ import static ru.isled.smartcontrol.Constants.MAX_BRIGHT;
 public enum RgbMode {
     RGB {
         @Override
-        byte[] exportChannels(Color color) {
+        byte[] export(Color color) {
             return new byte[]{
                     toByte(color.getRed()),
                     toByte(color.getGreen()),
@@ -21,7 +21,7 @@ public enum RgbMode {
     },
     RBG {
         @Override
-        byte[] exportChannels(Color color) {
+        byte[] export(Color color) {
             return new byte[]{
                     toByte(color.getRed()),
                     toByte(color.getBlue()),
@@ -31,7 +31,7 @@ public enum RgbMode {
     },
     GBR {
         @Override
-        byte[] exportChannels(Color color) {
+        byte[] export(Color color) {
             return new byte[]{
                     toByte(color.getGreen()),
                     toByte(color.getBlue()),
@@ -41,7 +41,7 @@ public enum RgbMode {
     },
     GRB {
         @Override
-        byte[] exportChannels(Color color) {
+        byte[] export(Color color) {
             return new byte[]{
                     toByte(color.getGreen()),
                     toByte(color.getRed()),
@@ -51,7 +51,7 @@ public enum RgbMode {
     },
     BGR {
         @Override
-        byte[] exportChannels(Color color) {
+        byte[] export(Color color) {
             return new byte[]{
                     toByte(color.getBlue()),
                     toByte(color.getGreen()),
@@ -61,7 +61,7 @@ public enum RgbMode {
     },
     BRG {
         @Override
-        byte[] exportChannels(Color color) {
+        byte[] export(Color color) {
             return new byte[]{
                     toByte(color.getBlue()),
                     toByte(color.getRed()),
@@ -71,7 +71,12 @@ public enum RgbMode {
     },
     MONO_WHITE {
         @Override
-        byte[] exportChannels(Color color) {
+        public int channels() {
+            return 1;
+        }
+
+        @Override
+        byte[] export(Color color) {
             return new byte[]{
                     toByte(color.getBrightness())
             };
@@ -92,7 +97,7 @@ public enum RgbMode {
         return (byte) (bright * MAX_BRIGHT);
     }
 
-    abstract byte[] exportChannels(Color color);
+    abstract byte[] export(Color color);
 
     public Color[] getColors() {
         Color[] colors = new Color[3];
@@ -126,8 +131,16 @@ public enum RgbMode {
         }
     }
 
+    public boolean isMultichannel() {
+        return channels() > 1;
+    }
+
     // for rgb color
     public Color getVisibleColor(Color startColor) {
         return startColor;
+    }
+
+    public int channels() {
+        return 3;
     }
 }

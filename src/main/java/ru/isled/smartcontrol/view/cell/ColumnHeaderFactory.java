@@ -22,7 +22,7 @@ public class ColumnHeaderFactory {
         pane.setPrefHeight(3);
         pane.setMinHeight(10);
         pane.setPrefWidth(Double.MAX_VALUE);
-        pane.backgroundProperty().bind(pixel.backgroundProperty());
+        pane.backgroundProperty().bind(pixel.background);
         header.getChildren().addAll(pixelNumber, pixelQuantifier, pane);
         return header;
     }

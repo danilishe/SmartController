@@ -9,7 +9,7 @@
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" cacheShape="false" centerShape="false"
             maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="900.0" minWidth="800.0"
             prefHeight="900.0" prefWidth="800.0" scaleShape="false" xmlns="http://javafx.com/javafx/8.0.171"
-            >
+>
     <top>
         <VBox BorderPane.alignment="CENTER">
             <MenuBar>
@@ -26,11 +26,11 @@
                     <MenuItem mnemonicParsing="false" onAction="#exitHandler" text="Выход"/>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Редактирование">
-                    <MenuItem mnemonicParsing="false" onAction="#selectAll" text="Выделить всё" />
-                    <MenuItem mnemonicParsing="false" onAction="#clearSelection" text="Снять выделение" />
+                    <MenuItem mnemonicParsing="false" onAction="#selectAll" text="Выделить всё"/>
+                    <MenuItem mnemonicParsing="false" onAction="#clearSelection" text="Снять выделение"/>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Помощь">
-                    <MenuItem mnemonicParsing="false" onAction="#showAboutInfoHandler" text="О программе..." />
+                    <MenuItem mnemonicParsing="false" onAction="#showAboutInfoHandler" text="О программе..."/>
                 </Menu>
             </MenuBar>
         </VBox>
@@ -71,34 +71,37 @@
                                 <Tooltip text="25% яркости"/>
                             </tooltip>
                         </Button>
-                        <Button fx:id="b50" alignment="BOTTOM_CENTER" layoutX="184.0" layoutY="10.0" minHeight="30.0" mnemonicParsing="false" onAction="#set50Bright" prefWidth="500.0">
+                        <Button fx:id="b50" alignment="BOTTOM_CENTER" layoutX="184.0" layoutY="10.0" minHeight="30.0"
+                                mnemonicParsing="false" onAction="#set50Bright" prefWidth="500.0">
                             <graphic>
                                 <ImageView fitHeight="10.0" fitWidth="20.0" pickOnBounds="true">
-                                    <Image url="@../images/base.png" />
+                                    <Image url="@../images/base.png"/>
                                 </ImageView>
                             </graphic>
                             <tooltip>
-                                <Tooltip text="50% яркости" />
+                                <Tooltip text="50% яркости"/>
                             </tooltip>
                         </Button>
-                        <Button fx:id="b75" alignment="BOTTOM_CENTER" layoutX="196.0" layoutY="10.0" minHeight="30.0" mnemonicParsing="false" onAction="#set75Bright" prefWidth="500.0">
+                        <Button fx:id="b75" alignment="BOTTOM_CENTER" layoutX="196.0" layoutY="10.0" minHeight="30.0"
+                                mnemonicParsing="false" onAction="#set75Bright" prefWidth="500.0">
                             <graphic>
                                 <ImageView fitHeight="15.0" fitWidth="20.0" pickOnBounds="true">
-                                    <Image url="@../images/base.png" />
+                                    <Image url="@../images/base.png"/>
                                 </ImageView>
                             </graphic>
                             <tooltip>
-                                <Tooltip text="75% яркость" />
+                                <Tooltip text="75% яркость"/>
                             </tooltip>
                         </Button>
-                        <Button fx:id="maxBright" alignment="BOTTOM_CENTER" layoutX="196.0" layoutY="10.0" minHeight="30.0" mnemonicParsing="false" onAction="#setMaxBright" prefWidth="500.0">
+                        <Button fx:id="maxBright" alignment="BOTTOM_CENTER" layoutX="196.0" layoutY="10.0"
+                                minHeight="30.0" mnemonicParsing="false" onAction="#setMaxBright" prefWidth="500.0">
                             <graphic>
                                 <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true">
-                                    <Image url="@../images/base.png" />
+                                    <Image url="@../images/base.png"/>
                                 </ImageView>
                             </graphic>
                             <tooltip>
-                                <Tooltip text="100% яркость" />
+                                <Tooltip text="100% яркость"/>
                             </tooltip>
                         </Button>
                     </HBox>
@@ -189,7 +192,10 @@
                         </Button>
                         <Button fx:id="fadeInOut" accessibleHelp="Мерцающее уменьшение яркости пиксела"
                                 accessibleText="Мерцающее угасание" layoutX="91.0" layoutY="10.0" minHeight="30.0"
-                                mnemonicParsing="false" onAction="#setFadeInOutEffect" prefWidth="500.0">
+                                mnemonicParsing="false" onAction="#setFadeInOutEffect" prefWidth="500.0"
+                                style='-fx-background-image: url("/ru/isled/smartcontrol/images/mFadeIn.png");
+                                       -fx-background-size: stretch;
+                                       -fx-background-color: linear-gradient(from 0% 0% to 0% 100%, black 0%, yellow 100%);'>
                             <graphic>
                                 <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true">
                                     <Image url="@../images/fadeInOut.png"/>
@@ -347,7 +353,7 @@
                 </VBox>
             </TitledPane>
             <padding>
-                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
             </padding>
         </VBox>
     </right>
@@ -383,7 +389,7 @@
                         </ImageView>
                     </graphic>
                 </Button>
-                <Separator maxHeight="1.7976931348623157E308" orientation="VERTICAL" />
+                <Separator maxHeight="1.7976931348623157E308" orientation="VERTICAL"/>
                 <HBox fx:id="previewZone" alignment="CENTER_LEFT" disable="true" maxHeight="1.7976931348623157E308"
                       maxWidth="1.7976931348623157E308" minHeight="45.0" minWidth="300.0" spacing="5.0"/>
             </HBox>

@@ -1,13 +1,16 @@
 package ru.isled.smartcontrol.model;
 
 import javafx.beans.property.*;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.layout.Background;
 import javafx.scene.paint.Color;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static ru.isled.smartcontrol.Constants.*;
 
@@ -26,8 +29,12 @@ public class Project {
             pixels.add(new Pixel(i + 1));
         }
         for (int i = 0; i < DEFAULT_FRAMES_COUNT; i++) {
-            frames.add(new LedFrame(i + 1));
+            frames.add(new LedFrame(i + 1, getPixelsBackgroundProperties(i)));
         }
+    }
+
+    private List<ObservableValue<Background>> getPixelsBackgroundProperties(final int index) {
+        return pixels.stream().map(pixel -> pixel.getFrames().get(index).backgroundProperty()).collect(Collectors.toList());
     }
 
     public Project(int framesCount, int pixelsCount, ArrayList<Pixel> pixels, ArrayList<LedFrame> frames, double gamma, boolean hasChanges, File file) {
@@ -51,7 +58,7 @@ public class Project {
         return this;
     }
 
-    public int getFramesCount() {
+    public int programLength() {
         return framesCount.get();
     }
 
@@ -152,8 +159,8 @@ public class Project {
     }
 
     public List<List<Color[]>> getInterpolated() {
-        final List<List<Color[]>> interpolated = new ArrayList<>(getFramesCount());
-        for (int i = 0; i < getFramesCount(); i++) {
+        final List<List<Color[]>> interpolated = new ArrayList<>(programLength());
+        for (int i = 0; i < programLength(); i++) {
             if (getFrame(i).getFrameLength() == 0) continue;
             final List<Color[]> interpolatedFrame = getInterpolatedFrame(i);
             for (int j = 0; j < getFrame(i).getCycles(); j++) {
@@ -165,27 +172,28 @@ public class Project {
 
     public long getLength() {
         return frames.stream()
-                .limit(getFramesCount())
+                .limit(programLength())
                 .mapToLong(f -> f.getFrameLength() * f.getCycles())
                 .sum();
     }
 
     public void onFramesChanged() {
         final int initIndex = frames.size() - 1;
-        if (frames.size() < getFramesCount()) {
-            for (int i = initIndex; i < getFramesCount(); i++) {
-                addFrame(new LedFrame(i + 1).setVisible(true));
-            }
-            for (Pixel pixel : pixels) {
-                for (int i = initIndex; i < getFramesCount(); i++) {
-                    pixel.getFrames().add(new Pixel.Frame(i));
+        if (projectLength() < programLength()) { // if project has no that frames before
+            for (Pixel pixel : pixels) { // Creating new Frames in Pixel lists
+                for (int i = initIndex; i < programLength(); i++) {
+                    pixel.getFrames().add(new Pixel.Frame(pixel.rgbModeProperty()));
                 }
             }
-        } else {
-            for (int i = initIndex; i < getFramesCount(); i++) {
-                getFrame(i).setVisible(false);
-            }
         }
+        // after that adding background properties to new LedFrame and adding it to LedFrames list
+        for (int i = initIndex; i < programLength(); i++) {
+            addFrame(new LedFrame(i + 1, getPixelsBackgroundProperties(i)));
+        }
+    }
+
+    private int projectLength() {
+        return pixels.get(0).getFrames().size();
     }
 
     public ObservableList<LedFrame> getFrames() {

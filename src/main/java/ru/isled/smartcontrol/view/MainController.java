@@ -7,6 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -745,7 +746,7 @@ private Label bulbIcon;
 
         // пиксели/каналы
         for (int i = 0; i < MAX_CHANNELS_COUNT; i++) {
-            TableColumn<LedFrame, String> column = new TableColumn<>();
+            TableColumn<LedFrame, Background> column = new TableColumn<>();
             final Pixel pixel = project.getPixel(i);
             column.setGraphic(ColumnHeaderFactory.get(pixel));
 
@@ -761,13 +762,10 @@ private Label bulbIcon;
             column.setResizable(false);
             column.setSortable(false);
             column.setEditable(false);
-            column.setStyle(DEFAULT_CELL_STYLE);
 
             column.setCellFactory(cell -> new LedFrameTableCell());
-            column.setCellValueFactory(data -> {
-                final int number = data.getValue().getNumber() - 1;
-                return new SimpleStringProperty(pixel.getFrameStyle(number));
-            });
+            int finalI = i;
+            column.setCellValueFactory(data -> data.getValue().getValue(finalI));
             frameTableView.getColumns().add(column);
         }
     }
@@ -805,7 +803,7 @@ private Label bulbIcon;
     public void setProject(Project project) {
         this.project = project;
         pixelSpinner.getValueFactory().setValue(project.getPixelsCount());
-        framesSpinner.getValueFactory().setValue(project.getFramesCount());
+        framesSpinner.getValueFactory().setValue(project.programLength());
 //        updateFramesCount();
 //        if (frameTableView.getColumns().size() > HEADER_COLUMNS) updateHeaderQuantifiers();
         updateTotalPixelCount();

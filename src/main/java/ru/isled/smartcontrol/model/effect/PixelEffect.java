@@ -1,6 +1,9 @@
 package ru.isled.smartcontrol.model.effect;
 
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
 
 import java.security.InvalidParameterException;
 import java.util.Arrays;
@@ -9,6 +12,15 @@ import static ru.isled.smartcontrol.Constants.*;
 
 public enum PixelEffect {
     FadeIn(12345, "fadeIn") {
+        @Override
+        protected BackgroundFill getGradient() {
+            return new BackgroundFill(
+                    new LinearGradient(0, 0, 0, 1, true, null,
+                            new Stop(0, Color.rgb(0, 0, 0, 0)),
+                            new Stop(1, Color.rgb(0, 0, 0, 1))
+                    ), null, null);
+        }
+
         @Override
         public Color[] interpolate(int iterations, Color start, Color end) {
             return PixelEffect.Solid.interpolate(
@@ -19,6 +31,16 @@ public enum PixelEffect {
     },
 
     FadeOutIn(53135, "fadeOutIn") {
+        @Override
+        protected BackgroundFill getGradient() {
+            return new BackgroundFill(
+                    new LinearGradient(0, 0, 0, 1, true, null,
+                            new Stop(0, Color.rgb(0, 0, 0, 0)),
+                            new Stop(.5, Color.rgb(0, 0, 0, 1)),
+                            new Stop(1, Color.rgb(0, 0, 0, 0))
+                    ), null, null);
+        }
+
         @Override
         public Color[] interpolate(int iterations, Color start, Color end) {
             int middle = iterations / 2;
@@ -33,6 +55,16 @@ public enum PixelEffect {
         }
     },
     FadeInOut(13531, "fadeInOut") {
+        @Override
+        protected BackgroundFill getGradient() {
+            return new BackgroundFill(
+                    new LinearGradient(0, 0, 0, 1, true, null,
+                            new Stop(0, Color.rgb(0, 0, 0, 1)),
+                            new Stop(.5, Color.rgb(0, 0, 0, 0)),
+                            new Stop(1, Color.rgb(0, 0, 0, 1))
+                    ), null, null);
+        }
+
         @Override
         public Color[] interpolate(int iterations, Color start, Color end) {
             int middle = iterations / 2;
@@ -50,6 +82,15 @@ public enum PixelEffect {
 
     FadeOut(54321, "fadeOut") {
         @Override
+        protected BackgroundFill getGradient() {
+            return new BackgroundFill(
+                    new LinearGradient(0, 0, 0, 1, true, null,
+                            new Stop(0, Color.rgb(0, 0, 0, 0)),
+                            new Stop(1, Color.rgb(0, 0, 0, 1))
+                    ), null, null);
+        }
+
+        @Override
         public Color[] interpolate(int iterations, Color start, Color end) {
             return PixelEffect.Solid.interpolate(iterations, start,
                     Color.hsb(end.getHue(), end.getSaturation(), MIN_BRIGHT));
@@ -57,6 +98,36 @@ public enum PixelEffect {
     },
 
     BlinkingFadeIn(19395, "mFadeIn") {
+        @Override
+        protected BackgroundFill getGradient() {
+            return new BackgroundFill(
+                    new LinearGradient(0, 0, 0, 1, true, null,
+                            new Stop(0, Color.rgb(0, 0, 0, 1)),
+
+                            new Stop(.1, Color.rgb(0, 0, 0, .9)),
+                            new Stop(.13, Color.rgb(0, 0, 0, 0)),
+                            new Stop(.15, Color.rgb(0, 0, 0, .85)),
+
+                            new Stop(.3, Color.rgb(0, 0, 0, .7)),
+                            new Stop(.33, Color.rgb(0, 0, 0, 0)),
+                            new Stop(.35, Color.rgb(0, 0, 0, .65)),
+
+                            new Stop(.5, Color.rgb(0, 0, 0, 0.5)),
+                            new Stop(.53, Color.rgb(0, 0, 0, 0)),
+                            new Stop(.55, Color.rgb(0, 0, 0, 0.45)),
+
+                            new Stop(.7, Color.rgb(0, 0, 0, .3)),
+                            new Stop(.73, Color.rgb(0, 0, 0, 1)),
+                            new Stop(.75, Color.rgb(0, 0, 0, .25)),
+
+                            new Stop(.9, Color.rgb(0, 0, 0, .1)),
+                            new Stop(.93, Color.rgb(0, 0, 0, 1)),
+                            new Stop(.95, Color.rgb(0, 0, 0, .05)),
+
+                            new Stop(1, Color.rgb(0, 0, 0, 0))
+                    ), null, null);
+        }
+
         @Override
         public Color[] interpolate(int iterations, Color start, Color end) {
             Color[] colors = FadeIn.interpolate(iterations, start, end);
@@ -72,6 +143,36 @@ public enum PixelEffect {
     },
     BlinkingFadeOut(59391, "mFadeOut") {
         @Override
+        protected BackgroundFill getGradient() {
+            return new BackgroundFill(
+                    new LinearGradient(0, 0, 0, 1, true, null,
+                            new Stop(1, Color.rgb(0, 0, 0, 1)),
+
+                            new Stop(.95, Color.rgb(0, 0, 0, .9)),
+                            new Stop(.93, Color.rgb(0, 0, 0, 0)),
+                            new Stop(.9, Color.rgb(0, 0, 0, .85)),
+
+                            new Stop(.75, Color.rgb(0, 0, 0, .7)),
+                            new Stop(.73, Color.rgb(0, 0, 0, 0)),
+                            new Stop(.7, Color.rgb(0, 0, 0, .65)),
+
+                            new Stop(.55, Color.rgb(0, 0, 0, 0.5)),
+                            new Stop(.53, Color.rgb(0, 0, 0, 0)),
+                            new Stop(.5, Color.rgb(0, 0, 0, 0.45)),
+
+                            new Stop(.35, Color.rgb(0, 0, 0, .3)),
+                            new Stop(.33, Color.rgb(0, 0, 0, 1)),
+                            new Stop(.3, Color.rgb(0, 0, 0, .25)),
+
+                            new Stop(.15, Color.rgb(0, 0, 0, .1)),
+                            new Stop(.13, Color.rgb(0, 0, 0, 1)),
+                            new Stop(.1, Color.rgb(0, 0, 0, .05)),
+
+                            new Stop(0, Color.rgb(0, 0, 0, 0))
+                    ), null, null);
+        }
+
+        @Override
         public Color[] interpolate(int iterations, Color start, Color end) {
             Color[] colors = FadeOut.interpolate(iterations, start, end);
             for (int i = 0; i < iterations; i++) {
@@ -86,6 +187,32 @@ public enum PixelEffect {
     },
     // при мерцании главное, чтобы вспышка была не менее VISIBLE_PERIOD, иначе её сложно разглядеть как вспышку
     Blinking(90909, "blink") {
+        @Override
+        protected BackgroundFill getGradient() {
+            return new BackgroundFill(
+                    new LinearGradient(0, 0, 0, 1, true, null,
+                            new Stop(.95, Color.rgb(0, 0, 0, 0)),
+                            new Stop(.93, Color.rgb(0, 0, 0, 1)),
+                            new Stop(.9, Color.rgb(0, 0, 0, 0)),
+
+                            new Stop(.75, Color.rgb(0, 0, 0, 0)),
+                            new Stop(.73, Color.rgb(0, 0, 0, 1)),
+                            new Stop(.7, Color.rgb(0, 0, 0, 0)),
+
+                            new Stop(.55, Color.rgb(0, 0, 0, 0)),
+                            new Stop(.53, Color.rgb(0, 0, 0, 1)),
+                            new Stop(.5, Color.rgb(0, 0, 0, 0)),
+
+                            new Stop(.35, Color.rgb(0, 0, 0, 0)),
+                            new Stop(.33, Color.rgb(0, 0, 0, 1)),
+                            new Stop(.3, Color.rgb(0, 0, 0, 0)),
+
+                            new Stop(.15, Color.rgb(0, 0, 0, 0)),
+                            new Stop(.13, Color.rgb(0, 0, 0, 1)),
+                            new Stop(.1, Color.rgb(0, 0, 0, 0))
+                    ), null, null);
+        }
+
         @Override
         public Color[] interpolate(int iterations, Color start, Color end) {
             if (iterations < 3) return new Color[]{Color.hsb(start.getHue(), start.getSaturation(), 0), end};
@@ -106,6 +233,24 @@ public enum PixelEffect {
         }
     },
     Chaos(75381, "chaos") {
+        @Override
+        protected BackgroundFill getGradient() {
+            return new BackgroundFill(
+                    new LinearGradient(0, 0, 0, 1, true, null,
+                            new Stop(0, Color.rgb(0, 0, 0, .2)),
+                            new Stop(.1, Color.rgb(0, 0, 0, .0)),
+                            new Stop(.2, Color.rgb(0, 0, 0, .1)),
+                            new Stop(.3, Color.rgb(0, 0, 0, .9)),
+                            new Stop(.4, Color.rgb(0, 0, 0, .1)),
+                            new Stop(.5, Color.rgb(0, 0, 0, .7)),
+                            new Stop(.6, Color.rgb(0, 0, 0, .4)),
+                            new Stop(.7, Color.rgb(0, 0, 0, .1)),
+                            new Stop(.8, Color.rgb(0, 0, 0, .9)),
+                            new Stop(.9, Color.rgb(0, 0, 0, .3)),
+                            new Stop(1, Color.rgb(0, 0, 0, .7))
+                    ), null, null);
+        }
+
         @Override
         public Color[] interpolate(int iterations, Color start, Color end) {
             final Color[] colors = PixelEffect.Solid.interpolate(iterations, start, end);
@@ -130,6 +275,19 @@ public enum PixelEffect {
                 colors[i] = start.interpolate(end, (double) i / iterations);
             }
             return colors;
+        }
+
+        @Override
+        protected BackgroundFill getGradient() {
+            //FIXME
+            return new BackgroundFill(
+                    new LinearGradient(0, 0, 0, 1, true, null,
+                            new Stop(0, Color.rgb(0, 0, 255, 1)),
+                            new Stop(.5, Color.rgb(255, 0, 0, 0)),
+                            new Stop(1, Color.rgb(0, 255, 0, 1))
+                    ), null, null);
+
+//            return new BackgroundFill(Color.rgb(0, 0, 0, 0), null, null);
         }
     };
 
@@ -167,7 +325,7 @@ public enum PixelEffect {
     }
 
     /**
-     * Возвращает интерполяцию эффекта
+     * Возвращает видимую на дисплее интерполяцию эффекта
      *
      * @param iterations количество шагов за которое закончится кадр
      * @param start      начальный цвет
@@ -175,4 +333,8 @@ public enum PixelEffect {
      * @return интерполяцию цветового ряда в зависимости от выбранного эфекта длиной iterations
      */
     public abstract Color[] interpolate(int iterations, Color start, Color end);
+
+    public BackgroundFill gradient = getGradient();
+
+    protected abstract BackgroundFill getGradient();
 }
