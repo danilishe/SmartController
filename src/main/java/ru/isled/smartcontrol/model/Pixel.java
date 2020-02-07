@@ -1,9 +1,6 @@
 package ru.isled.smartcontrol.model;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -26,7 +23,7 @@ public class Pixel {
     private final ObjectProperty<RgbMode> rgbMode;
     private final IntegerProperty quantifier;
     private final ObservableList<Frame> frames;
-    public final ObjectProperty<Background> background;
+    public final StringProperty background;
 
     public Pixel(int number, int framesCount) {
         this(number, RgbMode.MONO_WHITE, 1, new ArrayList<>(MAX_FRAMES));
@@ -40,7 +37,7 @@ public class Pixel {
         this.rgbMode = new SimpleObjectProperty<>(rgbMode);
         this.quantifier = new SimpleIntegerProperty(quantifier);
         this.frames = FXCollections.observableArrayList(frames);
-        background = new SimpleObjectProperty<>(rgbMode.getBackground());
+        background = new SimpleStringProperty(rgbMode.getBackground());
         // if rgbMode changes, background changes too
         this.rgbMode.addListener((v, o, n) -> background.set(getRgbMode().getBackground()));
     }
@@ -112,7 +109,7 @@ public class Pixel {
 // fixme delete this if all background values are from pixel frames
 //    public String getFrameStyle(Integer number) {
 //        final Frame frame = getFrames().get(number);
-//        return String.format("-fx-background-color: linear-gradient(from 0%% 0%% to 0%% 100%%, #%s 0%%, #%s 100%%);"
+//        return String.format("-fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #%s 0%, #%s 100%);"
 ////                        + "-fx-background-insets: 5px;"
 //                ,
 //                toHex(getRgbMode().getVisibleColor(frame.getStartColor())),

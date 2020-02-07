@@ -1,10 +1,7 @@
 package ru.isled.smartcontrol.model.effect;
 
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
+import ru.isled.smartcontrol.util.Convert;
 
 import static ru.isled.smartcontrol.Constants.MAX_BRIGHT;
 
@@ -83,8 +80,8 @@ public enum RgbMode {
         }
 
         @Override
-        public Background getBackground() {
-            return new Background(new BackgroundFill(Color.WHITE, null, null));
+        public String getBackground() {
+            return "-fx-background-color: white;";
         }
 
         @Override
@@ -108,16 +105,12 @@ public enum RgbMode {
     }
 
     // for rgb colors
-    public Background getBackground() {
+    public String getBackground() {
         final Color[] colors = getColors();
-        return new Background(new BackgroundFill(
-                new LinearGradient(0, 0,
-                        1, 0,
-                        true, null,
-                        new Stop(.20, colors[0]),
-                        new Stop(.5, colors[1]),
-                        new Stop(.80, colors[2])),
-                null, null));
+        return String.format("-fx-background-color: linear-gradient(from 0%% 0%% to 100%% 0%%, #%s 20%%, #%s 50%%, #%s 80%%);",
+                Convert.toHex(colors[0]),
+                Convert.toHex(colors[1]),
+                Convert.toHex(colors[2]));
     }
 
     private Color getColorByLetter(char c) {
