@@ -14,7 +14,6 @@ import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import ru.isled.smartcontrol.model.effect.PixelEffect;
 import ru.isled.smartcontrol.model.effect.RgbMode;
-import ru.isled.smartcontrol.util.ColorToHex;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,16 +21,16 @@ import java.util.List;
 
 import static ru.isled.smartcontrol.Constants.*;
 
-public class Pixel implements ColorToHex {
+public class Pixel {
     private final IntegerProperty number;
     private final ObjectProperty<RgbMode> rgbMode;
     private final IntegerProperty quantifier;
     private final ObservableList<Frame> frames;
     public final ObjectProperty<Background> background;
 
-    public Pixel(int number) {
+    public Pixel(int number, int framesCount) {
         this(number, RgbMode.MONO_WHITE, 1, new ArrayList<>(MAX_FRAMES));
-        for (int i = 0; i < DEFAULT_FRAMES_COUNT; i++) {
+        for (int i = 0; i < framesCount; i++) {
             frames.add(new Frame(rgbMode));
         }
     }
@@ -136,11 +135,11 @@ public class Pixel implements ColorToHex {
         private void updateBackground() {
             background.setValue(
                     new Background(Arrays.asList(
-                            effect.gradient, // effect
                             new BackgroundFill( // color mode
                                     new LinearGradient(0, 0, 0, 1, true, null,
                                             new Stop(0, rgbMode.get().getVisibleColor(startColor)),
-                                            new Stop(1, rgbMode.get().getVisibleColor(endColor))), null, null)
+                                            new Stop(1, rgbMode.get().getVisibleColor(endColor))), null, null),
+                            effect.gradient // effect
                     ), null));
         }
 
@@ -155,6 +154,7 @@ public class Pixel implements ColorToHex {
             this.background = new SimpleObjectProperty<>();
             this.rgbMode = rgbMode;
             rgbMode.addListener(changeModeListener);
+            updateBackground();
         }
 
         public Frame(Color oneColor, PixelEffect effect, ObjectProperty<RgbMode> rgbMode) {

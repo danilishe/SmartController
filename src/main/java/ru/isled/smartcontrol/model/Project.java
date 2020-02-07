@@ -19,6 +19,7 @@ public class Project {
     private final IntegerProperty pixelsCount;
     private final ObservableList<Pixel> pixels;
     private final ObservableList<LedFrame> frames;
+    private final List<LedFrame> framesCache = new ArrayList<>();
     private final DoubleProperty gamma;
     private final BooleanProperty hasChanges;
     private final ObjectProperty<File> file;
@@ -26,18 +27,20 @@ public class Project {
     public Project() {
         this(DEFAULT_FRAMES_COUNT, DEFAULT_PIXEL_COUNT, new ArrayList<>(MAX_CHANNELS_COUNT), new ArrayList<>(MAX_FRAMES), DEFAULT_GAMMA, false, null);
         for (int i = 0; i < MAX_CHANNELS_COUNT; i++) {
-            pixels.add(new Pixel(i + 1));
+            pixels.add(new Pixel(i + 1, DEFAULT_FRAMES_COUNT));
         }
         for (int i = 0; i < DEFAULT_FRAMES_COUNT; i++) {
-            frames.add(new LedFrame(i + 1, getPixelsBackgroundProperties(i)));
+            LedFrame frame = new LedFrame(i + 1, getPixelsBackgroundProperties(i));
+            frames.add(frame);
         }
+        framesCache.addAll(frames);
     }
 
     private List<ObservableValue<Background>> getPixelsBackgroundProperties(final int index) {
         return pixels.stream().map(pixel -> pixel.getFrames().get(index).backgroundProperty()).collect(Collectors.toList());
     }
 
-    public Project(int framesCount, int pixelsCount, ArrayList<Pixel> pixels, ArrayList<LedFrame> frames, double gamma, boolean hasChanges, File file) {
+    public Project(int framesCount, int pixelsCount, List<Pixel> pixels, List<LedFrame> frames, double gamma, boolean hasChanges, File file) {
         this.framesCount = new SimpleIntegerProperty(framesCount);
         this.pixelsCount = new SimpleIntegerProperty(pixelsCount);
         this.pixels = FXCollections.observableList(pixels);
@@ -46,6 +49,7 @@ public class Project {
         this.hasChanges = new SimpleBooleanProperty(hasChanges);
         this.file = new SimpleObjectProperty<>(file);
         this.framesCount.addListener(c -> onFramesChanged());
+        this.framesCache.addAll(frames);
     }
 
 
@@ -105,10 +109,6 @@ public class Project {
 
     public LedFrame getFrame(int frameNo) {
         return frames.get(frameNo);
-    }
-
-    public boolean addFrame(LedFrame frame) {
-        return frames.add(frame);
     }
 
     public File getFile() {
@@ -178,22 +178,22 @@ public class Project {
     }
 
     public void onFramesChanged() {
-        final int initIndex = frames.size() - 1;
-        if (projectLength() < programLength()) { // if project has no that frames before
+        // framesCache.size() must be == frames count at each pixel
+        if (framesCache.size() < programLength()) { // if project has no that frames before
             for (Pixel pixel : pixels) { // Creating new Frames in Pixel lists
-                for (int i = initIndex; i < programLength(); i++) {
+                for (int i = frames.size(); i < programLength(); i++) {
                     pixel.getFrames().add(new Pixel.Frame(pixel.rgbModeProperty()));
                 }
             }
+            for (int i = frames.size(); i < programLength(); i++) {
+                framesCache.add(new LedFrame(i + 1, getPixelsBackgroundProperties(i - 1)));
+            }
         }
-        // after that adding background properties to new LedFrame and adding it to LedFrames list
-        for (int i = initIndex; i < programLength(); i++) {
-            addFrame(new LedFrame(i + 1, getPixelsBackgroundProperties(i)));
+        if (frames.size() < programLength()) {
+            frames.addAll(framesCache.subList(frames.size(), programLength()));
+        } else {
+            frames.remove(programLength(), frames.size());
         }
-    }
-
-    private int projectLength() {
-        return pixels.get(0).getFrames().size();
     }
 
     public ObservableList<LedFrame> getFrames() {

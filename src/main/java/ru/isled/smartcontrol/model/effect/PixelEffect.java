@@ -16,8 +16,8 @@ public enum PixelEffect {
         protected BackgroundFill getGradient() {
             return new BackgroundFill(
                     new LinearGradient(0, 0, 0, 1, true, null,
-                            new Stop(0, Color.rgb(0, 0, 0, 0)),
-                            new Stop(1, Color.rgb(0, 0, 0, 1))
+                            new Stop(0, Color.rgb(0, 0, 0, 1)),
+                            new Stop(1, Color.rgb(0, 0, 0, 0))
                     ), null, null);
         }
 
@@ -279,15 +279,7 @@ public enum PixelEffect {
 
         @Override
         protected BackgroundFill getGradient() {
-            //FIXME
-            return new BackgroundFill(
-                    new LinearGradient(0, 0, 0, 1, true, null,
-                            new Stop(0, Color.rgb(0, 0, 255, 1)),
-                            new Stop(.5, Color.rgb(255, 0, 0, 0)),
-                            new Stop(1, Color.rgb(0, 255, 0, 1))
-                    ), null, null);
-
-//            return new BackgroundFill(Color.rgb(0, 0, 0, 0), null, null);
+            return new BackgroundFill(Color.rgb(0, 0, 0, 0), null, null);
         }
     };
 
