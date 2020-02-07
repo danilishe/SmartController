@@ -10,12 +10,10 @@ import static ru.isled.smartcontrol.Constants.*;
 public enum PixelEffect {
     FadeIn(12345, "fadeIn") {
         @Override
-        protected String effectOverlay() { // fixme
+        protected String effectOverlay() {
             return "linear-gradient(from 0% 0% to 0% 100%, " +
-                    "#0000 9%, black 10%, #0000 11%," +
-                    "#0000 29%, black 30%, #0000 41%," +
-                    "#0000 59%, black 60%, #0000 71%," +
-                    "#0000 89%, black 90%, #0000 91%" +
+                    "#000f 0%, " +
+                    "#0000 100%" +
                     ")";
         }
 
@@ -30,12 +28,9 @@ public enum PixelEffect {
 
     FadeOutIn(53135, "fadeOutIn") {
         @Override
-        protected String effectOverlay() { // fixme
+        protected String effectOverlay() {
             return "linear-gradient(from 0% 0% to 0% 100%, " +
-                    "#0000 9%, black 10%, #0000 11%," +
-                    "#0000 29%, black 30%, #0000 41%," +
-                    "#0000 59%, black 60%, #0000 71%," +
-                    "#0000 89%, black 90%, #0000 91%" +
+                    "#0000 1%, black 50%, #0000 100%" +
                     ")";
         }
 
@@ -54,12 +49,9 @@ public enum PixelEffect {
     },
     FadeInOut(13531, "fadeInOut") {
         @Override
-        protected String effectOverlay() { // fixme
+        protected String effectOverlay() {
             return "linear-gradient(from 0% 0% to 0% 100%, " +
-                    "#0000 9%, black 10%, #0000 11%," +
-                    "#0000 29%, black 30%, #0000 41%," +
-                    "#0000 59%, black 60%, #0000 71%," +
-                    "#0000 89%, black 90%, #0000 91%" +
+                    "black 0%, #0000 50%, black 100%" +
                     ")";
         }
 
@@ -80,12 +72,9 @@ public enum PixelEffect {
 
     FadeOut(54321, "fadeOut") {
         @Override
-        protected String effectOverlay() { // fixme
+        protected String effectOverlay() {
             return "linear-gradient(from 0% 0% to 0% 100%, " +
-                    "#0000 9%, black 10%, #0000 11%," +
-                    "#0000 29%, black 30%, #0000 41%," +
-                    "#0000 59%, black 60%, #0000 71%," +
-                    "#0000 89%, black 90%, #0000 91%" +
+                    "#0000 0%, black 100%" +
                     ")";
         }
 
@@ -98,12 +87,18 @@ public enum PixelEffect {
 
     BlinkingFadeIn(19395, "mFadeIn") {
         @Override
-        protected String effectOverlay() { // fixme
+        protected String effectOverlay() {
             return "linear-gradient(from 0% 0% to 0% 100%, " +
-                    "#0000 9%, black 10%, #0000 11%," +
-                    "#0000 29%, black 30%, #0000 41%," +
-                    "#0000 59%, black 60%, #0000 71%," +
-                    "#0000 89%, black 90%, #0000 91%" +
+                    "#000f 0%," +
+                    "#000e 10%, #0000 15%, #000e 17%," +
+                    "#000c 20%, #0000 25%, #000c 27%," +
+                    "#000a 30%, #0000 35%, #000a 37%," +
+                    "#0009 40%, #0000 45%, #0009 47%," +
+                    "#0007 60%, #000f 65%, #0007 67%," +
+                    "#0006 70%, #000f 75%, #0006 77%," +
+                    "#0003 80%, #000f 85%, #0003 87%," +
+                    "#0001 90%, #000f 95%, #0001 97%," +
+                    "#0000 100%" +
                     ")";
         }
 
@@ -122,12 +117,18 @@ public enum PixelEffect {
     },
     BlinkingFadeOut(59391, "mFadeOut") {
         @Override
-        protected String effectOverlay() { // fixme
+        protected String effectOverlay() {
             return "linear-gradient(from 0% 0% to 0% 100%, " +
-                    "#0000 9%, black 10%, #0000 11%," +
-                    "#0000 29%, black 30%, #0000 41%," +
-                    "#0000 59%, black 60%, #0000 71%," +
-                    "#0000 89%, black 90%, #0000 91%" +
+                    "#0000 0%," +
+                    "#0001 10%, #000f 14%, #0001 17%," +
+                    "#0002 20%, #000f 24%, #0002 27%," +
+                    "#0004 30%, #000f 34%, #0004 37%," +
+                    "#0005 40%, #000f 44%, #0005 47%," +
+                    "#0009 60%, #0000 64%, #0009 67%," +
+                    "#000a 70%, #0000 74%, #000a 77%," +
+                    "#000c 80%, #0000 84%, #000c 87%," +
+                    "#000e 90%, #0000 94%, #000e 97%," +
+                    "#000f 100%" +
                     ")";
         }
 
@@ -149,10 +150,11 @@ public enum PixelEffect {
         @Override
         protected String effectOverlay() {
             return "linear-gradient(from 0% 0% to 0% 100%, " +
-                    "#0000 9%, black 10%, #0000 11%," +
-                    "#0000 29%, black 30%, #0000 41%," +
-                    "#0000 59%, black 60%, #0000 71%," +
-                    "#0000 89%, black 90%, #0000 91%" +
+                    "#0000 09%, black 10%,black 20%, #0000 21%," +
+                    "#0000 29%, black 30%,black 40%, #0000 41%," +
+                    "#0000 49%, black 50%,black 60%, #0000 61%," +
+                    "#0000 69%, black 70%,black 80%, #0000 81%," +
+                    "#0000 89%, black 90%" +
                     ")";
         }
 
@@ -178,21 +180,17 @@ public enum PixelEffect {
     Chaos(75381, "chaos") {
         @Override
         protected String effectOverlay() {
-            return "linear-gradient(from 0 0 to 0 100%, " +
-                    "#0002 0%," +
-                    "#0005 3%," +
-                    "#0008 5%," +
-                    "#0009 7%," +
-                    "#0008 10%," +
-                    "#0001 15%," +
-                    "#0002 35%," +
-                    "#0003 45%," +
-                    "#0005 55%," +
-                    "#0009 65%," +
-                    "#000f 75%," +
-                    "#0001 85%," +
-                    "#0006 95%," +
-                    "#000e 100%" +
+            return "linear-gradient(from 0% 0% to 0% 100%, " +
+                    "#0001 0%,  #0001 5%," +
+                    "#000b 5%,  #000b 15%," +
+                    "#000c 15%, #000c 35%," +
+                    "#000e 35%, #000e 45%," +
+                    "#0000 45%, #0000 55%," +
+                    "#0006 55%, #0006 65%," +
+                    "#0005 65%, #0005 75%," +
+                    "#000a 75%, #000a 85%," +
+                    "#0007 85%, #0007 95%," +
+                    "#0009 95%, #0009 100%" +
                     ")";
         }
 

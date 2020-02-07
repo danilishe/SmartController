@@ -6,7 +6,6 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -79,8 +78,16 @@ public class MainController {
     private Spinner<Integer> chanelQuantifier;
 
     @FXML
+    private ToggleGroup pixelEffect;
+
+    @FXML
     public void setFadeInEffect() {
         setEffectSelectedCells(PixelEffect.FadeIn);
+    }
+
+    @FXML
+    public void setSolidEffect() {
+        setEffectSelectedCells(PixelEffect.Solid);
     }
 
     @FXML
@@ -118,11 +125,6 @@ public class MainController {
         setEffectSelectedCells(PixelEffect.BlinkingFadeOut);
     }
 
-    @FXML
-    private void refresh() {
-        // todo придумать более памятеефективный способ обновлнеия внешнего вида ячеек
-        frameTableView.refresh();
-    }
 
     @FXML
     public void newFile() {
@@ -353,7 +355,7 @@ public class MainController {
 */
     }
 
-//    private void changePixelQuantities() {
+    //    private void changePixelQuantities() {
 //        final int value = chanelQuantifier.getValue();
 //        frameTableView.getSelectionModel().getSelectedCells().stream().mapToInt(TablePosition::getColumn)
 //                .distinct()
@@ -367,8 +369,8 @@ public class MainController {
 //        updateTotalPixelCount();
 //    }
 //
-@FXML
-private Label bulbIcon;
+    @FXML
+    private Label bulbIcon;
 
     @FXML
     public void increment5Frames() {
@@ -821,6 +823,8 @@ private Label bulbIcon;
 
     @FXML
     public void initialize() {
+
+
         initializeRowHeader();
         loadAndSetDefaultEffects();
 
