@@ -206,7 +206,7 @@ public class MainController {
 
     private void setBrightSelectedCells(int bright) {
         log.trace("updating bright to ");
-        for (TablePosition<LedFrame, Background> cell : getSelectedDataCells()) {
+        for (TablePosition cell : getSelectedDataCells()) {
             int pixelNo = cell.getColumn() - HEADER_COLUMNS;
             int frameNo = cell.getRow();
             project.getPixel(pixelNo).getFrames().get(frameNo).setBright(bright);
@@ -217,7 +217,7 @@ public class MainController {
 
     private void setEffectSelectedCells(PixelEffect effect) {
         log.trace("updating effect to " + effect);
-        for (TablePosition<LedFrame, Background> cell : getSelectedDataCells()) {
+        for (TablePosition cell : getSelectedDataCells()) {
             int pixelNo = cell.getColumn() - HEADER_COLUMNS;
             int frameNo = cell.getRow();
             project.getPixel(pixelNo).getFrames().get(frameNo).setEffect(effect);
@@ -745,7 +745,7 @@ private Label bulbIcon;
 
         // пиксели/каналы
         for (int i = 0; i < MAX_CHANNELS_COUNT; i++) {
-            TableColumn<LedFrame, Background> column = new TableColumn<>();
+            TableColumn<LedFrame, String> column = new TableColumn<>();
             final Pixel pixel = project.getPixel(i);
             column.setGraphic(ColumnHeaderFactory.get(pixel));
 

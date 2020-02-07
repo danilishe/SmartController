@@ -4,16 +4,12 @@ import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
 import ru.isled.smartcontrol.model.effect.PixelEffect;
 import ru.isled.smartcontrol.model.effect.RgbMode;
+import ru.isled.smartcontrol.util.Convert;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static ru.isled.smartcontrol.Constants.*;
@@ -106,16 +102,6 @@ public class Pixel {
         return getFrames().get(frameNo).getInterpolated(frameLength / MIN_FRAME_LENGTH);
     }
 
-// fixme delete this if all background values are from pixel frames
-//    public String getFrameStyle(Integer number) {
-//        final Frame frame = getFrames().get(number);
-//        return String.format("-fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #%s 0%, #%s 100%);"
-////                        + "-fx-background-insets: 5px;"
-//                ,
-//                toHex(getRgbMode().getVisibleColor(frame.getStartColor())),
-//                toHex(getRgbMode().getVisibleColor(frame.getEndColor())));
-//    }
-
     /**
      * Frame Pixel is logical unit of each frame of program. Each Frame Pixel knows only own colors, rgbMode and effect
      */
@@ -124,20 +110,19 @@ public class Pixel {
         private Color endColor;
         private PixelEffect effect;
         private final ObjectProperty<RgbMode> rgbMode;
-        private final ObjectProperty<Background> background;
+        private final StringProperty background;
         private final ChangeListener<RgbMode> changeModeListener = (v, o, n) -> {
             if (o.channels() != n.channels()) this.updateBackground();
         };
 
         private void updateBackground() {
+            String start = Convert.toHex(rgbMode.get().getVisibleColor(startColor));
+            String end = Convert.toHex(rgbMode.get().getVisibleColor(endColor));
             background.setValue(
-                    new Background(Arrays.asList(
-                            new BackgroundFill( // color mode
-                                    new LinearGradient(0, 0, 0, 1, true, null,
-                                            new Stop(0, rgbMode.get().getVisibleColor(startColor)),
-                                            new Stop(1, rgbMode.get().getVisibleColor(endColor))), null, null),
-                            effect.gradient // effect
-                    ), null));
+                    "-fx-background-color: linear-gradient(from 0% 0% to 0% 100%, " +
+                            "#" + start + " 1%, #" + end + " 99%), " +
+                            effect.overlay + ";");
+
         }
 
         public Frame(ObjectProperty<RgbMode> rgbMode) {
@@ -148,7 +133,7 @@ public class Pixel {
             this.startColor = startColor;
             this.endColor = endColor;
             this.effect = effect;
-            this.background = new SimpleObjectProperty<>();
+            this.background = new SimpleStringProperty("");
             this.rgbMode = rgbMode;
             rgbMode.addListener(changeModeListener);
             updateBackground();
@@ -202,7 +187,7 @@ public class Pixel {
             return getEffect().interpolate(frameLength, getStartColor(), getEndColor());
         }
 
-        public ObjectProperty<Background> backgroundProperty() {
+        public StringProperty backgroundProperty() {
             return background;
         }
     }

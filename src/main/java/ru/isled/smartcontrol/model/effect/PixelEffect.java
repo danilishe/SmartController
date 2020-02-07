@@ -1,9 +1,6 @@
 package ru.isled.smartcontrol.model.effect;
 
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
 
 import java.security.InvalidParameterException;
 import java.util.Arrays;
@@ -13,12 +10,13 @@ import static ru.isled.smartcontrol.Constants.*;
 public enum PixelEffect {
     FadeIn(12345, "fadeIn") {
         @Override
-        protected BackgroundFill getGradient() {
-            return new BackgroundFill(
-                    new LinearGradient(0, 0, 0, 1, true, null,
-                            new Stop(0, Color.rgb(0, 0, 0, 1)),
-                            new Stop(1, Color.rgb(0, 0, 0, 0))
-                    ), null, null);
+        protected String effectOverlay() { // fixme
+            return "linear-gradient(from 0% 0% to 0% 100%, " +
+                    "#0000 9%, black 10%, #0000 11%," +
+                    "#0000 29%, black 30%, #0000 41%," +
+                    "#0000 59%, black 60%, #0000 71%," +
+                    "#0000 89%, black 90%, #0000 91%" +
+                    ")";
         }
 
         @Override
@@ -32,13 +30,13 @@ public enum PixelEffect {
 
     FadeOutIn(53135, "fadeOutIn") {
         @Override
-        protected BackgroundFill getGradient() {
-            return new BackgroundFill(
-                    new LinearGradient(0, 0, 0, 1, true, null,
-                            new Stop(0, Color.rgb(0, 0, 0, 0)),
-                            new Stop(.5, Color.rgb(0, 0, 0, 1)),
-                            new Stop(1, Color.rgb(0, 0, 0, 0))
-                    ), null, null);
+        protected String effectOverlay() { // fixme
+            return "linear-gradient(from 0% 0% to 0% 100%, " +
+                    "#0000 9%, black 10%, #0000 11%," +
+                    "#0000 29%, black 30%, #0000 41%," +
+                    "#0000 59%, black 60%, #0000 71%," +
+                    "#0000 89%, black 90%, #0000 91%" +
+                    ")";
         }
 
         @Override
@@ -56,13 +54,13 @@ public enum PixelEffect {
     },
     FadeInOut(13531, "fadeInOut") {
         @Override
-        protected BackgroundFill getGradient() {
-            return new BackgroundFill(
-                    new LinearGradient(0, 0, 0, 1, true, null,
-                            new Stop(0, Color.rgb(0, 0, 0, 1)),
-                            new Stop(.5, Color.rgb(0, 0, 0, 0)),
-                            new Stop(1, Color.rgb(0, 0, 0, 1))
-                    ), null, null);
+        protected String effectOverlay() { // fixme
+            return "linear-gradient(from 0% 0% to 0% 100%, " +
+                    "#0000 9%, black 10%, #0000 11%," +
+                    "#0000 29%, black 30%, #0000 41%," +
+                    "#0000 59%, black 60%, #0000 71%," +
+                    "#0000 89%, black 90%, #0000 91%" +
+                    ")";
         }
 
         @Override
@@ -82,12 +80,13 @@ public enum PixelEffect {
 
     FadeOut(54321, "fadeOut") {
         @Override
-        protected BackgroundFill getGradient() {
-            return new BackgroundFill(
-                    new LinearGradient(0, 0, 0, 1, true, null,
-                            new Stop(0, Color.rgb(0, 0, 0, 0)),
-                            new Stop(1, Color.rgb(0, 0, 0, 1))
-                    ), null, null);
+        protected String effectOverlay() { // fixme
+            return "linear-gradient(from 0% 0% to 0% 100%, " +
+                    "#0000 9%, black 10%, #0000 11%," +
+                    "#0000 29%, black 30%, #0000 41%," +
+                    "#0000 59%, black 60%, #0000 71%," +
+                    "#0000 89%, black 90%, #0000 91%" +
+                    ")";
         }
 
         @Override
@@ -99,33 +98,13 @@ public enum PixelEffect {
 
     BlinkingFadeIn(19395, "mFadeIn") {
         @Override
-        protected BackgroundFill getGradient() {
-            return new BackgroundFill(
-                    new LinearGradient(0, 0, 0, 1, true, null,
-                            new Stop(0, Color.rgb(0, 0, 0, 1)),
-
-                            new Stop(.1, Color.rgb(0, 0, 0, .9)),
-                            new Stop(.13, Color.rgb(0, 0, 0, 0)),
-                            new Stop(.15, Color.rgb(0, 0, 0, .85)),
-
-                            new Stop(.3, Color.rgb(0, 0, 0, .7)),
-                            new Stop(.33, Color.rgb(0, 0, 0, 0)),
-                            new Stop(.35, Color.rgb(0, 0, 0, .65)),
-
-                            new Stop(.5, Color.rgb(0, 0, 0, 0.5)),
-                            new Stop(.53, Color.rgb(0, 0, 0, 0)),
-                            new Stop(.55, Color.rgb(0, 0, 0, 0.45)),
-
-                            new Stop(.7, Color.rgb(0, 0, 0, .3)),
-                            new Stop(.73, Color.rgb(0, 0, 0, 1)),
-                            new Stop(.75, Color.rgb(0, 0, 0, .25)),
-
-                            new Stop(.9, Color.rgb(0, 0, 0, .1)),
-                            new Stop(.93, Color.rgb(0, 0, 0, 1)),
-                            new Stop(.95, Color.rgb(0, 0, 0, .05)),
-
-                            new Stop(1, Color.rgb(0, 0, 0, 0))
-                    ), null, null);
+        protected String effectOverlay() { // fixme
+            return "linear-gradient(from 0% 0% to 0% 100%, " +
+                    "#0000 9%, black 10%, #0000 11%," +
+                    "#0000 29%, black 30%, #0000 41%," +
+                    "#0000 59%, black 60%, #0000 71%," +
+                    "#0000 89%, black 90%, #0000 91%" +
+                    ")";
         }
 
         @Override
@@ -143,33 +122,13 @@ public enum PixelEffect {
     },
     BlinkingFadeOut(59391, "mFadeOut") {
         @Override
-        protected BackgroundFill getGradient() {
-            return new BackgroundFill(
-                    new LinearGradient(0, 0, 0, 1, true, null,
-                            new Stop(1, Color.rgb(0, 0, 0, 1)),
-
-                            new Stop(.95, Color.rgb(0, 0, 0, .9)),
-                            new Stop(.93, Color.rgb(0, 0, 0, 0)),
-                            new Stop(.9, Color.rgb(0, 0, 0, .85)),
-
-                            new Stop(.75, Color.rgb(0, 0, 0, .7)),
-                            new Stop(.73, Color.rgb(0, 0, 0, 0)),
-                            new Stop(.7, Color.rgb(0, 0, 0, .65)),
-
-                            new Stop(.55, Color.rgb(0, 0, 0, 0.5)),
-                            new Stop(.53, Color.rgb(0, 0, 0, 0)),
-                            new Stop(.5, Color.rgb(0, 0, 0, 0.45)),
-
-                            new Stop(.35, Color.rgb(0, 0, 0, .3)),
-                            new Stop(.33, Color.rgb(0, 0, 0, 1)),
-                            new Stop(.3, Color.rgb(0, 0, 0, .25)),
-
-                            new Stop(.15, Color.rgb(0, 0, 0, .1)),
-                            new Stop(.13, Color.rgb(0, 0, 0, 1)),
-                            new Stop(.1, Color.rgb(0, 0, 0, .05)),
-
-                            new Stop(0, Color.rgb(0, 0, 0, 0))
-                    ), null, null);
+        protected String effectOverlay() { // fixme
+            return "linear-gradient(from 0% 0% to 0% 100%, " +
+                    "#0000 9%, black 10%, #0000 11%," +
+                    "#0000 29%, black 30%, #0000 41%," +
+                    "#0000 59%, black 60%, #0000 71%," +
+                    "#0000 89%, black 90%, #0000 91%" +
+                    ")";
         }
 
         @Override
@@ -188,29 +147,13 @@ public enum PixelEffect {
     // при мерцании главное, чтобы вспышка была не менее VISIBLE_PERIOD, иначе её сложно разглядеть как вспышку
     Blinking(90909, "blink") {
         @Override
-        protected BackgroundFill getGradient() {
-            return new BackgroundFill(
-                    new LinearGradient(0, 0, 0, 1, true, null,
-                            new Stop(.95, Color.rgb(0, 0, 0, 0)),
-                            new Stop(.93, Color.rgb(0, 0, 0, 1)),
-                            new Stop(.9, Color.rgb(0, 0, 0, 0)),
-
-                            new Stop(.75, Color.rgb(0, 0, 0, 0)),
-                            new Stop(.73, Color.rgb(0, 0, 0, 1)),
-                            new Stop(.7, Color.rgb(0, 0, 0, 0)),
-
-                            new Stop(.55, Color.rgb(0, 0, 0, 0)),
-                            new Stop(.53, Color.rgb(0, 0, 0, 1)),
-                            new Stop(.5, Color.rgb(0, 0, 0, 0)),
-
-                            new Stop(.35, Color.rgb(0, 0, 0, 0)),
-                            new Stop(.33, Color.rgb(0, 0, 0, 1)),
-                            new Stop(.3, Color.rgb(0, 0, 0, 0)),
-
-                            new Stop(.15, Color.rgb(0, 0, 0, 0)),
-                            new Stop(.13, Color.rgb(0, 0, 0, 1)),
-                            new Stop(.1, Color.rgb(0, 0, 0, 0))
-                    ), null, null);
+        protected String effectOverlay() {
+            return "linear-gradient(from 0% 0% to 0% 100%, " +
+                    "#0000 9%, black 10%, #0000 11%," +
+                    "#0000 29%, black 30%, #0000 41%," +
+                    "#0000 59%, black 60%, #0000 71%," +
+                    "#0000 89%, black 90%, #0000 91%" +
+                    ")";
         }
 
         @Override
@@ -234,21 +177,23 @@ public enum PixelEffect {
     },
     Chaos(75381, "chaos") {
         @Override
-        protected BackgroundFill getGradient() {
-            return new BackgroundFill(
-                    new LinearGradient(0, 0, 0, 1, true, null,
-                            new Stop(0, Color.rgb(0, 0, 0, .2)),
-                            new Stop(.1, Color.rgb(0, 0, 0, .0)),
-                            new Stop(.2, Color.rgb(0, 0, 0, .1)),
-                            new Stop(.3, Color.rgb(0, 0, 0, .9)),
-                            new Stop(.4, Color.rgb(0, 0, 0, .1)),
-                            new Stop(.5, Color.rgb(0, 0, 0, .7)),
-                            new Stop(.6, Color.rgb(0, 0, 0, .4)),
-                            new Stop(.7, Color.rgb(0, 0, 0, .1)),
-                            new Stop(.8, Color.rgb(0, 0, 0, .9)),
-                            new Stop(.9, Color.rgb(0, 0, 0, .3)),
-                            new Stop(1, Color.rgb(0, 0, 0, .7))
-                    ), null, null);
+        protected String effectOverlay() {
+            return "linear-gradient(from 0 0 to 0 100%, " +
+                    "#0002 0%," +
+                    "#0005 3%," +
+                    "#0008 5%," +
+                    "#0009 7%," +
+                    "#0008 10%," +
+                    "#0001 15%," +
+                    "#0002 35%," +
+                    "#0003 45%," +
+                    "#0005 55%," +
+                    "#0009 65%," +
+                    "#000f 75%," +
+                    "#0001 85%," +
+                    "#0006 95%," +
+                    "#000e 100%" +
+                    ")";
         }
 
         @Override
@@ -278,8 +223,8 @@ public enum PixelEffect {
         }
 
         @Override
-        protected BackgroundFill getGradient() {
-            return new BackgroundFill(Color.rgb(0, 0, 0, 0), null, null);
+        protected String effectOverlay() {
+            return "#0000";
         }
     };
 
@@ -326,7 +271,7 @@ public enum PixelEffect {
      */
     public abstract Color[] interpolate(int iterations, Color start, Color end);
 
-    public BackgroundFill gradient = getGradient();
+    public String overlay = effectOverlay();
 
-    protected abstract BackgroundFill getGradient();
+    protected abstract String effectOverlay();
 }

@@ -12,20 +12,20 @@ public class LedFrame {
     private final IntegerProperty number;
     private final IntegerProperty frameLength;
     private final IntegerProperty cycles;
-    private final List<ObservableValue<Background>> values;
+    private final List<StringProperty> values;
 
-    public LedFrame(int number, List<ObservableValue<Background>> values) {
+    public LedFrame(int number, List<StringProperty> values) {
         this(number, DEFAULT_FRAME_LENGTH, 1, values);
     }
 
-    public LedFrame(int number, int frameLength, int cycles, List<ObservableValue<Background>> values) {
+    public LedFrame(int number, int frameLength, int cycles, List<StringProperty> values) {
         this.number = new SimpleIntegerProperty(number);
         this.frameLength = new SimpleIntegerProperty(frameLength);
         this.cycles = new SimpleIntegerProperty(cycles);
         this.values = values;
     }
 
-    public ObservableValue<Background> getValue(int index) {
+    public StringProperty getValue(int index) {
         return values.get(index);
     }
 

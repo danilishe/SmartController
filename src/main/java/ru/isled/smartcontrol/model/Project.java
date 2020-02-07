@@ -1,10 +1,8 @@
 package ru.isled.smartcontrol.model;
 
 import javafx.beans.property.*;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.layout.Background;
 import javafx.scene.paint.Color;
 
 import java.io.File;
@@ -36,7 +34,7 @@ public class Project {
         framesCache.addAll(frames);
     }
 
-    private List<ObservableValue<Background>> getPixelsBackgroundProperties(final int index) {
+    private List<StringProperty> getPixelsBackgroundProperties(final int index) {
         return pixels.stream().map(pixel -> pixel.getFrames().get(index).backgroundProperty()).collect(Collectors.toList());
     }
 
@@ -181,12 +179,12 @@ public class Project {
         // framesCache.size() must be == frames count at each pixel
         if (framesCache.size() < programLength()) { // if project has no that frames before
             for (Pixel pixel : pixels) { // Creating new Frames in Pixel lists
-                for (int i = frames.size(); i < programLength(); i++) {
+                for (int i = framesCache.size(); i < programLength(); i++) {
                     pixel.getFrames().add(new Pixel.Frame(pixel.rgbModeProperty()));
                 }
             }
-            for (int i = frames.size(); i < programLength(); i++) {
-                framesCache.add(new LedFrame(i + 1, getPixelsBackgroundProperties(i - 1)));
+            for (int i = framesCache.size(); i < programLength(); i++) {
+                framesCache.add(new LedFrame(i + 1, getPixelsBackgroundProperties(i)));
             }
         }
         if (frames.size() < programLength()) {
