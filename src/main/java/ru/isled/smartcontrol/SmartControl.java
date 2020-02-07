@@ -77,11 +77,15 @@ public class SmartControl extends Application {
         project = new Project();
         project.hasChangesProperty().addListener(l -> updateHeader());
         updateHeader();
-        controller = new MainController(project, this);
+
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("view/main.fxml"));
-        loader.setController(controller);
         Scene scene = new Scene(loader.load());
+
+        controller = loader.getController();
+        controller.setProject(project);
+        controller.setMainApp(this);
+
         mainStage.setScene(scene);
         mainStage.getIcons().add(new Image(getClass().getResourceAsStream("images/play.png")));
         mainStage.getScene().getStylesheets().addAll(getClass().getResource("css/custom.css").toExternalForm());

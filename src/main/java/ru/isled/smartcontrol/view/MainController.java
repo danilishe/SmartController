@@ -370,11 +370,6 @@ public class MainController {
 @FXML
 private Label bulbIcon;
 
-    public MainController(Project project, SmartControl mainApp) {
-        this.project = project;
-        this.mainApp = mainApp;
-    }
-
     @FXML
     public void increment5Frames() {
         framesSpinner.increment(5);
@@ -807,6 +802,10 @@ private Label bulbIcon;
 //        updateFramesCount();
 //        if (frameTableView.getColumns().size() > HEADER_COLUMNS) updateHeaderQuantifiers();
         updateTotalPixelCount();
+
+        initDataColumns();
+        frameTableView.setItems(project.getFrames());
+
     }
 
     public Project getProject() {
@@ -829,14 +828,13 @@ private Label bulbIcon;
         initGammaHandlers();
 
         initSpinners();
-        initDataColumns();
+
         initializePreviewZone();
         initializeBrightHandlers();
 
         frameTableView.getSelectionModel().setCellSelectionEnabled(true);
         frameTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 //        frameTableView.addEventHandler(EventType.ROOT, x -> handleCellSelection());
-        frameTableView.setItems(project.getFrames());
 //        frames.addListener((ListChangeListener<LedFrame>) c -> updateProgramLength());
     }
 
