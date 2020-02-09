@@ -4,20 +4,30 @@
 }
 
 .table-view:cell-selection .table-cell:selected {
-    -fx-border-width: 1px;
+    -fx-border-width: 2px;
     -fx-border-color: blue;
     -fx-background-insets: 2px;
 }
 
 .table-cell {
-    -fx-background-insets: 1px 7px 1px 7px;
+    -fx-background-insets: 2px 7px 2px 7px;
+    -fx-border-width: 2px;
 }
 
-.header/*, .table-cell:hover:selected > .header */{
+.header /*, .table-cell:hover:selected > .header */
+{
     -fx-alignment: center;
-    -fx-background-color: -fx-box-border, -fx-inner-border/*, -fx-body-color*/;
+    -fx-background-color: -fx-box-border, -fx-inner-border /*, -fx-body-color*/;
     -fx-font-weight: bold;
     -fx-text-fill: black;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
     /*-fx-font-size: 14pt;*/
     /*-fx-background-insets: 0, 0 1 1 0, 1 2 2 1;*/
+}
+
+.header:hover, .table-view:cell-selection .header.table-cell:selected {
+    -fx-border-width: 0;
+    -fx-border-insets: 0;
+    -fx-background-insets: 0;
 }
