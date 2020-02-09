@@ -1,18 +1,13 @@
 package ru.isled.smartcontrol.view;
 
 import com.sun.javafx.scene.control.skin.TableHeaderRow;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
-import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.isled.smartcontrol.SmartControl;
@@ -29,7 +24,6 @@ import java.io.File;
 import java.time.DateTimeException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -39,8 +33,6 @@ import static ru.isled.smartcontrol.Constants.*;
 public class MainController {
     private static final Logger log = LogManager.getLogger();
 
-    @FXML
-    public HBox previewZone;
     @FXML
     public Button maxBright;
     @FXML
@@ -61,16 +53,14 @@ public class MainController {
     public Slider brightSlider;
     @FXML
     public TextField brightField;
-    @FXML
-    public Spinner<Integer> frameLengthSpinner;
-    @FXML
-    public Spinner<Integer> frameCyclesSpinner;
+    private final FramePreviewController framePreviewController = new FramePreviewController(this);
     @FXML
     public Slider zoomSlider;
     @FXML
     public Menu lastFiles;
+    @FXML
+    public HBox previewZone;
     private Project project;
-    private List<Shape> previewPixels = new ArrayList<>(MAX_CHANNELS_COUNT);
     private SmartControl mainApp;
     @FXML
     private Label fullTime;
@@ -78,7 +68,10 @@ public class MainController {
     private Spinner<Integer> chanelQuantifier;
 
     @FXML
-    private ToggleGroup pixelEffect;
+    public Spinner<Integer> frameLengthSpinner;
+    @FXML
+    public Spinner<Integer> frameCyclesSpinner;
+    private FrameHandlersController frameHandlersController = new FrameHandlersController(this);
 
     @FXML
     public void setFadeInEffect() {
@@ -161,20 +154,6 @@ public class MainController {
         zoomSlider.valueProperty().addListener((o, ov, nv) -> setColumnsWidth(nv.doubleValue()));
     }
 
-    private void initializePreviewZone() {
-        for (int i = 0; i < MAX_CHANNELS_COUNT; i++) {
-            Shape pixel = new Rectangle(20, 20, Color.BLACK);
-            Text pixelText = new Text("" + (i + 1));
-            StackPane stack = new StackPane(pixel, pixelText);
-            pixel.setStroke(Color.BLACK);
-            pixel.setStrokeWidth(0.7);
-
-            if (i >= DEFAULT_PIXEL_COUNT) stack.setVisible(false);
-            previewPixels.add(pixel);
-            previewZone.getChildren().add(stack);
-        }
-    }
-
     private void initializeBrightHandlers() {
         brightSlider.valueProperty().addListener((ov, o, n) -> {
             brightField.setText(String.valueOf(n.intValue()));
@@ -214,7 +193,7 @@ public class MainController {
             project.getPixel(pixelNo).getFrames().get(frameNo).setBright(bright);
             project.setHasChanges(true);
         }
-        previewFrame(getSelectedFrame());
+        framePreviewController.previewFrame(getSelectedFrame());
     }
 
     private void setEffectSelectedCells(PixelEffect effect) {
@@ -225,7 +204,7 @@ public class MainController {
             project.getPixel(pixelNo).getFrames().get(frameNo).setEffect(effect);
             project.setHasChanges(true);
         }
-        previewFrame(getSelectedFrame());
+        framePreviewController.previewFrame(getSelectedFrame());
     }
 
     private void setLengthSelectedFrames(int length) {
@@ -258,36 +237,30 @@ public class MainController {
         updateProgramLength();
     }
 
-//    private void handleCellSelection() {
-//
-//        frameTableView.requestFocus();
-//
-//        selectAllRowsWhereHeaderIsSelected();
-//
-//        List<TablePosition<LedFrame, Pixel.Frame>> selectedDataCells = getSelectedDataCells();
-//
-//        if (!selectedDataCells.isEmpty()) {
-//
-//            TablePosition<LedFrame, Pixel.Frame> position = selectedDataCells.get(0);
-//
-//            final int frameNo = position.getRow();
-//            final int pixelNo = position.getColumn() - HEADER_COLUMNS;
-//            LedFrame frame = project.getFrame(frameNo);
-//            Pixel.Frame pixel = frame.getPixelValue(pixelNo);
-//
-//            previewFrame(frame);
-//
-//            if (selectedDataCells.size() == 1) {
-//
-//
-//                if (cellValue <= MAX_BRIGHT) {
-//                    brightField.textProperty().setValue("" + cellValue);
-//                } else {
-//                    brightField.textProperty().setValue(PixelEffect.byIndex(cellValue).name());
-//                }
-//            }
-//        }
-//    }
+    private void handleCellSelection() {
+
+        frameTableView.requestFocus();
+
+        selectAllRowsWhereHeaderIsSelected();
+
+        List<TablePosition> selectedDataCells = getSelectedDataCells();
+
+        if (!selectedDataCells.isEmpty()) {
+
+            framePreviewController.previewFrame(getSelectedFrame());
+
+            if (selectedDataCells.size() == 1) {
+                frameHandlersController.updateHandlers(getSelectedFrame());
+            }
+        }
+    }
+
+    private Pixel.Frame getSelectedPixelFrame() {
+        final TablePosition selectedCell = getSelectedDataCells().get(0);
+        final int frameNo = selectedCell.getRow();
+        final int pixelNo = selectedCell.getColumn() - HEADER_COLUMNS;
+        return project.getPixel(pixelNo).getFrames().get(frameNo);
+    }
 
     private void setFrameHandlersDisabled(boolean b) {
         brightField.setDisable(b);
@@ -317,42 +290,13 @@ public class MainController {
     }
 
     private LedFrame getSelectedFrame() {
-        try {
-            final int frameNo = frameTableView.getSelectionModel().getSelectedCells().get(0).getRow();
-            return project.getFrame(frameNo);
-        } catch (IndexOutOfBoundsException out) {
+        if (getSelectedFrames().isEmpty())
             return project.getFrame(0);
-        }
+        else return getSelectedFrames().get(0);
     }
 
-    private void previewFrame(LedFrame frame) {
-/* TODO
-        frameLengthSpinner.getValueFactory().setValue(frame.getFrameLength());
-        frameCyclesSpinner.getValueFactory().setValue(frame.getCycles());
-        previewZone.setPreview(project.getframe.getSubFrames())
-        for (int i = 0; i < pixelSpinner.getValue(); i++) {
-
-            Shape pixel = previewPixels.get(i);
-
-            pixel.getStyleClass().clear();
-            if (frame.getPixelValue(i) <= MAX_BRIGHT) {
-                pixel.getStyleClass().clear();
-                pixel.scaleYProperty().set(1 + .1 * project.getPixels().get(i));
-                pixel.fillProperty().setValue(
-                        Color.rgb(0xFF, 0xFF, 0, ((double) frame.getPixelValue(i) / MAX_BRIGHT)));
-            } else {
-//                pixel.fillProperty().setValue(
-//                        null
-//                );
-
-                if (pixel.getStyleClass().isEmpty())
-                    pixel.getStyleClass().add(PixelEffect.cssByIndex(frame.getPixelValue(i)));
-                else
-                    pixel.getStyleClass().set(0, PixelEffect.cssByIndex(frame.getPixelValue(i)));
-
-            }
-        }
-*/
+    public List<LedFrame> getSelectedFrames() {
+        return frameTableView.getSelectionModel().getSelectedItems();
     }
 
     //    private void changePixelQuantities() {
@@ -447,9 +391,7 @@ public class MainController {
 
         initPixelSpinner();
 
-        initLengthSpinner();
-
-        initCyclesSpinner();
+        frameHandlersController.init(frameLengthSpinner, frameCyclesSpinner);
 
         initPixelQuantifierSpinner();
 
@@ -464,92 +406,6 @@ public class MainController {
                 .stream()
                 .filter(x -> x.getColumn() >= HEADER_COLUMNS)
                 .collect(Collectors.toList());
-    }
-
-    private void initCyclesSpinner() {
-        frameCyclesSpinner.setValueFactory(
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(MIN_CYCLES, MAX_CYCLES, 1));
-        frameCyclesSpinner.getEditor().textProperty().addListener((ov, oldV, newV) -> {
-            if (!newV.matches("\\d+"))
-                frameCyclesSpinner.getEditor().setText(oldV);
-        });
-        frameCyclesSpinner.getValueFactory().valueProperty().addListener((ov, oldV, newV) -> {
-            if (newV > MAX_CYCLES)
-                frameCyclesSpinner.getEditor().setText("" + MAX_CYCLES);
-            else if (newV < MIN_CYCLES)
-                frameCyclesSpinner.getEditor().setText("" + MIN_CYCLES);
-
-            if (newV >= MIN_CYCLES && newV <= MAX_CYCLES) {
-                setCyclesSelectedFrames();
-            }
-        });
-    }
-
-    private void setCyclesSelectedFrames() {
-        int cycles = frameCyclesSpinner.getValue();
-        frameTableView.getSelectionModel().getSelectedItems().forEach(frame -> frame.setCycles(cycles));
-        updateProgramLength();
-    }
-
-    private void initLengthSpinner() {
-        frameLengthSpinner.setValueFactory(
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(MIN_FRAME_LENGTH, MAX_FRAME_LENGTH, DEFAULT_FRAME_LENGTH, FRAME_LENGTH_STEP)
-        );
-
-        // запрет ввода НЕ цифр
-        frameLengthSpinner.getEditor().textProperty().addListener((ov, oldValue, newValue) -> {
-            if (!newValue.matches("\\d+"))
-                frameLengthSpinner.getEditor().setText(oldValue);
-        });
-
-        // отслеживает корректность значения спиннера (не текстового поля, входящего в его состав)
-        frameLengthSpinner.getValueFactory().valueProperty().addListener((observable, oldValue, newValue) -> {
-
-            if (newValue % FRAME_LENGTH_STEP != 0)
-                frameLengthSpinner.getValueFactory().setValue((newValue / FRAME_LENGTH_STEP * FRAME_LENGTH_STEP));
-
-            if (newValue > MAX_FRAME_LENGTH)
-                frameLengthSpinner.getValueFactory().setValue(MAX_FRAME_LENGTH);
-            else if (newValue < MIN_FRAME_LENGTH)
-                frameLengthSpinner.getValueFactory().setValue(MIN_FRAME_LENGTH);
-
-            if (newValue % MIN_FRAME_LENGTH == 0 && newValue <= MAX_FRAME_LENGTH && newValue >= MIN_FRAME_LENGTH) {
-                setLengthSelectedFrames(newValue);
-            } else {
-//                frameLengthSpinner.getValueFactory().getValue());
-            }
-
-        });
-
-        frameLengthSpinner.getEditor().addEventHandler(KeyEvent.KEY_RELEASED, event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                frameTableView.getColumns().get(HEADER_COLUMNS - 1).setVisible(false);
-                frameLengthSpinner.getEditor().commitValue();
-                frameTableView.getColumns().get(HEADER_COLUMNS - 1).setVisible(true);
-                event.consume();
-            }
-        });
-        // применяет значение после потери фокуса
-        frameLengthSpinner.getEditor().focusedProperty().addListener((ov, o, n) -> {
-            if (n == false) {
-                int val = Integer.parseInt(frameLengthSpinner.getEditor().getText());
-                if (val % FRAME_LENGTH_STEP != 0)
-                    val = val / FRAME_LENGTH_STEP * FRAME_LENGTH_STEP;
-
-                if (val > MAX_FRAME_LENGTH)
-                    val = MAX_FRAME_LENGTH;
-                else if (val < MIN_FRAME_LENGTH)
-                    val = MIN_FRAME_LENGTH;
-
-                // чётко обновляет внешний вид таблицы, так как после скрытия столбца, его значение меняется
-                if (frameLengthSpinner.getValue() != val) {
-                    frameTableView.getColumns().get(HEADER_COLUMNS - 1).setVisible(false);
-                    frameLengthSpinner.getValueFactory().setValue(val);
-                    frameTableView.getColumns().get(HEADER_COLUMNS - 1).setVisible(true);
-                }
-            }
-        });
-
     }
 
     private void initPixelSpinner() {
@@ -628,12 +484,14 @@ public class MainController {
         int selectedPixelNumber = pixelSpinner.getValue();
         for (int i = 0; i < MAX_CHANNELS_COUNT; i++) {
 
-            frameTableView.getColumns().get(i + HEADER_COLUMNS).visibleProperty().setValue(
-                    i < selectedPixelNumber);
+            final boolean expectedVisibility = i < selectedPixelNumber;
+            final TableColumn<LedFrame, ?> column = frameTableView.getColumns().get(i + HEADER_COLUMNS);
+            if (column.isVisible() != expectedVisibility)
+                column.setVisible(expectedVisibility);
 
-            previewPixels.get(i).getParent().setVisible(
-                    i < selectedPixelNumber);
         }
+
+        framePreviewController.show(selectedPixelNumber);
     }
 
     private void initializeRowHeader() {
@@ -654,7 +512,7 @@ public class MainController {
         chanelQuantifier.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10, 1));
         chanelQuantifier.getValueFactory().valueProperty().addListener((val, ov, nv) -> {
 //            changePixelQuantities();
-            previewFrame(getSelectedFrame());
+            framePreviewController.previewFrame(getSelectedFrame());
         });
     }
 
@@ -833,12 +691,12 @@ public class MainController {
 
         initSpinners();
 
-        initializePreviewZone();
+        framePreviewController.init(previewZone);
         initializeBrightHandlers();
 
         frameTableView.getSelectionModel().setCellSelectionEnabled(true);
         frameTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-//        frameTableView.addEventHandler(EventType.ROOT, x -> handleCellSelection());
+        frameTableView.addEventHandler(EventType.ROOT, x -> handleCellSelection());
 //        frames.addListener((ListChangeListener<LedFrame>) c -> updateProgramLength());
     }
 
@@ -894,5 +752,13 @@ public class MainController {
         } else {
             gammaSlider.decrement();
         }
+    }
+
+    public void setCycles(int cycles) {
+        getSelectedFrames().forEach(frame -> frame.setCycles(cycles));
+    }
+
+    public void setLength(int length) {
+        getSelectedFrames().forEach(frame -> frame.setLength(length));
     }
 }

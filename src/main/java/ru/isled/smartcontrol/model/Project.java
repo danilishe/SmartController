@@ -149,7 +149,7 @@ public class Project {
      */
     public List<Color[]> getInterpolatedFrame(int frameNo) {
         final List<Color[]> interpolatedFrame = new ArrayList<>(getPixelsCount());
-        final int frameLength = getFrame(frameNo).getFrameLength();
+        final int frameLength = getFrame(frameNo).getLength();
         for (int i = 0; i < getPixelsCount(); i++) {
             interpolatedFrame.add(getPixel(i).getInterpolatedFrame(frameNo, frameLength));
         }
@@ -159,7 +159,7 @@ public class Project {
     public List<List<Color[]>> getInterpolated() {
         final List<List<Color[]>> interpolated = new ArrayList<>(programLength());
         for (int i = 0; i < programLength(); i++) {
-            if (getFrame(i).getFrameLength() == 0) continue;
+            if (getFrame(i).getLength() == 0) continue;
             final List<Color[]> interpolatedFrame = getInterpolatedFrame(i);
             for (int j = 0; j < getFrame(i).getCycles(); j++) {
                 interpolated.add(interpolatedFrame);
@@ -171,7 +171,7 @@ public class Project {
     public long getLength() {
         return frames.stream()
                 .limit(programLength())
-                .mapToLong(f -> f.getFrameLength() * f.getCycles())
+                .mapToLong(f -> f.getLength() * f.getCycles())
                 .sum();
     }
 

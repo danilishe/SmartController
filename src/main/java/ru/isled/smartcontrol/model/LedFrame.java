@@ -1,8 +1,10 @@
 package ru.isled.smartcontrol.model;
 
-import javafx.beans.property.*;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.scene.layout.Background;
 
 import java.util.List;
 
@@ -42,7 +44,7 @@ public class LedFrame {
         return number.asObject();
     }
 
-    public int getFrameLength() {
+    public int getLength() {
         return frameLength.asObject().get();
     }
 
@@ -58,10 +60,6 @@ public class LedFrame {
     public LedFrame setCycles(int cycles) {
         this.cycles.set(cycles);
         return this;
-    }
-
-    public ObjectProperty<Integer> getCyclesProperty() {
-        return cycles.asObject();
     }
 
     public ObjectProperty<Integer> frameLengthProperty() {
