@@ -22,7 +22,7 @@ public class Pixel {
     public final StringProperty background;
 
     public Pixel(int number, int framesCount) {
-        this(number, RgbMode.MONO_WHITE, 1, new ArrayList<>(MAX_FRAMES));
+        this(number, RgbMode.WHITE, 1, new ArrayList<>(MAX_FRAMES));
         for (int i = 0; i < framesCount; i++) {
             frames.add(new Frame(rgbMode));
         }

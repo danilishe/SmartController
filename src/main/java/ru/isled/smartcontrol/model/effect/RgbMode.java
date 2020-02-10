@@ -66,7 +66,7 @@ public enum RgbMode {
             };
         }
     },
-    MONO_WHITE {
+    WHITE {
         @Override
         public int channels() {
             return 1;
@@ -88,7 +88,59 @@ public enum RgbMode {
         public Color getVisibleColor(Color startColor) {
             return startColor.grayscale();
         }
+    },
+
+    COLD {
+        @Override
+        public int channels() {
+            return 1;
+        }
+
+        @Override
+        byte[] export(Color color) {
+            return new byte[]{
+                    toByte(color.getBrightness())
+            };
+        }
+
+        @Override
+        public String getBackground() {
+            return "-fx-background-color: #eef;";
+        }
+
+        @Override
+        public Color getVisibleColor(Color startColor) {
+            Color gray = startColor.grayscale();
+            return Color.color(gray.getRed() * TEMP_FACTOR, gray.getGreen() * TEMP_FACTOR, gray.getBlue());
+        }
+    },
+
+    WARM {
+        @Override
+        public int channels() {
+            return 1;
+        }
+
+        @Override
+        byte[] export(Color color) {
+            return new byte[]{
+                    toByte(color.getBrightness())
+            };
+        }
+
+        @Override
+        public String getBackground() {
+            return "-fx-background-color: #fee;";
+        }
+
+        @Override
+        public Color getVisibleColor(Color startColor) {
+            Color gray = startColor.grayscale();
+            return Color.color(gray.getRed(), gray.getGreen(), TEMP_FACTOR * gray.getBlue());
+        }
     };
+
+    public static final double TEMP_FACTOR = .93;
 
     private static byte toByte(double bright) {
         return (byte) (bright * MAX_BRIGHT);
