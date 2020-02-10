@@ -22,13 +22,15 @@ public class FramePreviewer extends Thread {
         while (!interrupted()) {
             change = false;
             try {
-                for (int i = 0; i < colors.get(0).length; i++) {
-                    for (int j = 0; j < colors.size(); j++) {
-                        previewPixels.get(j).setFill(colors.get(j)[i]);
+                if (colors == null) sleep(1_000);
+                else
+                    for (int i = 0; i < colors.get(0).length; i++) {
+                        for (int j = 0; j < colors.size(); j++) {
+                            previewPixels.get(j).setFill(colors.get(j)[i]);
+                        }
+                        if (change) break;
+                        sleep(MIN_FRAME_LENGTH);
                     }
-                    if (change) break;
-                    sleep(MIN_FRAME_LENGTH);
-                }
 
             } catch (Exception e) {
                 e.printStackTrace();
