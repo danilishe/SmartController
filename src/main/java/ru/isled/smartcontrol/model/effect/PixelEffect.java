@@ -2,13 +2,12 @@ package ru.isled.smartcontrol.model.effect;
 
 import javafx.scene.paint.Color;
 
-import java.security.InvalidParameterException;
 import java.util.Arrays;
 
 import static ru.isled.smartcontrol.Constants.*;
 
 public enum PixelEffect {
-    FadeIn(12345, "fadeIn") {
+    FadeIn {
         @Override
         protected String effectOverlay() {
             return "linear-gradient(from 0% 0% to 0% 100%, " +
@@ -26,7 +25,7 @@ public enum PixelEffect {
         }
     },
 
-    FadeOutIn(53135, "fadeOutIn") {
+    FadeOutIn {
         @Override
         protected String effectOverlay() {
             return "linear-gradient(from 0% 0% to 0% 100%, " +
@@ -47,7 +46,7 @@ public enum PixelEffect {
             return colors;
         }
     },
-    FadeInOut(13531, "fadeInOut") {
+    FadeInOut {
         @Override
         protected String effectOverlay() {
             return "linear-gradient(from 0% 0% to 0% 100%, " +
@@ -70,7 +69,7 @@ public enum PixelEffect {
     },
 
 
-    FadeOut(54321, "fadeOut") {
+    FadeOut {
         @Override
         protected String effectOverlay() {
             return "linear-gradient(from 0% 0% to 0% 100%, " +
@@ -85,7 +84,7 @@ public enum PixelEffect {
         }
     },
 
-    BlinkingFadeIn(19395, "mFadeIn") {
+    BlinkingFadeIn {
         @Override
         protected String effectOverlay() {
             return "linear-gradient(from 0% 0% to 0% 100%, " +
@@ -108,14 +107,14 @@ public enum PixelEffect {
             for (int i = 0; i < iterations; i++) {
                 if (i % 4 == 0) {
                     colors[i] = i < iterations / 2
-                            ? Color.hsb(colors[i].getHue(), colors[i].getSaturation(), MAX_BRIGHT)
-                            : Color.hsb(colors[i].getHue(), colors[i].getSaturation(), MIN_BRIGHT);
+                            ? Color.hsb(colors[i].getHue(), colors[i].getSaturation(), 1.0)
+                            : Color.hsb(colors[i].getHue(), colors[i].getSaturation(), 0);
                 }
             }
             return colors;
         }
     },
-    BlinkingFadeOut(59391, "mFadeOut") {
+    BlinkingFadeOut {
         @Override
         protected String effectOverlay() {
             return "linear-gradient(from 0% 0% to 0% 100%, " +
@@ -138,15 +137,15 @@ public enum PixelEffect {
             for (int i = 0; i < iterations; i++) {
                 if (i % 4 == 0) {
                     colors[i] = i < iterations / 2
-                            ? Color.hsb(colors[i].getHue(), colors[i].getSaturation(), MIN_BRIGHT)
-                            : Color.hsb(colors[i].getHue(), colors[i].getSaturation(), MAX_BRIGHT);
+                            ? Color.hsb(colors[i].getHue(), colors[i].getSaturation(), 0)
+                            : Color.hsb(colors[i].getHue(), colors[i].getSaturation(), 1);
                 }
             }
             return colors;
         }
     },
     // при мерцании главное, чтобы вспышка была не менее VISIBLE_PERIOD, иначе её сложно разглядеть как вспышку
-    Blinking(90909, "blink") {
+    Blinking {
         @Override
         protected String effectOverlay() {
             return "linear-gradient(from 0% 0% to 0% 100%, " +
@@ -177,7 +176,7 @@ public enum PixelEffect {
             return colors;
         }
     },
-    Chaos(75381, "chaos") {
+    Chaos {
         @Override
         protected String effectOverlay() {
             return "linear-gradient(from 0% 0% to 0% 100%, " +
@@ -210,7 +209,7 @@ public enum PixelEffect {
             return colors;
         }
     },
-    Solid(0, "base") {
+    Solid {
         @Override
         public Color[] interpolate(int iterations, Color start, Color end) {
             final Color[] colors = new Color[iterations];
@@ -227,37 +226,6 @@ public enum PixelEffect {
     };
 
     public static final int VISIBLE_PERIOD = 1000 / 5;
-    int code;
-    String cssClass;
-
-    PixelEffect(int code, String cssClass) {
-        this.code = code;
-        this.cssClass = cssClass;
-    }
-
-    public static PixelEffect byIndex(int index) {
-        return Arrays.stream(values())
-                .filter(e -> e.code == index)
-                .findFirst()
-                .orElseThrow(() -> new InvalidParameterException("Отсутствует пиксельный эффект с индексом: " + index));
-    }
-
-    public static String cssByIndex(int index) {
-        return Arrays.stream(values())
-                .filter(e -> e.code == index)
-                .findFirst()
-                .orElseThrow(() -> new InvalidParameterException("Отсутствует пиксельный эффект с индексом: " + index))
-                .cssClass();
-    }
-
-
-    public String cssClass() {
-        return cssClass;
-    }
-
-    public int index() {
-        return code;
-    }
 
     /**
      * Возвращает видимую на дисплее интерполяцию эффекта

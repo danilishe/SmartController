@@ -85,7 +85,7 @@ public class GlareEffectController implements Initializable {
         }
 
         if (tailBefore == 1) {
-            glare.add(PixelEffect.FadeIn.index());
+//            glare.add(PixelEffect.FadeIn.index());
         } else if (tailBefore > 1) {
             int step = (glBright - bgBright) / (tailBefore + 1);
             for (int i = 1; i <= tailBefore; i++) {
@@ -94,7 +94,7 @@ public class GlareEffectController implements Initializable {
         }
 
         if (tailAfter == 1) {
-            glare.add(0, PixelEffect.FadeOut.index());
+//            glare.add(0, PixelEffect.FadeOut.index());
         } else if (tailAfter > 1) {
             int step = (glBright - bgBright) / (tailAfter + 1);
             for (int i = 1; i <= tailAfter; i++) {

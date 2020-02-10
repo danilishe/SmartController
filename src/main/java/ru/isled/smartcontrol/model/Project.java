@@ -145,7 +145,8 @@ public class Project {
     }
 
     /**
-     * Return interpolated frame without using cycles information and pixel quantifier
+     * Return interpolated frame without using cycles information and pixel quantifier.
+     * frameNo starts from 0!!!
      */
     public List<Color[]> getInterpolatedFrame(int frameNo) {
         final List<Color[]> interpolatedFrame = new ArrayList<>(getPixelsCount());

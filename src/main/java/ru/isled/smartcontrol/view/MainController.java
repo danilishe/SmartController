@@ -3,6 +3,7 @@ package ru.isled.smartcontrol.view;
 import com.sun.javafx.scene.control.skin.TableHeaderRow;
 import javafx.event.EventType;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
@@ -53,13 +54,13 @@ public class MainController {
     public Slider brightSlider;
     @FXML
     public TextField brightField;
-    private final FramePreviewController framePreviewController = new FramePreviewController(this);
     @FXML
     public Slider zoomSlider;
     @FXML
     public Menu lastFiles;
     @FXML
     public HBox previewZone;
+    private FramePreviewController framePreviewController;
     private Project project;
     private SmartControl mainApp;
     @FXML
@@ -72,6 +73,7 @@ public class MainController {
     @FXML
     public Spinner<Integer> frameCyclesSpinner;
     private FrameHandlersController frameHandlersController = new FrameHandlersController(this);
+    private int lastFrame = -1;
 
     @FXML
     public void setFadeInEffect() {
@@ -207,16 +209,6 @@ public class MainController {
         framePreviewController.previewFrame(getSelectedFrame());
     }
 
-    private void setLengthSelectedFrames(int length) {
-        for (LedFrame frame : frameTableView.getSelectionModel().getSelectedItems()) {
-//            System.out.println("was=" + frame.getFrameLength() + " become=" + length);
-            frame.setLength(length);
-            //fixme move to listener
-            project.setHasChanges(true);
-        }
-        updateProgramLength();
-    }
-
     private void updateProgramLength() {
         fullTime.setText(mSecToProgramLength(project.getLength()));
     }
@@ -246,11 +238,10 @@ public class MainController {
         List<TablePosition> selectedDataCells = getSelectedDataCells();
 
         if (!selectedDataCells.isEmpty()) {
-
-            framePreviewController.previewFrame(getSelectedFrame());
-
-            if (selectedDataCells.size() == 1) {
+            if (getSelectedFrames().size() == 1 && getSelectedFrame().getNumber() != lastFrame) {
+                framePreviewController.previewFrame(getSelectedFrame());
                 frameHandlersController.updateHandlers(getSelectedFrame());
+                lastFrame = getSelectedFrame().getNumber();
             }
         }
     }
@@ -691,7 +682,9 @@ public class MainController {
 
         initSpinners();
 
+        framePreviewController = new FramePreviewController(this);
         framePreviewController.init(previewZone);
+
         initializeBrightHandlers();
 
         frameTableView.getSelectionModel().setCellSelectionEnabled(true);
@@ -760,5 +753,10 @@ public class MainController {
 
     public void setLength(int length) {
         getSelectedFrames().forEach(frame -> frame.setLength(length));
+        framePreviewController.previewFrame(getSelectedFrame());
+    }
+
+    public TableColumn<LedFrame, ?> getColumn(int i) {
+        return frameTableView.getColumns().get(i);
     }
 }

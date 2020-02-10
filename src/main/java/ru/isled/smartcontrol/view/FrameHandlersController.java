@@ -85,9 +85,9 @@ public class FrameHandlersController {
 
         frameLengthSpinner.getEditor().addEventHandler(KeyEvent.KEY_RELEASED, event -> {
             if (event.getCode() == KeyCode.ENTER) {
-//                frameTableView.getColumns().get(HEADER_COLUMNS - 1).setVisible(false);
+                mainController.getColumn(HEADER_COLUMNS - 1).setVisible(false);
                 frameLengthSpinner.getEditor().commitValue();
-//                frameTableView.getColumns().get(HEADER_COLUMNS - 1).setVisible(true);
+                mainController.getColumn(HEADER_COLUMNS - 1).setVisible(true);
                 event.consume();
             }
         });
@@ -105,9 +105,9 @@ public class FrameHandlersController {
 
                 // чётко обновляет внешний вид таблицы, так как после скрытия столбца, его значение меняется
                 if (frameLengthSpinner.getValue() != val) {
-//                    frameTableView.getColumns().get(HEADER_COLUMNS - 1).setVisible(false);
+                    mainController.getColumn(HEADER_COLUMNS - 1).setVisible(false);
                     frameLengthSpinner.getValueFactory().setValue(val);
-//                    frameTableView.getColumns().get(HEADER_COLUMNS - 1).setVisible(true);
+                    mainController.getColumn(HEADER_COLUMNS - 1).setVisible(true);
                 }
             }
         });

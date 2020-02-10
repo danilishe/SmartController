@@ -22,7 +22,7 @@ public enum Effect {
         }
     },
 
-    Случайно {
+    Случайно { // todo наверное стоит удалить, или переделать в СЛУЧАЙНЫЕ ЦВЕТА
         @Override
         public void apply(List<IntegerProperty> values, Integer cols, Integer rows) {
             ChaosEffectController effect = ChaosEffectController.get(values, cols, rows);

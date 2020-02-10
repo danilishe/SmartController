@@ -98,6 +98,9 @@ public class Pixel {
         return quantifier.asObject();
     }
 
+    /**
+     * frameNo starts from 0!!!
+     */
     public Color[] getInterpolatedFrame(int frameNo, int frameLength) {
         return getFrames().get(frameNo).getInterpolated(frameLength / MIN_FRAME_LENGTH);
     }
