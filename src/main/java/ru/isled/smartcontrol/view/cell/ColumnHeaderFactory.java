@@ -21,7 +21,10 @@ public class ColumnHeaderFactory {
         VBox header = new VBox(2);
         header.setMinHeight(40);
         header.setAlignment(Pos.BOTTOM_CENTER);
-        header.setOnContextMenuRequested(event -> contextMenu.show(header, event.getScreenX(), event.getScreenY()));
+        header.setOnContextMenuRequested(event -> {
+            contextMenu.show(header, event.getScreenX(), event.getScreenY());
+            event.consume();
+        });
 
         ToggleGroup tg = new ToggleGroup();
         for (RgbMode rgbMode : RgbMode.values()) {

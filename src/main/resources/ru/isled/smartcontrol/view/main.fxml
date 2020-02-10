@@ -1,384 +1,432 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.URL?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.ColorPicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.SeparatorMenuItem?>
-<?import javafx.scene.control.Slider?>
-<?import javafx.scene.control.Spinner?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.control.Tooltip?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-
-<BorderPane cacheShape="false" centerShape="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="900.0" minWidth="800.0" prefHeight="900.0" prefWidth="800.0" scaleShape="false" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.isled.smartcontrol.view.MainController">
+<?import java.net.URL?>
+<BorderPane cacheShape="false" centerShape="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+            minHeight="900.0" minWidth="800.0" prefHeight="900.0" prefWidth="800.0" scaleShape="false"
+            xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ru.isled.smartcontrol.view.MainController">
     <top>
         <VBox BorderPane.alignment="CENTER">
             <MenuBar>
                 <Menu mnemonicParsing="false" text="Файл">
-                    <MenuItem mnemonicParsing="false" onAction="#newFile" text="Новый" />
-                    <MenuItem mnemonicParsing="false" onAction="#loadFile" text="Открыть..." />
-                    <Menu fx:id="lastFiles" mnemonicParsing="false" text="Открыть недавние" />
-                    <SeparatorMenuItem mnemonicParsing="false" />
-                    <MenuItem mnemonicParsing="false" onAction="#saveFile" text="Сохранить" />
-                    <MenuItem mnemonicParsing="false" onAction="#saveFileAs" text="Сохранить как..." />
-                    <SeparatorMenuItem mnemonicParsing="false" />
-                    <MenuItem mnemonicParsing="false" onAction="#exportHandler" text="Экспорт..." />
-                    <SeparatorMenuItem mnemonicParsing="false" />
-                    <MenuItem mnemonicParsing="false" onAction="#exitHandler" text="Выход" />
+                    <MenuItem mnemonicParsing="false" onAction="#newFile" text="Новый"/>
+                    <MenuItem mnemonicParsing="false" onAction="#loadFile" text="Открыть..."/>
+                    <Menu fx:id="lastFiles" mnemonicParsing="false" text="Открыть недавние"/>
+                    <SeparatorMenuItem mnemonicParsing="false"/>
+                    <MenuItem mnemonicParsing="false" onAction="#saveFile" text="Сохранить"/>
+                    <MenuItem mnemonicParsing="false" onAction="#saveFileAs" text="Сохранить как..."/>
+                    <SeparatorMenuItem mnemonicParsing="false"/>
+                    <MenuItem mnemonicParsing="false" onAction="#exportHandler" text="Экспорт..."/>
+                    <SeparatorMenuItem mnemonicParsing="false"/>
+                    <MenuItem mnemonicParsing="false" onAction="#exitHandler" text="Выход"/>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Редактирование">
-                    <MenuItem mnemonicParsing="false" onAction="#selectAll" text="Выделить всё" />
-                    <MenuItem mnemonicParsing="false" onAction="#clearSelection" text="Снять выделение" />
+                    <MenuItem mnemonicParsing="false" onAction="#selectAll" text="Выделить всё"/>
+                    <MenuItem mnemonicParsing="false" onAction="#clearSelection" text="Снять выделение"/>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Помощь">
-                    <MenuItem mnemonicParsing="false" onAction="#showAboutInfoHandler" text="О программе..." />
+                    <MenuItem mnemonicParsing="false" onAction="#showAboutInfoHandler" text="О программе..."/>
                 </Menu>
             </MenuBar>
         </VBox>
     </top>
     <right>
         <VBox maxWidth="330.0" minWidth="330.0" prefWidth="330.0" spacing="5.0">
-            <TitledPane animated="false" collapsible="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="320.0" text="Пиксель">
-                <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="320.0" spacing="5.0">
-                    <HBox spacing="5.0">
-                        <children>
-                            <ColorPicker fx:id="startColor" editable="true" />
-                            <ColorPicker fx:id="endColor" editable="true" />
-                        </children>
-                    </HBox>
+            <TitledPane animated="false" collapsible="false" maxHeight="-Infinity" maxWidth="-Infinity"
+                        minHeight="-Infinity" minWidth="-Infinity" prefWidth="320.0" text="Пиксель">
+                <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+                      prefWidth="320.0" spacing="5.0">
+                    <FlowPane fx:id="colorPalette" hgap="2.0" prefHeight="0.0" vgap="2.0" VBox.vgrow="ALWAYS">
+                        <VBox.margin>
+                            <Insets/>
+                        </VBox.margin>
+                    </FlowPane>
                     <HBox onScroll="#scrollBright" spacing="5.0">
-                        <Slider fx:id="brightSlider" majorTickUnit="100.0" max="255.0" maxHeight="1.7976931348623157E308" minorTickCount="50" prefWidth="999.0" showTickLabels="true" showTickMarks="true" />
-                        <TextField fx:id="brightField" minWidth="60.0" text="0" />
+                        <Slider fx:id="brightSlider" majorTickUnit="100.0" max="255.0"
+                                maxHeight="1.7976931348623157E308" minorTickCount="50" prefWidth="999.0"
+                                showTickLabels="true" showTickMarks="true"/>
+                        <TextField fx:id="brightField" minWidth="60.0" text="0"/>
                     </HBox>
                     <HBox spacing="5.0">
-                        <Button fx:id="minBright" accessibleHelp="Отключение пиксела" alignment="BOTTOM_CENTER" minHeight="30.0" mnemonicParsing="false" onAction="#setMinBright" prefWidth="500.0">
+                        <Button fx:id="minBright" accessibleHelp="Отключение пиксела" alignment="BOTTOM_CENTER"
+                                minHeight="30.0" mnemonicParsing="false" onAction="#setMinBright" prefWidth="500.0">
                             <tooltip>
-                                <Tooltip text="Выключенный пиксел" />
+                                <Tooltip text="Выключенный пиксел"/>
                             </tooltip>
                         </Button>
-                        <Button fx:id="b25" alignment="BOTTOM_CENTER" layoutX="10.0" layoutY="10.0" minHeight="30.0" mnemonicParsing="false" onAction="#set25Bright" prefWidth="500.0">
+                        <Button fx:id="b25" alignment="BOTTOM_CENTER" layoutX="10.0" layoutY="10.0" minHeight="30.0"
+                                mnemonicParsing="false" onAction="#set25Bright" prefWidth="500.0">
                             <graphic>
                                 <ImageView fitHeight="5.0" fitWidth="20.0" pickOnBounds="true">
-                                    <Image url="@../images/base.png" />
+                                    <Image url="@../images/base.png"/>
                                 </ImageView>
                             </graphic>
                             <tooltip>
-                                <Tooltip text="25% яркости" />
+                                <Tooltip text="25% яркости"/>
                             </tooltip>
                         </Button>
-                        <Button fx:id="b50" alignment="BOTTOM_CENTER" layoutX="184.0" layoutY="10.0" minHeight="30.0" mnemonicParsing="false" onAction="#set50Bright" prefWidth="500.0">
+                        <Button fx:id="b50" alignment="BOTTOM_CENTER" layoutX="184.0" layoutY="10.0" minHeight="30.0"
+                                mnemonicParsing="false" onAction="#set50Bright" prefWidth="500.0">
                             <graphic>
                                 <ImageView fitHeight="10.0" fitWidth="20.0" pickOnBounds="true">
-                                    <Image url="@../images/base.png" />
+                                    <Image url="@../images/base.png"/>
                                 </ImageView>
                             </graphic>
                             <tooltip>
-                                <Tooltip text="50% яркости" />
+                                <Tooltip text="50% яркости"/>
                             </tooltip>
                         </Button>
-                        <Button fx:id="b75" alignment="BOTTOM_CENTER" layoutX="196.0" layoutY="10.0" minHeight="30.0" mnemonicParsing="false" onAction="#set75Bright" prefWidth="500.0">
+                        <Button fx:id="b75" alignment="BOTTOM_CENTER" layoutX="196.0" layoutY="10.0" minHeight="30.0"
+                                mnemonicParsing="false" onAction="#set75Bright" prefWidth="500.0">
                             <graphic>
                                 <ImageView fitHeight="15.0" fitWidth="20.0" pickOnBounds="true">
-                                    <Image url="@../images/base.png" />
+                                    <Image url="@../images/base.png"/>
                                 </ImageView>
                             </graphic>
                             <tooltip>
-                                <Tooltip text="75% яркость" />
+                                <Tooltip text="75% яркость"/>
                             </tooltip>
                         </Button>
-                        <Button fx:id="maxBright" alignment="BOTTOM_CENTER" layoutX="196.0" layoutY="10.0" minHeight="30.0" mnemonicParsing="false" onAction="#setMaxBright" prefWidth="500.0">
+                        <Button fx:id="maxBright" alignment="BOTTOM_CENTER" layoutX="196.0" layoutY="10.0"
+                                minHeight="30.0" mnemonicParsing="false" onAction="#setMaxBright" prefWidth="500.0">
                             <graphic>
                                 <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true">
-                                    <Image url="@../images/base.png" />
+                                    <Image url="@../images/base.png"/>
                                 </ImageView>
                             </graphic>
                             <tooltip>
-                                <Tooltip text="100% яркость" />
+                                <Tooltip text="100% яркость"/>
                             </tooltip>
                         </Button>
                     </HBox>
                     <FlowPane hgap="5.0" vgap="5.0">
                         <children>
-                            <Button fx:id="solidEffect" accessibleHelp="Мерцающее уменьшение яркости пиксела" accessibleText="Мерцающее угасание" layoutX="120.0" layoutY="45.0" minHeight="30.0" mnemonicParsing="false" onAction="#setSolidEffect" prefWidth="105.0" text="Без эффекта">
+                            <Button fx:id="solidEffect" accessibleHelp="Мерцающее уменьшение яркости пиксела"
+                                    accessibleText="Мерцающее угасание" layoutX="120.0" layoutY="45.0" minHeight="30.0"
+                                    mnemonicParsing="false" onAction="#setSolidEffect" prefWidth="105.0"
+                                    text="Без эффекта">
                                 <tooltip>
-                                    <Tooltip text="Без эффекта" />
+                                    <Tooltip text="Без эффекта"/>
                                 </tooltip>
                             </Button>
-                            <Button fx:id="fadeIn" accessibleHelp="Плавное разгорание пиксела" accessibleText="Разгорание" minHeight="30.0" mnemonicParsing="false" onAction="#setFadeInEffect" prefWidth="50.0">
+                            <Button fx:id="fadeIn" accessibleHelp="Плавное разгорание пиксела"
+                                    accessibleText="Разгорание" minHeight="30.0" mnemonicParsing="false"
+                                    onAction="#setFadeInEffect" prefWidth="50.0">
                                 <graphic>
                                     <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true">
-                                        <Image url="@../images/fadeIn.png" />
+                                        <Image url="@../images/fadeIn.png"/>
                                     </ImageView>
                                 </graphic>
                                 <tooltip>
-                                    <Tooltip text="Плавное разгорание" />
+                                    <Tooltip text="Плавное разгорание"/>
                                 </tooltip>
                             </Button>
-                            <Button fx:id="mFadeIn" accessibleHelp="Мерцающее увеличение яркости пиксела" accessibleText="Мерцающее разгорание" minHeight="30.0" mnemonicParsing="false" onAction="#setBlinkingFadeInEffect" prefWidth="50.0">
+                            <Button fx:id="mFadeIn" accessibleHelp="Мерцающее увеличение яркости пиксела"
+                                    accessibleText="Мерцающее разгорание" minHeight="30.0" mnemonicParsing="false"
+                                    onAction="#setBlinkingFadeInEffect" prefWidth="50.0">
                                 <graphic>
                                     <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true">
-                                        <Image url="@../images/mFadeIn.png" />
+                                        <Image url="@../images/mFadeIn.png"/>
                                     </ImageView>
                                 </graphic>
                                 <tooltip>
-                                    <Tooltip text="Мерцающее разгорание" />
+                                    <Tooltip text="Мерцающее разгорание"/>
                                 </tooltip>
                             </Button>
-                            <Button fx:id="blink" accessibleHelp="Мерцание пиксела от минимальной до максимальной яркости" accessibleText="Мерцание" minHeight="30.0" mnemonicParsing="false" onAction="#setBlinkEffect" prefWidth="50.0">
+                            <Button fx:id="blink"
+                                    accessibleHelp="Мерцание пиксела от минимальной до максимальной яркости"
+                                    accessibleText="Мерцание" minHeight="30.0" mnemonicParsing="false"
+                                    onAction="#setBlinkEffect" prefWidth="50.0">
                                 <graphic>
                                     <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true">
-                                        <Image url="@../images/blink.png" />
+                                        <Image url="@../images/blink.png"/>
                                     </ImageView>
                                 </graphic>
                                 <tooltip>
-                                    <Tooltip text="Мерцание" />
+                                    <Tooltip text="Мерцание"/>
                                 </tooltip>
                             </Button>
-                            <Button fx:id="fadeOutIn" accessibleHelp="Мерцающее увеличение яркости пиксела" accessibleText="Мерцающее разгорание" minHeight="30.0" mnemonicParsing="false" onAction="#setFadeOutInEffect" prefWidth="50.0">
+                            <Button fx:id="fadeOutIn" accessibleHelp="Мерцающее увеличение яркости пиксела"
+                                    accessibleText="Мерцающее разгорание" minHeight="30.0" mnemonicParsing="false"
+                                    onAction="#setFadeOutInEffect" prefWidth="50.0">
                                 <graphic>
                                     <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true">
-                                        <Image url="@../images/fadeOutIn.png" />
+                                        <Image url="@../images/fadeOutIn.png"/>
                                     </ImageView>
                                 </graphic>
                                 <tooltip>
-                                    <Tooltip text="Угасание затем разгорание" />
+                                    <Tooltip text="Угасание затем разгорание"/>
                                 </tooltip>
                             </Button>
-                            <Button fx:id="fadeOut" accessibleHelp="Медленное уменьшение яркости пиксела" accessibleText="Угасани" minHeight="30.0" mnemonicParsing="false" onAction="#setFadeOutEffect" prefWidth="50.0">
+                            <Button fx:id="fadeOut" accessibleHelp="Медленное уменьшение яркости пиксела"
+                                    accessibleText="Угасани" minHeight="30.0" mnemonicParsing="false"
+                                    onAction="#setFadeOutEffect" prefWidth="50.0">
                                 <graphic>
                                     <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true">
-                                        <Image url="@../images/fadeOut.png" />
+                                        <Image url="@../images/fadeOut.png"/>
                                     </ImageView>
                                 </graphic>
                                 <tooltip>
-                                    <Tooltip text="Плавное угасание" />
+                                    <Tooltip text="Плавное угасание"/>
                                 </tooltip>
                             </Button>
-                            <Button fx:id="mFadeOut" accessibleHelp="Мерцающее уменьшение яркости пиксела" accessibleText="Мерцающее угасание" minHeight="30.0" mnemonicParsing="false" onAction="#setBlinkingFadeOutEffect" prefWidth="50.0">
+                            <Button fx:id="mFadeOut" accessibleHelp="Мерцающее уменьшение яркости пиксела"
+                                    accessibleText="Мерцающее угасание" minHeight="30.0" mnemonicParsing="false"
+                                    onAction="#setBlinkingFadeOutEffect" prefWidth="50.0">
                                 <graphic>
                                     <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true">
-                                        <Image url="@../images/mFadeOut.png" />
+                                        <Image url="@../images/mFadeOut.png"/>
                                     </ImageView>
                                 </graphic>
                                 <tooltip>
-                                    <Tooltip text="Мерцающее угасание" />
+                                    <Tooltip text="Мерцающее угасание"/>
                                 </tooltip>
                             </Button>
-                            <Button fx:id="chaos" accessibleHelp="Хаотичное изменение яркости пиксела" accessibleText="Хаос" minHeight="30.0" mnemonicParsing="false" onAction="#setChaosEffect" prefWidth="50.0">
+                            <Button fx:id="chaos" accessibleHelp="Хаотичное изменение яркости пиксела"
+                                    accessibleText="Хаос" minHeight="30.0" mnemonicParsing="false"
+                                    onAction="#setChaosEffect" prefWidth="50.0">
                                 <graphic>
                                     <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true">
-                                        <Image url="@../images/chaos.png" />
+                                        <Image url="@../images/chaos.png"/>
                                     </ImageView>
                                 </graphic>
                                 <tooltip>
-                                    <Tooltip text="Хаотичная яркость" />
+                                    <Tooltip text="Хаотичная яркость"/>
                                 </tooltip>
                             </Button>
-                            <Button fx:id="fadeInOut" accessibleHelp="Мерцающее уменьшение яркости пиксела" accessibleText="Мерцающее угасание" minHeight="30.0" mnemonicParsing="false" onAction="#setFadeInOutEffect" prefWidth="50.0">
+                            <Button fx:id="fadeInOut" accessibleHelp="Мерцающее уменьшение яркости пиксела"
+                                    accessibleText="Мерцающее угасание" minHeight="30.0" mnemonicParsing="false"
+                                    onAction="#setFadeInOutEffect" prefWidth="50.0">
                                 <graphic>
                                     <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true">
-                                        <Image url="@../images/fadeInOut.png" />
+                                        <Image url="@../images/fadeInOut.png"/>
                                     </ImageView>
                                 </graphic>
                                 <tooltip>
-                                    <Tooltip text="Разгорание, затем угасание" />
+                                    <Tooltip text="Разгорание, затем угасание"/>
                                 </tooltip>
                             </Button>
                         </children>
                     </FlowPane>
                     <GridPane alignment="CENTER" hgap="5.0" vgap="5.0">
                         <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
                         </columnConstraints>
                         <rowConstraints>
-                            <RowConstraints vgrow="SOMETIMES" />
-                            <RowConstraints vgrow="SOMETIMES" />
+                            <RowConstraints vgrow="SOMETIMES"/>
+                            <RowConstraints vgrow="SOMETIMES"/>
                         </rowConstraints>
-                        <Label layoutX="10.0" layoutY="42.0" text="Каналов на пиксель" />
-                        <Spinner fx:id="chanelQuantifier" layoutX="116.0" layoutY="38.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onScroll="#scrollQuantifier" prefWidth="150.0" GridPane.columnIndex="1" />
+                        <Label layoutX="10.0" layoutY="42.0" text="Каналов на пиксель"/>
+                        <Spinner fx:id="chanelQuantifier" layoutX="116.0" layoutY="38.0" maxHeight="-Infinity"
+                                 maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+                                 onScroll="#scrollQuantifier" prefWidth="150.0" GridPane.columnIndex="1"/>
                     </GridPane>
                 </VBox>
             </TitledPane>
-            <TitledPane animated="false" collapsible="false" layoutX="15.0" layoutY="15.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="320.0" text="Кадр">
+            <TitledPane animated="false" collapsible="false" layoutX="15.0" layoutY="15.0" maxHeight="-Infinity"
+                        maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="320.0" text="Кадр">
                 <content>
                     <VBox maxHeight="-Infinity" maxWidth="-Infinity" spacing="5.0">
                         <children>
                             <GridPane alignment="CENTER" hgap="5.0" vgap="5.0">
                                 <columnConstraints>
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
                                 </columnConstraints>
                                 <rowConstraints>
-                                    <RowConstraints vgrow="SOMETIMES" />
-                                    <RowConstraints vgrow="SOMETIMES" />
-                                    <RowConstraints vgrow="SOMETIMES" />
+                                    <RowConstraints vgrow="SOMETIMES"/>
+                                    <RowConstraints vgrow="SOMETIMES"/>
+                                    <RowConstraints vgrow="SOMETIMES"/>
                                 </rowConstraints>
                                 <children>
-                                    <Label text="Длина кадра, мс" />
-                                    <Spinner fx:id="frameLengthSpinner" editable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onScroll="#scrollFrameLength" prefWidth="150.0" GridPane.columnIndex="1" />
-                                    <Label text="Повторов кадра" GridPane.rowIndex="1" />
-                                    <Spinner fx:id="frameCyclesSpinner" editable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onScroll="#scrollRepeats" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <Label text="Длина кадра, мс"/>
+                                    <Spinner fx:id="frameLengthSpinner" editable="true" maxHeight="-Infinity"
+                                             maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+                                             onScroll="#scrollFrameLength" prefWidth="150.0" GridPane.columnIndex="1"/>
+                                    <Label text="Повторов кадра" GridPane.rowIndex="1"/>
+                                    <Spinner fx:id="frameCyclesSpinner" editable="true" maxHeight="-Infinity"
+                                             maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+                                             onScroll="#scrollRepeats" prefWidth="150.0" GridPane.columnIndex="1"
+                                             GridPane.rowIndex="1"/>
                                 </children>
                             </GridPane>
                         </children>
                     </VBox>
                 </content>
             </TitledPane>
-            <TitledPane animated="false" collapsible="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="320.0" text="Многокадровые эффекты">
+            <TitledPane animated="false" collapsible="false" maxHeight="-Infinity" maxWidth="-Infinity"
+                        minHeight="-Infinity" minWidth="-Infinity" prefWidth="320.0" text="Многокадровые эффекты">
                 <VBox spacing="10.0">
                     <HBox spacing="10.0">
-                        <Button fx:id="clearSelection" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clearSelection" prefWidth="300.0" text="Снять выделение" />
-                        <Button fx:id="selectAll" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#selectAll" prefWidth="300.0" text="Выделить всё">
+                        <Button fx:id="clearSelection" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                                onAction="#clearSelection" prefWidth="300.0" text="Снять выделение"/>
+                        <Button fx:id="selectAll" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                                onAction="#selectAll" prefWidth="300.0" text="Выделить всё">
                             <opaqueInsets>
-                                <Insets />
+                                <Insets/>
                             </opaqueInsets>
                         </Button>
                     </HBox>
-                    <ChoiceBox fx:id="effectsSelector" maxWidth="1.7976931348623157E308" minWidth="230.0" />
-                    <Button fx:id="applyEffect" alignment="CENTER" contentDisplay="TOP" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#applyEffectHandler" prefWidth="230.0" text="Применить эффект">
+                    <ChoiceBox fx:id="effectsSelector" maxWidth="1.7976931348623157E308" minWidth="230.0"/>
+                    <Button fx:id="applyEffect" alignment="CENTER" contentDisplay="TOP"
+                            maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#applyEffectHandler"
+                            prefWidth="230.0" text="Применить эффект">
                         <opaqueInsets>
-                            <Insets />
+                            <Insets/>
                         </opaqueInsets>
                         <padding>
-                            <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
+                            <Insets bottom="5.0" left="15.0" right="15.0" top="5.0"/>
                         </padding>
                     </Button>
                 </VBox>
             </TitledPane>
-            <TitledPane animated="false" collapsible="false" maxHeight="240.0" prefHeight="240.0" text="Настройки программы">
+            <TitledPane animated="false" collapsible="false" maxHeight="240.0" prefHeight="240.0"
+                        text="Настройки программы">
                 <VBox spacing="10.0">
                     <HBox alignment="CENTER_LEFT" spacing="10.0" VBox.vgrow="NEVER">
                         <children>
                             <Label text="⏰">
                                 <font>
-                                    <Font size="18.0" />
+                                    <Font size="18.0"/>
                                 </font>
                             </Label>
-                            <Label fx:id="fullTime" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
+                            <Label fx:id="fullTime" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                                   minWidth="-Infinity" prefWidth="100.0"/>
                             <Label fx:id="bulbIcon" text="🔌">
                                 <tooltip>
                                     <Tooltip fx:id="errorTooltip">
                                         <font>
-                                            <Font size="14.0" />
+                                            <Font size="14.0"/>
                                         </font>
                                     </Tooltip>
                                 </tooltip>
                                 <font>
-                                    <Font size="18.0" />
+                                    <Font size="18.0"/>
                                 </font>
                             </Label>
-                            <Label fx:id="totalPixels" maxHeight="-Infinity" maxWidth="-Infinity" prefWidth="80.0" text="10" />
+                            <Label fx:id="totalPixels" maxHeight="-Infinity" maxWidth="-Infinity" prefWidth="80.0"
+                                   text="10"/>
                         </children>
                     </HBox>
                     <GridPane hgap="5.0" minHeight="55.0" vgap="15.0">
                         <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" />
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308"/>
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0"
+                                               prefWidth="100.0"/>
                         </columnConstraints>
                         <rowConstraints>
-                            <RowConstraints minHeight="15.0" prefHeight="20.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="15.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="15.0" prefHeight="20.0" vgrow="SOMETIMES"/>
+                            <RowConstraints minHeight="15.0" prefHeight="20.0" vgrow="SOMETIMES"/>
                         </rowConstraints>
                         <VBox.margin>
-                            <Insets bottom="5.0" top="5.0" />
+                            <Insets bottom="5.0" top="5.0"/>
                         </VBox.margin>
-                        <Spinner fx:id="framesSpinner" editable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onScroll="#scrollFrames" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Label text="Кадров" GridPane.rowIndex="1" />
-                        <Spinner fx:id="pixelSpinner" editable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onScroll="#scrollPixels" prefWidth="150.0" GridPane.columnIndex="1" />
-                        <Label text="Пикселей" />
+                        <Spinner fx:id="framesSpinner" editable="true" maxHeight="-Infinity" maxWidth="-Infinity"
+                                 minHeight="-Infinity" minWidth="-Infinity" onScroll="#scrollFrames" prefWidth="150.0"
+                                 GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                        <Label text="Кадров" GridPane.rowIndex="1"/>
+                        <Spinner fx:id="pixelSpinner" editable="true" maxHeight="-Infinity" maxWidth="-Infinity"
+                                 minHeight="-Infinity" minWidth="-Infinity" onScroll="#scrollPixels" prefWidth="150.0"
+                                 GridPane.columnIndex="1"/>
+                        <Label text="Пикселей"/>
                     </GridPane>
                     <HBox spacing="5.0">
-                        <Button fx:id="dec5" mnemonicParsing="false" onAction="#decrement5Frames" prefWidth="150.0" text="-5" />
-                        <Button fx:id="dec15" mnemonicParsing="false" onAction="#decrement15Frames" prefWidth="150.0" text="-15" />
-                        <Button fx:id="inc15" mnemonicParsing="false" onAction="#increment15Frames" prefWidth="150.0" text="+15" />
-                        <Button fx:id="inc5" mnemonicParsing="false" onAction="#increment5Frames" prefWidth="150.0" text="+5" />
+                        <Button fx:id="dec5" mnemonicParsing="false" onAction="#decrement5Frames" prefWidth="150.0"
+                                text="-5"/>
+                        <Button fx:id="dec15" mnemonicParsing="false" onAction="#decrement15Frames" prefWidth="150.0"
+                                text="-15"/>
+                        <Button fx:id="inc15" mnemonicParsing="false" onAction="#increment15Frames" prefWidth="150.0"
+                                text="+15"/>
+                        <Button fx:id="inc5" mnemonicParsing="false" onAction="#increment5Frames" prefWidth="150.0"
+                                text="+5"/>
                     </HBox>
                     <HBox onScroll="#scrollGamma" spacing="5.0">
                         <children>
-                            <Label contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="60.0" text="Гамма" HBox.hgrow="NEVER" />
-                            <Slider fx:id="gammaSlider" blockIncrement="0.1" majorTickUnit="10.0" max="4.0" min="-4.0" minorTickCount="5" prefHeight="38.0" prefWidth="229.0" showTickMarks="true" value="2.2" />
-                            <Label fx:id="gammaLabel" prefHeight="21.0" prefWidth="125.0" text="2.2" />
+                            <Label contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity"
+                                   minHeight="-Infinity" minWidth="-Infinity" prefWidth="60.0" text="Гамма"
+                                   HBox.hgrow="NEVER"/>
+                            <Slider fx:id="gammaSlider" blockIncrement="0.1" majorTickUnit="10.0" max="4.0" min="-4.0"
+                                    minorTickCount="5" prefHeight="38.0" prefWidth="229.0" showTickMarks="true"
+                                    value="2.2"/>
+                            <Label fx:id="gammaLabel" prefHeight="21.0" prefWidth="125.0" text="2.2"/>
                         </children>
                     </HBox>
                 </VBox>
             </TitledPane>
             <padding>
-                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
             </padding>
         </VBox>
     </right>
     <bottom>
-        <VBox maxHeight="1.7976931348623157E308" minHeight="85.0" prefHeight="85.0" spacing="5.0" BorderPane.alignment="TOP_LEFT">
+        <VBox maxHeight="1.7976931348623157E308" minHeight="85.0" prefHeight="85.0" spacing="5.0"
+              BorderPane.alignment="TOP_LEFT">
             <opaqueInsets>
-                <Insets />
+                <Insets/>
             </opaqueInsets>
             <padding>
-                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
             </padding>
             <HBox prefHeight="32.0" spacing="5.0">
                 <Label text="🔎">
                     <font>
-                        <Font size="18.0" />
+                        <Font size="18.0"/>
                     </font>
                 </Label>
-                <Slider fx:id="zoomSlider" maxHeight="1.7976931348623157E308" onScroll="#scrollZoom">
+                <Slider fx:id="zoomSlider" disable="true" maxHeight="1.7976931348623157E308" onScroll="#scrollZoom">
                     <tooltip>
-                        <Tooltip text="Ширина колонок" />
+                        <Tooltip text="Ширина колонок"/>
                     </tooltip>
                 </Slider>
             </HBox>
             <HBox alignment="CENTER_LEFT" spacing="5.0">
-                <Button fx:id="startPreview" minWidth="150.0" mnemonicParsing="false" onAction="#startPreview" text="Предпросмотр">
+                <Button fx:id="startPreview" minWidth="150.0" mnemonicParsing="false" onAction="#startPreview"
+                        text="Предпросмотр">
                     <graphic>
                         <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../images/play.png" />
+                                <Image url="@../images/play.png"/>
                             </image>
                         </ImageView>
                     </graphic>
                 </Button>
-                <Separator maxHeight="1.7976931348623157E308" orientation="VERTICAL" />
-                <HBox fx:id="previewZone" alignment="CENTER_LEFT" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="45.0" minWidth="300.0" prefHeight="45.0" prefWidth="614.0" spacing="5.0" />
+                <Separator maxHeight="1.7976931348623157E308" orientation="VERTICAL"/>
+                <HBox fx:id="previewZone" alignment="CENTER_LEFT" disable="true" maxHeight="1.7976931348623157E308"
+                      maxWidth="1.7976931348623157E308" minHeight="45.0" minWidth="300.0" prefHeight="45.0"
+                      prefWidth="614.0" spacing="5.0"/>
             </HBox>
         </VBox>
     </bottom>
     <center>
         <VBox prefHeight="99999.0" BorderPane.alignment="BOTTOM_CENTER">
             <children>
-                <TableView fx:id="frameTableView" accessibleRole="IMAGE_VIEW" cache="true" cacheShape="false" centerShape="false" editable="true" fixedCellSize="0.0" focusTraversable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="450.0" nodeOrientation="LEFT_TO_RIGHT" pickOnBounds="false" scaleShape="false" VBox.vgrow="ALWAYS">
+                <TableView fx:id="frameTableView" accessibleRole="IMAGE_VIEW" cache="true" cacheShape="false"
+                           centerShape="false" editable="true" fixedCellSize="0.0" focusTraversable="false"
+                           maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="450.0"
+                           nodeOrientation="LEFT_TO_RIGHT" pickOnBounds="false" scaleShape="false" VBox.vgrow="ALWAYS">
                     <columns>
-                        <TableColumn fx:id="frameNumColumn" editable="false" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="60.0" resizable="false" sortable="false" styleClass="header" text="#" />
-                        <TableColumn fx:id="frameRepeatColumn" editable="false" maxWidth="40.0" minWidth="40.0" prefWidth="40.0" resizable="false" sortable="false" styleClass="header" text="⭮" />
-                        <TableColumn fx:id="frameLengthColumn" editable="false" maxWidth="60.0" minWidth="40.0" prefWidth="50.0" resizable="false" sortable="false" styleClass="header" text="⏰" />
+                        <TableColumn fx:id="frameNumColumn" editable="false" maxWidth="1.7976931348623157E308"
+                                     minWidth="-Infinity" prefWidth="60.0" resizable="false" sortable="false"
+                                     styleClass="header" text="#"/>
+                        <TableColumn fx:id="frameRepeatColumn" editable="false" maxWidth="40.0" minWidth="40.0"
+                                     prefWidth="40.0" resizable="false" sortable="false" styleClass="header" text="⭮"/>
+                        <TableColumn fx:id="frameLengthColumn" editable="false" maxWidth="60.0" minWidth="40.0"
+                                     prefWidth="50.0" resizable="false" sortable="false" styleClass="header" text="⏰"/>
                     </columns>
                     <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
                     </columnResizePolicy>
                 </TableView>
             </children>
         </VBox>
     </center>
     <stylesheets>
-        <URL value="@../css/custom.css" />
+        <URL value="@../css/custom.css"/>
     </stylesheets>
 </BorderPane>

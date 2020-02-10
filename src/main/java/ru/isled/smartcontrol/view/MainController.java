@@ -5,9 +5,12 @@ import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.isled.smartcontrol.SmartControl;
@@ -16,6 +19,7 @@ import ru.isled.smartcontrol.model.Pixel;
 import ru.isled.smartcontrol.model.Project;
 import ru.isled.smartcontrol.model.effect.Effect;
 import ru.isled.smartcontrol.model.effect.PixelEffect;
+import ru.isled.smartcontrol.model.effect.RgbMode;
 import ru.isled.smartcontrol.view.cell.ColumnHeaderFactory;
 import ru.isled.smartcontrol.view.cell.LedFrameLengthCell;
 import ru.isled.smartcontrol.view.cell.LedFrameTableCell;
@@ -59,6 +63,7 @@ public class MainController {
     public Menu lastFiles;
     @FXML
     public HBox previewZone;
+    public FlowPane colorPalette;
     private FramePreviewController framePreviewController;
     private Project project;
     private SmartControl mainApp;
@@ -73,6 +78,7 @@ public class MainController {
     public Spinner<Integer> frameCyclesSpinner;
     private FrameHandlersController frameHandlersController = new FrameHandlersController(this);
     private int lastFrame = -1;
+    private ColorPaletteController colorPaletteController;
 
     @FXML
     public void setFadeInEffect() {
@@ -208,7 +214,7 @@ public class MainController {
         framePreviewController.previewFrame(getSelectedFrame());
     }
 
-    private void updateProgramLength() {
+    public void updateProgramLength() {
         fullTime.setText(mSecToProgramLength(project.getLength()));
     }
 
@@ -219,13 +225,6 @@ public class MainController {
             return "> 24 ч!";
         }
 
-    }
-
-    private void setCyclesSelectedFrames(int cycles) {
-        for (LedFrame frame : frameTableView.getSelectionModel().getSelectedItems()) {
-            frame.setLength(cycles);
-        }
-        updateProgramLength();
     }
 
     private void handleCellSelection() {
@@ -676,12 +675,30 @@ public class MainController {
         framePreviewController = new FramePreviewController(this);
         framePreviewController.init(previewZone);
 
+        colorPaletteController = new ColorPaletteController(this, colorPalette);
+
         initializeBrightHandlers();
 
         frameTableView.getSelectionModel().setCellSelectionEnabled(true);
         frameTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         frameTableView.addEventHandler(EventType.ROOT, x -> handleCellSelection());
+
+        ContextMenu tableContextMenu = new ContextMenu();
+        // todo move in TableController class
+        for (RgbMode rgbMode : RgbMode.values()) {
+            Shape graphic = new Rectangle(20, 10);
+            graphic.setStyle(rgbMode.getBackground().replace("background-color", "fill"));
+            graphic.setStroke(Color.BLACK);
+            MenuItem menuItem = new MenuItem(rgbMode.name(), graphic);
+            menuItem.setOnAction(event -> this.setRgbMode(rgbMode));
+            tableContextMenu.getItems().add(menuItem);
+        }
+        frameTableView.setContextMenu(tableContextMenu);
 //        frames.addListener((ListChangeListener<LedFrame>) c -> updateProgramLength());
+    }
+
+    private void setRgbMode(RgbMode rgbMode) {
+        getSelectedPixels().forEach(pixel -> pixel.setRgbMode(rgbMode));
     }
 
     private void updateTotalPixelCount() {
@@ -740,14 +757,33 @@ public class MainController {
 
     public void setCycles(int cycles) {
         getSelectedFrames().forEach(frame -> frame.setCycles(cycles));
+        updateProgramLength();
     }
 
     public void setLength(int length) {
         getSelectedFrames().forEach(frame -> frame.setLength(length));
         framePreviewController.previewFrame(getSelectedFrame());
+        updateProgramLength();
     }
 
     public TableColumn<LedFrame, ?> getColumn(int i) {
         return frameTableView.getColumns().get(i);
+    }
+
+    public void setStartColor(Color color) {
+        setColor(color, null);
+    }
+
+    public void setColor(Color startColor, Color endColor) {
+        getSelectedDataCells().forEach(pos ->
+                getProject().getPixel(pos.getColumn() - HEADER_COLUMNS)
+                        .getFrames().get(pos.getRow())
+                        .setColor(startColor, endColor)
+        );
+        framePreviewController.previewFrame(getSelectedFrame());
+    }
+
+    public void setEndColor(Color color) {
+        setColor(null, color);
     }
 }

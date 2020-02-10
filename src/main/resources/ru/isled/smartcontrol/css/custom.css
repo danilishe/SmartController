@@ -10,7 +10,7 @@
 }
 
 .table-cell {
-    -fx-background-insets: 2px 7px 2px 7px;
+    -fx-background-insets: 2px;
     -fx-border-width: 2px;
 }
 
