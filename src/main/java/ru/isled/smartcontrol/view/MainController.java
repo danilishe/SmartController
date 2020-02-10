@@ -3,7 +3,6 @@ package ru.isled.smartcontrol.view;
 import com.sun.javafx.scene.control.skin.TableHeaderRow;
 import javafx.event.EventType;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
@@ -238,6 +237,7 @@ public class MainController {
         List<TablePosition> selectedDataCells = getSelectedDataCells();
 
         if (!selectedDataCells.isEmpty()) {
+            chanelQuantifier.getEditor().textProperty().set("" + getSelectedPixels().get(0).getQuantifier());
             if (getSelectedFrames().size() == 1 && getSelectedFrame().getNumber() != lastFrame) {
                 framePreviewController.previewFrame(getSelectedFrame());
                 frameHandlersController.updateHandlers(getSelectedFrame());
@@ -502,9 +502,17 @@ public class MainController {
     private void initPixelQuantifierSpinner() {
         chanelQuantifier.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10, 1));
         chanelQuantifier.getValueFactory().valueProperty().addListener((val, ov, nv) -> {
-//            changePixelQuantities();
+            getSelectedPixels().forEach(pixel -> pixel.setQuantifier(nv));
             framePreviewController.previewFrame(getSelectedFrame());
         });
+    }
+
+    private List<Pixel> getSelectedPixels() {
+        return getSelectedDataCells().stream()
+                .map(position -> position.getColumn() - HEADER_COLUMNS)
+                .distinct()
+                .map(i -> getProject().getPixel(i))
+                .collect(Collectors.toList());
     }
 
     private void initFrameSpinner() {
@@ -546,14 +554,6 @@ public class MainController {
     @FXML
     private Label totalPixels;
 
-//    public void updateHeaderQuantifiers() {
-//        List<Integer> quantifiers = project.getPixels();
-//        for (int i = 0; i < quantifiers.size(); i++) {
-//            TableColumn<LedFrame, ?> column = frameTableView.getColumns().get(i + HEADER_COLUMNS - 1);
-//            column.setText(column.getText().replaceAll("\\[\\d+]", "[" + quantifiers.get(i) + "]"));
-//        }
-//    }
-
     private void loadAndSetDefaultEffects() {
         for (Effect effect : Effect.values()) {
             effectsSelector.getItems().add(effect.toString());
@@ -594,15 +594,6 @@ public class MainController {
             TableColumn<LedFrame, String> column = new TableColumn<>();
             final Pixel pixel = project.getPixel(i);
             column.setGraphic(ColumnHeaderFactory.get(pixel));
-
-
-//            column.addEventHandler(MouseEvent.ANY,
-//                    event -> {
-//                        frameTableView.getSelectionModel()
-//                                .selectRange(0, frameTableView.getColumns().get(absNum),
-//                                        framesSpinner.getValue(), frameTableView.getColumns().get(absNum + 1));
-//                        event.consume();
-//                    });
             column.setPrefWidth(INIT_COL_WIDTH);
             column.setResizable(false);
             column.setSortable(false);
