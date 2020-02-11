@@ -6,51 +6,53 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <?import java.net.URL?>
-<BorderPane cacheShape="false" centerShape="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-            minHeight="900.0" minWidth="800.0" prefHeight="900.0" prefWidth="800.0" scaleShape="false"
-            xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" cacheShape="false" centerShape="false" maxHeight="1.7976931348623157E308"
+            maxWidth="1.7976931348623157E308" minHeight="900.0" minWidth="800.0" prefHeight="900.0" prefWidth="800.0"
+            scaleShape="false" xmlns="http://javafx.com/javafx/8.0.171"
             fx:controller="ru.isled.smartcontrol.view.MainController">
     <top>
-        <VBox BorderPane.alignment="CENTER">
-            <MenuBar>
-                <Menu mnemonicParsing="false" text="Файл">
-                    <MenuItem mnemonicParsing="false" onAction="#newFile" text="Новый"/>
-                    <MenuItem mnemonicParsing="false" onAction="#loadFile" text="Открыть..."/>
-                    <Menu fx:id="lastFiles" mnemonicParsing="false" text="Открыть недавние"/>
-                    <SeparatorMenuItem mnemonicParsing="false"/>
-                    <MenuItem mnemonicParsing="false" onAction="#saveFile" text="Сохранить"/>
-                    <MenuItem mnemonicParsing="false" onAction="#saveFileAs" text="Сохранить как..."/>
-                    <SeparatorMenuItem mnemonicParsing="false"/>
-                    <MenuItem mnemonicParsing="false" onAction="#exportHandler" text="Экспорт..."/>
-                    <SeparatorMenuItem mnemonicParsing="false"/>
-                    <MenuItem mnemonicParsing="false" onAction="#exitHandler" text="Выход"/>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Редактирование">
-                    <MenuItem mnemonicParsing="false" onAction="#selectAll" text="Выделить всё"/>
-                    <MenuItem mnemonicParsing="false" onAction="#clearSelection" text="Снять выделение"/>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Помощь">
-                    <MenuItem mnemonicParsing="false" onAction="#showAboutInfoHandler" text="О программе..."/>
-                </Menu>
-            </MenuBar>
-            <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                  minWidth="-Infinity" prefWidth="800.0" spacing="5.0" VBox.vgrow="NEVER">
-                <children>
-                    <Label text="Кадров"/>
-                    <Spinner fx:id="framesSpinner" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                             minWidth="-Infinity" onScroll="#scrollFrames" prefWidth="120.0"/>
-                    <Label text="Пикселей"/>
-                    <Spinner fx:id="pixelSpinner" editable="true" maxHeight="-Infinity" maxWidth="-Infinity"
-                             minHeight="-Infinity" minWidth="-Infinity" onScroll="#scrollPixels" prefWidth="109.0"/>
-                </children>
-                <padding>
-                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0"/>
-                </padding>
-            </HBox>
-            <HBox fx:id="previewZone" alignment="CENTER_LEFT" disable="true" maxHeight="1.7976931348623157E308"
-                  maxWidth="1.7976931348623157E308" minHeight="45.0" minWidth="300.0" prefHeight="45.0"
-                  prefWidth="614.0" spacing="5.0"/>
-        </VBox>
+        <HBox spacing="5.0">
+            <children>
+                <MenuBar minWidth="-Infinity">
+                    <Menu mnemonicParsing="false" text="Файл">
+                        <MenuItem mnemonicParsing="false" onAction="#newFile" text="Новый"/>
+                        <MenuItem mnemonicParsing="false" onAction="#loadFile" text="Открыть..."/>
+                        <Menu fx:id="lastFiles" mnemonicParsing="false" text="Открыть недавние"/>
+                        <SeparatorMenuItem mnemonicParsing="false"/>
+                        <MenuItem mnemonicParsing="false" onAction="#saveFile" text="Сохранить"/>
+                        <MenuItem mnemonicParsing="false" onAction="#saveFileAs" text="Сохранить как..."/>
+                        <SeparatorMenuItem mnemonicParsing="false"/>
+                        <MenuItem mnemonicParsing="false" onAction="#exportHandler" text="Экспорт..."/>
+                        <SeparatorMenuItem mnemonicParsing="false"/>
+                        <MenuItem mnemonicParsing="false" onAction="#exitHandler" text="Выход"/>
+                    </Menu>
+                    <Menu mnemonicParsing="false" text="Редактирование">
+                        <MenuItem mnemonicParsing="false" onAction="#selectAll" text="Выделить всё"/>
+                        <MenuItem mnemonicParsing="false" onAction="#clearSelection" text="Снять выделение"/>
+                    </Menu>
+                    <Menu mnemonicParsing="false" text="Помощь">
+                        <MenuItem mnemonicParsing="false" onAction="#showAboutInfoHandler" text="О программе..."/>
+                    </Menu>
+                </MenuBar>
+                <HBox alignment="CENTER_RIGHT" prefWidth="8999999.0" spacing="15.0">
+                    <children>
+                        <Label text="🔎">
+                            <font>
+                                <Font size="18.0"/>
+                            </font>
+                        </Label>
+                        <Slider fx:id="zoomSlider" maxHeight="1.7976931348623157E308" onScroll="#scrollZoom">
+                            <tooltip>
+                                <Tooltip text="Ширина колонок"/>
+                            </tooltip>
+                        </Slider>
+                    </children>
+                    <HBox.margin>
+                        <Insets right="10.0"/>
+                    </HBox.margin>
+                </HBox>
+            </children>
+        </HBox>
     </top>
     <right>
         <VBox maxWidth="330.0" minWidth="330.0" prefWidth="330.0" spacing="5.0">
@@ -87,8 +89,6 @@
                         <Separator prefWidth="1.0E16"/>
                     </children>
                 </HBox>
-                <HBox spacing="5.0"/>
-                <HBox fx:id="brightPanel" spacing="5.0"/>
                 <HBox alignment="CENTER" layoutX="10.0" layoutY="15.0">
                     <children>
                         <Label minWidth="-Infinity" text="Пиксельные эффекты">
@@ -323,16 +323,34 @@
                     <Separator prefWidth="1.0E16"/>
                 </children>
             </HBox>
+            <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                  minWidth="-Infinity" prefWidth="800.0" spacing="5.0" VBox.vgrow="NEVER">
+                <children>
+                    <Label text="Кадров"/>
+                    <Spinner fx:id="framesSpinner" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                             minWidth="-Infinity" onScroll="#scrollFrames" prefHeight="31.0" prefWidth="110.0"/>
+                    <Label text="Пикселей">
+                        <opaqueInsets>
+                            <Insets/>
+                        </opaqueInsets>
+                        <HBox.margin>
+                            <Insets left="10.0"/>
+                        </HBox.margin>
+                    </Label>
+                    <Spinner fx:id="pixelSpinner" editable="true" maxHeight="-Infinity" maxWidth="-Infinity"
+                             minHeight="-Infinity" minWidth="-Infinity" onScroll="#scrollPixels" prefHeight="31.0"
+                             prefWidth="63.0"/>
+                </children>
+                <padding>
+                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0"/>
+                </padding>
+            </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="27.0" prefWidth="226.0" spacing="10.0">
                 <children>
-                    <Label prefHeight="27.0" prefWidth="34.0" text="⏰">
-                        <font>
-                            <Font size="18.0"/>
-                        </font>
-                    </Label>
+                    <Label prefHeight="27.0" text="Длительность"/>
                     <Label fx:id="fullTime" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                           minWidth="-Infinity" prefWidth="100.0" text="00:00:00"/>
-                    <Label fx:id="bulbIcon" prefHeight="27.0" prefWidth="27.0" text="🔌">
+                           minWidth="-Infinity" prefHeight="21.0" prefWidth="89.0" text="00:00:00"/>
+                    <Label fx:id="bulbIcon" prefHeight="27.0" text="Каналов">
                         <tooltip>
                             <Tooltip fx:id="errorTooltip">
                                 <font>
@@ -340,11 +358,9 @@
                                 </font>
                             </Tooltip>
                         </tooltip>
-                        <font>
-                            <Font size="18.0"/>
-                        </font>
                     </Label>
-                    <Label fx:id="totalPixels" maxHeight="-Infinity" maxWidth="-Infinity" prefWidth="80.0" text="10"/>
+                    <Label fx:id="totalPixels" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="21.0"
+                           prefWidth="59.0" text="10"/>
                 </children>
             </HBox>
             <VBox spacing="10.0">
@@ -372,6 +388,8 @@
                     <Font name="System Bold" size="15.0"/>
                 </font>
             </Button>
+            <CheckBox fx:id="animateFramePreview" mnemonicParsing="false" selected="true"
+                      text="анимация текущего кадра"/>
             <padding>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
             </padding>
@@ -404,20 +422,6 @@
         <URL value="@../css/custom.css"/>
     </stylesheets>
     <left>
-        <VBox prefHeight="703.0" prefWidth="0.0" BorderPane.alignment="CENTER">
-            <children>
-                <Label text="🔎">
-                    <font>
-                        <Font size="18.0"/>
-                    </font>
-                </Label>
-                <Slider fx:id="zoomSlider" maxHeight="1.7976931348623157E308" onScroll="#scrollZoom"
-                        orientation="VERTICAL">
-                    <tooltip>
-                        <Tooltip text="Ширина колонок"/>
-                    </tooltip>
-                </Slider>
-            </children>
-        </VBox>
+        <VBox prefHeight="703.0" prefWidth="0.0" BorderPane.alignment="CENTER"/>
     </left>
 </BorderPane>

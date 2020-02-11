@@ -9,9 +9,10 @@ import javafx.scene.shape.Shape;
 import ru.isled.smartcontrol.model.LedFrame;
 import ru.isled.smartcontrol.model.Pixel;
 import ru.isled.smartcontrol.model.effect.RgbMode;
-import ru.isled.smartcontrol.view.cell.ColumnHeaderFactory;
+import ru.isled.smartcontrol.view.cell.PixelHeader;
 import ru.isled.smartcontrol.view.cell.LedFrameTableCell;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,7 +23,7 @@ public class TableController {
     private final MainController mainController;
     private final TableView<LedFrame> frameTableView;
     private int lastFrame = -1;
-
+    private final List<Shape> previewPixels = new ArrayList<>(MAX_CHANNELS_COUNT);
 
     public TableController(MainController mainController, TableView<LedFrame> frameTableView) {
         this.mainController = mainController;
@@ -163,7 +164,11 @@ public class TableController {
         for (int i = 0; i < MAX_CHANNELS_COUNT; i++) {
             TableColumn<LedFrame, String> column = new TableColumn<>();
             final Pixel pixel = mainController.getProject().getPixel(i);
-            column.setGraphic(ColumnHeaderFactory.get(pixel));
+            PixelHeader header = new PixelHeader(pixel);
+//            column.widthProperty().addListener((observable, oldValue, newValue) -> header.setPrefWidth(newValue.doubleValue() - 2.0));
+            previewPixels.add(header.previewPixel);
+
+            column.setGraphic(header);
             column.setPrefWidth(INIT_COL_WIDTH);
             column.setResizable(false);
             column.setSortable(false);
@@ -190,5 +195,9 @@ public class TableController {
 
     public TableColumn<LedFrame, ?> getColumn(int i) {
         return frameTableView.getColumns().get(i);
+    }
+
+    public List<Shape> getPreviewPixels() {
+        return previewPixels;
     }
 }

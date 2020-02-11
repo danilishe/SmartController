@@ -4,7 +4,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import org.apache.logging.log4j.LogManager;
@@ -51,9 +50,10 @@ public class MainController {
     public Slider zoomSlider;
     @FXML
     public Menu lastFiles;
-    @FXML
-    public HBox previewZone;
     public FlowPane colorPalette;
+
+    @FXML
+    public CheckBox animateFramePreview;
     private FramePreviewController framePreviewController;
 
     private Project project;
@@ -217,7 +217,6 @@ public class MainController {
             else {
                 project.setPixelsCount(n);
                 tableController.refreshVisibleColumnsCount();
-                framePreviewController.show(n);
                 updateTotalPixelCount();
             }
         });
@@ -371,8 +370,16 @@ public class MainController {
         updateTotalPixelCount();
         updateProgramLength();
 
+        for (int i = 0; i < MAX_CHANNELS_COUNT; i++) {
+            project.getPixel(i).rgbModeProperty().addListener((observable, oldValue, newValue) -> refreshFramePreview());
+        }
+
         tableController.initDataColumns();
         tableController.refreshItems();
+    }
+
+    public void refreshFramePreview() {
+        framePreviewController.previewFrame(tableController.getSelectedFrame());
     }
 
     public Project getProject() {
@@ -413,13 +420,15 @@ public class MainController {
 
         initPixelQuantifierSpinner();
 
+        tableController = new TableController(this, frameTableView);
+
         framePreviewController = new FramePreviewController(this);
-        framePreviewController.init(previewZone);
+        framePreviewController.init(tableController.getPreviewPixels(), animateFramePreview.selectedProperty());
+        animateFramePreview.selectedProperty().addListener((observable, oldValue, newValue) -> refreshFramePreview());
 
         colorPaletteController = new ColorPaletteController(this, colorPalette);
 
 
-        tableController = new TableController(this, frameTableView);
     }
 
     public void setRgbMode(RgbMode rgbMode) {
