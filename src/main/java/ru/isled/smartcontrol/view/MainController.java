@@ -38,8 +38,6 @@ public class MainController {
     private static final Logger log = LogManager.getLogger();
 
     @FXML
-    public Button maxBright;
-    @FXML
     public Spinner<Integer> framesSpinner;
     @FXML
     public Spinner<Integer> pixelSpinner;
@@ -53,10 +51,6 @@ public class MainController {
     public TableColumn<LedFrame, Integer> frameLengthColumn;
     @FXML
     public ChoiceBox<String> effectsSelector;
-    @FXML
-    public Slider brightSlider;
-    @FXML
-    public TextField brightField;
     @FXML
     public Slider zoomSlider;
     @FXML
@@ -154,40 +148,6 @@ public class MainController {
         mainApp.saveProject();
     }
 
-    private void initZoomSlider() {
-        zoomSlider.setMin(MIN_COL_WIDTH);
-        zoomSlider.setMax(MAX_COL_WIDTH);
-        zoomSlider.setValue(INIT_COL_WIDTH);
-        zoomSlider.setBlockIncrement((MAX_BRIGHT - MIN_BRIGHT) / 10d);
-        zoomSlider.valueProperty().addListener((o, ov, nv) -> setColumnsWidth(nv.doubleValue()));
-    }
-
-    private void initializeBrightHandlers() {
-        brightSlider.valueProperty().addListener((ov, o, n) -> {
-            brightField.setText(String.valueOf(n.intValue()));
-        });
-        brightField.textProperty().addListener((ol, oldValue, newValue) -> {
-            if ("".equals(newValue)) return;
-            try {
-                int val = Integer.parseInt(newValue);
-
-                if (val < MIN_BRIGHT) {
-                    val = MIN_BRIGHT;
-                } else if (val > MAX_BRIGHT) {
-                    val = MAX_BRIGHT;
-                }
-                brightField.textProperty().setValue(String.valueOf(val));
-
-                brightSlider.setValue(val);
-                setBrightSelectedCells(val);
-
-            } catch (NumberFormatException nfe) {
-//                System.err.println(nfe.getCause() + " newVal=" + newValue + " oldValue=" + oldValue);
-//                brightField.textProperty().setValue(oldValue);
-            }
-        });
-    }
-
     @FXML
     public void exportHandler() {
         mainApp.exportProject();
@@ -253,13 +213,6 @@ public class MainController {
         return project.getPixel(pixelNo).getFrames().get(frameNo);
     }
 
-    private void setFrameHandlersDisabled(boolean b) {
-        brightField.setDisable(b);
-        brightSlider.setDisable(b);
-        frameLengthSpinner.setDisable(b);
-        frameCyclesSpinner.setDisable(b);
-    }
-
     private void selectAllRowsWhereHeaderIsSelected() {
         List<TablePosition> selectedHeaderCells = getSelectedHeaderCells();
         if (!selectedHeaderCells.isEmpty()) {
@@ -290,20 +243,6 @@ public class MainController {
         return frameTableView.getSelectionModel().getSelectedItems();
     }
 
-    //    private void changePixelQuantities() {
-//        final int value = chanelQuantifier.getValue();
-//        frameTableView.getSelectionModel().getSelectedCells().stream().mapToInt(TablePosition::getColumn)
-//                .distinct()
-//                .forEach(col -> {
-//                    project.getPixels().set(col - HEADER_COLUMNS, value);
-//                    TableColumn<LedFrame, ?> column = frameTableView.getColumns().get(col);
-//                    String text = column.getText();
-//                    column.setText(text.replaceAll("\\[\\d+]", "[" + value + "]"));
-//                });
-//        project.setHasChanges(true);
-//        updateTotalPixelCount();
-//    }
-//
     @FXML
     private Label bulbIcon;
 
@@ -340,11 +279,6 @@ public class MainController {
     }
 
     @FXML
-    public void setBrightBySlider() {
-        brightField.textProperty().setValue(String.valueOf((int) brightSlider.getValue()));
-    }
-
-    @FXML
     public void setMaxBright() {
 //        brightField.textProperty().setValue(String.valueOf(MAX_BRIGHT));
         setBrightSelectedCells(MAX_BRIGHT);
@@ -374,18 +308,6 @@ public class MainController {
     @FXML
     public void clearSelection() {
         frameTableView.getSelectionModel().clearSelection();
-    }
-
-    private void initSpinners() {
-
-        initFrameSpinner();
-
-        initPixelSpinner();
-
-        frameHandlersController.init(frameLengthSpinner, frameCyclesSpinner);
-
-        initPixelQuantifierSpinner();
-
     }
 
     /**
@@ -440,14 +362,6 @@ public class MainController {
     @FXML
     private Label gammaLabel;
 
-    private void initGammaHandlers() {
-        gammaSlider.valueProperty().addListener((ov, oldValue, newValue) -> {
-            final String value = String.format(Locale.US, "%.1f", (double) newValue);
-            gammaLabel.textProperty().set(value);
-            getProject().setGamma(Double.parseDouble(value));
-        });
-    }
-
     @FXML
     public void startPreview() {
 //        Dialogs.preview(project);
@@ -483,13 +397,6 @@ public class MainController {
         }
 
         framePreviewController.show(selectedPixelNumber);
-    }
-
-    private void initializeRowHeader() {
-        frameNumColumn.setCellValueFactory(x -> x.getValue().numberProperty());
-        frameRepeatColumn.setCellValueFactory(x -> x.getValue().cyclesProperty());
-        frameLengthColumn.setCellFactory(column -> new LedFrameLengthCell());
-        frameLengthColumn.setCellValueFactory(x -> x.getValue().frameLengthProperty());
     }
 
     private void disableColumnReordering() {
@@ -663,20 +570,36 @@ public class MainController {
     public void initialize() {
 
 
-        initializeRowHeader();
+        frameNumColumn.setCellValueFactory(x1 -> x1.getValue().numberProperty());
+        frameRepeatColumn.setCellValueFactory(x1 -> x1.getValue().cyclesProperty());
+        frameLengthColumn.setCellFactory(column -> new LedFrameLengthCell());
+        frameLengthColumn.setCellValueFactory(x1 -> x1.getValue().frameLengthProperty());
         loadAndSetDefaultEffects();
 
-        initZoomSlider();
-        initGammaHandlers();
+        zoomSlider.setMin(MIN_COL_WIDTH);
+        zoomSlider.setMax(MAX_COL_WIDTH);
+        zoomSlider.setValue(INIT_COL_WIDTH);
+        zoomSlider.setBlockIncrement((MAX_BRIGHT - MIN_BRIGHT) / 10d);
+        zoomSlider.valueProperty().addListener((o, ov, nv) -> setColumnsWidth(nv.doubleValue()));
 
-        initSpinners();
+        gammaSlider.valueProperty().addListener((ov, oldValue, newValue) -> {
+            final String value = String.format(Locale.US, "%.1f", (double) newValue);
+            gammaLabel.textProperty().set(value);
+            getProject().setGamma(Double.parseDouble(value));
+        });
+
+        initFrameSpinner();
+
+        initPixelSpinner();
+
+        frameHandlersController.init(frameLengthSpinner, frameCyclesSpinner);
+
+        initPixelQuantifierSpinner();
 
         framePreviewController = new FramePreviewController(this);
         framePreviewController.init(previewZone);
 
         colorPaletteController = new ColorPaletteController(this, colorPalette);
-
-        initializeBrightHandlers();
 
         frameTableView.getSelectionModel().setCellSelectionEnabled(true);
         frameTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -714,10 +637,6 @@ public class MainController {
     public void scrollZoom(ScrollEvent scrollEvent) {
         final double currentValue = zoomSlider.getValue();
         zoomSlider.setValue(currentValue + scrollEvent.getTextDeltaY());
-    }
-
-    public void scrollBright(ScrollEvent scrollEvent) {
-        brightSlider.setValue(brightSlider.getValue() + scrollEvent.getTextDeltaY());
     }
 
     public void scrollFrameLength(ScrollEvent scrollEvent) {
