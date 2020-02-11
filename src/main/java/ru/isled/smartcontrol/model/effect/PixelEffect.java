@@ -13,7 +13,7 @@ public enum PixelEffect {
             return "linear-gradient(from 0% 0% to 0% 100%, " +
                     "#000f 0%, " +
                     "#0000 100%" +
-                    ")";
+                    ") /* FI */ ";
         }
 
         @Override
@@ -30,7 +30,7 @@ public enum PixelEffect {
         protected String effectOverlay() {
             return "linear-gradient(from 0% 0% to 0% 100%, " +
                     "#0000 1%, black 50%, #0000 100%" +
-                    ")";
+                    ") /* FOI */ ";
         }
 
         @Override
@@ -51,7 +51,7 @@ public enum PixelEffect {
         protected String effectOverlay() {
             return "linear-gradient(from 0% 0% to 0% 100%, " +
                     "black 0%, #0000 50%, black 100%" +
-                    ")";
+                    ") /* FIO */ ";
         }
 
         @Override
@@ -74,7 +74,7 @@ public enum PixelEffect {
         protected String effectOverlay() {
             return "linear-gradient(from 0% 0% to 0% 100%, " +
                     "#0000 0%, black 100%" +
-                    ")";
+                    ") /* FO */ ";
         }
 
         @Override
@@ -98,7 +98,7 @@ public enum PixelEffect {
                     "#0003 80%, #000f 85%, #0003 87%," +
                     "#0001 90%, #000f 95%, #0001 97%," +
                     "#0000 100%" +
-                    ")";
+                    ") /* BFI */ ";
         }
 
         @Override
@@ -128,7 +128,7 @@ public enum PixelEffect {
                     "#000c 80%, #0000 84%, #000c 87%," +
                     "#000e 90%, #0000 94%, #000e 97%," +
                     "#000f 100%" +
-                    ")";
+                    ") /* BFO */ ";
         }
 
         @Override
@@ -154,7 +154,7 @@ public enum PixelEffect {
                     "#0000 49%, black 50%,black 60%, #0000 61%," +
                     "#0000 69%, black 70%,black 80%, #0000 81%," +
                     "#0000 89%, black 90%" +
-                    ")";
+                    ") /* BL */ ";
         }
 
         @Override
@@ -190,7 +190,7 @@ public enum PixelEffect {
                     "#000a 75%, #000a 85%," +
                     "#0007 85%, #0007 95%," +
                     "#0009 95%, #0009 100%" +
-                    ")";
+                    ") /* CH */ ";
         }
 
         @Override

@@ -17,6 +17,8 @@ public class LedFrameTableCell extends javafx.scene.control.TableCell<LedFrame, 
             return;
         }
         this.setStyle(item);
+        if (item.contains("/* ")) setText(item.substring(item.indexOf("/* ") + 3, item.indexOf(" */")));
+        else setText(null);
     }
 
 }

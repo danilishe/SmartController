@@ -12,6 +12,8 @@
 .table-cell {
     -fx-background-insets: 2px;
     -fx-border-width: 2px;
+    -fx-font-size: .8em;
+    -fx-text-fill: white;
 }
 
 .header /*, .table-cell:hover:selected > .header */
@@ -22,7 +24,7 @@
     -fx-text-fill: black;
     -fx-border-width: 0;
     -fx-background-insets: 0;
-    /*-fx-font-size: 14pt;*/
+    -fx-font-size: 1em;
     /*-fx-background-insets: 0, 0 1 1 0, 1 2 2 1;*/
 }
 
