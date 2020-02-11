@@ -1,7 +1,5 @@
 package ru.isled.smartcontrol.view;
 
-import com.sun.javafx.scene.control.skin.TableHeaderRow;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.ScrollEvent;
@@ -9,20 +7,15 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.isled.smartcontrol.SmartControl;
 import ru.isled.smartcontrol.model.LedFrame;
-import ru.isled.smartcontrol.model.Pixel;
 import ru.isled.smartcontrol.model.Project;
 import ru.isled.smartcontrol.model.effect.Effect;
 import ru.isled.smartcontrol.model.effect.PixelEffect;
 import ru.isled.smartcontrol.model.effect.RgbMode;
-import ru.isled.smartcontrol.view.cell.ColumnHeaderFactory;
 import ru.isled.smartcontrol.view.cell.LedFrameLengthCell;
-import ru.isled.smartcontrol.view.cell.LedFrameTableCell;
 
 import java.io.File;
 import java.time.DateTimeException;
@@ -30,7 +23,6 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
 
 import static ru.isled.smartcontrol.Constants.*;
 
@@ -41,6 +33,7 @@ public class MainController {
     public Spinner<Integer> framesSpinner;
     @FXML
     public Spinner<Integer> pixelSpinner;
+
     @FXML
     public TableView<LedFrame> frameTableView;
     @FXML
@@ -49,6 +42,9 @@ public class MainController {
     public TableColumn<LedFrame, Integer> frameRepeatColumn;
     @FXML
     public TableColumn<LedFrame, Integer> frameLengthColumn;
+    private TableController tableController;
+
+
     @FXML
     public ChoiceBox<String> effectsSelector;
     @FXML
@@ -72,7 +68,6 @@ public class MainController {
     @FXML
     public Spinner<Integer> frameCyclesSpinner;
     private FrameHandlersController frameHandlersController = new FrameHandlersController(this);
-    private int lastFrame = -1;
     private ColorPaletteController colorPaletteController;
 
     @FXML
@@ -153,26 +148,27 @@ public class MainController {
         mainApp.exportProject();
     }
 
+    // fixme update to new two-color model
     private void setBrightSelectedCells(int bright) {
         log.trace("updating bright to ");
-        for (TablePosition cell : getSelectedDataCells()) {
+        for (TablePosition cell : tableController.getSelectedDataCells()) {
             int pixelNo = cell.getColumn() - HEADER_COLUMNS;
             int frameNo = cell.getRow();
             project.getPixel(pixelNo).getFrames().get(frameNo).setBright(bright);
             project.setHasChanges(true);
         }
-        framePreviewController.previewFrame(getSelectedFrame());
+        framePreviewController.previewFrame(tableController.getSelectedFrame());
     }
 
     private void setEffectSelectedCells(PixelEffect effect) {
         log.trace("updating effect to " + effect);
-        for (TablePosition cell : getSelectedDataCells()) {
+        for (TablePosition cell : tableController.getSelectedDataCells()) {
             int pixelNo = cell.getColumn() - HEADER_COLUMNS;
             int frameNo = cell.getRow();
             project.getPixel(pixelNo).getFrames().get(frameNo).setEffect(effect);
             project.setHasChanges(true);
         }
-        framePreviewController.previewFrame(getSelectedFrame());
+        framePreviewController.previewFrame(tableController.getSelectedFrame());
     }
 
     public void updateProgramLength() {
@@ -185,140 +181,19 @@ public class MainController {
         } catch (DateTimeException dte) {
             return "> 24 ч!";
         }
-
-    }
-
-    private void handleCellSelection() {
-
-        frameTableView.requestFocus();
-
-        selectAllRowsWhereHeaderIsSelected();
-
-        List<TablePosition> selectedDataCells = getSelectedDataCells();
-
-        if (!selectedDataCells.isEmpty()) {
-            chanelQuantifier.getEditor().textProperty().set("" + getSelectedPixels().get(0).getQuantifier());
-            if (getSelectedFrames().size() == 1 && getSelectedFrame().getNumber() != lastFrame) {
-                framePreviewController.previewFrame(getSelectedFrame());
-                frameHandlersController.updateHandlers(getSelectedFrame());
-                lastFrame = getSelectedFrame().getNumber();
-            }
-        }
-    }
-
-    private Pixel.Frame getSelectedPixelFrame() {
-        final TablePosition selectedCell = getSelectedDataCells().get(0);
-        final int frameNo = selectedCell.getRow();
-        final int pixelNo = selectedCell.getColumn() - HEADER_COLUMNS;
-        return project.getPixel(pixelNo).getFrames().get(frameNo);
-    }
-
-    private void selectAllRowsWhereHeaderIsSelected() {
-        List<TablePosition> selectedHeaderCells = getSelectedHeaderCells();
-        if (!selectedHeaderCells.isEmpty()) {
-            int firstRow = selectedHeaderCells.get(0).getRow();
-            int lastRow = selectedHeaderCells.get(selectedHeaderCells.size() - 1).getRow();
-
-            clearSelection();
-            frameTableView.getSelectionModel().selectRange(firstRow,
-                    frameTableView.getColumns().get(HEADER_COLUMNS),
-                    lastRow,
-                    frameTableView.getColumns().get(pixelSpinner.getValue() + HEADER_COLUMNS - 1));
-        }
-    }
-
-    private List<TablePosition> getSelectedHeaderCells() {
-        return frameTableView.getSelectionModel().getSelectedCells()
-                .stream().filter(x -> x.getColumn() < HEADER_COLUMNS)
-                .collect(Collectors.toList());
-    }
-
-    private LedFrame getSelectedFrame() {
-        if (getSelectedFrames().isEmpty())
-            return project.getFrame(0);
-        else return getSelectedFrames().get(0);
-    }
-
-    public List<LedFrame> getSelectedFrames() {
-        return frameTableView.getSelectionModel().getSelectedItems();
     }
 
     @FXML
     private Label bulbIcon;
 
     @FXML
-    public void increment5Frames() {
-        framesSpinner.increment(5);
-    }
-
-    @FXML
-    public void increment15Frames() {
-        framesSpinner.increment(15);
-    }
-
-    @FXML
-    public void decrement5Frames() {
-        framesSpinner.decrement(5);
-    }
-
-    @FXML
-    public void decrement15Frames() {
-        framesSpinner.decrement(15);
-    }
-
-    @FXML
     public void selectAll() {
-        List<TableColumn<LedFrame, ?>> colsList = frameTableView.getColumns();
-        int lastVisibleColNumber = pixelSpinner.getValue();
-        int rows = frameTableView.getItems().size();
-
-        clearSelection();
-
-        frameTableView.getSelectionModel().selectRange(0, colsList.get(HEADER_COLUMNS),
-                rows - 1, colsList.get(lastVisibleColNumber + HEADER_COLUMNS - 1));
-    }
-
-    @FXML
-    public void setMaxBright() {
-//        brightField.textProperty().setValue(String.valueOf(MAX_BRIGHT));
-        setBrightSelectedCells(MAX_BRIGHT);
-    }
-
-    @FXML
-    public void set25Bright() {
-        setBrightSelectedCells((int) (MAX_BRIGHT * 0.25));
-    }
-
-    @FXML
-    public void set75Bright() {
-        setBrightSelectedCells((int) (MAX_BRIGHT * 0.75));
-    }
-
-    @FXML
-    public void set50Bright() {
-        setBrightSelectedCells((int) (MAX_BRIGHT * 0.5));
-    }
-
-    @FXML
-    public void setMinBright() {
-//        brightField.textProperty().setValue(String.valueOf(MIN_BRIGHT));
-        setBrightSelectedCells(MIN_BRIGHT);
+        tableController.selectAll();
     }
 
     @FXML
     public void clearSelection() {
-        frameTableView.getSelectionModel().clearSelection();
-    }
-
-    /**
-     * @return возвращает все выбранные ячейки списком кроме заголовочных
-     */
-    private List<TablePosition> getSelectedDataCells() {
-        return frameTableView.getSelectionModel()
-                .getSelectedCells()
-                .stream()
-                .filter(x -> x.getColumn() >= HEADER_COLUMNS)
-                .collect(Collectors.toList());
+        tableController.clearSelection();
     }
 
     private void initPixelSpinner() {
@@ -341,7 +216,8 @@ public class MainController {
                 pixelSpinner.getValueFactory().setValue(MAX_CHANNELS_COUNT);
             else {
                 project.setPixelsCount(n);
-                refreshVisibleColumnsCount();
+                tableController.refreshVisibleColumnsCount();
+                framePreviewController.show(n);
                 updateTotalPixelCount();
             }
         });
@@ -384,42 +260,14 @@ public class MainController {
 //        }
 //    }
 
-    // скрывает колонки
-    private void refreshVisibleColumnsCount() {
-        int selectedPixelNumber = pixelSpinner.getValue();
-        for (int i = 0; i < MAX_CHANNELS_COUNT; i++) {
-
-            final boolean expectedVisibility = i < selectedPixelNumber;
-            final TableColumn<LedFrame, ?> column = frameTableView.getColumns().get(i + HEADER_COLUMNS);
-            if (column.isVisible() != expectedVisibility)
-                column.setVisible(expectedVisibility);
-
-        }
-
-        framePreviewController.show(selectedPixelNumber);
-    }
-
-    private void disableColumnReordering() {
-        frameTableView.widthProperty().addListener((source, oldWidth, newWidth) -> {
-            TableHeaderRow header = (TableHeaderRow) frameTableView.lookup("TableHeaderRow");
-            header.reorderingProperty().addListener((observable, oldValue, newValue) -> header.setReordering(false));
-        });
-    }
 
     private void initPixelQuantifierSpinner() {
         chanelQuantifier.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, MAX_QUANTIFIER, 1));
         chanelQuantifier.setEditable(false);
         chanelQuantifier.getValueFactory().valueProperty().addListener((val, ov, nv) ->
-                getSelectedPixels().forEach(pixel -> pixel.setQuantifier(nv)));
+                tableController.getSelectedPixels().forEach(pixel -> pixel.setQuantifier(nv)));
     }
 
-    private List<Pixel> getSelectedPixels() {
-        return getSelectedDataCells().stream()
-                .map(position -> position.getColumn() - HEADER_COLUMNS)
-                .distinct()
-                .map(i -> getProject().getPixel(i))
-                .collect(Collectors.toList());
-    }
 
     private void initFrameSpinner() {
         framesSpinner.setValueFactory(
@@ -460,13 +308,6 @@ public class MainController {
     @FXML
     private Label totalPixels;
 
-    private void loadAndSetDefaultEffects() {
-        for (Effect effect : Effect.values()) {
-            effectsSelector.getItems().add(effect.toString());
-        }
-        effectsSelector.setValue(effectsSelector.getItems().get(0));
-    }
-
     @FXML
     public void exitHandler() {
         mainApp.exit();
@@ -490,27 +331,6 @@ public class MainController {
 
         alert.getDialogPane().setContent(new VBox(label, isLedLink));
         alert.showAndWait();
-    }
-
-    private void initDataColumns() {
-        disableColumnReordering();
-
-        // пиксели/каналы
-        for (int i = 0; i < MAX_CHANNELS_COUNT; i++) {
-            TableColumn<LedFrame, String> column = new TableColumn<>();
-            final Pixel pixel = project.getPixel(i);
-            column.setGraphic(ColumnHeaderFactory.get(pixel));
-            column.setPrefWidth(INIT_COL_WIDTH);
-            column.setResizable(false);
-            column.setSortable(false);
-            column.setEditable(false);
-
-            column.setCellFactory(cell -> new LedFrameTableCell());
-            int finalI = i;
-            column.setCellValueFactory(data -> data.getValue().getValue(finalI));
-            column.setVisible(i < DEFAULT_PIXEL_COUNT);
-            frameTableView.getColumns().add(column);
-        }
     }
 
     @FXML
@@ -551,36 +371,33 @@ public class MainController {
         updateTotalPixelCount();
         updateProgramLength();
 
-        initDataColumns();
-        frameTableView.setItems(project.getFrames());
+        tableController.initDataColumns();
+        tableController.refreshItems();
     }
 
     public Project getProject() {
         return project;
     }
 
-    private void setColumnsWidth(double columnsWidth) {
-        frameTableView.getColumns().stream()
-                .skip(HEADER_COLUMNS).forEach(col -> {
-            col.setPrefWidth(columnsWidth);
-        });
-    }
-
     @FXML
     public void initialize() {
-
 
         frameNumColumn.setCellValueFactory(x1 -> x1.getValue().numberProperty());
         frameRepeatColumn.setCellValueFactory(x1 -> x1.getValue().cyclesProperty());
         frameLengthColumn.setCellFactory(column -> new LedFrameLengthCell());
         frameLengthColumn.setCellValueFactory(x1 -> x1.getValue().frameLengthProperty());
-        loadAndSetDefaultEffects();
+
+        // loading effects
+        for (Effect effect : Effect.values()) {
+            effectsSelector.getItems().add(effect.toString());
+        }
+        effectsSelector.setValue(effectsSelector.getItems().get(0));
 
         zoomSlider.setMin(MIN_COL_WIDTH);
         zoomSlider.setMax(MAX_COL_WIDTH);
         zoomSlider.setValue(INIT_COL_WIDTH);
         zoomSlider.setBlockIncrement((MAX_BRIGHT - MIN_BRIGHT) / 10d);
-        zoomSlider.valueProperty().addListener((o, ov, nv) -> setColumnsWidth(nv.doubleValue()));
+        zoomSlider.valueProperty().addListener((o, ov, nv) -> tableController.setColumnsWidth(nv.doubleValue()));
 
         gammaSlider.valueProperty().addListener((ov, oldValue, newValue) -> {
             final String value = String.format(Locale.US, "%.1f", (double) newValue);
@@ -601,25 +418,12 @@ public class MainController {
 
         colorPaletteController = new ColorPaletteController(this, colorPalette);
 
-        frameTableView.getSelectionModel().setCellSelectionEnabled(true);
-        frameTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        frameTableView.addEventHandler(EventType.ROOT, x -> handleCellSelection());
 
-        ContextMenu tableContextMenu = new ContextMenu();
-        // todo move in TableController class
-        for (RgbMode rgbMode : RgbMode.values()) {
-            Shape graphic = new Rectangle(20, 10);
-            graphic.setStyle(rgbMode.getBackground().replace("background-color", "fill"));
-            graphic.setStroke(Color.BLACK);
-            MenuItem menuItem = new MenuItem(rgbMode.name(), graphic);
-            menuItem.setOnAction(event -> this.setRgbMode(rgbMode));
-            tableContextMenu.getItems().add(menuItem);
-        }
-        frameTableView.setContextMenu(tableContextMenu);
+        tableController = new TableController(this, frameTableView);
     }
 
-    private void setRgbMode(RgbMode rgbMode) {
-        getSelectedPixels().forEach(pixel -> pixel.setRgbMode(rgbMode));
+    public void setRgbMode(RgbMode rgbMode) {
+        tableController.getSelectedPixels().forEach(pixel -> pixel.setRgbMode(rgbMode));
     }
 
     private void updateTotalPixelCount() {
@@ -677,18 +481,18 @@ public class MainController {
     }
 
     public void setCycles(int cycles) {
-        getSelectedFrames().forEach(frame -> frame.setCycles(cycles));
+        tableController.getSelectedFrames().forEach(frame -> frame.setCycles(cycles));
         updateProgramLength();
     }
 
     public void setLength(int length) {
-        getSelectedFrames().forEach(frame -> frame.setLength(length));
-        framePreviewController.previewFrame(getSelectedFrame());
+        tableController.getSelectedFrames().forEach(frame -> frame.setLength(length));
+        framePreviewController.previewFrame(tableController.getSelectedFrame());
         updateProgramLength();
     }
 
     public TableColumn<LedFrame, ?> getColumn(int i) {
-        return frameTableView.getColumns().get(i);
+        return tableController.getColumn(i);
     }
 
     public void setStartColor(Color color) {
@@ -696,15 +500,24 @@ public class MainController {
     }
 
     public void setColor(Color startColor, Color endColor) {
-        getSelectedDataCells().forEach(pos ->
+        tableController.getSelectedDataCells().forEach(pos ->
                 getProject().getPixel(pos.getColumn() - HEADER_COLUMNS)
                         .getFrames().get(pos.getRow())
                         .setColor(startColor, endColor)
         );
-        framePreviewController.previewFrame(getSelectedFrame());
+        framePreviewController.previewFrame(tableController.getSelectedFrame());
     }
 
     public void setEndColor(Color color) {
         setColor(null, color);
+    }
+
+    public void onDataCellsSelected(List<TablePosition> selectedDataCells) {
+        chanelQuantifier.getEditor().textProperty().set("" + tableController.getSelectedPixels().get(0).getQuantifier());
+    }
+
+    public void onSelectedFrameChanged(LedFrame selectedFrame) {
+        framePreviewController.previewFrame(selectedFrame);
+        frameHandlersController.updateHandlers(selectedFrame);
     }
 }

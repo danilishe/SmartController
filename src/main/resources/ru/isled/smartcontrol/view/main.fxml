@@ -411,7 +411,7 @@
                         <Font size="18.0"/>
                     </font>
                 </Label>
-                <Slider fx:id="zoomSlider" disable="true" maxHeight="1.7976931348623157E308" onScroll="#scrollZoom"
+                <Slider fx:id="zoomSlider" maxHeight="1.7976931348623157E308" onScroll="#scrollZoom"
                         orientation="VERTICAL">
                     <tooltip>
                         <Tooltip text="Ширина колонок"/>

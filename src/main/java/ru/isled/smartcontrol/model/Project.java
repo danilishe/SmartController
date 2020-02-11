@@ -134,8 +134,8 @@ public class Project {
      */
     public int getChannelsCount() {
         int result = 0;
-        for (Pixel pixel : pixels) {
-            result += pixel.getChannelsCount();
+        for (int i = 0; i < getPixelsCount(); i++) {
+            result += getPixel(i).getChannelsCount();
         }
         return result;
     }
