@@ -65,6 +65,7 @@ public class MainController {
     public HBox previewZone;
     public FlowPane colorPalette;
     private FramePreviewController framePreviewController;
+
     private Project project;
     private SmartControl mainApp;
     @FXML
@@ -499,11 +500,10 @@ public class MainController {
     }
 
     private void initPixelQuantifierSpinner() {
-        chanelQuantifier.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10, 1));
-        chanelQuantifier.getValueFactory().valueProperty().addListener((val, ov, nv) -> {
-            getSelectedPixels().forEach(pixel -> pixel.setQuantifier(nv));
-            framePreviewController.previewFrame(getSelectedFrame());
-        });
+        chanelQuantifier.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, MAX_QUANTIFIER, 1));
+        chanelQuantifier.setEditable(false);
+        chanelQuantifier.getValueFactory().valueProperty().addListener((val, ov, nv) ->
+                getSelectedPixels().forEach(pixel -> pixel.setQuantifier(nv)));
     }
 
     private List<Pixel> getSelectedPixels() {
@@ -640,13 +640,12 @@ public class MainController {
         this.project = project;
         pixelSpinner.getValueFactory().setValue(project.getPixelsCount());
         framesSpinner.getValueFactory().setValue(project.programLength());
-//        updateFramesCount();
-//        if (frameTableView.getColumns().size() > HEADER_COLUMNS) updateHeaderQuantifiers();
+
         updateTotalPixelCount();
+        updateProgramLength();
 
         initDataColumns();
         frameTableView.setItems(project.getFrames());
-
     }
 
     public Project getProject() {
@@ -694,7 +693,6 @@ public class MainController {
             tableContextMenu.getItems().add(menuItem);
         }
         frameTableView.setContextMenu(tableContextMenu);
-//        frames.addListener((ListChangeListener<LedFrame>) c -> updateProgramLength());
     }
 
     private void setRgbMode(RgbMode rgbMode) {
@@ -738,13 +736,17 @@ public class MainController {
     }
 
     public void scrollRepeats(ScrollEvent scrollEvent) {
-        final int delta = (int) scrollEvent.getTextDeltaY();
-        frameCyclesSpinner.increment(delta);
+        if (scrollEvent.getDeltaY() > 0)
+            frameCyclesSpinner.increment();
+        else
+            frameCyclesSpinner.decrement();
     }
 
     public void scrollQuantifier(ScrollEvent scrollEvent) {
-        final int delta = (int) scrollEvent.getTextDeltaY();
-        chanelQuantifier.increment(delta);
+        if (scrollEvent.getTextDeltaY() > 0)
+            chanelQuantifier.increment();
+        else
+            chanelQuantifier.decrement();
     }
 
     public void scrollGamma(ScrollEvent scrollEvent) {

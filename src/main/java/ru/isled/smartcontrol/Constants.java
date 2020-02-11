@@ -77,4 +77,5 @@ public interface Constants {
     int COLOR_PALETTE_GRAYS = 9;
     int COLOR_PALETTE_COLORS = 60;
     double PALETTE_COLOR_SIZE = 20;
+    int MAX_QUANTIFIER = 5;
 }

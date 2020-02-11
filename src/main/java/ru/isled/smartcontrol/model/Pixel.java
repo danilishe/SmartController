@@ -17,7 +17,7 @@ import static ru.isled.smartcontrol.Constants.*;
 public class Pixel {
     private final IntegerProperty number;
     private final ObjectProperty<RgbMode> rgbMode;
-    private final IntegerProperty quantifier;
+    private final ObjectProperty<Integer> quantifier;
     private final ObservableList<Frame> frames;
     public final StringProperty background;
 
@@ -31,7 +31,7 @@ public class Pixel {
     public Pixel(int number, RgbMode rgbMode, int quantifier, List<Pixel.Frame> frames) {
         this.number = new SimpleIntegerProperty(number);
         this.rgbMode = new SimpleObjectProperty<>(rgbMode);
-        this.quantifier = new SimpleIntegerProperty(quantifier);
+        this.quantifier = new SimpleObjectProperty<>(quantifier);
         this.frames = FXCollections.observableArrayList(frames);
         background = new SimpleStringProperty(rgbMode.getBackground());
         // if rgbMode changes, background changes too
@@ -95,7 +95,7 @@ public class Pixel {
     }
 
     public ObjectProperty<Integer> quantifierProperty() {
-        return quantifier.asObject();
+        return quantifier;
     }
 
     /**

@@ -2,10 +2,8 @@ package ru.isled.smartcontrol.view.cell;
 
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.RadioMenuItem;
-import javafx.scene.control.SeparatorMenuItem;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -13,6 +11,9 @@ import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import ru.isled.smartcontrol.model.Pixel;
 import ru.isled.smartcontrol.model.effect.RgbMode;
+
+import static ru.isled.smartcontrol.Constants.INIT_COL_WIDTH;
+import static ru.isled.smartcontrol.Constants.MAX_QUANTIFIER;
 
 public class ColumnHeaderFactory {
     public static Node get(Pixel pixel) {
@@ -46,9 +47,16 @@ public class ColumnHeaderFactory {
         header.setAlignment(Pos.CENTER);
         Text pixelNumber = new Text(String.valueOf(pixel.getNumber()));
         pixelNumber.textProperty().bind(pixel.numberProperty().asString());
-        Text pixelQuantifier = new Text(String.valueOf(pixel.getQuantifier()));
-        pixelQuantifier.textProperty().bind(pixel.quantifierProperty().asString());
-        pixelQuantifier.setFill(Color.DEEPSKYBLUE);
+
+        Spinner<Integer> pixelQuantifier = new Spinner<>(1, MAX_QUANTIFIER, pixel.getQuantifier(), 1);
+        pixelQuantifier.setEditable(false);
+        pixelQuantifier.getValueFactory().valueProperty().bindBidirectional(pixel.quantifierProperty());
+        pixelQuantifier.setOnScroll(scroll -> {
+            if (scroll.getDeltaY() > 0) pixelQuantifier.increment();
+            else pixelQuantifier.decrement();
+        });
+        pixelQuantifier.setScaleX(.8);
+        pixelQuantifier.setScaleY(.8);
 
         Text rgbModeText = new Text(pixel.getRgbMode().name());
         rgbModeText.textProperty().bind(pixel.rgbModeProperty().asString());
@@ -59,7 +67,12 @@ public class ColumnHeaderFactory {
         pane.setMinHeight(10);
         pane.setPrefWidth(Double.MAX_VALUE);
         pane.styleProperty().bind(pixel.background);
-        header.getChildren().addAll(pixelNumber, pixelQuantifier, rgbModeText, pane);
+
+        Button button = new Button("", new VBox(2, rgbModeText, pane));
+        button.setAlignment(Pos.CENTER);
+        button.setMinWidth(INIT_COL_WIDTH - 5);
+        button.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> contextMenu.show(header, e.getScreenX(), e.getScreenY()));
+        header.getChildren().addAll(pixelNumber, pixelQuantifier, button);
         return header;
     }
 }

@@ -365,7 +365,7 @@
         </VBox>
     </right>
     <bottom>
-        <VBox maxHeight="1.7976931348623157E308" minHeight="85.0" prefHeight="85.0" spacing="5.0"
+        <VBox maxHeight="1.7976931348623157E308" minHeight="85.0" prefHeight="85.0" spacing="5.0" translateZ="-1.0"
               BorderPane.alignment="TOP_LEFT">
             <opaqueInsets>
                 <Insets/>
@@ -373,7 +373,8 @@
             <padding>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
             </padding>
-            <HBox prefHeight="32.0" spacing="5.0">
+            <HBox fillHeight="false" maxWidth="200.0" prefHeight="27.0" prefWidth="200.0" spacing="5.0"
+                  VBox.vgrow="NEVER">
                 <Label text="🔎">
                     <font>
                         <Font size="18.0"/>
@@ -399,7 +400,7 @@
                 <Separator maxHeight="1.7976931348623157E308" orientation="VERTICAL"/>
                 <HBox fx:id="previewZone" alignment="CENTER_LEFT" disable="true" maxHeight="1.7976931348623157E308"
                       maxWidth="1.7976931348623157E308" minHeight="45.0" minWidth="300.0" prefHeight="45.0"
-                      prefWidth="614.0" spacing="5.0"/>
+                      prefWidth="614.0" spacing="5.0" translateZ="-1.0"/>
             </HBox>
         </VBox>
     </bottom>
