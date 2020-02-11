@@ -102,7 +102,11 @@ public class Pixel {
      * frameNo starts from 0!!!
      */
     public Color[] getInterpolatedFrame(int frameNo, int frameLength) {
-        return getFrames().get(frameNo).getInterpolated(frameLength / MIN_FRAME_LENGTH);
+        Color[] interpolated = getFrames().get(frameNo).getInterpolated(frameLength / MIN_FRAME_LENGTH);
+        for (int i = 0; i < interpolated.length; i++) {
+            interpolated[i] = getRgbMode().getVisibleColor(interpolated[i]);
+        }
+        return interpolated;
     }
 
     /**

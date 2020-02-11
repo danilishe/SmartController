@@ -53,7 +53,8 @@ public class FramePreviewController {
     }
 
     protected void previewFrame(LedFrame frame) {
-        List<Color[]> interpolatedFrame = mainController.getProject().getInterpolatedFrame(frame.getNumber() - 1);
+        List<Color[]> interpolatedFrame = mainController.getProject()
+                .getInterpolatedFrame(frame.getNumber() - 1);
         viewer.changeProgram(interpolatedFrame);
     }
 }
