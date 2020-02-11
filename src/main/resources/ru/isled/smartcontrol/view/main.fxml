@@ -6,9 +6,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <?import java.net.URL?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" cacheShape="false" centerShape="false" maxHeight="1.7976931348623157E308"
-            maxWidth="1.7976931348623157E308" minHeight="900.0" minWidth="800.0" prefHeight="900.0" prefWidth="800.0"
-            scaleShape="false" xmlns="http://javafx.com/javafx/8.0.171"
+<BorderPane cacheShape="false" centerShape="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+            minHeight="900.0" minWidth="800.0" prefHeight="900.0" prefWidth="800.0" scaleShape="false"
+            xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="ru.isled.smartcontrol.view.MainController">
     <top>
         <HBox spacing="5.0">
@@ -55,345 +55,356 @@
         </HBox>
     </top>
     <right>
-        <VBox maxWidth="330.0" minWidth="330.0" prefWidth="330.0" spacing="5.0">
-            <HBox alignment="CENTER">
-                <children>
-                    <Label minWidth="-Infinity" text="Цвет">
-                        <padding>
-                            <Insets bottom="5.0" left="5.0" right="5.0" top="2.0"/>
-                        </padding>
-                        <font>
-                            <Font name="System Bold" size="14.0"/>
-                        </font>
-                    </Label>
-                    <Separator prefWidth="1.0E16"/>
-                </children>
-            </HBox>
-            <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-                  prefWidth="320.0" spacing="5.0">
-                <FlowPane fx:id="colorPalette" hgap="2.0" prefHeight="0.0" vgap="2.0" VBox.vgrow="ALWAYS">
-                    <VBox.margin>
-                        <Insets/>
-                    </VBox.margin>
-                </FlowPane>
-                <HBox alignment="CENTER">
-                    <children>
-                        <Label minWidth="-Infinity" text="Яркость">
-                            <padding>
-                                <Insets bottom="5.0" left="5.0" right="5.0" top="2.0"/>
-                            </padding>
-                            <font>
-                                <Font name="System Bold" size="14.0"/>
-                            </font>
-                        </Label>
-                        <Separator prefWidth="1.0E16"/>
-                    </children>
-                </HBox>
-                <HBox alignment="CENTER" layoutX="10.0" layoutY="15.0">
-                    <children>
-                        <Label minWidth="-Infinity" text="Пиксельные эффекты">
-                            <padding>
-                                <Insets bottom="5.0" left="5.0" right="5.0" top="2.0"/>
-                            </padding>
-                            <font>
-                                <Font name="System Bold" size="14.0"/>
-                            </font>
-                        </Label>
-                        <Separator prefWidth="1.0E16"/>
-                    </children>
-                </HBox>
-                <FlowPane hgap="5.0" vgap="5.0">
-                    <children>
-                        <Button fx:id="solidEffect" accessibleHelp="Мерцающее уменьшение яркости пиксела"
-                                accessibleText="Мерцающее угасание" layoutX="120.0" layoutY="45.0" minHeight="30.0"
-                                mnemonicParsing="false" onAction="#setSolidEffect" prefWidth="105.0" text="Без эффекта">
-                            <tooltip>
-                                <Tooltip text="Без эффекта"/>
-                            </tooltip>
-                        </Button>
-                        <Button fx:id="fadeIn" accessibleHelp="Плавное разгорание пиксела" accessibleText="Разгорание"
-                                minHeight="30.0" mnemonicParsing="false" onAction="#setFadeInEffect" prefWidth="50.0">
-                            <graphic>
-                                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true">
-                                    <Image url="@../images/fadeIn.png"/>
-                                </ImageView>
-                            </graphic>
-                            <tooltip>
-                                <Tooltip text="Плавное разгорание"/>
-                            </tooltip>
-                        </Button>
-                        <Button fx:id="mFadeIn" accessibleHelp="Мерцающее увеличение яркости пиксела"
-                                accessibleText="Мерцающее разгорание" minHeight="30.0" mnemonicParsing="false"
-                                onAction="#setBlinkingFadeInEffect" prefWidth="50.0">
-                            <graphic>
-                                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true">
-                                    <Image url="@../images/mFadeIn.png"/>
-                                </ImageView>
-                            </graphic>
-                            <tooltip>
-                                <Tooltip text="Мерцающее разгорание"/>
-                            </tooltip>
-                        </Button>
-                        <Button fx:id="blink" accessibleHelp="Мерцание пиксела от минимальной до максимальной яркости"
-                                accessibleText="Мерцание" minHeight="30.0" mnemonicParsing="false"
-                                onAction="#setBlinkEffect" prefWidth="50.0">
-                            <graphic>
-                                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true">
-                                    <Image url="@../images/blink.png"/>
-                                </ImageView>
-                            </graphic>
-                            <tooltip>
-                                <Tooltip text="Мерцание"/>
-                            </tooltip>
-                        </Button>
-                        <Button fx:id="fadeOutIn" accessibleHelp="Мерцающее увеличение яркости пиксела"
-                                accessibleText="Мерцающее разгорание" minHeight="30.0" mnemonicParsing="false"
-                                onAction="#setFadeOutInEffect" prefWidth="50.0">
-                            <graphic>
-                                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true">
-                                    <Image url="@../images/fadeOutIn.png"/>
-                                </ImageView>
-                            </graphic>
-                            <tooltip>
-                                <Tooltip text="Угасание затем разгорание"/>
-                            </tooltip>
-                        </Button>
-                        <Button fx:id="fadeOut" accessibleHelp="Медленное уменьшение яркости пиксела"
-                                accessibleText="Угасани" minHeight="30.0" mnemonicParsing="false"
-                                onAction="#setFadeOutEffect" prefWidth="50.0">
-                            <graphic>
-                                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true">
-                                    <Image url="@../images/fadeOut.png"/>
-                                </ImageView>
-                            </graphic>
-                            <tooltip>
-                                <Tooltip text="Плавное угасание"/>
-                            </tooltip>
-                        </Button>
-                        <Button fx:id="mFadeOut" accessibleHelp="Мерцающее уменьшение яркости пиксела"
-                                accessibleText="Мерцающее угасание" minHeight="30.0" mnemonicParsing="false"
-                                onAction="#setBlinkingFadeOutEffect" prefWidth="50.0">
-                            <graphic>
-                                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true">
-                                    <Image url="@../images/mFadeOut.png"/>
-                                </ImageView>
-                            </graphic>
-                            <tooltip>
-                                <Tooltip text="Мерцающее угасание"/>
-                            </tooltip>
-                        </Button>
-                        <Button fx:id="chaos" accessibleHelp="Хаотичное изменение яркости пиксела" accessibleText="Хаос"
-                                minHeight="30.0" mnemonicParsing="false" onAction="#setChaosEffect" prefWidth="50.0">
-                            <graphic>
-                                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true">
-                                    <Image url="@../images/chaos.png"/>
-                                </ImageView>
-                            </graphic>
-                            <tooltip>
-                                <Tooltip text="Хаотичная яркость"/>
-                            </tooltip>
-                        </Button>
-                        <Button fx:id="fadeInOut" accessibleHelp="Мерцающее уменьшение яркости пиксела"
-                                accessibleText="Мерцающее угасание" minHeight="30.0" mnemonicParsing="false"
-                                onAction="#setFadeInOutEffect" prefWidth="50.0">
-                            <graphic>
-                                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true">
-                                    <Image url="@../images/fadeInOut.png"/>
-                                </ImageView>
-                            </graphic>
-                            <tooltip>
-                                <Tooltip text="Разгорание, затем угасание"/>
-                            </tooltip>
-                        </Button>
-                    </children>
-                </FlowPane>
-                <HBox alignment="CENTER">
-                    <children>
-                        <Label minWidth="-Infinity" text="Настройка пикселей">
-                            <padding>
-                                <Insets bottom="5.0" left="5.0" right="5.0" top="2.0"/>
-                            </padding>
-                            <font>
-                                <Font name="System Bold" size="14.0"/>
-                            </font>
-                        </Label>
-                        <Separator prefWidth="1.0E16"/>
-                    </children>
-                </HBox>
-                <GridPane alignment="CENTER" hgap="5.0" vgap="5.0">
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints vgrow="SOMETIMES"/>
-                        <RowConstraints vgrow="SOMETIMES"/>
-                    </rowConstraints>
-                    <Label layoutX="10.0" layoutY="42.0" text="Каналов на пиксель"/>
-                    <Spinner fx:id="chanelQuantifier" layoutX="116.0" layoutY="38.0" maxHeight="-Infinity"
-                             maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-                             onScroll="#scrollQuantifier" prefWidth="150.0" GridPane.columnIndex="1"/>
-                </GridPane>
-            </VBox>
-            <HBox alignment="CENTER">
-                <children>
-                    <Label minWidth="-Infinity" text="Настройка кадров">
-                        <padding>
-                            <Insets bottom="5.0" left="5.0" right="5.0" top="2.0"/>
-                        </padding>
-                        <font>
-                            <Font name="System Bold" size="14.0"/>
-                        </font>
-                    </Label>
-                    <Separator prefWidth="1.0E16"/>
-                </children>
-            </HBox>
-            <VBox maxHeight="-Infinity" maxWidth="-Infinity" spacing="5.0">
-                <children>
-                    <GridPane alignment="CENTER" hgap="5.0" vgap="5.0">
-                        <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
-                        </columnConstraints>
-                        <rowConstraints>
-                            <RowConstraints vgrow="SOMETIMES"/>
-                            <RowConstraints vgrow="SOMETIMES"/>
-                            <RowConstraints vgrow="SOMETIMES"/>
-                        </rowConstraints>
+        <ScrollPane hbarPolicy="NEVER">
+            <content>
+                <VBox maxWidth="350.0" minWidth="350.0" prefWidth="350.0" spacing="5.0">
+                    <HBox alignment="CENTER">
                         <children>
-                            <Label text="Длина кадра, мс"/>
-                            <Spinner fx:id="frameLengthSpinner" editable="true" maxHeight="-Infinity"
-                                     maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-                                     onScroll="#scrollFrameLength" prefWidth="150.0" GridPane.columnIndex="1"/>
-                            <Label text="Повторов кадра" GridPane.rowIndex="1"/>
-                            <Spinner fx:id="frameCyclesSpinner" editable="true" maxHeight="-Infinity"
-                                     maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-                                     onScroll="#scrollRepeats" prefWidth="150.0" GridPane.columnIndex="1"
-                                     GridPane.rowIndex="1"/>
-                        </children>
-                    </GridPane>
-                </children>
-            </VBox>
-            <HBox alignment="CENTER" layoutX="15.0" layoutY="314.0">
-                <children>
-                    <Label minWidth="-Infinity" text="Многокадровые эффекты">
-                        <padding>
-                            <Insets bottom="5.0" left="5.0" right="5.0" top="2.0"/>
-                        </padding>
-                        <font>
-                            <Font name="System Bold" size="14.0"/>
-                        </font>
-                    </Label>
-                    <Separator prefWidth="1.0E16"/>
-                </children>
-            </HBox>
-            <VBox spacing="10.0">
-                <HBox spacing="10.0">
-                    <Button fx:id="clearSelection" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
-                            onAction="#clearSelection" prefWidth="300.0" text="Снять выделение"/>
-                    <Button fx:id="selectAll" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
-                            onAction="#selectAll" prefWidth="300.0" text="Выделить всё">
-                        <opaqueInsets>
-                            <Insets/>
-                        </opaqueInsets>
-                    </Button>
-                </HBox>
-                <ChoiceBox fx:id="effectsSelector" maxWidth="1.7976931348623157E308" minWidth="230.0"/>
-                <Button fx:id="applyEffect" alignment="CENTER" contentDisplay="TOP" maxWidth="1.7976931348623157E308"
-                        mnemonicParsing="false" onAction="#applyEffectHandler" prefWidth="230.0"
-                        text="Применить эффект">
-                    <opaqueInsets>
-                        <Insets/>
-                    </opaqueInsets>
-                    <padding>
-                        <Insets bottom="5.0" left="15.0" right="15.0" top="5.0"/>
-                    </padding>
-                </Button>
-            </VBox>
-            <HBox alignment="CENTER" layoutX="15.0" layoutY="423.0">
-                <children>
-                    <Label minWidth="-Infinity" text="Параметры программы">
-                        <padding>
-                            <Insets bottom="5.0" left="5.0" right="5.0" top="2.0"/>
-                        </padding>
-                        <font>
-                            <Font name="System Bold" size="14.0"/>
-                        </font>
-                    </Label>
-                    <Separator prefWidth="1.0E16"/>
-                </children>
-            </HBox>
-            <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                  minWidth="-Infinity" prefWidth="800.0" spacing="5.0" VBox.vgrow="NEVER">
-                <children>
-                    <Label text="Кадров"/>
-                    <Spinner fx:id="framesSpinner" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                             minWidth="-Infinity" onScroll="#scrollFrames" prefHeight="31.0" prefWidth="110.0"/>
-                    <Label text="Пикселей">
-                        <opaqueInsets>
-                            <Insets/>
-                        </opaqueInsets>
-                        <HBox.margin>
-                            <Insets left="10.0"/>
-                        </HBox.margin>
-                    </Label>
-                    <Spinner fx:id="pixelSpinner" editable="true" maxHeight="-Infinity" maxWidth="-Infinity"
-                             minHeight="-Infinity" minWidth="-Infinity" onScroll="#scrollPixels" prefHeight="31.0"
-                             prefWidth="63.0"/>
-                </children>
-                <padding>
-                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0"/>
-                </padding>
-            </HBox>
-            <HBox alignment="CENTER_LEFT" prefHeight="27.0" prefWidth="226.0" spacing="10.0">
-                <children>
-                    <Label prefHeight="27.0" text="Длительность"/>
-                    <Label fx:id="fullTime" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                           minWidth="-Infinity" prefHeight="21.0" prefWidth="89.0" text="00:00:00"/>
-                    <Label fx:id="bulbIcon" prefHeight="27.0" text="Каналов">
-                        <tooltip>
-                            <Tooltip fx:id="errorTooltip">
+                            <Label minWidth="-Infinity" text="Цвет">
+                                <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="2.0"/>
+                                </padding>
                                 <font>
-                                    <Font size="14.0"/>
+                                    <Font name="System Bold" size="14.0"/>
                                 </font>
-                            </Tooltip>
-                        </tooltip>
-                    </Label>
-                    <Label fx:id="totalPixels" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="21.0"
-                           prefWidth="59.0" text="10"/>
-                </children>
-            </HBox>
-            <VBox spacing="10.0">
-                <HBox onScroll="#scrollGamma" spacing="5.0">
-                    <children>
-                        <Label contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                               minWidth="-Infinity" prefWidth="60.0" text="Гамма" HBox.hgrow="NEVER"/>
-                        <Slider fx:id="gammaSlider" blockIncrement="0.1" majorTickUnit="10.0" max="4.0" min="-4.0"
-                                minorTickCount="5" prefHeight="38.0" prefWidth="229.0" showTickMarks="true"
-                                value="2.2"/>
-                        <Label fx:id="gammaLabel" prefHeight="21.0" prefWidth="125.0" text="2.2"/>
-                    </children>
-                </HBox>
-            </VBox>
-            <Button fx:id="startPreview" minWidth="150.0" mnemonicParsing="false" onAction="#startPreview"
-                    prefHeight="40.0" prefWidth="9999999.0" text="Предпросмотр">
-                <graphic>
-                    <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                        <image>
-                            <Image url="@../images/play.png"/>
-                        </image>
-                    </ImageView>
-                </graphic>
-                <font>
-                    <Font name="System Bold" size="15.0"/>
-                </font>
-            </Button>
-            <CheckBox fx:id="animateFramePreview" mnemonicParsing="false" selected="true"
-                      text="анимация текущего кадра"/>
-            <padding>
-                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-            </padding>
-        </VBox>
+                            </Label>
+                            <Separator prefWidth="1.0E16"/>
+                        </children>
+                    </HBox>
+                    <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+                          prefWidth="320.0" spacing="5.0">
+                        <FlowPane fx:id="colorPalette" hgap="2.0" prefHeight="0.0" vgap="2.0" VBox.vgrow="ALWAYS">
+                            <VBox.margin>
+                                <Insets/>
+                            </VBox.margin>
+                        </FlowPane>
+                        <HBox alignment="CENTER">
+                            <children>
+                                <Label minWidth="-Infinity" text="Яркость">
+                                    <padding>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="2.0"/>
+                                    </padding>
+                                    <font>
+                                        <Font name="System Bold" size="14.0"/>
+                                    </font>
+                                </Label>
+                                <Separator prefWidth="1.0E16"/>
+                            </children>
+                        </HBox>
+                        <HBox fx:id="brightPalette" spacing="2"/>
+                        <HBox alignment="CENTER" layoutX="10.0" layoutY="15.0">
+                            <children>
+                                <Label minWidth="-Infinity" text="Пиксельные эффекты">
+                                    <padding>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="2.0"/>
+                                    </padding>
+                                    <font>
+                                        <Font name="System Bold" size="14.0"/>
+                                    </font>
+                                </Label>
+                                <Separator prefWidth="1.0E16"/>
+                            </children>
+                        </HBox>
+                        <FlowPane hgap="5.0" vgap="5.0">
+                            <children>
+                                <Button fx:id="solidEffect" accessibleHelp="Мерцающее уменьшение яркости пиксела"
+                                        accessibleText="Мерцающее угасание" layoutX="120.0" layoutY="45.0"
+                                        minHeight="30.0" mnemonicParsing="false" onAction="#setSolidEffect"
+                                        prefWidth="105.0" text="Без эффекта">
+                                    <tooltip>
+                                        <Tooltip text="Без эффекта"/>
+                                    </tooltip>
+                                </Button>
+                                <Button fx:id="fadeIn" accessibleHelp="Плавное разгорание пиксела"
+                                        accessibleText="Разгорание" minHeight="30.0" mnemonicParsing="false"
+                                        onAction="#setFadeInEffect" prefWidth="50.0">
+                                    <graphic>
+                                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true">
+                                            <Image url="@../images/fadeIn.png"/>
+                                        </ImageView>
+                                    </graphic>
+                                    <tooltip>
+                                        <Tooltip text="Плавное разгорание"/>
+                                    </tooltip>
+                                </Button>
+                                <Button fx:id="mFadeIn" accessibleHelp="Мерцающее увеличение яркости пиксела"
+                                        accessibleText="Мерцающее разгорание" minHeight="30.0" mnemonicParsing="false"
+                                        onAction="#setBlinkingFadeInEffect" prefWidth="50.0">
+                                    <graphic>
+                                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true">
+                                            <Image url="@../images/mFadeIn.png"/>
+                                        </ImageView>
+                                    </graphic>
+                                    <tooltip>
+                                        <Tooltip text="Мерцающее разгорание"/>
+                                    </tooltip>
+                                </Button>
+                                <Button fx:id="blink"
+                                        accessibleHelp="Мерцание пиксела от минимальной до максимальной яркости"
+                                        accessibleText="Мерцание" minHeight="30.0" mnemonicParsing="false"
+                                        onAction="#setBlinkEffect" prefWidth="50.0">
+                                    <graphic>
+                                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true">
+                                            <Image url="@../images/blink.png"/>
+                                        </ImageView>
+                                    </graphic>
+                                    <tooltip>
+                                        <Tooltip text="Мерцание"/>
+                                    </tooltip>
+                                </Button>
+                                <Button fx:id="fadeOutIn" accessibleHelp="Мерцающее увеличение яркости пиксела"
+                                        accessibleText="Мерцающее разгорание" minHeight="30.0" mnemonicParsing="false"
+                                        onAction="#setFadeOutInEffect" prefWidth="50.0">
+                                    <graphic>
+                                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true">
+                                            <Image url="@../images/fadeOutIn.png"/>
+                                        </ImageView>
+                                    </graphic>
+                                    <tooltip>
+                                        <Tooltip text="Угасание затем разгорание"/>
+                                    </tooltip>
+                                </Button>
+                                <Button fx:id="fadeOut" accessibleHelp="Медленное уменьшение яркости пиксела"
+                                        accessibleText="Угасани" minHeight="30.0" mnemonicParsing="false"
+                                        onAction="#setFadeOutEffect" prefWidth="50.0">
+                                    <graphic>
+                                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true">
+                                            <Image url="@../images/fadeOut.png"/>
+                                        </ImageView>
+                                    </graphic>
+                                    <tooltip>
+                                        <Tooltip text="Плавное угасание"/>
+                                    </tooltip>
+                                </Button>
+                                <Button fx:id="mFadeOut" accessibleHelp="Мерцающее уменьшение яркости пиксела"
+                                        accessibleText="Мерцающее угасание" minHeight="30.0" mnemonicParsing="false"
+                                        onAction="#setBlinkingFadeOutEffect" prefWidth="50.0">
+                                    <graphic>
+                                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true">
+                                            <Image url="@../images/mFadeOut.png"/>
+                                        </ImageView>
+                                    </graphic>
+                                    <tooltip>
+                                        <Tooltip text="Мерцающее угасание"/>
+                                    </tooltip>
+                                </Button>
+                                <Button fx:id="chaos" accessibleHelp="Хаотичное изменение яркости пиксела"
+                                        accessibleText="Хаос" minHeight="30.0" mnemonicParsing="false"
+                                        onAction="#setChaosEffect" prefWidth="50.0">
+                                    <graphic>
+                                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true">
+                                            <Image url="@../images/chaos.png"/>
+                                        </ImageView>
+                                    </graphic>
+                                    <tooltip>
+                                        <Tooltip text="Хаотичная яркость"/>
+                                    </tooltip>
+                                </Button>
+                                <Button fx:id="fadeInOut" accessibleHelp="Мерцающее уменьшение яркости пиксела"
+                                        accessibleText="Мерцающее угасание" minHeight="30.0" mnemonicParsing="false"
+                                        onAction="#setFadeInOutEffect" prefWidth="50.0">
+                                    <graphic>
+                                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true">
+                                            <Image url="@../images/fadeInOut.png"/>
+                                        </ImageView>
+                                    </graphic>
+                                    <tooltip>
+                                        <Tooltip text="Разгорание, затем угасание"/>
+                                    </tooltip>
+                                </Button>
+                            </children>
+                        </FlowPane>
+                        <HBox alignment="CENTER">
+                            <children>
+                                <Label minWidth="-Infinity" text="Настройка пикселей">
+                                    <padding>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="2.0"/>
+                                    </padding>
+                                    <font>
+                                        <Font name="System Bold" size="14.0"/>
+                                    </font>
+                                </Label>
+                                <Separator prefWidth="1.0E16"/>
+                            </children>
+                        </HBox>
+                        <GridPane alignment="CENTER" hgap="5.0" vgap="5.0">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints vgrow="SOMETIMES"/>
+                                <RowConstraints vgrow="SOMETIMES"/>
+                            </rowConstraints>
+                            <Label layoutX="10.0" layoutY="42.0" text="Каналов на пиксель"/>
+                            <Spinner fx:id="chanelQuantifier" layoutX="116.0" layoutY="38.0" maxHeight="-Infinity"
+                                     maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+                                     onScroll="#scrollQuantifier" prefWidth="150.0" GridPane.columnIndex="1"/>
+                        </GridPane>
+                    </VBox>
+                    <HBox alignment="CENTER">
+                        <children>
+                            <Label minWidth="-Infinity" text="Настройка кадров">
+                                <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="2.0"/>
+                                </padding>
+                                <font>
+                                    <Font name="System Bold" size="14.0"/>
+                                </font>
+                            </Label>
+                            <Separator prefWidth="1.0E16"/>
+                        </children>
+                    </HBox>
+                    <VBox maxHeight="-Infinity" maxWidth="-Infinity" spacing="5.0">
+                        <children>
+                            <GridPane alignment="CENTER" hgap="5.0" vgap="5.0">
+                                <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
+                                </columnConstraints>
+                                <rowConstraints>
+                                    <RowConstraints vgrow="SOMETIMES"/>
+                                    <RowConstraints vgrow="SOMETIMES"/>
+                                    <RowConstraints vgrow="SOMETIMES"/>
+                                </rowConstraints>
+                                <children>
+                                    <Label text="Длина кадра, мс"/>
+                                    <Spinner fx:id="frameLengthSpinner" editable="true" maxHeight="-Infinity"
+                                             maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+                                             onScroll="#scrollFrameLength" prefWidth="150.0" GridPane.columnIndex="1"/>
+                                    <Label text="Повторов кадра" GridPane.rowIndex="1"/>
+                                    <Spinner fx:id="frameCyclesSpinner" editable="true" maxHeight="-Infinity"
+                                             maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+                                             onScroll="#scrollRepeats" prefWidth="150.0" GridPane.columnIndex="1"
+                                             GridPane.rowIndex="1"/>
+                                </children>
+                            </GridPane>
+                        </children>
+                    </VBox>
+                    <HBox alignment="CENTER" layoutX="15.0" layoutY="314.0">
+                        <children>
+                            <Label minWidth="-Infinity" text="Многокадровые эффекты">
+                                <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="2.0"/>
+                                </padding>
+                                <font>
+                                    <Font name="System Bold" size="14.0"/>
+                                </font>
+                            </Label>
+                            <Separator prefWidth="1.0E16"/>
+                        </children>
+                    </HBox>
+                    <VBox spacing="10.0">
+                        <HBox spacing="10.0">
+                            <Button fx:id="clearSelection" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                                    onAction="#clearSelection" prefWidth="300.0" text="Снять выделение"/>
+                            <Button fx:id="selectAll" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                                    onAction="#selectAll" prefWidth="300.0" text="Выделить всё">
+                                <opaqueInsets>
+                                    <Insets/>
+                                </opaqueInsets>
+                            </Button>
+                        </HBox>
+                        <ChoiceBox fx:id="effectsSelector" maxWidth="1.7976931348623157E308" minWidth="230.0"/>
+                        <Button fx:id="applyEffect" alignment="CENTER" contentDisplay="TOP"
+                                maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#applyEffectHandler"
+                                prefWidth="230.0" text="Применить эффект">
+                            <opaqueInsets>
+                                <Insets/>
+                            </opaqueInsets>
+                            <padding>
+                                <Insets bottom="5.0" left="15.0" right="15.0" top="5.0"/>
+                            </padding>
+                        </Button>
+                    </VBox>
+                    <HBox alignment="CENTER" layoutX="15.0" layoutY="423.0">
+                        <children>
+                            <Label minWidth="-Infinity" text="Параметры программы">
+                                <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="2.0"/>
+                                </padding>
+                                <font>
+                                    <Font name="System Bold" size="14.0"/>
+                                </font>
+                            </Label>
+                            <Separator prefWidth="1.0E16"/>
+                        </children>
+                    </HBox>
+                    <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                          minWidth="-Infinity" prefWidth="800.0" spacing="5.0" VBox.vgrow="NEVER">
+                        <children>
+                            <Label text="Кадров"/>
+                            <Spinner fx:id="framesSpinner" maxHeight="-Infinity" maxWidth="-Infinity"
+                                     minHeight="-Infinity" minWidth="-Infinity" onScroll="#scrollFrames"
+                                     prefHeight="31.0" prefWidth="110.0"/>
+                            <Label text="Пикселей">
+                                <opaqueInsets>
+                                    <Insets/>
+                                </opaqueInsets>
+                                <HBox.margin>
+                                    <Insets left="10.0"/>
+                                </HBox.margin>
+                            </Label>
+                            <Spinner fx:id="pixelSpinner" editable="true" maxHeight="-Infinity" maxWidth="-Infinity"
+                                     minHeight="-Infinity" minWidth="-Infinity" onScroll="#scrollPixels"
+                                     prefHeight="31.0" prefWidth="63.0"/>
+                        </children>
+                        <padding>
+                            <Insets bottom="2.0" left="2.0" right="2.0" top="2.0"/>
+                        </padding>
+                    </HBox>
+                    <HBox alignment="CENTER_LEFT" prefHeight="27.0" prefWidth="226.0" spacing="10.0">
+                        <children>
+                            <Label prefHeight="27.0" text="Длительность"/>
+                            <Label fx:id="fullTime" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                                   minWidth="-Infinity" prefHeight="21.0" prefWidth="89.0" text="00:00:00"/>
+                            <Label fx:id="bulbIcon" prefHeight="27.0" text="Каналов">
+                                <tooltip>
+                                    <Tooltip fx:id="errorTooltip">
+                                        <font>
+                                            <Font size="14.0"/>
+                                        </font>
+                                    </Tooltip>
+                                </tooltip>
+                            </Label>
+                            <Label fx:id="totalPixels" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="21.0"
+                                   prefWidth="59.0" text="10"/>
+                        </children>
+                    </HBox>
+                    <VBox spacing="10.0">
+                        <HBox onScroll="#scrollGamma" spacing="5.0">
+                            <children>
+                                <Label contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity"
+                                       minHeight="-Infinity" minWidth="-Infinity" prefWidth="60.0" text="Гамма"
+                                       HBox.hgrow="NEVER"/>
+                                <Slider fx:id="gammaSlider" blockIncrement="0.1" majorTickUnit="10.0" max="4.0"
+                                        min="-4.0" minorTickCount="5" prefHeight="38.0" prefWidth="229.0"
+                                        showTickMarks="true" value="2.2"/>
+                                <Label fx:id="gammaLabel" prefHeight="21.0" prefWidth="125.0" text="2.2"/>
+                            </children>
+                        </HBox>
+                    </VBox>
+                    <Button fx:id="startPreview" minWidth="150.0" mnemonicParsing="false" onAction="#startPreview"
+                            prefHeight="40.0" prefWidth="9999999.0" text="Предпросмотр">
+                        <graphic>
+                            <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                <image>
+                                    <Image url="@../images/play.png"/>
+                                </image>
+                            </ImageView>
+                        </graphic>
+                        <font>
+                            <Font name="System Bold" size="15.0"/>
+                        </font>
+                    </Button>
+                    <CheckBox fx:id="animateFramePreview" mnemonicParsing="false" selected="true"
+                              text="анимация текущего кадра"/>
+                    <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                    </padding>
+                </VBox>
+            </content>
+        </ScrollPane>
     </right>
     <center>
         <VBox prefHeight="99999.0" BorderPane.alignment="BOTTOM_CENTER">

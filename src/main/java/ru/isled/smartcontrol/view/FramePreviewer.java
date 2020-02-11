@@ -26,6 +26,10 @@ public class FramePreviewer extends Thread {
             change = false;
             try {
                 if (!previewActive.getValue()) {
+                    // setting first subframe
+                    for (int i = 0; i < colors.size(); i++) {
+                        previewPixels.get(i).setFill(colors.get(i)[0]);
+                    }
                     while (!change) {
                         sleep(500);
                     }

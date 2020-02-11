@@ -4,12 +4,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.isled.smartcontrol.SmartControl;
 import ru.isled.smartcontrol.model.LedFrame;
+import ru.isled.smartcontrol.model.Pixel;
 import ru.isled.smartcontrol.model.Project;
 import ru.isled.smartcontrol.model.effect.Effect;
 import ru.isled.smartcontrol.model.effect.PixelEffect;
@@ -69,6 +71,10 @@ public class MainController {
     public Spinner<Integer> frameCyclesSpinner;
     private FrameHandlersController frameHandlersController = new FrameHandlersController(this);
     private ColorPaletteController colorPaletteController;
+
+    @FXML
+    public HBox brightPalette;
+    private BrightPaletteController brightPaletteController;
 
     @FXML
     public void setFadeInEffect() {
@@ -427,7 +433,7 @@ public class MainController {
         animateFramePreview.selectedProperty().addListener((observable, oldValue, newValue) -> refreshFramePreview());
 
         colorPaletteController = new ColorPaletteController(this, colorPalette);
-
+        brightPaletteController = new BrightPaletteController(this, brightPalette);
 
     }
 
@@ -528,5 +534,24 @@ public class MainController {
     public void onSelectedFrameChanged(LedFrame selectedFrame) {
         framePreviewController.previewFrame(selectedFrame);
         frameHandlersController.updateHandlers(selectedFrame);
+    }
+
+    public void setBright(Double startBright, Double endBright) {
+        tableController.getSelectedDataCells().forEach(pixel -> {
+                    int pixelNo = pixel.getColumn() - HEADER_COLUMNS;
+                    int frameNo = pixel.getRow();
+                    Pixel.Frame frame = getProject().getPixel(pixelNo).getFrames().get(frameNo);
+                    if (startBright != null) {
+                        Color startColor = frame.getStartColor();
+                        frame.setColor(
+                                Color.hsb(startColor.getHue(), startColor.getSaturation(), startBright), null);
+                    }
+                    if (endBright != null) {
+                        Color endColor = frame.getEndColor();
+                        frame.setColor(
+                                null, Color.hsb(endColor.getHue(), endColor.getSaturation(), endBright));
+                    }
+                }
+        );
     }
 }

@@ -74,7 +74,7 @@ public interface Constants {
     String CHANNELS_COUNTER_HINT = "Общее количество пикселей, включая кратные каналы";
     double CHANNEL_PREVIEW_SIZE = 15.0;
     double DEFAULT_GAMMA = 2.2;
-    int COLOR_PALETTE_GRAYS = 9;
+    int COLOR_PALETTE_GRAYS = 13;
     int COLOR_PALETTE_COLORS = 60;
     double PALETTE_COLOR_SIZE = 20;
     int MAX_QUANTIFIER = 5;
