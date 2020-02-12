@@ -377,7 +377,11 @@ public class MainController {
         updateProgramLength();
 
         for (int i = 0; i < MAX_CHANNELS_COUNT; i++) {
-            project.getPixel(i).rgbModeProperty().addListener((observable, oldValue, newValue) -> refreshFramePreview());
+            project.getPixel(i).rgbModeProperty().addListener((observable, oldValue, newValue) -> {
+                refreshFramePreview();
+                updateTotalPixelCount();
+            });
+            project.getPixel(i).quantifierProperty().addListener((observable, oldValue, newValue) -> updateTotalPixelCount());
         }
 
         tableController.initDataColumns();

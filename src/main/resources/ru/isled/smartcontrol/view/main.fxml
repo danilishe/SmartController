@@ -343,34 +343,38 @@
                     <Separator prefWidth="1.0E16"/>
                 </children>
             </HBox>
-            <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                  minWidth="-Infinity" prefWidth="800.0" spacing="5.0" VBox.vgrow="NEVER">
+            <GridPane hgap="5.0" vgap="5.0">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="78.0" minWidth="10.0" prefWidth="77.0"/>
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="91.0" minWidth="10.0" prefWidth="84.0"/>
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="61.0"/>
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="93.0" minWidth="10.0" prefWidth="84.0"/>
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
+                    <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
+                </rowConstraints>
                 <children>
                     <Label text="Кадров"/>
-                    <Spinner fx:id="framesSpinner" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                             minWidth="-Infinity" onScroll="#scrollFrames" prefHeight="31.0" prefWidth="110.0"/>
-                    <Label text="Пикселей">
+                    <Spinner fx:id="framesSpinner" maxHeight="-Infinity" maxWidth="-Infinity" onScroll="#scrollFrames"
+                             prefHeight="31.0" prefWidth="999.0" GridPane.columnIndex="1"/>
+                    <Label text="Пикселей" GridPane.rowIndex="1">
                         <opaqueInsets>
                             <Insets/>
                         </opaqueInsets>
-                        <HBox.margin>
-                            <Insets left="10.0"/>
-                        </HBox.margin>
                     </Label>
                     <Spinner fx:id="pixelSpinner" editable="true" maxHeight="-Infinity" maxWidth="-Infinity"
-                             minHeight="-Infinity" minWidth="-Infinity" onScroll="#scrollPixels" prefHeight="31.0"
-                             prefWidth="63.0"/>
-                </children>
-                <padding>
-                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0"/>
-                </padding>
-            </HBox>
-            <HBox alignment="CENTER_LEFT" prefHeight="27.0" prefWidth="226.0" spacing="10.0">
-                <children>
-                    <Label prefHeight="27.0" text="Длительность"/>
-                    <Label fx:id="fullTime" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                           minWidth="-Infinity" prefHeight="21.0" prefWidth="89.0" text="00:00:00"/>
-                    <Label fx:id="bulbIcon" prefHeight="27.0" text="Каналов">
+                             minHeight="-Infinity" onScroll="#scrollPixels" prefHeight="31.0" prefWidth="999.0"
+                             GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                    <Label prefHeight="27.0" text="Время" GridPane.columnIndex="2"/>
+                    <Label fx:id="fullTime" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="21.0"
+                           prefWidth="999.0" text="00:00:00" GridPane.columnIndex="3">
+                        <font>
+                            <Font name="System Bold" size="15.0"/>
+                        </font>
+                    </Label>
+                    <Label fx:id="bulbIcon" prefHeight="27.0" text="Каналов" GridPane.columnIndex="2"
+                           GridPane.rowIndex="1">
                         <tooltip>
                             <Tooltip fx:id="errorTooltip">
                                 <font>
@@ -379,10 +383,14 @@
                             </Tooltip>
                         </tooltip>
                     </Label>
-                    <Label fx:id="totalPixels" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="21.0"
-                           prefWidth="59.0" text="10"/>
+                    <Label fx:id="totalPixels" prefHeight="21.0" prefWidth="999.0" text="10" GridPane.columnIndex="3"
+                           GridPane.rowIndex="1">
+                        <font>
+                            <Font name="System Bold" size="15.0"/>
+                        </font>
+                    </Label>
                 </children>
-            </HBox>
+            </GridPane>
             <VBox spacing="10.0">
                 <HBox onScroll="#scrollGamma" spacing="5.0">
                     <children>
