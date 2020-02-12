@@ -60,7 +60,7 @@ public class Project {
         return this;
     }
 
-    public int programLength() {
+    public int framesCount() {
         return framesCount.get();
     }
 
@@ -158,9 +158,8 @@ public class Project {
     }
 
     public List<List<Color[]>> getInterpolated() {
-        final List<List<Color[]>> interpolated = new ArrayList<>(programLength());
-        for (int i = 0; i < programLength(); i++) {
-            if (getFrame(i).getLength() == 0) continue;
+        final List<List<Color[]>> interpolated = new ArrayList<>(framesCount());
+        for (int i = 0; i < framesCount(); i++) {
             final List<Color[]> interpolatedFrame = getInterpolatedFrame(i);
             for (int j = 0; j < getFrame(i).getCycles(); j++) {
                 interpolated.add(interpolatedFrame);
@@ -171,27 +170,27 @@ public class Project {
 
     public long getLength() {
         return frames.stream()
-                .limit(programLength())
+                .limit(framesCount())
                 .mapToLong(f -> f.getLength() * f.getCycles())
                 .sum();
     }
 
     public void onFramesChanged() {
         // framesCache.size() must be == frames count at each pixel
-        if (framesCache.size() < programLength()) { // if project has no that frames before
+        if (framesCache.size() < framesCount()) { // if project has no that frames before
             for (Pixel pixel : pixels) { // Creating new Frames in Pixel lists
-                for (int i = framesCache.size(); i < programLength(); i++) {
+                for (int i = framesCache.size(); i < framesCount(); i++) {
                     pixel.getFrames().add(new Pixel.Frame(pixel.rgbModeProperty()));
                 }
             }
-            for (int i = framesCache.size(); i < programLength(); i++) {
+            for (int i = framesCache.size(); i < framesCount(); i++) {
                 framesCache.add(new LedFrame(i + 1, getPixelsBackgroundProperties(i)));
             }
         }
-        if (frames.size() < programLength()) {
-            frames.addAll(framesCache.subList(frames.size(), programLength()));
+        if (frames.size() < framesCount()) {
+            frames.addAll(framesCache.subList(frames.size(), framesCount()));
         } else {
-            frames.remove(programLength(), frames.size());
+            frames.remove(framesCount(), frames.size());
         }
     }
 

@@ -1,5 +1,6 @@
 package ru.isled.smartcontrol.view;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.ScrollEvent;
@@ -55,7 +56,7 @@ public class MainController {
     public FlowPane colorPalette;
 
     @FXML
-    public CheckBox animateFramePreview;
+    public ToggleButton animateFramePreview;
     private FramePreviewController framePreviewController;
 
     private Project project;
@@ -245,26 +246,8 @@ public class MainController {
 
     @FXML
     public void startPreview() {
-//        Dialogs.preview(project);
+        Dialogs.preview(project);
     }
-
-//    private void updateFramesCount() {
-//        int existsFrames = frameTableView.getItems().size();
-//        int needFrames = framesSpinner.getValue();
-//        if (existsFrames > needFrames) {
-//            for (int i = existsFrames; i > needFrames; i--) {
-//                frames.remove(frames.size() - 1);
-//            }
-//            updateProgramLength();
-//        } else if (existsFrames < needFrames) {
-//            for (int i = existsFrames; i < needFrames; i++) {
-//                if (project.size() == i) project.addFrame(new LedFrame());
-//                frames.add(project.getFrame(i));
-//            }
-//            updateProgramLength();
-//        }
-//    }
-
 
     private void initPixelQuantifierSpinner() {
         chanelQuantifier.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, MAX_QUANTIFIER, 1));
@@ -371,7 +354,7 @@ public class MainController {
     public void setProject(Project project) {
         this.project = project;
         pixelSpinner.getValueFactory().setValue(project.getPixelsCount());
-        framesSpinner.getValueFactory().setValue(project.programLength());
+        framesSpinner.getValueFactory().setValue(project.framesCount());
 
         updateTotalPixelCount();
         updateProgramLength();
@@ -557,5 +540,9 @@ public class MainController {
                     }
                 }
         );
+    }
+
+    public void refreshTableView() {
+        tableController.refresh();
     }
 }

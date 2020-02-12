@@ -189,6 +189,10 @@ public class TableController {
         });
     }
 
+    public void refresh() {
+        frameTableView.refresh();
+    }
+
     public void refreshItems() {
         frameTableView.setItems(mainController.getProject().getFrames());
     }

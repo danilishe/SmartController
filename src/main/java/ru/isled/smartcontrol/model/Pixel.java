@@ -101,8 +101,8 @@ public class Pixel {
     /**
      * frameNo starts from 0!!!
      */
-    public Color[] getInterpolatedFrame(int frameNo, int frameLength) {
-        Color[] interpolated = getFrames().get(frameNo).getInterpolated(frameLength / MIN_FRAME_LENGTH);
+    public Color[] getInterpolatedFrame(int frameNo, int frameLengthMsec) {
+        Color[] interpolated = getFrames().get(frameNo).getInterpolated(frameLengthMsec / BASE_FRAME_LENGTH);
         for (int i = 0; i < interpolated.length; i++) {
             interpolated[i] = getRgbMode().getVisibleColor(interpolated[i]);
         }
@@ -190,8 +190,8 @@ public class Pixel {
             return setBright((double) bright / MAX_BRIGHT);
         }
 
-        private Color[] getInterpolated(int frameLength) {
-            return getEffect().interpolate(frameLength, getStartColor(), getEndColor());
+        private Color[] getInterpolated(int subframesAmount) {
+            return getEffect().interpolate(subframesAmount, getStartColor(), getEndColor());
         }
 
         public StringProperty backgroundProperty() {

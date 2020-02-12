@@ -36,6 +36,7 @@
                 </MenuBar>
                 <HBox alignment="CENTER_RIGHT" prefWidth="8999999.0" spacing="15.0">
                     <children>
+                        <Button onAction="#refreshTableView" mnemonicParsing="false" text="🔄"/>
                         <Button fx:id="startPreview" mnemonicParsing="false" onAction="#startPreview"
                                 text="Предпросмотр">
                             <graphic>
@@ -62,8 +63,7 @@
                                 <Tooltip text="Ширина колонок"/>
                             </tooltip>
                         </Slider>
-                        <CheckBox fx:id="animateFramePreview" mnemonicParsing="false" selected="true"
-                                  text="анимировать кадр"/>
+                        <ToggleButton fx:id="animateFramePreview" mnemonicParsing="false" text="анимировать кадр"/>
                     </children>
                     <HBox.margin>
                         <Insets right="10.0"/>

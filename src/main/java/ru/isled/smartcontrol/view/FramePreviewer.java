@@ -27,7 +27,7 @@ public class FramePreviewer extends Thread {
             try {
                 if (!previewActive.getValue()) {
                     // setting first subframe
-                    for (int i = 0; i < colors.size(); i++) {
+                    if (colors != null) for (int i = 0; i < colors.size(); i++) {
                         previewPixels.get(i).setFill(colors.get(i)[0]);
                     }
                     while (!change) {
@@ -39,7 +39,7 @@ public class FramePreviewer extends Thread {
                     for (int i = 0; i < colors.get(0).length; i++) {
                         for (int j = 0; j < colors.size(); j++) {
                             // small graphic performance upgrade
-                            if (i > 0 && !colors.get(j)[i - 1].equals(colors.get(j)[i])) {
+                            if (i == 0 || !colors.get(j)[i - 1].equals(colors.get(j)[i])) {
                                 previewPixels.get(j).setFill(colors.get(j)[i]);
                             }
                         }
