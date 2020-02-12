@@ -363,7 +363,7 @@
                             <Insets/>
                         </opaqueInsets>
                     </Label>
-                    <Spinner fx:id="pixelSpinner" editable="true" maxHeight="-Infinity" maxWidth="-Infinity"
+                    <Spinner fx:id="pixelSpinner" editable="false" maxHeight="-Infinity" maxWidth="-Infinity"
                              minHeight="-Infinity" onScroll="#scrollPixels" prefHeight="31.0" prefWidth="999.0"
                              GridPane.columnIndex="1" GridPane.rowIndex="1"/>
                     <Label prefHeight="27.0" text="Время" GridPane.columnIndex="2"/>

@@ -1,6 +1,5 @@
 package ru.isled.smartcontrol.view;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.ScrollEvent;
@@ -210,32 +209,10 @@ public class MainController {
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(MIN_PIXELS_COUNT, MAX_CHANNELS_COUNT, DEFAULT_PIXEL_COUNT)
         );
 
-        pixelSpinner.getEditor().textProperty().addListener((ov, oldValue, newValue) -> {
-            if (!newValue.matches("\\d+")) {
-                pixelSpinner.getEditor().textProperty().setValue(oldValue);
-            }
-        });
-
         pixelSpinner.getValueFactory().valueProperty().addListener((ov, o, n) -> {
-            if (n < MIN_PIXELS_COUNT)
-                pixelSpinner.getValueFactory().setValue(MIN_PIXELS_COUNT);
-            else if (n > MAX_CHANNELS_COUNT)
-                pixelSpinner.getValueFactory().setValue(MAX_CHANNELS_COUNT);
-            else {
-                project.setPixelsCount(n);
-                tableController.refreshVisibleColumnsCount();
-                updateTotalPixelCount();
-            }
-        });
-
-        pixelSpinner.getEditor().focusedProperty().addListener((ov, o, n) -> {
-            if (!n) {
-                pixelSpinner.getValueFactory().setValue(
-                        Integer.parseInt(
-                                pixelSpinner.getEditor().textProperty().get()
-                        )
-                );
-            }
+            project.setPixelsCount(n);
+            tableController.refreshVisibleColumnsCount();
+            updateTotalPixelCount();
         });
     }
 
@@ -268,27 +245,7 @@ public class MainController {
             }
         });
 
-        framesSpinner.getValueFactory().valueProperty().addListener((ov, o, n) -> {
-            if (n < MIN_FRAMES)
-                framesSpinner.getValueFactory().setValue(MIN_FRAMES);
-            else if (n > MAX_FRAMES)
-                framesSpinner.getValueFactory().setValue(MAX_FRAMES);
-            else {
-                project.setFramesCount(n);
-//                updateFramesCount();
-            }
-        });
-
-        framesSpinner.getEditor().focusedProperty().addListener((ov, o, n) -> {
-            if (!n) {
-                framesSpinner.getValueFactory().setValue(
-                        Integer.parseInt(
-                                framesSpinner.getEditor().textProperty().get()
-                        )
-                );
-            }
-        });
-
+        framesSpinner.getValueFactory().valueProperty().addListener((ov, o, n) -> project.setFramesCount(n));
     }
 
     @FXML
@@ -431,13 +388,9 @@ public class MainController {
     private void updateTotalPixelCount() {
         int sum = project.getChannelsCount();
         if (sum > MAX_CHANNELS_COUNT) {
-            bulbIcon.setTextFill(Color.RED);
-            errorTooltip.setText(TOO_MUCH_CHANNELS_ERROR_HINT);
-        } else {
-            bulbIcon.setTextFill(Color.BLACK);
-            errorTooltip.setText(CHANNELS_COUNTER_HINT);
-        }
-        totalPixels.setText(String.valueOf(sum));
+            pixelSpinner.decrement();
+        } else
+            totalPixels.setText(String.valueOf(sum));
     }
 
     public void scrollZoom(ScrollEvent scrollEvent) {
@@ -543,6 +496,7 @@ public class MainController {
     }
 
     public void refreshTableView() {
-        tableController.refresh();
+        tableController.getColumn(0).setVisible(false);
+        tableController.getColumn(0).setVisible(true);
     }
 }
