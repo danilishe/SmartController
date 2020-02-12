@@ -44,9 +44,12 @@ public class ColorPaletteController {
 
     private EventHandler<MouseEvent> getMouseEventHandler(Color color) {
         return event -> {
-            if (event.getButton() == MouseButton.PRIMARY)
-                mainController.setStartColor(color);
-            else if (event.getButton() == MouseButton.MIDDLE)
+            if (event.getButton() == MouseButton.PRIMARY) {
+                if (event.getClickCount() > 1)
+                    mainController.setColor(color, color);
+                else
+                    mainController.setStartColor(color);
+            } else if (event.getButton() == MouseButton.MIDDLE)
                 mainController.setColor(color, color);
             else if (event.getButton() == MouseButton.SECONDARY)
                 mainController.setEndColor(color);

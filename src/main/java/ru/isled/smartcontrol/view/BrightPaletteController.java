@@ -35,9 +35,12 @@ public class BrightPaletteController {
             StackPane stack = new StackPane(shape, text);
             stack.setAlignment(Pos.CENTER);
             stack.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
-                if (event.getButton() == MouseButton.PRIMARY)
-                    mainController.setBright(bright, null);
-                else if (event.getButton() == MouseButton.MIDDLE)
+                if (event.getButton() == MouseButton.PRIMARY) {
+                    if (event.getClickCount() > 1)
+                        mainController.setBright(bright, bright);
+                    else
+                        mainController.setBright(bright, null);
+                } else if (event.getButton() == MouseButton.MIDDLE)
                     mainController.setBright(bright, bright);
                 else
                     mainController.setBright(null, bright);

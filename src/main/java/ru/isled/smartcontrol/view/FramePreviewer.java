@@ -38,7 +38,10 @@ public class FramePreviewer extends Thread {
                 else {
                     for (int i = 0; i < colors.get(0).length; i++) {
                         for (int j = 0; j < colors.size(); j++) {
-                            previewPixels.get(j).setFill(colors.get(j)[i]);
+                            // small graphic performance upgrade
+                            if (i > 0 && !colors.get(j)[i - 1].equals(colors.get(j)[i])) {
+                                previewPixels.get(j).setFill(colors.get(j)[i]);
+                            }
                         }
                         if (change) break;
                         sleep(MIN_FRAME_LENGTH);
