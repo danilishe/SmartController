@@ -11,6 +11,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import ru.isled.smartcontrol.model.Pixel;
 import ru.isled.smartcontrol.model.effect.RgbMode;
@@ -61,11 +63,14 @@ public class PixelHeader extends VBox {
         Text rgbModeText = new Text(pixel.getRgbMode().name());
         rgbModeText.textProperty().bind(pixel.rgbModeProperty().asString());
         rgbModeText.setFill(Color.ROYALBLUE);
+        rgbModeText.setFont(Font.font("Sans", FontWeight.EXTRA_BOLD, 12));
 
         Pane pane = new Pane();
         pane.setMinHeight(7);
-        pane.setMinWidth(MIN_COL_WIDTH);
-        pane.setPrefWidth(Double.MAX_VALUE);
+        pane.setMinWidth(10);
+        pane.setPrefWidth(10);
+//        pane.prefWidthProperty().bind(this.prefWidthProperty());
+//        pane.setPrefWidth(Double.POSITIVE_INFINITY);
         pane.styleProperty().bind(pixel.background);
 
         VBox button = new VBox(2, rgbModeText, pane);

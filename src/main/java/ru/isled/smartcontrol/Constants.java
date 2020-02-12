@@ -41,7 +41,7 @@ public interface Constants {
     int MAX_CYCLES = 100;
     int MIN_CYCLES = 0;
     String PROPS_PATH = System.getProperty("user.home") + "/smartcontrol/properties.ini";
-    int MIN_HEIGHT = 850;
+    int MIN_HEIGHT = 900;
     int MIN_WIDTH = 930;
     int MAX_LAST_FILES_COUNT = 10;
     String CONTROLLER_PAGE_URL = "http://is-led.ru/";
