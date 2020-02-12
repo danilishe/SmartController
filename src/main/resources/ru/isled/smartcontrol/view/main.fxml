@@ -36,7 +36,6 @@
                 </MenuBar>
                 <HBox alignment="CENTER_RIGHT" prefWidth="8999999.0" spacing="15.0">
                     <children>
-                        <Button onAction="#refreshTableView" mnemonicParsing="false" text="🔄"/>
                         <Button fx:id="startPreview" mnemonicParsing="false" onAction="#startPreview"
                                 text="Предпросмотр">
                             <graphic>
@@ -75,21 +74,21 @@
     <right>
         <VBox maxHeight="-Infinity" maxWidth="330.0" minHeight="-Infinity" minWidth="330.0" prefWidth="330.0"
               spacing="5.0">
-            <HBox alignment="CENTER">
-                <children>
-                    <Label minWidth="-Infinity" text="Цвет">
-                        <padding>
-                            <Insets bottom="5.0" left="5.0" right="5.0" top="2.0"/>
-                        </padding>
-                        <font>
-                            <Font name="System Bold" size="14.0"/>
-                        </font>
-                    </Label>
-                    <Separator prefWidth="1.0E16"/>
-                </children>
-            </HBox>
             <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
                   prefWidth="320.0" spacing="5.0">
+                <HBox alignment="CENTER">
+                    <children>
+                        <Label minWidth="-Infinity" text="Цвет">
+                            <padding>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="2.0"/>
+                            </padding>
+                            <font>
+                                <Font name="System Bold" size="14.0"/>
+                            </font>
+                        </Label>
+                        <Separator prefWidth="1.0E16"/>
+                    </children>
+                </HBox>
                 <FlowPane fx:id="colorPalette" hgap="2.0" prefHeight="0.0" vgap="2.0" VBox.vgrow="ALWAYS">
                     <VBox.margin>
                         <Insets/>
@@ -255,21 +254,21 @@
                              onScroll="#scrollQuantifier" prefWidth="150.0" GridPane.columnIndex="1"/>
                 </GridPane>
             </VBox>
-            <HBox alignment="CENTER">
-                <children>
-                    <Label minWidth="-Infinity" text="Настройка кадров">
-                        <padding>
-                            <Insets bottom="5.0" left="5.0" right="5.0" top="2.0"/>
-                        </padding>
-                        <font>
-                            <Font name="System Bold" size="14.0"/>
-                        </font>
-                    </Label>
-                    <Separator prefWidth="1.0E16"/>
-                </children>
-            </HBox>
             <VBox maxHeight="-Infinity" maxWidth="-Infinity" spacing="5.0">
                 <children>
+                    <HBox alignment="CENTER">
+                        <children>
+                            <Label minWidth="-Infinity" text="Настройка кадров">
+                                <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="2.0"/>
+                                </padding>
+                                <font>
+                                    <Font name="System Bold" size="14.0"/>
+                                </font>
+                            </Label>
+                            <Separator prefWidth="1.0E16"/>
+                        </children>
+                    </HBox>
                     <GridPane alignment="CENTER" hgap="5.0" vgap="5.0">
                         <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
@@ -294,29 +293,46 @@
                     </GridPane>
                 </children>
             </VBox>
-            <HBox alignment="CENTER" layoutX="15.0" layoutY="314.0">
+            <VBox spacing="5.0">
                 <children>
-                    <Label minWidth="-Infinity" text="Многокадровые эффекты">
-                        <padding>
-                            <Insets bottom="5.0" left="5.0" right="5.0" top="2.0"/>
-                        </padding>
-                        <font>
-                            <Font name="System Bold" size="14.0"/>
-                        </font>
-                    </Label>
-                    <Separator prefWidth="1.0E16"/>
+                    <HBox alignment="CENTER">
+                        <children>
+                            <Label minWidth="-Infinity" text="Инструменты">
+                                <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="2.0"/>
+                                </padding>
+                                <font>
+                                    <Font name="System Bold" size="14.0"/>
+                                </font>
+                            </Label>
+                            <Separator prefWidth="1.0E16"/>
+                        </children>
+                    </HBox>
+                    <HBox spacing="10.0">
+                        <Button fx:id="clearSelection" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                                onAction="#clearSelection" prefWidth="300.0" text="Снять выделение"/>
+                        <Button fx:id="selectAll" defaultButton="true" maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false" onAction="#selectAll" prefWidth="300.0" text="Выделить всё">
+                            <opaqueInsets>
+                                <Insets/>
+                            </opaqueInsets>
+                        </Button>
+                    </HBox>
                 </children>
-            </HBox>
+            </VBox>
             <VBox spacing="10.0">
-                <HBox spacing="10.0">
-                    <Button fx:id="clearSelection" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
-                            onAction="#clearSelection" prefWidth="300.0" text="Снять выделение"/>
-                    <Button fx:id="selectAll" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
-                            onAction="#selectAll" prefWidth="300.0" text="Выделить всё">
-                        <opaqueInsets>
-                            <Insets/>
-                        </opaqueInsets>
-                    </Button>
+                <HBox alignment="CENTER">
+                    <children>
+                        <Label minWidth="-Infinity" text="Многокадровые эффекты">
+                            <padding>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="2.0"/>
+                            </padding>
+                            <font>
+                                <Font name="System Bold" size="14.0"/>
+                            </font>
+                        </Label>
+                        <Separator prefWidth="1.0E16"/>
+                    </children>
                 </HBox>
                 <ChoiceBox fx:id="effectsSelector" maxWidth="1.7976931348623157E308" minWidth="230.0"/>
                 <Button fx:id="applyEffect" alignment="CENTER" contentDisplay="TOP" maxWidth="1.7976931348623157E308"
@@ -400,6 +416,26 @@
                                 minorTickCount="5" prefHeight="38.0" prefWidth="229.0" showTickMarks="true"
                                 value="2.2"/>
                         <Label fx:id="gammaLabel" prefHeight="21.0" prefWidth="125.0" text="2.2"/>
+                    </children>
+                </HBox>
+                <HBox alignment="TOP_RIGHT" spacing="5.0">
+                    <children>
+                        <Button mnemonicParsing="false" onAction="#refreshTableView" text="🔄">
+                            <font>
+                                <Font size="12.0"/>
+                            </font>
+                        </Button>
+                        <Button mnemonicParsing="false" onAction="#dropQuantifiers" text="Сбросить каналы">
+                            <font>
+                                <Font size="12.0"/>
+                            </font>
+                        </Button>
+                        <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#dropRgbMode"
+                                text="Сбросить цветность">
+                            <font>
+                                <Font size="12.0"/>
+                            </font>
+                        </Button>
                     </children>
                 </HBox>
             </VBox>

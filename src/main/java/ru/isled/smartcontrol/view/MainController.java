@@ -499,4 +499,12 @@ public class MainController {
         tableController.getColumn(0).setVisible(false);
         tableController.getColumn(0).setVisible(true);
     }
+
+    public void dropQuantifiers() {
+        project.getPixels().forEach(pixel -> pixel.setQuantifier(1));
+    }
+
+    public void dropRgbMode() {
+        project.getPixels().forEach(pixel -> pixel.setRgbMode(RgbMode.WHITE));
+    }
 }

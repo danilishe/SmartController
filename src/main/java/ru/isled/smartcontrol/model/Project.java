@@ -197,4 +197,8 @@ public class Project {
     public ObservableList<LedFrame> getFrames() {
         return frames;
     }
+
+    public List<Pixel> getPixels() {
+        return pixels;
+    }
 }
