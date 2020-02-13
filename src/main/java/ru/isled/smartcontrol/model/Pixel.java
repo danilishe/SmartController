@@ -35,7 +35,10 @@ public class Pixel {
         this.frames = FXCollections.observableArrayList(frames);
         background = new SimpleStringProperty(rgbMode.getBackground());
         // if rgbMode changes, background changes too
-        this.rgbMode.addListener((v, o, n) -> background.set(getRgbMode().getBackground()));
+        this.rgbMode.addListener((v, o, n) -> {
+            background.set(getRgbMode().getBackground());
+            this.getFrames().forEach(Frame::updateBackground);
+        });
     }
 
     public boolean isMultichannel() {

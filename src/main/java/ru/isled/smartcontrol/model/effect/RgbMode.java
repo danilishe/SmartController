@@ -86,7 +86,7 @@ public enum RgbMode {
 
         @Override
         public Color getVisibleColor(Color startColor) {
-            return startColor.grayscale();
+            return Color.hsb(Color.WHITE.getHue(), 0, startColor.getBrightness());
         }
     },
 
@@ -110,8 +110,7 @@ public enum RgbMode {
 
         @Override
         public Color getVisibleColor(Color startColor) {
-            Color gray = startColor.grayscale();
-            return Color.color(gray.getRed() * TEMP_FACTOR, gray.getGreen() * TEMP_FACTOR, gray.getBlue());
+            return Color.hsb(Color.BLUE.getHue(), .09, startColor.getBrightness());
         }
     },
 
@@ -135,8 +134,7 @@ public enum RgbMode {
 
         @Override
         public Color getVisibleColor(Color startColor) {
-            Color gray = startColor.grayscale();
-            return Color.color(gray.getRed(), gray.getGreen(), TEMP_FACTOR * gray.getBlue());
+            return Color.hsb(Color.YELLOW.getHue(), .2, startColor.getBrightness());
         }
     };
 
