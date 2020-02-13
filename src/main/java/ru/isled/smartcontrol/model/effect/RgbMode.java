@@ -138,8 +138,6 @@ public enum RgbMode {
         }
     };
 
-    public static final double TEMP_FACTOR = .93;
-
     private static byte toByte(double bright) {
         return (byte) (bright * MAX_BRIGHT);
     }

@@ -1,4 +1,4 @@
-package ru.isled.smartcontrol.view;
+package ru.isled.smartcontrol.view.effect_controller;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.fxml.FXML;
@@ -11,12 +11,12 @@ import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-//todo подумать, реализовать
-public class DisbuildingEffectController implements Initializable {
+
+public class BuildingEffectController implements Initializable {
     private static List<IntegerProperty> cells;
     private static int sizeX;
     private static int sizeY;
-    private static DisbuildingEffectController controller;
+    private static BuildingEffectController controller;
 
     @FXML
     private RadioButton fromRight;
@@ -48,17 +48,17 @@ public class DisbuildingEffectController implements Initializable {
 
     Alert window;
 
-    private DisbuildingEffectController() {
+    private BuildingEffectController() {
         loadDialog();
     }
 
-    public static DisbuildingEffectController get(List<IntegerProperty> aCells, int x, int y) {
+    public static BuildingEffectController get(List<IntegerProperty> aCells, int x, int y) {
         cells = aCells;
         sizeX = x;
         sizeY = y;
 
         if (controller == null)
-            controller = new DisbuildingEffectController();
+            controller = new BuildingEffectController();
         return controller;
     }
 

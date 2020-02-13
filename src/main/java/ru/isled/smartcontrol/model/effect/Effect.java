@@ -1,59 +1,23 @@
 package ru.isled.smartcontrol.model.effect;
 
-import javafx.beans.property.IntegerProperty;
-import ru.isled.smartcontrol.view.*;
+import javafx.scene.paint.Color;
+import ru.isled.smartcontrol.model.Project;
+import ru.isled.smartcontrol.view.effect_controller.MultiFrameEffect;
 
-import java.util.List;
-
-public enum Effect {
-    Разгорание {
+public enum Effect implements MultiFrameEffect {
+    Сгладить {
         @Override
-        public void apply(List<IntegerProperty> values, Integer cols, Integer rows) {
-            FadeInEffectController effect = FadeInEffectController.get(values, cols, rows);
-            effect.apply();
+        public void apply(Project project, int x1, int y1, int x2, int y2) {
+            int height = y2 - y1 + 1;
+            if (height < 2) return;
+            for (int frameNo = y1 + 1; frameNo <= y2; frameNo++) {
+                for (int pixelNo = x1; pixelNo <= x2; pixelNo++) {
+                    Color middleColor = project.getPixelFrame(frameNo - 1, pixelNo).getStartColor()
+                            .interpolate(project.getPixelFrame(frameNo, pixelNo).getEndColor(), .5);
+                    project.getPixelFrame(frameNo - 1, pixelNo).setColor(null, middleColor);
+                    project.getPixelFrame(frameNo, pixelNo).setColor(middleColor, null);
+                }
+            }
         }
-    },
-
-    Угасание {
-        @Override
-        public void apply(List<IntegerProperty> values, Integer cols, Integer rows) {
-            FadeOutEffectController effect = FadeOutEffectController.get(values, cols, rows);
-            effect.apply();
-        }
-    },
-
-    Случайно { // todo наверное стоит удалить, или переделать в СЛУЧАЙНЫЕ ЦВЕТА
-        @Override
-        public void apply(List<IntegerProperty> values, Integer cols, Integer rows) {
-            ChaosEffectController effect = ChaosEffectController.get(values, cols, rows);
-            effect.apply();
-        }
-    },
-
-    Блик {
-        @Override
-        public void apply(List<IntegerProperty> values, Integer cols, Integer rows) {
-            GlareEffectController effect = GlareEffectController.get(values, cols, rows);
-            effect.apply();
-        }
-    },
-
-    Сборка {
-        @Override
-        public void apply(List<IntegerProperty> values, Integer cols, Integer rows) {
-            BuildingEffectController effect = BuildingEffectController.get(values, cols, rows);
-            effect.apply();
-        }
-    },
-
-    Наполнение {
-        @Override
-        public void apply(List<IntegerProperty> values, Integer cols, Integer rows) {
-            FillingEffectController effect = FillingEffectController.get(values, cols, rows);
-            effect.apply();
-        }
-    };
-
-    public abstract void apply(List<IntegerProperty> values,
-                               Integer cols, Integer rows);
+    }
 }

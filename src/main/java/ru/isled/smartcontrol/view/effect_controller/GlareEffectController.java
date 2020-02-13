@@ -1,4 +1,4 @@
-package ru.isled.smartcontrol.view;
+package ru.isled.smartcontrol.view.effect_controller;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.fxml.FXML;
@@ -6,7 +6,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
-import ru.isled.smartcontrol.model.effect.PixelEffect;
 
 import java.io.IOException;
 import java.net.URL;

@@ -50,6 +50,9 @@ public class Project {
         this.framesCache.addAll(frames);
     }
 
+    public Pixel.Frame getPixelFrame(int frameNo, int pixelNo) {
+        return getPixel(pixelNo).getFrames().get(frameNo);
+    }
 
     public double getGamma() {
         return gamma.get();

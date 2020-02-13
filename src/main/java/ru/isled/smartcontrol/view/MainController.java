@@ -280,28 +280,23 @@ public class MainController {
 
     @FXML
     public void applyEffectHandler() {
-//        List<TablePosition> cells = getSelectedDataCells();
-//        new ColorPicker(Color.WHITE).getValue();
-//
-//        if (cells != null && cells.size() > 0) {
-//            project.setHasChanges(true);
-//
-//            //fixme ПЕРЕДЕЛАТЬ МЕТОД, ЧТОБЫ ВОЗВРАЩАЛ ДВУМЕРНЫЙ МАССИВ
-//            //todo СДЕЛАТЬ НАСТРОЙКУ В ЭФФЕКТАХ, ЧТОБЫ МОЖНО БЫЛО ДОБАВИТЬ КАДРЫ ДО ОКОНЧАНИЯ ЭФФЕКТА
-//
-//            TablePosition lastCell = cells.get(cells.size() - 1);
-//            TablePosition firstCell = cells.get(0);
-//            int cols = lastCell.getColumn() - firstCell.getColumn() + 1;
-//            int rows = lastCell.getRow() - firstCell.getRow() + 1;
-//
-//
-//            List<IntegerProperty> values = getValuesList(cells);
-//
-//
-//            String selectedEffect = effectsSelector.getValue();
-//            Effect.valueOf(selectedEffect).apply(values, cols, rows);
-//
-//        }
+        List<TablePosition> cells = tableController.getSelectedDataCells();
+
+        if (cells != null && cells.size() > 0) {
+            project.setHasChanges(true);
+
+            TablePosition firstCell = cells.get(0);
+            TablePosition lastCell = cells.get(cells.size() - 1);
+
+            int x1 = firstCell.getColumn() - HEADER_COLUMNS,
+                    y1 = firstCell.getRow(),
+                    x2 = lastCell.getColumn() - HEADER_COLUMNS,
+                    y2 = lastCell.getRow();
+
+            String selectedEffect = effectsSelector.getValue();
+            Effect.valueOf(selectedEffect).apply(getProject(), x1, y1, x2, y2);
+
+        }
     }
 
     public void setMainApp(SmartControl main) {
