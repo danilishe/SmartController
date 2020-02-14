@@ -7,6 +7,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.isled.smartcontrol.SmartControl;
@@ -43,6 +44,9 @@ public class MainController {
     public TableColumn<LedFrame, Integer> frameRepeatColumn;
     @FXML
     public TableColumn<LedFrame, Integer> frameLengthColumn;
+    public Rectangle customColor;
+    public ColorPicker colorPicker;
+    private CustomColorController customColorController;
     private TableController tableController;
 
 
@@ -374,6 +378,7 @@ public class MainController {
         colorPaletteController = new ColorPaletteController(this, colorPalette);
         brightPaletteController = new BrightPaletteController(this, brightPalette);
 
+        customColorController = new CustomColorController(this, customColor, colorPicker);
     }
 
     public void setRgbMode(RgbMode rgbMode) {

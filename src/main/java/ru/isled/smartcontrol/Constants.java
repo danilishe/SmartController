@@ -3,7 +3,7 @@ package ru.isled.smartcontrol;
 import javafx.stage.FileChooser;
 
 public interface Constants {
-    String PROGRAM_VERSION = "1.2.1";
+    String PROGRAM_VERSION = "2.0.0";
     int MIN_FRAMES = 1;
     int MAX_FRAMES = 5_000;
     int MIN_PIXELS_COUNT = 1;
@@ -78,4 +78,5 @@ public interface Constants {
     int COLOR_PALETTE_COLORS = 60;
     double PALETTE_COLOR_SIZE = 20;
     int MAX_QUANTIFIER = 5;
+    int CUSTOM_COLORS_COUNT = 16;
 }

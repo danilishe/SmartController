@@ -4,6 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.*?>
 <?import java.net.URL?>
 <BorderPane cacheShape="false" centerShape="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
@@ -94,6 +95,13 @@
                         <Insets/>
                     </VBox.margin>
                 </FlowPane>
+                <HBox alignment="CENTER_LEFT" spacing="5.0">
+                    <children>
+                        <Rectangle fx:id="customColor" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="30.0"
+                                   stroke="BLACK" strokeType="INSIDE" width="30.0"/>
+                        <ColorPicker fx:id="colorPicker"/>
+                    </children>
+                </HBox>
                 <HBox alignment="CENTER">
                     <children>
                         <Label minWidth="-Infinity" text="Яркость">
