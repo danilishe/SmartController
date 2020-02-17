@@ -5,7 +5,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
+import ru.isled.smartcontrol.view.CustomColorController;
 
 import java.io.IOException;
 import java.net.URL;
@@ -24,13 +25,11 @@ public class GlareEffectController implements Initializable {
     @FXML
     ToggleGroup direction;
     @FXML
-    Slider effectBrightness;
+    ColorPicker mainColor;
     @FXML
     CheckBox background;
     @FXML
-    Slider backgroundBrightness;
-    @FXML
-    HBox backgroundBrightnessBox;
+    ColorPicker bgColor;
     @FXML
     Label backgroundBrightnessLabel;
     @FXML
@@ -43,6 +42,8 @@ public class GlareEffectController implements Initializable {
     Spinner<Integer> traceBefore;
     @FXML
     RadioButton rightDirection;
+    @FXML
+    CheckBox autoFrame;
 
     Alert window;
 
@@ -66,16 +67,21 @@ public class GlareEffectController implements Initializable {
         Optional<ButtonType> button = window.showAndWait();
         if (ButtonType.OK.equals(button.get())) {
             apply(rightDirection.isSelected(),
-                    (int) effectBrightness.getValue(), glareWidth.getValue(),
-                    (int) backgroundBrightness.getValue(), background.isSelected(),
-                    traceBefore.getValue(), traceAfter.getValue());
+                    mainColor.getValue(),
+                    glareWidth.getValue(),
+                    bgColor.getValue(),
+                    background.isSelected(),
+                    traceBefore.getValue(), traceAfter.getValue(),
+                    autoFrame.isSelected()
+            );
         }
     }
 
     public void apply(boolean isRightDirection,
-                      int glBright, int glWidth,
-                      final int bgBright, boolean isBgOpaque,
-                      int tailBefore, int tailAfter) {
+                      Color mainColor, int glWidth,
+                      Color bgColor, boolean isBgOpaque,
+                      int tailBefore, int tailAfter,
+                      boolean autoFrameAdd) {
 
         List<Integer> glare = IntStream.generate(() -> glBright).limit(glWidth).boxed().collect(Collectors.toList());
 
@@ -125,13 +131,6 @@ public class GlareEffectController implements Initializable {
         glareWidth.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 15, 1));
         traceBefore.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 15, 0));
         traceAfter.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 15, 0));
-
-        backgroundBrightness.valueProperty().addListener(((observable, oldValue, newValue) -> {
-            backgroundBrightnessLabel.setText(String.valueOf(newValue.intValue()));
-        }));
-        effectBrightness.valueProperty().addListener(((observable, oldValue, newValue) -> {
-            effectBrightnessLabel.setText(String.valueOf(newValue.intValue()));
-        }));
     }
 
     public void loadDialog() {
@@ -149,5 +148,9 @@ public class GlareEffectController implements Initializable {
 
         window.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
 
+        mainColor.setValue(Color.WHITE);
+        mainColor.getCustomColors().addAll(CustomColorController.getCustomColorsPalette());
+        bgColor.setValue(Color.BLACK);
+        bgColor.getCustomColors().addAll(CustomColorController.getCustomColorsPalette());
     }
 }

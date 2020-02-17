@@ -298,7 +298,7 @@ public class MainController {
                     y2 = lastCell.getRow();
 
             String selectedEffect = effectsSelector.getValue();
-            Effect.valueOf(selectedEffect).apply(getProject(), x1, y1, x2, y2);
+            Effect.selectEffect(selectedEffect).apply(getProject(), x1, y1, x2, y2);
 
         }
     }
@@ -345,7 +345,7 @@ public class MainController {
 
         // loading effects
         for (Effect effect : Effect.values()) {
-            effectsSelector.getItems().add(effect.toString());
+            effectsSelector.getItems().add(effect.getName());
         }
         effectsSelector.setValue(effectsSelector.getItems().get(0));
 

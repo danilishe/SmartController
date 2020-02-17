@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import ru.isled.smartcontrol.model.Project;
 
 import java.io.IOException;
 import java.net.URL;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class BuildingEffectController implements Initializable {
+public class BuildingEffectController implements Initializable, MultiFrameEffect {
     private static List<IntegerProperty> cells;
     private static int sizeX;
     private static int sizeY;
@@ -60,17 +61,6 @@ public class BuildingEffectController implements Initializable {
         if (controller == null)
             controller = new BuildingEffectController();
         return controller;
-    }
-
-    @FXML
-    public void apply() {
-        Optional<ButtonType> button = window.showAndWait();
-        if (ButtonType.OK.equals(button.get())) {
-            apply(fromRight.isSelected(),
-                    (int) effectBrightness.getValue(), blockWidth.getValue(),
-                    (int) backgroundBrightness.getValue(), background.isSelected(),
-                    traceBefore.getValue(), traceAfter.getValue());
-        }
     }
 
     public void apply(boolean blockFallingFromRight,
@@ -149,5 +139,16 @@ public class BuildingEffectController implements Initializable {
 
         window.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
 
+    }
+
+    @Override
+    public void apply(Project project, int x1, int y1, int x2, int y2) {
+        Optional<ButtonType> button = window.showAndWait();
+        if (ButtonType.OK.equals(button.get())) {
+            apply(fromRight.isSelected(),
+                    (int) effectBrightness.getValue(), blockWidth.getValue(),
+                    (int) backgroundBrightness.getValue(), background.isSelected(),
+                    traceBefore.getValue(), traceAfter.getValue());
+        }
     }
 }
