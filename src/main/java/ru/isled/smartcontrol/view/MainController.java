@@ -242,13 +242,6 @@ public class MainController {
         framesSpinner.setValueFactory(
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(MIN_FRAMES, MAX_FRAMES, DEFAULT_FRAMES_COUNT)
         );
-
-        framesSpinner.getEditor().textProperty().addListener((ov, oldValue, newValue) -> {
-            if (!newValue.matches("\\d+")) {
-                framesSpinner.getEditor().textProperty().setValue(oldValue);
-            }
-        });
-
         framesSpinner.getValueFactory().valueProperty().addListener((ov, o, n) -> project.setFramesCount(n));
     }
 
@@ -294,8 +287,12 @@ public class MainController {
 
             int x1 = firstCell.getColumn() - HEADER_COLUMNS,
                     y1 = firstCell.getRow(),
-                    x2 = lastCell.getColumn() - HEADER_COLUMNS,
-                    y2 = lastCell.getRow();
+                    x2 = lastCell.getColumn() - HEADER_COLUMNS + 1,
+                    y2 = lastCell.getRow() + 1;
+            System.out.println("x1 = " + x1);
+            System.out.println("y1 = " + y1);
+            System.out.println("x2 = " + x2);
+            System.out.println("y2 = " + y2);
 
             String selectedEffect = effectsSelector.getValue();
             Effect.selectEffect(selectedEffect).apply(getProject(), x1, y1, x2, y2);
@@ -370,6 +367,13 @@ public class MainController {
         initPixelQuantifierSpinner();
 
         tableController = new TableController(this, frameTableView);
+// TODO it could be fix a bug when project frame count is more when value in frameSpinner after effect, but doesn't work
+//        frameTableView.getItems().addListener((InvalidationListener) observable -> {
+//            final int size = ((List<?>) observable).size();
+//            if (size != framesSpinner.getValue()) {
+//                framesSpinner.getEditor().textProperty().set("" + size);
+//            }
+//        });
 
         framePreviewController = new FramePreviewController(this);
         framePreviewController.init(tableController.getPreviewPixels(), animateFramePreview.selectedProperty());

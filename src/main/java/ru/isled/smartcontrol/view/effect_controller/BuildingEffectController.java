@@ -82,9 +82,9 @@ public class BuildingEffectController implements Initializable, MultiFrameEffect
             int firstGlareIndex = Math.min(firstGlareLine * sizeX, cells.size() - 1);
 
             List<IntegerProperty> forGlare = cells.subList(firstGlareIndex, lastGlareIndex);
-            GlareEffectController.get(forGlare, sizeX, lastGlareLine - firstGlareLine)
-                    .apply(!blockFallingFromRight, bright, blockWidth, bgBright, false,
-                            tailBefore, tailAfter);
+//            GlareEffectController.get(forGlare, sizeX, lastGlareLine - firstGlareLine)
+//                    .apply(!blockFallingFromRight, bright, blockWidth, bgBright, false,
+//                            tailBefore, tailAfter);
 
             firstGlareLine = lastGlareLine - tailAfter - (block * blockWidth);
         }
