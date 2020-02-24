@@ -7,7 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.paint.Color;
 import ru.isled.smartcontrol.model.effect.PixelEffect;
 import ru.isled.smartcontrol.model.effect.RgbMode;
-import ru.isled.smartcontrol.util.Convert;
+import ru.isled.smartcontrol.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -126,8 +126,8 @@ public class Pixel {
         };
 
         private void updateBackground() {
-            String start = Convert.toHex(rgbMode.get().getVisibleColor(startColor));
-            String end = Convert.toHex(rgbMode.get().getVisibleColor(endColor));
+            String start = Util.toHex(rgbMode.get().getVisibleColor(startColor));
+            String end = Util.toHex(rgbMode.get().getVisibleColor(endColor));
             background.setValue(
                     "-fx-background-color: linear-gradient(from 0% 0% to 0% 100%, " +
                             "#" + start + " 1%, #" + end + " 99%), " +

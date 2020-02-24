@@ -1,168 +1,181 @@
-//package ru.isled.smartcontrol.view.effect_controller;
-//
-//import javafx.beans.property.IntegerProperty;
-//import javafx.fxml.FXML;
-//import javafx.fxml.FXMLLoader;
-//import javafx.fxml.Initializable;
-//import javafx.scene.control.*;
-//import javafx.scene.layout.HBox;
-//
-//import java.io.IOException;
-//import java.net.URL;
-//import java.util.List;
-//import java.util.Optional;
-//import java.util.ResourceBundle;
-//import java.util.stream.Collectors;
-//import java.util.stream.IntStream;
-//
-//public class FillingEffectController implements Initializable {
-//    private static List<IntegerProperty> cells;
-//    private static int sizeX;
-//    private static int sizeY;
-//    private static FillingEffectController controller;
-//    Alert window;
-//    @FXML
-//    private RadioButton toLeft;
-//    @FXML
-//    private ToggleGroup direction;
-//    @FXML
-//    private RadioButton toRight;
-//    @FXML
-//    private RadioButton toCenter;
-//    @FXML
-//    private RadioButton fromCenter;
-//    @FXML
-//    private Slider effectBrightness;
-//    @FXML
-//    private Label effectBrightnessLabel;
-//    @FXML
-//    private CheckBox background;
-//    @FXML
-//    private HBox backgroundBrightnessBox;
-//    @FXML
-//    private Slider backgroundBrightness;
-//    @FXML
-//    private Label backgroundBrightnessLabel;
-//    @FXML
-//    private Spinner<Integer> transitionalWidth;
-//
-//    private FillingEffectController() {
-//        loadDialog();
-//    }
-//
-//    public static FillingEffectController get(List<IntegerProperty> aCells, int x, int y) {
-//        cells = aCells;
-//        sizeX = x;
-//        sizeY = y;
-//
-//        if (controller == null)
-//            controller = new FillingEffectController();
-//        return controller;
-//    }
+package ru.isled.smartcontrol.view.effect_controller;
 
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.control.*;
+import javafx.scene.paint.Color;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import ru.isled.smartcontrol.model.Project;
 
-//    @FXML
-//    public void apply() {
-//        Optional<ButtonType> button = window.showAndWait();
-//        if (ButtonType.OK.equals(button.get())) {
-//            apply((int) effectBrightness.getValue(), (int) backgroundBrightness.getValue(),
-//                    background.isSelected(), transitionalWidth.getValue(), getDirection());
-//        }
-//    }
+import java.io.IOException;
+import java.net.URL;
+import java.util.Optional;
+import java.util.ResourceBundle;
 
-//    private Direction getDirection() {
-//        if (toRight.isSelected()) {
-//            return Direction.RIGHT;
-//        } else if (toLeft.isSelected()) {
-//            return Direction.LEFT;
-//        } else if (toCenter.isSelected()) {
-//            return Direction.CENTER;
-//        } else {
-//            return Direction.FROM_CENTER;
-//        }
-//    }
+import static ru.isled.smartcontrol.util.Util.fill;
 
-//    public void apply(int glBright, final int bgBright,
-//                      boolean isBgOpaque, int transitionalWidth, Direction dir) {
+public class FillingEffectController implements Initializable {
+    private static final Logger log = LogManager.getLogger();
+    private static FillingEffectController controller;
+    Alert window;
+    @FXML
+    ColorPicker mainColor;
+    @FXML
+    CheckBox background;
+    @FXML
+    ColorPicker bgColor;
+    @FXML
+    CheckBox autoFrame;
+    private Project project;
+    private int x1;
+    private int y1;
+    private int x2;
+    private int y2;
+    @FXML
+    private RadioButton toLeft;
+    @FXML
+    private ToggleGroup direction;
+    @FXML
+    private RadioButton toRight;
+    @FXML
+    private RadioButton toCenter;
+    @FXML
+    private RadioButton fromCenter;
+    @FXML
+    private Spinner<Integer> transitionalWidth;
 
-//        int half = (int) Math.ceil((double) sizeX / 2);
-//        switch (dir) {
-//            case RIGHT:
-//                GlareEffectController.get(cells, sizeX, sizeY).apply(
-//                        true, glBright, 999, bgBright, isBgOpaque, transitionalWidth, 0
-//                );
-//                break;
-//            case LEFT:
-//                GlareEffectController.get(cells, sizeX, sizeY).apply(
-//                        false, glBright, 999, bgBright, isBgOpaque, transitionalWidth, 0
-//                );
-//                break;
-//            case CENTER:
-//                GlareEffectController.get(getLeftHalf(), half, sizeY).apply(
-//                        true, glBright, 999, bgBright, isBgOpaque, transitionalWidth, 0
-//                );
-//                GlareEffectController.get(getRightHalf(), half, sizeY).apply(
-//                        false, glBright, 999, bgBright, isBgOpaque, transitionalWidth, 0
-//                );
-//
-//                break;
-//            case FROM_CENTER:
-//                GlareEffectController.get(getLeftHalf(), half, sizeY).apply(
-//                        false, glBright, 999, bgBright, isBgOpaque, transitionalWidth, 0
-//                );
-//                GlareEffectController.get(getRightHalf(), half, sizeY).apply(
-//                        true, glBright, 999, bgBright, isBgOpaque, transitionalWidth, 0
-//                );
-//                break;
-//        }
-//    }
+    private FillingEffectController() {
+        loadDialog();
+        mainColor.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.isOpaque()) {
+                mainColor.setValue(Color.color(newValue.getRed(), newValue.getGreen(), newValue.getBlue()));
+            }
+        });
+        bgColor.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.isOpaque()) {
+                bgColor.setValue(Color.color(newValue.getRed(), newValue.getGreen(), newValue.getBlue()));
+            }
+        });
+    }
 
-//    private List<IntegerProperty> getRightHalf() {
-//        return IntStream.range(0, cells.size())
-//                .filter(i -> i % sizeX >= sizeX / 2)
-//                .mapToObj(i -> cells.get(i))
-//                .collect(Collectors.toList());
-//    }
-//
-//    // 0 1 2 3 4 5 6 7  = 4
-////  0 1 2 3 4 5 6   = 3
-//    private List<IntegerProperty> getLeftHalf() {
-//        return IntStream.range(0, cells.size())
-//                .filter(i -> i % sizeX < (double) sizeX / 2)
-//                .mapToObj(i -> cells.get(i))
-//                .collect(Collectors.toList());
-//    }
+    public static FillingEffectController get(Project project, int x1, int y1, int x2, int y2) {
+        if (controller == null)
+            controller = new FillingEffectController();
+        controller.project = project;
+        controller.x1 = x1;
+        controller.y1 = y1;
+        controller.x2 = x2;
+        controller.y2 = y2;
+        return controller;
+    }
 
-//    @Override
-//    public void initialize(URL location, ResourceBundle resources) {
-//        transitionalWidth.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 15, 0));
-//
-//        backgroundBrightness.valueProperty().addListener(((observable, oldValue, newValue) -> {
-//            backgroundBrightnessLabel.setText(String.valueOf(newValue.intValue()));
-//        }));
-//        effectBrightness.valueProperty().addListener(((observable, oldValue, newValue) -> {
-//            effectBrightnessLabel.setText(String.valueOf(newValue.intValue()));
-//        }));
-//    }
-//
-//    private void loadDialog() {
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("fill.fxml"));
-//        loader.setController(this);
-//        window = new Alert(Alert.AlertType.CONFIRMATION);
-//        try {
-//            window.getDialogPane().setContent(loader.load());
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        window.setTitle("Эффект \"Наполнение\"");
-//        window.setHeaderText("Выберите параметры эффекта");
-//
-//        window.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
-//
-//    }
+    @FXML
+    public void changeColors() {
+        final Color value = mainColor.getValue();
+        mainColor.setValue(bgColor.getValue());
+        bgColor.setValue(value);
+    }
 
-//    public enum Direction {
-//        LEFT, RIGHT, CENTER, FROM_CENTER
-//    }
-//}
+    @FXML
+    public void apply() {
+        Optional<ButtonType> button = window.showAndWait();
+        if (ButtonType.OK.equals(button.get())) {
+            apply(mainColor.getValue(), bgColor.getValue(),
+                    background.isSelected(), transitionalWidth.getValue(), getDirection(),
+                    autoFrame.isSelected());
+        }
+    }
+
+    private Direction getDirection() {
+        if (toRight.isSelected()) {
+            return Direction.RIGHT;
+        } else if (toLeft.isSelected()) {
+            return Direction.LEFT;
+        } else if (toCenter.isSelected()) {
+            return Direction.CENTER;
+        } else {
+            return Direction.FROM_CENTER;
+        }
+    }
+
+    private void apply(Color color, Color bgColor,
+                       boolean isBgOpaque, int transitionalWidth, Direction dir,
+                       boolean autoFrameAdd) {
+
+        final int width = x2 - x1;
+        int half = width / 2;
+        log.debug("half = " + half);
+        log.debug("width = " + width);
+        int programLength = y1 + width + transitionalWidth - 1;
+        log.debug("programLength = " + programLength);
+        if (dir == Direction.CENTER || dir == Direction.FROM_CENTER)
+            programLength = programLength - half;
+        if (programLength >= project.framesCount())
+            project.setFramesCount(programLength);
+        if (programLength < y2) {
+            fill(project, x1, programLength, x2, y2, color);
+        }
+        // reuse glare effect cause fill is glare with width == full width
+        switch (dir) {
+            case RIGHT:
+                GlareEffectController.get(project, x1, y1, x2, programLength).apply(true,
+                        color, width, bgColor, isBgOpaque, transitionalWidth, 0,
+                        false);
+                break;
+            case LEFT:
+                if (autoFrameAdd) project.setFramesCount(width + transitionalWidth);
+                GlareEffectController.get(project, x1, y1, x2, programLength).apply(false,
+                        color, width, bgColor, isBgOpaque, transitionalWidth, 0,
+                        false);
+                break;
+            case CENTER:
+                GlareEffectController.get(project, x1, y1, x2 - half, programLength).apply(true,
+                        color, width, bgColor, isBgOpaque, transitionalWidth, 0,
+                        false);
+
+                GlareEffectController.get(project, x1 + half, y1, x2, programLength).apply(false,
+                        color, width, bgColor, isBgOpaque, transitionalWidth, 0,
+                        false);
+                break;
+            case FROM_CENTER:
+                GlareEffectController.get(project, x1 + half, y1, x2, programLength).apply(true,
+                        color, width, bgColor, isBgOpaque, transitionalWidth, 0,
+                        false);
+
+                GlareEffectController.get(project, x1, y1, x2 - half, programLength).apply(false,
+                        color, width, bgColor, isBgOpaque, transitionalWidth, 0,
+                        false);
+                break;
+        }
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        transitionalWidth.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 15, 0));
+        mainColor.setValue(Color.WHITE);
+        bgColor.setValue(Color.BLACK);
+    }
+
+    private void loadDialog() {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("fill.fxml"));
+        loader.setController(this);
+        window = new Alert(Alert.AlertType.CONFIRMATION);
+        try {
+            window.getDialogPane().setContent(loader.load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        window.setTitle("Эффект \"Наполнение\"");
+        window.setHeaderText("Выберите параметры эффекта");
+
+        window.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
+
+    }
+
+    public enum Direction {
+        LEFT, RIGHT, CENTER, FROM_CENTER
+    }
+}

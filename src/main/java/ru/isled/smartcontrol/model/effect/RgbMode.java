@@ -1,7 +1,7 @@
 package ru.isled.smartcontrol.model.effect;
 
 import javafx.scene.paint.Color;
-import ru.isled.smartcontrol.util.Convert;
+import ru.isled.smartcontrol.util.Util;
 
 import static ru.isled.smartcontrol.Constants.MAX_BRIGHT;
 
@@ -156,9 +156,9 @@ public enum RgbMode {
     public String getBackground() {
         final Color[] colors = getColors();
         return String.format("-fx-background-color: linear-gradient(from 0%% 0%% to 100%% 0%%, #%s 20%%, #%s 50%%, #%s 80%%);",
-                Convert.toHex(colors[0]),
-                Convert.toHex(colors[1]),
-                Convert.toHex(colors[2]));
+                Util.toHex(colors[0]),
+                Util.toHex(colors[1]),
+                Util.toHex(colors[2]));
     }
 
     private Color getColorByLetter(char c) {

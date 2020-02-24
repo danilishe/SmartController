@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
+import static ru.isled.smartcontrol.util.Util.fill;
+
 public class GlareEffectController implements Initializable {
     Logger log = LogManager.getLogger();
     private Project project;
@@ -29,10 +31,6 @@ public class GlareEffectController implements Initializable {
     CheckBox background;
     @FXML
     ColorPicker bgColor;
-    @FXML
-    Label backgroundBrightnessLabel;
-    @FXML
-    Label effectBrightnessLabel;
     @FXML
     Spinner<Integer> glareWidth;
     @FXML
@@ -94,11 +92,11 @@ public class GlareEffectController implements Initializable {
         }
     }
 
-    private void apply(boolean isRightDirection,
-                       Color mainColor, int glWidth,
-                       Color bgColor, boolean setBackground,
-                       int tailBefore, int tailAfter,
-                       boolean autoFrameAdd) {
+    public void apply(boolean isRightDirection,
+                      Color mainColor, int glWidth,
+                      Color bgColor, boolean setBackground,
+                      int tailBefore, int tailAfter,
+                      boolean autoFrameAdd) {
 
         int fullLength = x2 - x1 + tailAfter + tailBefore + glWidth - 1;
         log.debug("fullLength = " + fullLength);
@@ -111,11 +109,7 @@ public class GlareEffectController implements Initializable {
             }
         }
         if (setBackground) {
-            for (int x = x1; x < x2; x++) {
-                for (int y = y1; y < y2; y++) {
-                    project.getPixelFrame(y, x).setColor(bgColor);
-                }
-            }
+            fill(project, x1, y1, x2, y2, bgColor);
         }
 
 
