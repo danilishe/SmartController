@@ -5,10 +5,23 @@ import ru.isled.smartcontrol.model.Project;
 import ru.isled.smartcontrol.view.effect_controller.FillingEffectController;
 import ru.isled.smartcontrol.view.effect_controller.GlareEffectController;
 import ru.isled.smartcontrol.view.effect_controller.MultiFrameEffect;
+import ru.isled.smartcontrol.view.effect_controller.RandomEffectController;
 
 import java.util.NoSuchElementException;
 
 public enum Effect implements MultiFrameEffect {
+    Random {
+        @Override
+        public String getName() {
+            return "Произвольные вспышки";
+        }
+
+        @Override
+        public void apply(Project project, int x1, int y1, int x2, int y2) {
+            RandomEffectController.get(project, x1, y1, x2, y2)
+                    .apply();
+        }
+    },
     SmoothColor {
         @Override
         public String getName() {

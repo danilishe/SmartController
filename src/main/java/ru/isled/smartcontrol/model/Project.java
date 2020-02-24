@@ -178,6 +178,8 @@ public class Project {
                 .sum();
     }
 
+    // FIXME в некоторых случаях в список фреймов кидается значение кадров из другого фрейма!!! (проверять при увеличении/уменьшении кадров)
+    // причём эффект виден только в таблице! (возможно завязано на фабрики)
     public void onFramesChanged() {
         // framesCache.size() must be == frames count at each pixel
         if (framesCache.size() < framesCount()) { // if project has no that frames before
