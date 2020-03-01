@@ -2,14 +2,23 @@ package ru.isled.smartcontrol.model.effect;
 
 import javafx.scene.paint.Color;
 import ru.isled.smartcontrol.model.Project;
-import ru.isled.smartcontrol.view.effect_controller.FillingEffectController;
-import ru.isled.smartcontrol.view.effect_controller.GlareEffectController;
-import ru.isled.smartcontrol.view.effect_controller.MultiFrameEffect;
-import ru.isled.smartcontrol.view.effect_controller.RandomEffectController;
+import ru.isled.smartcontrol.view.effect_controller.*;
 
 import java.util.NoSuchElementException;
 
 public enum Effect implements MultiFrameEffect {
+    ColorGradient {
+        @Override
+        public String getName() {
+            return "Цветовой перелив";
+        }
+
+        @Override
+        public void apply(Project project, int x1, int y1, int x2, int y2) {
+            ColorGradientController.get(project, x1, y1, x2, y2)
+                    .apply();
+        }
+    },
     Random {
         @Override
         public String getName() {

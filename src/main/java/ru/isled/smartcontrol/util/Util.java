@@ -9,11 +9,10 @@ public class Util {
     private static final Logger log = LogManager.getLogger();
 
     public static String toHex(Color color) {
-        return String.format("%02x%02x%02x%02x",
+        return String.format("%02x%02x%02x",
                 (int) (color.getRed() * 255),
                 (int) (color.getGreen() * 255),
-                (int) (color.getBlue() * 255),
-                (int) (color.getOpacity() * 255));
+                (int) (color.getBlue() * 255));
     }
 
     public static boolean isOdd(int i) {
@@ -22,8 +21,8 @@ public class Util {
         return b;
     }
 
-    public static Project fill(final Project project, int x1, int programLength, int x2, int y2, Color color) {
-        for (int y = programLength; y < y2; y++) {
+    public static Project fill(final Project project, int x1, int y1, int x2, int y2, Color color) {
+        for (int y = y1; y < y2; y++) {
             for (int x = x1; x < x2; x++) {
                 project.getPixelFrame(y, x).setColor(color);
             }

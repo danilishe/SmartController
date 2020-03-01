@@ -7,7 +7,9 @@ import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ru.isled.smartcontrol.model.Direction;
 import ru.isled.smartcontrol.model.Project;
+import ru.isled.smartcontrol.util.TransparentColorFilter;
 
 import java.io.IOException;
 import java.net.URL;
@@ -48,16 +50,8 @@ public class FillingEffectController implements Initializable {
 
     private FillingEffectController() {
         loadDialog();
-        mainColor.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.isOpaque()) {
-                mainColor.setValue(Color.color(newValue.getRed(), newValue.getGreen(), newValue.getBlue()));
-            }
-        });
-        bgColor.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.isOpaque()) {
-                bgColor.setValue(Color.color(newValue.getRed(), newValue.getGreen(), newValue.getBlue()));
-            }
-        });
+        mainColor.valueProperty().addListener(new TransparentColorFilter(mainColor));
+        bgColor.valueProperty().addListener(new TransparentColorFilter(bgColor));
     }
 
     public static FillingEffectController get(Project project, int x1, int y1, int x2, int y2) {
@@ -175,7 +169,4 @@ public class FillingEffectController implements Initializable {
 
     }
 
-    public enum Direction {
-        LEFT, RIGHT, CENTER, FROM_CENTER
-    }
 }

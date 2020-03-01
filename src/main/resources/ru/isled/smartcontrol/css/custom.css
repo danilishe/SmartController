@@ -16,6 +16,20 @@
     -fx-text-fill: white;
 }
 
+.onClickRemovable:hover {
+    -fx-scale-x: 1.2;
+    -fx-scale-y: 1.2;
+    -fx-border-color: black;
+    -fx-border-width: 2px;
+}
+
+.onClickRemovable {
+    -fx-scale-x: 1.5;
+    -fx-scale-y: 1;
+    -fx-border-color: none;
+    -fx-border-width: 0;
+}
+
 .header /*, .table-cell:hover:selected > .header */
 {
     -fx-alignment: center;
@@ -37,14 +51,16 @@
 .spinner .increment-arrow-button {
     -fx-padding: 1 4 1 4; /*caspian.css values are 4 8 4 8 */
 }
+
 .spinner .decrement-arrow-button {
     -fx-padding: 1 4 1 4; /*caspian.css values are 3 8 6 8 */
 }
 
 
 .spinner .increment-arrow-button .increment-arrow {
-    -fx-padding: 2 3 2 3;    /*caspian.css values are 2 4 2 4 */
+    -fx-padding: 2 3 2 3; /*caspian.css values are 2 4 2 4 */
 }
+
 .spinner .decrement-arrow-button .decrement-arrow {
     -fx-padding: 2 3 2 3; /*caspian.css values are 2 4 2 4 */
 }

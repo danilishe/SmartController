@@ -43,10 +43,16 @@ public class CustomColorController {
 
     public static List<Color> getCustomColorsPalette() {
         if (customPalette.isEmpty()) {
-            for (int i = 0; i < CUSTOM_COLORS_COUNT; i++) {
-                customPalette.add(Color.hsb(360d / CUSTOM_COLORS_COUNT * i, 1, 1));
-            }
+            customPalette.addAll(getColorPalette(CUSTOM_COLORS_COUNT));
         }
         return customPalette;
+    }
+
+    public static List<Color> getColorPalette(int colorsCount) {
+        List<Color> palette = new ArrayList<>(colorsCount);
+        for (int i = 0; i < colorsCount; i++) {
+            palette.add(Color.hsb(360d / colorsCount * i, 1, 1));
+        }
+        return palette;
     }
 }

@@ -79,4 +79,5 @@ public interface Constants {
     double PALETTE_COLOR_SIZE = 20;
     int MAX_QUANTIFIER = 5;
     int CUSTOM_COLORS_COUNT = 16;
+    int CUSTOM_PALETTE_SIZE = 10;
 }

@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.isled.smartcontrol.model.Pixel;
 import ru.isled.smartcontrol.model.Project;
+import ru.isled.smartcontrol.util.TransparentColorFilter;
 import ru.isled.smartcontrol.view.CustomColorController;
 
 import java.io.IOException;
@@ -46,16 +47,8 @@ public class GlareEffectController implements Initializable {
 
     private GlareEffectController() {
         loadDialog();
-        mainColor.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.isOpaque()) {
-                mainColor.setValue(Color.color(newValue.getRed(), newValue.getGreen(), newValue.getBlue()));
-            }
-        });
-        bgColor.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.isOpaque()) {
-                bgColor.setValue(Color.color(newValue.getRed(), newValue.getGreen(), newValue.getBlue()));
-            }
-        });
+        mainColor.valueProperty().addListener(new TransparentColorFilter(mainColor));
+        bgColor.valueProperty().addListener(new TransparentColorFilter(bgColor));
     }
 
     public static GlareEffectController get(Project project, int x1, int y1, int x2, int y2) {
@@ -155,13 +148,16 @@ public class GlareEffectController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         glareWidth.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 15, 1));
         traceBefore.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 15, 0));
         traceAfter.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 15, 0));
+        mainColor.setValue(Color.WHITE);
+        mainColor.getCustomColors().addAll(CustomColorController.getCustomColorsPalette());
+        bgColor.setValue(Color.BLACK);
+        bgColor.getCustomColors().addAll(CustomColorController.getCustomColorsPalette());
     }
 
-    public void loadDialog() {
+    private void loadDialog() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("glare.fxml"));
         loader.setController(this);
         window = new Alert(Alert.AlertType.CONFIRMATION);
@@ -173,12 +169,6 @@ public class GlareEffectController implements Initializable {
 
         window.setTitle("Эффект \"Блик\"");
         window.setHeaderText("Выберите параметры эффекта");
-
         window.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
-
-        mainColor.setValue(Color.WHITE);
-        mainColor.getCustomColors().addAll(CustomColorController.getCustomColorsPalette());
-        bgColor.setValue(Color.BLACK);
-        bgColor.getCustomColors().addAll(CustomColorController.getCustomColorsPalette());
     }
 }
