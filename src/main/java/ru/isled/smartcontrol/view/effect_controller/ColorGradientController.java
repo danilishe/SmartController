@@ -15,8 +15,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.isled.smartcontrol.Constants;
 import ru.isled.smartcontrol.model.ClickableRectangle;
+import ru.isled.smartcontrol.model.Direction;
 import ru.isled.smartcontrol.model.Project;
 import ru.isled.smartcontrol.util.SimpleValueScroller;
 import ru.isled.smartcontrol.util.TransparentColorFilter;
@@ -25,15 +29,17 @@ import ru.isled.smartcontrol.view.CustomColorController;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static ru.isled.smartcontrol.Constants.CUSTOM_COLORS_COUNT;
 import static ru.isled.smartcontrol.Constants.PALETTE_COLOR_SIZE;
 
 public class ColorGradientController implements Initializable {
+    private static final Logger log = LogManager.getLogger();
     private static final List<Gradient> gradientSamples = Arrays.asList(
             new Gradient(1, 1, Color.RED, Color.LIME, Color.BLUE),
             new Gradient(1, 1, Color.RED, Color.ORANGE, Color.YELLOW, Color.LIME, Color.SKYBLUE, Color.BLUE, Color.VIOLET),
-            new Gradient(1, 0, Color.WHITE, Color.BLUE, Color.RED)
+            new Gradient(3, 0, Color.WHITE, Color.BLUE, Color.RED)
     );
     private static ColorGradientController cgc;
     @FXML
@@ -87,6 +93,11 @@ public class ColorGradientController implements Initializable {
         gradient.getChildren().clear();
     }
 
+    private List<Color> getSelectedColors() {
+        return gradient.getChildren().stream()
+                .map(node -> (Color) ((Shape) node).getFill())
+                .collect(Collectors.toList());
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -121,7 +132,6 @@ public class ColorGradientController implements Initializable {
                         colorWidth.getEditor().textProperty().set(String.valueOf(g.colorWidth));
                     });
                     samples.getChildren().add(rect);
-
                 }
         );
     }
@@ -133,9 +143,25 @@ public class ColorGradientController implements Initializable {
     }
 
     public void apply() {
-        final Optional<ButtonType> button = window.showAndWait();
-        if (ButtonType.OK.equals(button.get()))
-            apply();
+        boolean retry = false;
+        do {
+            final Optional<ButtonType> button = window.showAndWait();
+            if (ButtonType.OK.equals(button.get())) {
+                final List<Color> selectedColors = getSelectedColors();
+                if (selectedColors.isEmpty()) {
+                    retry = true;
+                    final Alert alert = new Alert(Alert.AlertType.ERROR, "Нужно выбрать несколько цветов!");
+                    alert.showAndWait();
+                    continue;
+                }
+
+                apply(Direction.of(direction), new Gradient(colorWidth.getValue(), transitionWidth.getValue(), selectedColors), onlyColorCheckbox.isSelected(), autoFrameCheckbox.isSelected());
+            }
+        } while (retry);
+    }
+
+    private void apply(Direction direction, Gradient gradient, boolean onlyColored, boolean autoFrame) {
+        log.trace("Do effect in " + direction + "!");
     }
 
     private void loadDialog() {

@@ -73,17 +73,17 @@
         </Label>
         <HBox spacing="10.0">
             <children>
-                <RadioButton mnemonicParsing="false" selected="true" text="Слева">
+                <RadioButton mnemonicParsing="false" selected="true" text="Влево">
                     <toggleGroup>
                         <ToggleGroup fx:id="direction"/>
                     </toggleGroup>
                 </RadioButton>
-                <RadioButton mnemonicParsing="false" text="Справа" toggleGroup="$direction"/>
+                <RadioButton mnemonicParsing="false" text="Вправо" toggleGroup="$direction"/>
                 <RadioButton mnemonicParsing="false" text="Из центра" toggleGroup="$direction"/>
                 <RadioButton mnemonicParsing="false" text="В центр" toggleGroup="$direction"/>
             </children>
         </HBox>
-        <CheckBox fx:id="onlyColorCheckboix" mnemonicParsing="false" text="Только поверх уже существующей яркости">
+        <CheckBox fx:id="onlyColorCheckbox" mnemonicParsing="false" text="Только поверх уже существующей яркости">
             <VBox.margin>
                 <Insets top="15.0"/>
             </VBox.margin>
