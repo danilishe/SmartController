@@ -28,6 +28,7 @@ import ru.isled.smartcontrol.util.SimpleValueScroller;
 import ru.isled.smartcontrol.util.TransparentColorFilter;
 import ru.isled.smartcontrol.util.Util;
 import ru.isled.smartcontrol.view.CustomColorController;
+import ru.isled.smartcontrol.view.Dialogs;
 
 import java.io.IOException;
 import java.net.URL;
@@ -163,8 +164,7 @@ public class ColorGradientController implements Initializable {
                 final List<Color> selectedColors = getSelectedColors();
                 if (selectedColors.isEmpty()) {
                     retry = true;
-                    final Alert alert = new Alert(Alert.AlertType.ERROR, "Нужно выбрать несколько цветов!");
-                    alert.showAndWait();
+                    Dialogs.showErrorAlert("Нужно выбрать несколько цветов!");
                     continue;
                 } else {
                     retry = false;
@@ -182,7 +182,6 @@ public class ColorGradientController implements Initializable {
     private void apply(Direction direction, Gradient gradient, boolean onlyColored, boolean autoFrame, boolean cycled,
                        Color bgColor) {
         log.trace("Do effect in " + direction + "!");
-        Util.fill(project, x1, y1, x2, y2, bgColor);
 
         final int colorsCount = gradient.colors.size();
         final int transitionWidth = gradient.transitionWidth;
@@ -229,6 +228,8 @@ public class ColorGradientController implements Initializable {
                 programLength; // or only program length (1 cycle)
         if (y1 + fullLength > project.framesCount() && autoFrame)
             project.setFramesCount(y1 + fullLength);
+
+        Util.fill(project, x1, y1, x2, y1 + fullLength, bgColor);
 
         // apply gradient
         for (int i = 0; i < fullLength + 1; i++) {
