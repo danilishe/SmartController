@@ -472,7 +472,7 @@ public class MainController {
     }
 
     public void onDataCellsSelected(List<TablePosition> selectedDataCells) {
-        chanelQuantifier.getEditor().textProperty().set("" + tableController.getSelectedPixels().get(0).getQuantifier());
+        chanelQuantifier.getValueFactory().setValue(tableController.getSelectedPixels().get(0).getQuantifier());
     }
 
     public void onSelectedFrameChanged(LedFrame selectedFrame) {

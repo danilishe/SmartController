@@ -18,8 +18,8 @@ public class FrameHandlersController {
     }
 
     public void updateHandlers(LedFrame frame) {
-        frameCyclesSpinner.getEditor().textProperty().set("" + frame.getCycles());
-        frameLengthSpinner.getEditor().textProperty().set("" + frame.getLength());
+        frameCyclesSpinner.getValueFactory().setValue(frame.getCycles());
+        frameLengthSpinner.getValueFactory().setValue(frame.getLength());
     }
 
     public void updateFrame(LedFrame frame) {

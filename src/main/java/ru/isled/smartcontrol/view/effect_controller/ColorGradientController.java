@@ -16,14 +16,17 @@ import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.isled.smartcontrol.Constants;
 import ru.isled.smartcontrol.model.ClickableRectangle;
 import ru.isled.smartcontrol.model.Direction;
+import ru.isled.smartcontrol.model.Pixel;
 import ru.isled.smartcontrol.model.Project;
 import ru.isled.smartcontrol.util.SimpleValueScroller;
 import ru.isled.smartcontrol.util.TransparentColorFilter;
+import ru.isled.smartcontrol.util.Util;
 import ru.isled.smartcontrol.view.CustomColorController;
 
 import java.io.IOException;
@@ -33,6 +36,7 @@ import java.util.stream.Collectors;
 
 import static ru.isled.smartcontrol.Constants.CUSTOM_COLORS_COUNT;
 import static ru.isled.smartcontrol.Constants.PALETTE_COLOR_SIZE;
+import static ru.isled.smartcontrol.util.Util.isOdd;
 
 public class ColorGradientController implements Initializable {
     private static final Logger log = LogManager.getLogger();
@@ -62,6 +66,12 @@ public class ColorGradientController implements Initializable {
     CheckBox onlyColorCheckbox;
     @FXML
     CheckBox autoFrameCheckbox;
+    @FXML
+    CheckBox setBackground;
+    @FXML
+    ColorPicker backgroundColorPicker;
+    //    @FXML
+//    CheckBox cycled;
     @FXML
     VBox samples;
     @FXML
@@ -113,6 +123,9 @@ public class ColorGradientController implements Initializable {
                         .add(new ClickableRectangle(oldValue, event -> addColor((Color) oldValue))));
         customColor.setOnMouseClicked(event -> addColor((Color) customColor.getFill()));
         customColorPicker.getCustomColors().addAll(CustomColorController.getCustomColorsPalette());
+        backgroundColorPicker.getCustomColors().addAll(CustomColorController.getCustomColorsPalette());
+        backgroundColorPicker.setValue(Color.BLACK);
+        backgroundColorPicker.valueProperty().addListener(new TransparentColorFilter(backgroundColorPicker));
         CustomColorController.getColorPalette(Constants.CUSTOM_COLORS_COUNT)
                 .forEach(color -> {
                     Rectangle rectangle = new Rectangle(PALETTE_COLOR_SIZE, PALETTE_COLOR_SIZE, color);
@@ -128,8 +141,8 @@ public class ColorGradientController implements Initializable {
                     final ClickableRectangle rect = new ClickableRectangle(550, 24, g.asGradient(), event -> {
                         gradient.getChildren().clear();
                         g.colors.forEach(this::addColor);
-                        transitionWidth.getEditor().textProperty().set(String.valueOf(g.transitionWidth));
-                        colorWidth.getEditor().textProperty().set(String.valueOf(g.colorWidth));
+                        transitionWidth.getValueFactory().setValue(g.transitionWidth);
+                        colorWidth.getValueFactory().setValue(g.colorWidth);
                     });
                     samples.getChildren().add(rect);
                 }
@@ -153,15 +166,119 @@ public class ColorGradientController implements Initializable {
                     final Alert alert = new Alert(Alert.AlertType.ERROR, "Нужно выбрать несколько цветов!");
                     alert.showAndWait();
                     continue;
+                } else {
+                    retry = false;
                 }
 
-                apply(Direction.of(direction), new Gradient(colorWidth.getValue(), transitionWidth.getValue(), selectedColors), onlyColorCheckbox.isSelected(), autoFrameCheckbox.isSelected());
-            }
+                apply(Direction.of(direction),
+                        new Gradient(colorWidth.getValue(), transitionWidth.getValue(), selectedColors),
+                        onlyColorCheckbox.isSelected(), autoFrameCheckbox.isSelected(), false /*cycled.isSelected()*/
+                        , setBackground.isSelected() ? backgroundColorPicker.getValue() : null
+                );
+            } else break;
         } while (retry);
     }
 
-    private void apply(Direction direction, Gradient gradient, boolean onlyColored, boolean autoFrame) {
+    private void apply(Direction direction, Gradient gradient, boolean onlyColored, boolean autoFrame, boolean cycled,
+                       Color bgColor) {
         log.trace("Do effect in " + direction + "!");
+        Util.fill(project, x1, y1, x2, y2, bgColor);
+
+        final int colorsCount = gradient.colors.size();
+        final int transitionWidth = gradient.transitionWidth;
+        final int colorWidth = gradient.colorWidth;
+
+        // create gradient
+        final ArrayList<Pair<Color, Color>> gradientPairs = new ArrayList<>(colorsCount * colorWidth + transitionWidth * colorsCount);
+        for (int i = 0; i <= colorsCount; i++) {
+            for (int transCounter = 0; transCounter < transitionWidth; transCounter++) {
+                if (i == colorsCount - 1 && cycled) {
+                    // at last iteration there is no transition when gradient cycled
+                    break;
+                }
+
+                Color prevColor = i == 0 ?
+                        cycled ? gradient.colors.get(colorsCount - 1) : bgColor
+                        : gradient.colors.get(i - 1);
+                Color nextColor = i == colorsCount ? bgColor : gradient.colors.get(i);
+
+                gradientPairs.add(new Pair<>(
+                        prevColor.interpolate(nextColor, (double) transCounter / transitionWidth),
+                        prevColor.interpolate(nextColor, (double) (transCounter + 1) / transitionWidth)
+                ));
+
+            }
+            if (i < colorsCount) // it just for non repeating last transition logic
+                for (int colorCounter = 0; colorCounter < colorWidth; colorCounter++) {
+                    gradientPairs.add(new Pair<>(gradient.colors.get(i), gradient.colors.get(i)));
+                }
+        }
+        if (direction == Direction.RIGHT || direction == Direction.FROM_CENTER)
+            Collections.reverse(gradientPairs);
+
+        final int selectedWidth = x2 - x1;
+        final int programWidth = direction == Direction.TO_CENTER || direction == Direction.FROM_CENTER ?
+                selectedWidth + (isOdd(selectedWidth) ? 1 : 0) // from center & to center programs is double shorted
+                : selectedWidth;
+        final int programLength = programWidth + gradientPairs.size();
+        final int selectedLength = y2 - y1;
+        final int fullLength = autoFrame && cycled && selectedLength % programLength != 0 ?
+                (selectedLength / programLength + 1) * programLength // we make full length multiple one program length
+                : cycled ?
+                selectedLength : // only selected frames if cycled
+                programLength; // or only program length (1 cycle)
+        if (y1 + fullLength > project.framesCount() && autoFrame)
+            project.setFramesCount(y1 + fullLength);
+
+        // apply gradient
+        for (int i = 0; i < fullLength + 1; i++) {
+            gradientIteration:
+            for (int j = 0; j < gradientPairs.size(); j++) {
+                int col;
+                switch (direction) {
+                    case LEFT:
+                        col = cycled ? x2 - (i % gradientPairs.size()) + j : x2 - i + j;
+                        if (col > x2) break gradientIteration; // micro optimization
+                        setPixel(y1 + i, col, gradientPairs.get(j), onlyColored);
+                        break;
+                    case RIGHT:
+                        col = x1 - gradientPairs.size() + j + (cycled ? i % gradientPairs.size() : i);
+                        if (col > x2) break gradientIteration;
+                        setPixel(y1 + i, col, gradientPairs.get(j), onlyColored);
+                        break;
+//                    case TO_CENTER:
+//                        col = x1 - gradientPairs.size() + j + (cycled ? i % gradientPairs.size() : i);
+//                        if (col > x1 + programWidth) break gradientIteration;
+//                        setPixel(y1 + i, col, gradientPairs.get(j), onlyColored);
+//                        col = cycled ? x2 - (i % gradientPairs.size()) + j : x2 - i + j;
+//                        setPixel(y1 + i, col, gradientPairs.get(j), onlyColored);
+//                        break;
+//                    case FROM_CENTER:
+//                        col = x1 - gradientPairs.size() + j + (cycled ? i % gradientPairs.size() : i);
+//                        if (col > x2) break gradientIteration;
+//                        if (col < x1 + programWidth) continue;
+//                        setPixel(y1 + i, col, gradientPairs.get(j), onlyColored);
+//                        col = cycled ? x2 - (i % gradientPairs.size()) + j : x2 - i + j;
+//                        setPixel(y1 + i, col, gradientPairs.get(j), onlyColored);
+//                        break;
+                }
+            }
+        }
+
+    }
+
+    private void setPixel(int frame, int col, Pair<Color, Color> newColors, boolean onlyColored) {
+        if (frame < project.framesCount() && frame >= y1 && col >= x1 && col < x2) {
+            final Pixel.Frame pixelFrame = project.getPixelFrame(frame, col);
+            if (onlyColored) {
+                pixelFrame.setColor(
+                        pixelFrame.getStartColor().equals(Color.BLACK) ? null : newColors.getKey(),
+                        pixelFrame.getEndColor().equals(Color.BLACK) ? null : newColors.getValue()
+                );
+            } else {
+                pixelFrame.setColor(newColors.getKey(), newColors.getValue());
+            }
+        }
     }
 
     private void loadDialog() {

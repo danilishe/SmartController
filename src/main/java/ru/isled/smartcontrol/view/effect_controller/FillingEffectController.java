@@ -88,7 +88,7 @@ public class FillingEffectController implements Initializable {
         } else if (toLeft.isSelected()) {
             return Direction.LEFT;
         } else if (toCenter.isSelected()) {
-            return Direction.CENTER;
+            return Direction.TO_CENTER;
         } else {
             return Direction.FROM_CENTER;
         }
@@ -104,7 +104,7 @@ public class FillingEffectController implements Initializable {
         log.debug("width = " + width);
         int programLength = y1 + width + transitionalWidth - 1;
         log.debug("programLength = " + programLength);
-        if (dir == Direction.CENTER || dir == Direction.FROM_CENTER)
+        if (dir == Direction.TO_CENTER || dir == Direction.FROM_CENTER)
             programLength = programLength - half;
         if (programLength >= project.framesCount())
             project.setFramesCount(programLength);
@@ -124,7 +124,7 @@ public class FillingEffectController implements Initializable {
                         color, width, bgColor, isBgOpaque, transitionalWidth, 0,
                         false);
                 break;
-            case CENTER:
+            case TO_CENTER:
                 GlareEffectController.get(project, x1, y1, x2 - half, programLength).apply(true,
                         color, width, bgColor, isBgOpaque, transitionalWidth, 0,
                         false);

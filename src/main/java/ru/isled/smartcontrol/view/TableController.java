@@ -1,23 +1,22 @@
 package ru.isled.smartcontrol.view;
 
 import com.sun.javafx.scene.control.skin.TableHeaderRow;
-import javafx.event.EventType;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import ru.isled.smartcontrol.model.LedFrame;
 import ru.isled.smartcontrol.model.Pixel;
 import ru.isled.smartcontrol.model.effect.RgbMode;
-import ru.isled.smartcontrol.view.cell.PixelHeader;
 import ru.isled.smartcontrol.view.cell.LedFrameTableCell;
+import ru.isled.smartcontrol.view.cell.PixelHeader;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static ru.isled.smartcontrol.Constants.*;
-import static ru.isled.smartcontrol.Constants.DEFAULT_PIXEL_COUNT;
 
 public class TableController {
     private final MainController mainController;
@@ -31,7 +30,7 @@ public class TableController {
 
         frameTableView.getSelectionModel().setCellSelectionEnabled(true);
         frameTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        frameTableView.addEventHandler(EventType.ROOT, x -> handleCellSelection());
+        frameTableView.addEventHandler(MouseEvent.MOUSE_CLICKED, x -> handleCellSelection());
 
         disableColumnReordering();
 
