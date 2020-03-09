@@ -4,13 +4,13 @@ package ru.isled.smartcontrol.controller;
 import ru.isled.smartcontrol.model.LedFrame;
 import ru.isled.smartcontrol.model.Project;
 import ru.isled.smartcontrol.model.WrappedLedFrame;
-import ru.isled.smartcontrol.model.WrappedProject;
+import ru.isled.smartcontrol.model.wraps.ProjectWrapper;
 
 import java.util.stream.Collectors;
 
 public class Wrapper {
-    public static WrappedProject wrap(Project project) {
-        return new WrappedProject()
+    public static ProjectWrapper wrap(Project project) {
+        return new ProjectWrapper()
                 .setFrameCount(project.getFrameCount())
                 .setPixelCount(project.getPixelCount())
                 .setQuantifiers(project.getPixels())
@@ -20,13 +20,13 @@ public class Wrapper {
                         .collect(Collectors.toList()));
     }
 
-    public static Project unwrap(WrappedProject wrappedProject) {
+    public static Project unwrap(ProjectWrapper projectWrapper) {
         return new Project()
-                .setPixelCount(wrappedProject.getPixelCount())
-                .setFrameCount(wrappedProject.getFrameCount())
-                .setPixels(wrappedProject.getQuantifiers())
+                .setPixelCount(projectWrapper.getPixelCount())
+                .setFrameCount(projectWrapper.getFrameCount())
+                .setPixels(projectWrapper.getQuantifiers())
                 .setFrames(
-                        wrappedProject.getFrames().stream()
+                        projectWrapper.getFrames().stream()
                                 .map(Wrapper::unwrapLedFrame)
                                 .collect(Collectors.toList())
                 );

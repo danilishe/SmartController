@@ -12,14 +12,15 @@ import ru.isled.smartcontrol.util.Util;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.isled.smartcontrol.Constants.*;
+import static ru.isled.smartcontrol.Constants.MAX_BRIGHT;
+import static ru.isled.smartcontrol.Constants.MAX_FRAMES;
 
 public class Pixel {
+    public final StringProperty background;
     private final IntegerProperty number;
     private final ObjectProperty<RgbMode> rgbMode;
     private final ObjectProperty<Integer> quantifier;
     private final ObservableList<Frame> frames;
-    public final StringProperty background;
 
     public Pixel(int number, int framesCount) {
         this(number, RgbMode.WHITE, 1, new ArrayList<>(MAX_FRAMES));
@@ -45,6 +46,9 @@ public class Pixel {
         return getRgbMode().isMultichannel();
     }
 
+    /**
+     * @return channels count of selected rgbMode
+     */
     public int channels() {
         return getRgbMode().channels();
     }
@@ -105,7 +109,7 @@ public class Pixel {
      * frameNo starts from 0!!!
      */
     public Color[] getInterpolatedFrame(int frameNo, int frameLengthMsec) {
-        Color[] interpolated = getFrames().get(frameNo).getInterpolated(frameLengthMsec / BASE_FRAME_LENGTH);
+        Color[] interpolated = getFrames().get(frameNo).getInterpolated(Util.framesAt(frameLengthMsec));
         for (int i = 0; i < interpolated.length; i++) {
             interpolated[i] = getRgbMode().getVisibleColor(interpolated[i]);
         }
@@ -113,27 +117,38 @@ public class Pixel {
     }
 
     /**
+     * exports pixelFrame with quantifiers and respectively how channel has rgbMode
+     *
+     * @param frameNo
+     * @param frameLengthMsec
+     * @return byte array of subframes. all channels are flatten and repeated
+     */
+    public byte[][] exportFrame(int frameNo, int frameLengthMsec) {
+        final int subFrames = Util.framesAt(frameLengthMsec);
+        byte[][] data = new byte[subFrames][getChannelsCount()];
+        final Color[] interpolated = getFrames().get(frameNo).getInterpolated(subFrames);
+        for (int subFrame = 0; subFrame < subFrames; subFrame++) {
+            for (int quantifier = 0; quantifier < getQuantifier(); quantifier++) {
+                System.arraycopy(
+                        getRgbMode().export(interpolated[subFrame]), 0,
+                        data[subFrame], quantifier * channels(), channels());
+            }
+        }
+        return data;
+    }
+
+    /**
      * Frame Pixel is logical unit of each frame of program. Each Frame Pixel knows only own colors, rgbMode and effect
      */
     public static class Frame {
+        private final ObjectProperty<RgbMode> rgbMode;
+        private final StringProperty background;
         private Color startColor;
         private Color endColor;
         private PixelEffect effect;
-        private final ObjectProperty<RgbMode> rgbMode;
-        private final StringProperty background;
         private final ChangeListener<RgbMode> changeModeListener = (v, o, n) -> {
             if (o.channels() != n.channels()) this.updateBackground();
         };
-
-        private void updateBackground() {
-            String start = Util.toHex(rgbMode.get().getVisibleColor(startColor));
-            String end = Util.toHex(rgbMode.get().getVisibleColor(endColor));
-            background.setValue(
-                    "-fx-background-color: linear-gradient(from 0% 0% to 0% 100%, " +
-                            "#" + start + " 1%, #" + end + " 99%), " +
-                            effect.overlay + ";");
-
-        }
 
         public Frame(ObjectProperty<RgbMode> rgbMode) {
             this(Color.BLACK, PixelEffect.Solid, rgbMode);
@@ -151,6 +166,16 @@ public class Pixel {
 
         public Frame(Color oneColor, PixelEffect effect, ObjectProperty<RgbMode> rgbMode) {
             this(oneColor, oneColor, effect, rgbMode);
+        }
+
+        private void updateBackground() {
+            String start = Util.toHex(rgbMode.get().getVisibleColor(startColor));
+            String end = Util.toHex(rgbMode.get().getVisibleColor(endColor));
+            background.setValue(
+                    "-fx-background-color: linear-gradient(from 0% 0% to 0% 100%, " +
+                            "#" + start + " 1%, #" + end + " 99%), " +
+                            effect.overlay + ";");
+
         }
 
         public Frame setColor(Color startColor, Color endColor) {

@@ -9,7 +9,6 @@ public class FileHelper {
         try (OutputStream bw = new BufferedOutputStream(new FileOutputStream(file))) {
             bw.write(data);
             bw.flush();
-            bw.close();
         } catch (IOException ioe) {
             System.err.println();
             Dialogs.showErrorAlert("Ошибка при записи файла!");
@@ -23,7 +22,6 @@ public class FileHelper {
         byte[] data = new byte[(int) file.length()];
         try(InputStream is = new BufferedInputStream(new FileInputStream(file))) {
             is.read(data);
-            is.close();
         } catch (IOException ioe) {
             Dialogs.showErrorAlert("Ошибка загрузки файла!");
             ioe.printStackTrace();

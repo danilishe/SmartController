@@ -119,7 +119,7 @@ public class TableController {
     }
 
     private int lastVisibleColumnIndex() {
-        return mainController.getProject().getPixelsCount() + HEADER_COLUMNS - 1;
+        return mainController.getProject().pixelsCount() + HEADER_COLUMNS - 1;
     }
 
     public void clearSelection() {
@@ -140,7 +140,7 @@ public class TableController {
 
     // скрывает колонки
     void refreshVisibleColumnsCount() {
-        int selectedPixelNumber = mainController.getProject().getPixelsCount();
+        int selectedPixelNumber = mainController.getProject().pixelsCount();
         for (int i = 0; i < MAX_CHANNELS_COUNT; i++) {
             final boolean expectedVisibility = i < selectedPixelNumber;
             final TableColumn<LedFrame, ?> column = frameTableView.getColumns().get(i + HEADER_COLUMNS);

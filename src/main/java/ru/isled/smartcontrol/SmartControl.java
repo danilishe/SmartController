@@ -10,6 +10,7 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import ru.isled.smartcontrol.controller.FileHelper;
 import ru.isled.smartcontrol.controller.ProgramProperties;
+import ru.isled.smartcontrol.controller.ProjectIO;
 import ru.isled.smartcontrol.model.Project;
 import ru.isled.smartcontrol.view.Dialogs;
 import ru.isled.smartcontrol.view.MainController;
@@ -166,17 +167,16 @@ public class SmartControl extends Application {
 
 
     public void saveProject() {
-        // TODO
-//        if (!project.hasName()) {
-//            File file = Dialogs.saveAs(project.getFile());
-//            if (file == null) return;
-//            project.setFileName(file);
-//        }
-//
-//        ProjectIO.save(project, project.getFile());
-//        addItemToLastFiles(project.getFile());
-//        project.setHasChanges(false);
-//        updateHeader();
+        if (!project.hasName()) {
+            File file = Dialogs.saveAs(project.getFile());
+            if (file == null) return;
+            project.setFileName(file);
+        }
+
+        ProjectIO.save(project, project.getFile());
+        addItemToLastFiles(project.getFile());
+        project.setHasChanges(false);
+        updateHeader();
     }
 
     public void createNewProject() {
@@ -194,8 +194,9 @@ public class SmartControl extends Application {
     public void exportProject() {
         File exportFile = Dialogs.export(project.getFile());
         if (exportFile == null) return;
-        // TODO
-//        ProjectIO.export(project, exportFile);
+        if (!ProjectIO.export(project, exportFile)) {
+            Dialogs.showErrorAlert("Не удалось экспортировать файл. Попробуйте ещё раз :(");
+        }
     }
 
     public void exit() {

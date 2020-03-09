@@ -4,6 +4,7 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.paint.Color;
+import ru.isled.smartcontrol.util.Util;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static ru.isled.smartcontrol.Constants.*;
+import static ru.isled.smartcontrol.util.Util.framesAt;
 
 public class Project {
     private final IntegerProperty framesCount;
@@ -72,7 +74,7 @@ public class Project {
         return this;
     }
 
-    public int getPixelsCount() {
+    public int pixelsCount() {
         return pixelsCount.get();
     }
 
@@ -137,7 +139,7 @@ public class Project {
      */
     public int getChannelsCount() {
         int result = 0;
-        for (int i = 0; i < getPixelsCount(); i++) {
+        for (int i = 0; i < pixelsCount(); i++) {
             result += getPixel(i).getChannelsCount();
         }
         return result;
@@ -152,15 +154,15 @@ public class Project {
      * frameNo starts from 0!!!
      */
     public List<Color[]> getInterpolatedFrame(int frameNo) {
-        final List<Color[]> interpolatedFrame = new ArrayList<>(getPixelsCount());
+        final List<Color[]> interpolatedFrame = new ArrayList<>(pixelsCount());
         final int frameLength = getFrame(frameNo).getLength();
-        for (int i = 0; i < getPixelsCount(); i++) {
+        for (int i = 0; i < pixelsCount(); i++) {
             interpolatedFrame.add(getPixel(i).getInterpolatedFrame(frameNo, frameLength));
         }
         return interpolatedFrame;
     }
 
-    public List<List<Color[]>> getInterpolated() {
+    public final List<List<Color[]>> getInterpolated() {
         final List<List<Color[]>> interpolated = new ArrayList<>(framesCount());
         for (int i = 0; i < framesCount(); i++) {
             final List<Color[]> interpolatedFrame = getInterpolatedFrame(i);
@@ -171,6 +173,37 @@ public class Project {
         return interpolated;
     }
 
+    public final byte[] export() {
+        final int pixelFrames = getFrames().stream()
+                .mapToInt(frame -> framesAt(frame.getLength()) * frame.getCycles())
+                .sum() * MAX_CHANNELS_COUNT;
+        assert pixelFrames > 0;
+        byte[] data = new byte[pixelFrames];
+
+        int subframesCounter = 0;
+        for (LedFrame frame : getFrames()) {
+            int channelsCounter = 0;
+            for (int pixelNo = 0; pixelNo < pixelsCount(); pixelNo++) {
+
+                final byte[][] pixelExport = getPixel(pixelNo).exportFrame(frame.getNumber(), frame.getLength());
+                for (int frameCycle = 0; frameCycle < frame.getCycles(); frameCycle++) {
+                    for (int subFrame = 0; subFrame < pixelExport.length; subFrame++) {
+                        for (int channel = 0; channel < pixelExport[0].length; channel++) {
+                            final int i = (subframesCounter + subFrame) * MAX_CHANNELS_COUNT + channelsCounter + channel;
+                            // fixme wrong counters
+                            data[i] = Util.withGamma(pixelExport[subFrame][channel], getGamma());
+                        }
+                    }
+                    subframesCounter += pixelExport.length;
+                }
+                channelsCounter += pixelExport[0].length;
+                assert channelsCounter < MAX_CHANNELS_COUNT;
+            }
+
+        }
+        return data;
+    }
+
     public long getLength() {
         return frames.stream()
                 .limit(framesCount())
@@ -178,8 +211,6 @@ public class Project {
                 .sum();
     }
 
-    // FIXME в некоторых случаях в список фреймов кидается значение кадров из другого фрейма!!! (проверять при увеличении/уменьшении кадров)
-    // причём эффект виден только в таблице! (возможно завязано на фабрики)
     public void onFramesChanged() {
         // framesCache.size() must be == frames count at each pixel
         if (framesCache.size() < framesCount()) { // if project has no that frames before

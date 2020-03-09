@@ -306,7 +306,7 @@ public class MainController {
 
     public void setProject(Project project) {
         this.project = project;
-        pixelSpinner.getValueFactory().setValue(project.getPixelsCount());
+        pixelSpinner.getValueFactory().setValue(project.pixelsCount());
         framesSpinner.getValueFactory().setValue(project.framesCount());
 
         updateTotalPixelCount();

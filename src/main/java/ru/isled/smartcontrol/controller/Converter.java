@@ -3,7 +3,7 @@ package ru.isled.smartcontrol.controller;
 
 import ru.isled.smartcontrol.model.effect.PixelEffect;
 import ru.isled.smartcontrol.model.WrappedLedFrame;
-import ru.isled.smartcontrol.model.WrappedProject;
+import ru.isled.smartcontrol.model.wraps.WrappedProject;
 
 import java.util.ArrayList;
 import java.util.List;

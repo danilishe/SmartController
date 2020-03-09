@@ -202,8 +202,8 @@ public class ColorGradientController implements Initializable {
                 Color nextColor = i == colorsCount ? bgColor : gradient.colors.get(i);
 
                 gradientPairs.add(new Pair<>(
-                        prevColor.interpolate(nextColor, (double) transCounter / transitionWidth),
-                        prevColor.interpolate(nextColor, (double) (transCounter + 1) / transitionWidth)
+                        Util.transparentInterpolate(prevColor, nextColor, (double) transCounter / transitionWidth)
+                        , Util.transparentInterpolate(prevColor, nextColor, (double) (transCounter + 1) / transitionWidth)
                 ));
 
             }
@@ -229,7 +229,7 @@ public class ColorGradientController implements Initializable {
         if (y1 + fullLength > project.framesCount() && autoFrame)
             project.setFramesCount(y1 + fullLength);
 
-        Util.fill(project, x1, y1, x2, y1 + fullLength, bgColor);
+        Util.fill(project, x1, y1, x2, Math.min(Math.max(y1 + fullLength, y2), project.framesCount()), bgColor);
 
         // apply gradient
         for (int i = 0; i < fullLength + 1; i++) {

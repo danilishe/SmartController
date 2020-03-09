@@ -57,13 +57,13 @@ public class Dialogs {
         int lastChannel = 0, firstChannel;
         Pixel pixel;
         // this list for color changing in preview
-        List<ObjectProperty<Background>> backgrounds = new ArrayList<>(project.getPixelsCount());
+        List<ObjectProperty<Background>> backgrounds = new ArrayList<>(project.pixelsCount());
 
         FlowPane mainBackGround = new FlowPane(15, 15);
         mainBackGround.setStyle("-fx-background-color: black; -fx-padding: 20px;");
 
         buildPixels:
-        for (int i = 0; i < project.getPixelsCount(); i++) {
+        for (int i = 0; i < project.pixelsCount(); i++) {
             pixel = project.getPixel(i);
             VBox multiPixel = new VBox(3);
             multiPixel.setAlignment(Pos.TOP_CENTER);

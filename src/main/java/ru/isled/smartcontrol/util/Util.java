@@ -5,6 +5,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.isled.smartcontrol.model.Project;
 
+import static ru.isled.smartcontrol.Constants.BASE_FRAME_LENGTH;
+import static ru.isled.smartcontrol.Constants.MAX_BRIGHT;
+
 public class Util {
     private static final Logger log = LogManager.getLogger();
 
@@ -37,5 +40,25 @@ public class Util {
             }
         }
         return project;
+    }
+
+    public static Color transparentInterpolate(Color prevColor, Color nextColor, double factor) {
+        if (Double.compare(factor, 0) == 0 && prevColor == null)
+            return null;
+        if (Double.compare(factor, 1) == 0 && nextColor == null)
+            return null;
+        if (prevColor == null)
+            prevColor = Color.BLACK;
+        if (nextColor == null)
+            nextColor = Color.BLACK;
+        return prevColor.interpolate(nextColor, factor);
+    }
+
+    public static int framesAt(int frameLengthMsec) {
+        return frameLengthMsec / BASE_FRAME_LENGTH;
+    }
+
+    public static byte withGamma(byte b, double gamma) {
+        return (byte) (Math.pow((double) b / MAX_BRIGHT, gamma) * MAX_BRIGHT);
     }
 }

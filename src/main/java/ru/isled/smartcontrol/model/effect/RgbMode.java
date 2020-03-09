@@ -8,7 +8,7 @@ import static ru.isled.smartcontrol.Constants.MAX_BRIGHT;
 public enum RgbMode {
     RGB {
         @Override
-        byte[] export(Color color) {
+        public byte[] export(Color color) {
             return new byte[]{
                     toByte(color.getRed()),
                     toByte(color.getGreen()),
@@ -18,7 +18,7 @@ public enum RgbMode {
     },
     RBG {
         @Override
-        byte[] export(Color color) {
+        public byte[] export(Color color) {
             return new byte[]{
                     toByte(color.getRed()),
                     toByte(color.getBlue()),
@@ -28,7 +28,7 @@ public enum RgbMode {
     },
     GBR {
         @Override
-        byte[] export(Color color) {
+        public byte[] export(Color color) {
             return new byte[]{
                     toByte(color.getGreen()),
                     toByte(color.getBlue()),
@@ -38,7 +38,7 @@ public enum RgbMode {
     },
     GRB {
         @Override
-        byte[] export(Color color) {
+        public byte[] export(Color color) {
             return new byte[]{
                     toByte(color.getGreen()),
                     toByte(color.getRed()),
@@ -48,7 +48,7 @@ public enum RgbMode {
     },
     BGR {
         @Override
-        byte[] export(Color color) {
+        public byte[] export(Color color) {
             return new byte[]{
                     toByte(color.getBlue()),
                     toByte(color.getGreen()),
@@ -58,7 +58,7 @@ public enum RgbMode {
     },
     BRG {
         @Override
-        byte[] export(Color color) {
+        public byte[] export(Color color) {
             return new byte[]{
                     toByte(color.getBlue()),
                     toByte(color.getRed()),
@@ -73,7 +73,7 @@ public enum RgbMode {
         }
 
         @Override
-        byte[] export(Color color) {
+        public byte[] export(Color color) {
             return new byte[]{
                     toByte(color.getBrightness())
             };
@@ -97,7 +97,7 @@ public enum RgbMode {
         }
 
         @Override
-        byte[] export(Color color) {
+        public byte[] export(Color color) {
             return new byte[]{
                     toByte(color.getBrightness())
             };
@@ -121,7 +121,7 @@ public enum RgbMode {
         }
 
         @Override
-        byte[] export(Color color) {
+        public byte[] export(Color color) {
             return new byte[]{
                     toByte(color.getBrightness())
             };
@@ -142,7 +142,7 @@ public enum RgbMode {
         return (byte) (bright * MAX_BRIGHT);
     }
 
-    abstract byte[] export(Color color);
+    public abstract byte[] export(Color color);
 
     public Color[] getColors() {
         Color[] colors = new Color[3];
