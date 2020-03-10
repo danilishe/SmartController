@@ -420,7 +420,7 @@
                     <children>
                         <Label contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
                                minWidth="-Infinity" prefWidth="60.0" text="Гамма" HBox.hgrow="NEVER"/>
-                        <Slider fx:id="gammaSlider" blockIncrement="0.1" majorTickUnit="10.0" max="4.0" min="-4.0"
+                        <Slider fx:id="gammaSlider" blockIncrement="0.1" majorTickUnit="10.0" max="4.0" min="0.0"
                                 minorTickCount="5" prefHeight="38.0" prefWidth="229.0" showTickMarks="true"
                                 value="2.2"/>
                         <Label fx:id="gammaLabel" prefHeight="21.0" prefWidth="125.0" text="2.2"/>

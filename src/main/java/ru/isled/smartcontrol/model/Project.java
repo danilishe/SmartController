@@ -185,21 +185,19 @@ public class Project {
             int channelsCounter = 0;
             for (int pixelNo = 0; pixelNo < pixelsCount(); pixelNo++) {
 
-                final byte[][] pixelExport = getPixel(pixelNo).exportFrame(frame.getNumber(), frame.getLength());
+                final byte[][] pixelExport = getPixel(pixelNo).exportFrame(frame.getNumber() - 1, frame.getLength());
                 for (int frameCycle = 0; frameCycle < frame.getCycles(); frameCycle++) {
                     for (int subFrame = 0; subFrame < pixelExport.length; subFrame++) {
                         for (int channel = 0; channel < pixelExport[0].length; channel++) {
                             final int i = (subframesCounter + subFrame) * MAX_CHANNELS_COUNT + channelsCounter + channel;
-                            // fixme wrong counters
                             data[i] = Util.withGamma(pixelExport[subFrame][channel], getGamma());
                         }
                     }
-                    subframesCounter += pixelExport.length;
                 }
                 channelsCounter += pixelExport[0].length;
                 assert channelsCounter < MAX_CHANNELS_COUNT;
             }
-
+            subframesCounter += Util.framesAt(frame.getLength());
         }
         return data;
     }

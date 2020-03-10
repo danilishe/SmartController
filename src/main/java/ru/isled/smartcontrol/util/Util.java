@@ -59,6 +59,7 @@ public class Util {
     }
 
     public static byte withGamma(byte b, double gamma) {
-        return (byte) (Math.pow((double) b / MAX_BRIGHT, gamma) * MAX_BRIGHT);
+        final double v = Math.pow((double) Byte.toUnsignedInt(b) / MAX_BRIGHT, 1d / gamma) * MAX_BRIGHT;
+        return (byte) v;
     }
 }
