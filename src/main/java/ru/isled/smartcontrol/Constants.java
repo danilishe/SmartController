@@ -3,6 +3,7 @@ package ru.isled.smartcontrol;
 import javafx.stage.FileChooser;
 
 public interface Constants {
+
     String PROGRAM_VERSION = "2.0.0";
     int MIN_FRAMES = 1;
     int MAX_FRAMES = 5_000;
@@ -80,4 +81,9 @@ public interface Constants {
     int MAX_QUANTIFIER = 5;
     int CUSTOM_COLORS_COUNT = 16;
     int CUSTOM_PALETTE_SIZE = 10;
+    String ERROR_WHILE_SAVING_PROJECT = "Ошибка при сохранении проекта! Попробуйте снова.";
+    String ERROR_WHILE_LOADING_PROJECT = "Ошибка при загрузке проекта!";
+    String NOT_CORRECT_PROJECT_VERSION_WHILE_LOAD = "При чтении файла обнаружено несовпадение версии. Проект может загрузиться некорректно.";
+    String WARNING_DIALOG_TITLE = "Внимание!";
+    String ERROR_DIALOG_TITLE = "Ошибка!";
 }

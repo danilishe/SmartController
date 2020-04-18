@@ -1,27 +1,26 @@
 package ru.isled.smartcontrol.model.wraps;
 
-import javafx.scene.paint.Color;
 import ru.isled.smartcontrol.model.effect.PixelEffect;
 
 public class PixelFrameWrapper {
-    private Color startColor;
-    private Color endColor;
+    private String startColor;
+    private String endColor;
     private PixelEffect effect;
 
-    public Color getStartColor() {
+    public String getStartColor() {
         return startColor;
     }
 
-    public PixelFrameWrapper setStartColor(Color startColor) {
+    public PixelFrameWrapper setStartColor(String startColor) {
         this.startColor = startColor;
         return this;
     }
 
-    public Color getEndColor() {
+    public String getEndColor() {
         return endColor;
     }
 
-    public PixelFrameWrapper setEndColor(Color endColor) {
+    public PixelFrameWrapper setEndColor(String endColor) {
         this.endColor = endColor;
         return this;
     }

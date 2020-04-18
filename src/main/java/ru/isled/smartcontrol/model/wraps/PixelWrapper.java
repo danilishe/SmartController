@@ -1,5 +1,6 @@
 package ru.isled.smartcontrol.model.wraps;
 
+import ru.isled.smartcontrol.model.Pixel;
 import ru.isled.smartcontrol.model.effect.RgbMode;
 
 import java.util.List;
@@ -8,6 +9,7 @@ public class PixelWrapper {
     private List<PixelFrameWrapper> frames;
     private RgbMode rgbMode;
     private int quantifier;
+    private int number;
 
     public List<PixelFrameWrapper> getFrames() {
         return frames;
@@ -33,6 +35,15 @@ public class PixelWrapper {
 
     public PixelWrapper setQuantifier(int quantifier) {
         this.quantifier = quantifier;
+        return this;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public PixelWrapper setNumber(int number) {
+        this.number =  number;
         return this;
     }
 }

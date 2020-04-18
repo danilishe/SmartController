@@ -193,7 +193,16 @@ public class Dialogs {
     public static Optional<ButtonType> showErrorAlert(String message) {
         alert = new Alert(Alert.AlertType.ERROR);
         alert.initOwner(stage);
-        alert.setTitle("Ошибка!");
+        alert.setTitle(ERROR_DIALOG_TITLE);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        return alert.showAndWait();
+    }
+
+    public static Optional<ButtonType> warn(String message) {
+        alert = new Alert(Alert.AlertType.WARNING);
+        alert.initOwner(stage);
+        alert.setTitle(WARNING_DIALOG_TITLE);
         alert.setHeaderText(null);
         alert.setContentText(message);
         return alert.showAndWait();

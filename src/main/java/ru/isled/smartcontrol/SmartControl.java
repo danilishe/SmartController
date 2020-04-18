@@ -115,17 +115,15 @@ public class SmartControl extends Application {
             if (!continueAfterAskSaveFile()) return;
 
         if (fileForLoad == null) return;
-// TODO
-//        Project newProject = ProjectIO.load(fileForLoad);
-//        if (newProject == null) {
-//            Dialogs.showErrorAlert("Неверный формат файла или данная версия не поддерживается программой!");
-//            return;
-//        }
+        Project newProject = ProjectIO.load(fileForLoad);
+        if (newProject == null) {
+            return;
+        }
 
-//        addItemToLastFiles(newProject.getFile());
-//
-//        project = newProject;
-//        registerProjToControllerAndListener();
+        addItemToLastFiles(newProject.getFile());
+
+        project = newProject;
+        //todo как-то обновить окно, чтобы проект показывался
     }
 
     private void addItemToLastFiles(File file) {
