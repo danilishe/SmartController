@@ -320,7 +320,7 @@ public class MainController {
             project.getPixel(i).quantifierProperty().addListener((observable, oldValue, newValue) -> updateTotalPixelCount());
         }
 
-        tableController.initDataColumns();
+        tableController.initDataColumns(project.pixelsCount());
         tableController.refreshItems();
     }
 

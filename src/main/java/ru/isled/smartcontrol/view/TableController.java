@@ -158,7 +158,9 @@ public class TableController {
                 .collect(Collectors.toList());
     }
 
-    public void initDataColumns() {
+    public void initDataColumns(int visibleCount) {
+        // preparation
+        frameTableView.getColumns().remove(3, frameTableView.getColumns().size());
         // пиксели/каналы
         for (int i = 0; i < MAX_CHANNELS_COUNT; i++) {
             TableColumn<LedFrame, String> column = new TableColumn<>();
@@ -176,7 +178,7 @@ public class TableController {
             column.setCellFactory(cell -> new LedFrameTableCell());
             int finalI = i;
             column.setCellValueFactory(data -> data.getValue().getValue(finalI));
-            column.setVisible(i < DEFAULT_PIXEL_COUNT);
+            column.setVisible(i < visibleCount);
             frameTableView.getColumns().add(column);
         }
     }

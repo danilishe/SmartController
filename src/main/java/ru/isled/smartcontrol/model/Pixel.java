@@ -33,7 +33,7 @@ public class Pixel {
         this.number = new SimpleIntegerProperty(number);
         this.rgbMode = new SimpleObjectProperty<>(rgbMode);
         this.quantifier = new SimpleObjectProperty<>(quantifier);
-        this.frames = FXCollections.observableArrayList(frames);
+        this.frames = frames == null ? FXCollections.observableArrayList() : FXCollections.observableArrayList(frames);
         background = new SimpleStringProperty(rgbMode.getBackground());
         // if rgbMode changes, background changes too
         this.rgbMode.addListener((v, o, n) -> {

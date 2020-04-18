@@ -83,7 +83,7 @@ public interface Constants {
     int CUSTOM_PALETTE_SIZE = 10;
     String ERROR_WHILE_SAVING_PROJECT = "Ошибка при сохранении проекта! Попробуйте снова.";
     String ERROR_WHILE_LOADING_PROJECT = "Ошибка при загрузке проекта!";
-    String NOT_CORRECT_PROJECT_VERSION_WHILE_LOAD = "При чтении файла обнаружено несовпадение версии. Проект может загрузиться некорректно.";
+    String NOT_CORRECT_PROJECT_VERSION_WHILE_LOAD = "При чтении файла обнаружено несовпадение версии. Невозможно загрузить проект.";
     String WARNING_DIALOG_TITLE = "Внимание!";
     String ERROR_DIALOG_TITLE = "Ошибка!";
 }

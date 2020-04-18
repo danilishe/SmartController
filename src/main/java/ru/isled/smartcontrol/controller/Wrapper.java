@@ -32,7 +32,7 @@ public class Wrapper {
     }
 
     public static Project unwrap(ProjectWrapper projectWrapper) {
-        List<Pixel> pixels = projectWrapper.getPixels().stream()
+         List<Pixel> pixels = projectWrapper.getPixels().stream()
                 .map(Wrapper::unwrap)
                 .collect(Collectors.toList());
         List<LedFrame> ledFrames = new ArrayList<>();

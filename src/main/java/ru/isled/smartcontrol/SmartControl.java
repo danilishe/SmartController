@@ -123,6 +123,7 @@ public class SmartControl extends Application {
         addItemToLastFiles(newProject.getFile());
 
         project = newProject;
+        controller.setProject(project);
         //todo как-то обновить окно, чтобы проект показывался
     }
 

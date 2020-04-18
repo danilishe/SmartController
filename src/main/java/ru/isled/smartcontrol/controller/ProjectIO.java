@@ -26,6 +26,7 @@ public class ProjectIO {
             ZipEntry nextEntry = zipInputStream.getNextEntry();
             if (nextEntry == null || !nextEntry.getName().equals(ENTRY_NAME)) {
                 Dialogs.warn(Constants.NOT_CORRECT_PROJECT_VERSION_WHILE_LOAD);
+                return null;
             }
             ProjectWrapper wrappedProject = JSON.parseObject(zipInputStream, ProjectWrapper.class);
             Project project = Wrapper.unwrap(wrappedProject);
@@ -33,6 +34,7 @@ public class ProjectIO {
             return project;
         } catch (Exception e) {
             Dialogs.showErrorAlert(Constants.ERROR_WHILE_LOADING_PROJECT + "\n\n" + e);
+
         }
         return null;
     }
