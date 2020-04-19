@@ -58,7 +58,10 @@ public class LedFrame {
     }
 
     public LedFrame setCycles(int cycles) {
-        this.cycles.set(cycles);
+        if (cycles != getCycles()) {
+            Project.setHasChanges(true);
+            this.cycles.set(cycles);
+        }
         return this;
     }
 
@@ -71,7 +74,10 @@ public class LedFrame {
     }
 
     public LedFrame setLength(int length) {
-        frameLength.setValue(length);
+        if (length != getLength()) {
+            Project.setHasChanges(true);
+            frameLength.setValue(length);
+        }
         return this;
     }
 }

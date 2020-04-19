@@ -169,6 +169,7 @@ public class Pixel {
         }
 
         private void updateBackground() {
+            Project.setHasChanges(true);
             String start = Util.toHex(rgbMode.get().getVisibleColor(startColor));
             String end = Util.toHex(rgbMode.get().getVisibleColor(endColor));
             background.setValue(

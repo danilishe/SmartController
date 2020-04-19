@@ -52,7 +52,6 @@ public class ProjectIO {
             zipOutputStream.closeEntry();
             zipOutputStream.flush();
             project.setFileName(file);
-            project.setHasChanges(false);
         } catch (Exception e) {
             Dialogs.showErrorAlert(Constants.ERROR_WHILE_SAVING_PROJECT + "\n\n" + e);
         }

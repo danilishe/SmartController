@@ -24,10 +24,6 @@ import static ru.isled.smartcontrol.Constants.*;
 //import ru.isled.smartcontrol.controller.ProjectIO;
 
 public class SmartControl extends Application {
-    public Stage getMainStage() {
-        return mainStage;
-    }
-
     private Stage mainStage = null;
     private Project project = null;
     private MainController controller;
@@ -37,7 +33,12 @@ public class SmartControl extends Application {
         launch(args);
     }
 
+    public Stage getMainStage() {
+        return mainStage;
+    }
+
     private void loadDefaults() {
+        Project.hasChangesProperty().addListener(l -> updateHeader());
         File file = new File(PROPS_PATH);
         try {
             if (file.exists()) {
@@ -61,8 +62,8 @@ public class SmartControl extends Application {
     private void loadLastFile(String text) {
         File lastFile = new File(text);
         if (!lastFile.exists()) {
-            Dialogs.showErrorAlert("Файл не существует!");
-            lastFiles.remove(lastFiles.indexOf(text));
+            Dialogs.showErrorAlert(FILE_NOT_EXISTS);
+            lastFiles.remove(text);
         } else {
             loadProject(lastFile);
         }
@@ -76,8 +77,6 @@ public class SmartControl extends Application {
         Dialogs.setStage(stage);
 
         project = new Project();
-        project.hasChangesProperty().addListener(l -> updateHeader());
-        updateHeader();
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("view/main.fxml"));
@@ -100,18 +99,16 @@ public class SmartControl extends Application {
         loadDefaults();
 
         mainStage.show();
-
+        updateHeader();
     }
 
     public void updateHeader() {
-        String name = project.getName() == null ? "- несохранённый проект -" : project.getName();
-        String unsavedMark = project.hasUnsavedChanges() ? "*" : "";
-        mainStage.setTitle("ISLed SMART Control " + name + unsavedMark);
+        mainStage.setTitle(String.format(TITLE, project.getName(), Project.hasChanges() ? "*" : ""));
     }
 
 
     public void loadProject(File fileForLoad) {
-        if (project.hasUnsavedChanges())
+        if (Project.hasChanges())
             if (!continueAfterAskSaveFile()) return;
 
         if (fileForLoad == null) return;
@@ -129,9 +126,7 @@ public class SmartControl extends Application {
 
     private void addItemToLastFiles(File file) {
         String filePath = file.getAbsolutePath();
-        if (lastFiles.contains(filePath)) {
-            lastFiles.remove(filePath);
-        }
+        lastFiles.remove(filePath);
 
         lastFiles.add(0, filePath);
 
@@ -153,7 +148,7 @@ public class SmartControl extends Application {
         switch (Dialogs.askSaveProject()) {
             case YES:
                 saveProject();
-                if (project.hasUnsavedChanges()) return false;
+                if (Project.hasChanges()) return false;
             case NO:
                 return true;
 
@@ -174,19 +169,18 @@ public class SmartControl extends Application {
 
         ProjectIO.save(project, project.getFile());
         addItemToLastFiles(project.getFile());
-        project.setHasChanges(false);
+        Project.setHasChanges(false);
         updateHeader();
     }
 
     public void createNewProject() {
-        if (project != null && project.hasUnsavedChanges())
+        if (project != null && Project.hasChanges())
             if (!continueAfterAskSaveFile()) {
                 return;
             }
 
         project = new Project();
         controller.setProject(project);
-        project.hasChangesProperty().addListener(l -> updateHeader());
         updateHeader();
     }
 
@@ -194,12 +188,12 @@ public class SmartControl extends Application {
         File exportFile = Dialogs.export(project.getFile());
         if (exportFile == null) return;
         if (!ProjectIO.export(project, exportFile)) {
-            Dialogs.showErrorAlert("Не удалось экспортировать файл. Попробуйте ещё раз :(");
+            Dialogs.showErrorAlert(EXPORT_ERROR_MESSAGE);
         }
     }
 
     public void exit() {
-        if (project.hasUnsavedChanges())
+        if (Project.hasChanges())
             if (!continueAfterAskSaveFile()) return;
         saveDefaults();
         System.exit(0);

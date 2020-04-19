@@ -158,25 +158,12 @@ public class MainController {
         mainApp.exportProject();
     }
 
-    // fixme update to new two-color model
-    private void setBrightSelectedCells(int bright) {
-        log.trace("updating bright to ");
-        for (TablePosition cell : tableController.getSelectedDataCells()) {
-            int pixelNo = cell.getColumn() - HEADER_COLUMNS;
-            int frameNo = cell.getRow();
-            project.getPixel(pixelNo).getFrames().get(frameNo).setBright(bright);
-            project.setHasChanges(true);
-        }
-        framePreviewController.previewFrame(tableController.getSelectedFrame());
-    }
-
     private void setEffectSelectedCells(PixelEffect effect) {
         log.trace("updating effect to " + effect);
         for (TablePosition cell : tableController.getSelectedDataCells()) {
             int pixelNo = cell.getColumn() - HEADER_COLUMNS;
             int frameNo = cell.getRow();
             project.getPixel(pixelNo).getFrames().get(frameNo).setEffect(effect);
-            project.setHasChanges(true);
         }
         framePreviewController.previewFrame(tableController.getSelectedFrame());
     }
@@ -280,7 +267,7 @@ public class MainController {
         List<TablePosition> cells = tableController.getSelectedDataCells();
 
         if (cells != null && cells.size() > 0) {
-            project.setHasChanges(true);
+            Project.setHasChanges(true);
 
             TablePosition firstCell = cells.get(0);
             TablePosition lastCell = cells.get(cells.size() - 1);
@@ -289,10 +276,7 @@ public class MainController {
                     y1 = firstCell.getRow(),
                     x2 = lastCell.getColumn() - HEADER_COLUMNS + 1,
                     y2 = lastCell.getRow() + 1;
-            System.out.println("x1 = " + x1);
-            System.out.println("y1 = " + y1);
-            System.out.println("x2 = " + x2);
-            System.out.println("y2 = " + y2);
+            log.debug("x1={} y1={} x2={} y2={}", x1, y1, x2, y2);
 
             String selectedEffect = effectsSelector.getValue();
             Effect.selectEffect(selectedEffect).apply(getProject(), x1, y1, x2, y2);
@@ -308,6 +292,7 @@ public class MainController {
         this.project = project;
         pixelSpinner.getValueFactory().setValue(project.pixelsCount());
         framesSpinner.getValueFactory().setValue(project.framesCount());
+        gammaSlider.setValue(project.getGamma());
 
         updateTotalPixelCount();
         updateProgramLength();
@@ -432,6 +417,7 @@ public class MainController {
     }
 
     public void scrollGamma(ScrollEvent scrollEvent) {
+        Project.setHasChanges(true);
         if (scrollEvent.getDeltaY() > 0) {
             gammaSlider.increment();
         } else {

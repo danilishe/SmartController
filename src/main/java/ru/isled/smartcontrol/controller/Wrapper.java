@@ -32,7 +32,7 @@ public class Wrapper {
     }
 
     public static Project unwrap(ProjectWrapper projectWrapper) {
-         List<Pixel> pixels = projectWrapper.getPixels().stream()
+        List<Pixel> pixels = projectWrapper.getPixels().stream()
                 .map(Wrapper::unwrap)
                 .collect(Collectors.toList());
         List<LedFrame> ledFrames = new ArrayList<>();
@@ -43,7 +43,7 @@ public class Wrapper {
                             .map(pixel -> pixel.getFrames().get(finalI).backgroundProperty())
                             .collect(Collectors.toList())));
         }
-        return new Project(projectWrapper.getFrameCount(), projectWrapper.getPixelCount(), pixels, ledFrames, projectWrapper.getGamma(), false, null);
+        return new Project(projectWrapper.getFrameCount(), projectWrapper.getPixelCount(), pixels, ledFrames, projectWrapper.getGamma(), null);
     }
 
     private static LedFrameWrapper wrap(LedFrame ledFrame) {
@@ -93,5 +93,4 @@ public class Wrapper {
                 wrappedPixelFrame.getEffect(),
                 rgbModeObjectProperty);
     }
-
 }

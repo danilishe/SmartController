@@ -86,4 +86,9 @@ public interface Constants {
     String NOT_CORRECT_PROJECT_VERSION_WHILE_LOAD = "При чтении файла обнаружено несовпадение версии. Невозможно загрузить проект.";
     String WARNING_DIALOG_TITLE = "Внимание!";
     String ERROR_DIALOG_TITLE = "Ошибка!";
+    String TITLE = "ISLed SMART Control (%s) %s";
+    String EXPORT_ERROR_MESSAGE = "Не удалось экспортировать файл. Попробуйте ещё раз :(";
+    String ERROR_WHILE_LOAD = "Ошибка загрузки файла!";
+    String ERROR_WHILE_SAVE = "Ошибка при записи файла!";
+    String FILE_NOT_EXISTS = "Файл не существует!";
 }

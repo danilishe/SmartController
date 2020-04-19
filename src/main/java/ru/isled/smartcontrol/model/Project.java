@@ -15,17 +15,17 @@ import static ru.isled.smartcontrol.Constants.*;
 import static ru.isled.smartcontrol.util.Util.framesAt;
 
 public class Project {
+    private static final BooleanProperty hasChanges = new SimpleBooleanProperty(false);
     private final IntegerProperty framesCount;
     private final IntegerProperty pixelsCount;
     private final ObservableList<Pixel> pixels;
     private final ObservableList<LedFrame> frames;
     private final List<LedFrame> framesCache = new ArrayList<>();
     private final DoubleProperty gamma;
-    private final BooleanProperty hasChanges;
     private final ObjectProperty<File> file;
 
     public Project() {
-        this(DEFAULT_FRAMES_COUNT, DEFAULT_PIXEL_COUNT, new ArrayList<>(MAX_CHANNELS_COUNT), new ArrayList<>(MAX_FRAMES), DEFAULT_GAMMA, false, null);
+        this(DEFAULT_FRAMES_COUNT, DEFAULT_PIXEL_COUNT, new ArrayList<>(MAX_CHANNELS_COUNT), new ArrayList<>(MAX_FRAMES), DEFAULT_GAMMA, null);
         for (int i = 0; i < MAX_CHANNELS_COUNT; i++) {
             pixels.add(new Pixel(i + 1, DEFAULT_FRAMES_COUNT));
         }
@@ -34,22 +34,35 @@ public class Project {
             frames.add(frame);
         }
         framesCache.addAll(frames);
+        setHasChanges(false);
     }
 
-    private List<StringProperty> getPixelsBackgroundProperties(final int index) {
-        return pixels.stream().map(pixel -> pixel.getFrames().get(index).backgroundProperty()).collect(Collectors.toList());
-    }
-
-    public Project(int framesCount, int pixelsCount, List<Pixel> pixels, List<LedFrame> frames, double gamma, boolean hasChanges, File file) {
+    public Project(int framesCount, int pixelsCount, List<Pixel> pixels, List<LedFrame> frames, double gamma, File file) {
         this.framesCount = new SimpleIntegerProperty(framesCount);
         this.pixelsCount = new SimpleIntegerProperty(pixelsCount);
         this.pixels = FXCollections.observableList(pixels);
         this.frames = FXCollections.observableList(frames);
         this.gamma = new SimpleDoubleProperty(gamma);
-        this.hasChanges = new SimpleBooleanProperty(hasChanges);
         this.file = new SimpleObjectProperty<>(file);
         this.framesCount.addListener(c -> onFramesChanged());
         this.framesCache.addAll(frames);
+        setHasChanges(false);
+    }
+
+    public static boolean hasChanges() {
+        return hasChanges.get();
+    }
+
+    public static void setHasChanges(boolean hasChanges) {
+        Project.hasChanges.set(hasChanges);
+    }
+
+    public static BooleanProperty hasChangesProperty() {
+        return hasChanges;
+    }
+
+    private List<StringProperty> getPixelsBackgroundProperties(final int index) {
+        return pixels.stream().map(pixel -> pixel.getFrames().get(index).backgroundProperty()).collect(Collectors.toList());
     }
 
     public Pixel.Frame getPixelFrame(int frameNo, int pixelNo) {
@@ -83,17 +96,8 @@ public class Project {
         return this;
     }
 
-    public BooleanProperty hasChangesProperty() {
-        return hasChanges;
-    }
-
-    public boolean hasUnsavedChanges() {
-        return hasChanges.get();
-    }
-
     public String getName() {
-        return UNSAVED_FILE_NAME;
-//        return file == null ? UNSAVED_FILE_NAME : file.getValue().getName();
+        return getFile() == null ? UNSAVED_FILE_NAME : file.getValue().getAbsolutePath();
     }
 
     public boolean hasName() {
@@ -102,11 +106,6 @@ public class Project {
 
     public Project setFileName(File file) {
         this.file.setValue(file);
-        return this;
-    }
-
-    public Project setHasChanges(boolean changed) {
-        hasChanges.setValue(changed);
         return this;
     }
 
@@ -120,18 +119,6 @@ public class Project {
 
     public int size() {
         return frames.size();
-    }
-
-    public Project setFrames(List<LedFrame> frames) {
-        this.frames.clear();
-        this.frames.addAll(frames);
-        return this;
-    }
-
-    public Project setPixels(List<Pixel> list) {
-        pixels.clear();
-        pixels.addAll(list);
-        return this;
     }
 
     /**
@@ -209,7 +196,9 @@ public class Project {
                 .sum();
     }
 
+    // fixme some problem here, which creates black lines
     public void onFramesChanged() {
+        Project.setHasChanges(true);
         // framesCache.size() must be == frames count at each pixel
         if (framesCache.size() < framesCount()) { // if project has no that frames before
             for (Pixel pixel : pixels) { // Creating new Frames in Pixel lists
@@ -232,7 +221,19 @@ public class Project {
         return frames;
     }
 
+    public Project setFrames(List<LedFrame> frames) {
+        this.frames.clear();
+        this.frames.addAll(frames);
+        return this;
+    }
+
     public List<Pixel> getPixels() {
         return pixels;
+    }
+
+    public Project setPixels(List<Pixel> list) {
+        pixels.clear();
+        pixels.addAll(list);
+        return this;
     }
 }
