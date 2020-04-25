@@ -514,7 +514,7 @@ public class MainController {
             timeSheetWindow.setTitle("Настройки времени контроллера");
             timeSheetWindow.setOnCloseRequest(e -> timeSheetWindow.hide());
             timeSheetWindow.initOwner(mainApp.getMainStage());
-            timeSheetWindow.getIcons().add(new Image(getClass().getResourceAsStream("images/play.png")));
+            timeSheetWindow.getIcons().add(new Image(getClass().getResourceAsStream("../images/play.png")));
         }
         timeSheetWindow.show();
     }

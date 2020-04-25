@@ -41,8 +41,8 @@ public class TimeSheetController {
         sheet.setItems(FXCollections.observableList(new ArrayList<>()));
         sheet.getItems().addListener((InvalidationListener) observable -> addRecord.disableProperty().setValue(sheet.getItems().size() > MAX_TIME_RECORDS));
 
-        sheet.getItems().add(new ScheduledCommand().setCommand(Command.OFF).setTime(22, 15).setWeekDay(WeekDay.EVERY_DAY));
-        sheet.getItems().add(new ScheduledCommand().setCommand(Command.ON).setTime(15, 15).setWeekDay(WeekDay.SUNDAY));
+        sheet.getItems().add(new ScheduledCommand().setCommand(Command.OFF).setTime(22, 0).setWeekDay(WeekDay.EVERY_DAY));
+        sheet.getItems().add(new ScheduledCommand().setCommand(Command.ON).setTime(15, 0).setWeekDay(WeekDay.EVERY_DAY));
 
         sheet.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == null) return;
@@ -55,6 +55,7 @@ public class TimeSheetController {
         command.setCellValueFactory(c -> c.getValue().commandProperty);
         time.setCellValueFactory(c -> c.getValue().timeProperty);
         weekday.setCellValueFactory(c -> c.getValue().weekDayProperty);
+        weekday.setSortType(TableColumn.SortType.ASCENDING);
 
         setHours.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23));
         setHours.getValueFactory().setConverter(HoursConverter.INSTANCE);
