@@ -78,8 +78,7 @@ public class SmartControl extends Application {
 
         project = new Project();
 
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("view/main.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("view/main.fxml"));
         Scene scene = new Scene(loader.load());
 
         controller = loader.getController();

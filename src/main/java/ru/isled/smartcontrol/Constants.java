@@ -28,6 +28,7 @@ public interface Constants {
     int MAX_FRAME_LENGTH = 20000;
     String DEFAULT_PROJECT_FILE_NAME = "project.isc";
     String DEFAULT_EXPORT_FILE_NAME = "0.bin";
+    String DEFAULT_TIME_FILE_NAME = "time.cfg";
 
     String UNSAVED_FILE_NAME = " <несохранённый проект> ";
     String DEFAULT_WORK_DIRECTORY = System.getProperty("user.home");// + "/Documents/";
@@ -39,6 +40,7 @@ public interface Constants {
     int MAX_COL_WIDTH = 140;
     FileChooser.ExtensionFilter PROJECT_EXT = new FileChooser.ExtensionFilter("ISLed проект для контроллера", "*.isc");
     FileChooser.ExtensionFilter BIN_EXT = new FileChooser.ExtensionFilter("ISLed файл для контроллера", "*.bin");
+    FileChooser.ExtensionFilter TIME_CFG = new FileChooser.ExtensionFilter("Настройки времени для контроллера ISLed", "time.cfg");
     int MAX_CYCLES = 100;
     int MIN_CYCLES = 0;
     String PROPS_PATH = System.getProperty("user.home") + "/smartcontrol/properties.ini";
@@ -91,4 +93,5 @@ public interface Constants {
     String ERROR_WHILE_LOAD = "Ошибка загрузки файла!";
     String ERROR_WHILE_SAVE = "Ошибка при записи файла!";
     String FILE_NOT_EXISTS = "Файл не существует!";
+    int MAX_TIME_RECORDS = 11;
 }

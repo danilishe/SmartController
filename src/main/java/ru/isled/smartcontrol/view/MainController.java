@@ -1,13 +1,17 @@
 package ru.isled.smartcontrol.view;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.isled.smartcontrol.SmartControl;
@@ -20,6 +24,7 @@ import ru.isled.smartcontrol.model.effect.RgbMode;
 import ru.isled.smartcontrol.view.cell.LedFrameLengthCell;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.DateTimeException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -79,6 +84,7 @@ public class MainController {
     @FXML
     public HBox brightPalette;
     private BrightPaletteController brightPaletteController;
+    private Stage timeSheetWindow;
 
     @FXML
     public void setFadeInEffect() {
@@ -496,5 +502,20 @@ public class MainController {
 
     public void dropRgbMode() {
         project.getPixels().forEach(pixel -> pixel.setRgbMode(RgbMode.WHITE));
+    }
+
+    public void exportTimesheet() throws IOException {
+        if (timeSheetWindow == null) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("timesheet.fxml"));
+            Scene scene = new Scene(loader.load());
+            timeSheetWindow = new Stage();
+            timeSheetWindow.resizableProperty().setValue(false);
+            timeSheetWindow.setScene(scene);
+            timeSheetWindow.setTitle("Настройки времени контроллера");
+            timeSheetWindow.setOnCloseRequest(e -> timeSheetWindow.hide());
+            timeSheetWindow.initOwner(mainApp.getMainStage());
+            timeSheetWindow.getIcons().add(new Image(getClass().getResourceAsStream("images/play.png")));
+        }
+        timeSheetWindow.show();
     }
 }

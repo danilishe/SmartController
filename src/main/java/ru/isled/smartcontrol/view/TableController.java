@@ -35,7 +35,7 @@ public class TableController {
         disableColumnReordering();
 
         ContextMenu tableContextMenu = new ContextMenu();
-        // todo move in TableController class
+
         for (RgbMode rgbMode : RgbMode.values()) {
             Shape graphic = new Rectangle(20, 10);
             graphic.setStyle(rgbMode.getBackground().replace("background-color", "fill"));
