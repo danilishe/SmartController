@@ -50,6 +50,12 @@
                                                     shortcut="UP"/>
                             </accelerator>
                         </MenuItem>
+                        <MenuItem mnemonicParsing="false" onAction="#exportTimesheet" text="Экспорт настроек времени">
+                            <accelerator>
+                                <KeyCodeCombination alt="UP" code="T" control="DOWN" meta="UP" shift="UP"
+                                                    shortcut="UP"/>
+                            </accelerator>
+                        </MenuItem>
                         <SeparatorMenuItem mnemonicParsing="false"/>
                         <MenuItem mnemonicParsing="false" onAction="#exitHandler" text="Выход">
                             <accelerator>
