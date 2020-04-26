@@ -10,6 +10,15 @@ public enum Command {
         this.description = description;
     }
 
+    public static Command of(String command) {
+        for (Command value : Command.values()) {
+            if (command.equalsIgnoreCase(value.getCode()) || command.equalsIgnoreCase(value.toString())) {
+                return value;
+            }
+        }
+        return Command.ON;
+    }
+
     public String getCode() {
         return name().toLowerCase();
     }

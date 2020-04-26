@@ -258,8 +258,7 @@ public class MainController {
         final Label label = new Label("Программа для создания и редактирования эффектов для контроллера ISLed" +
                 "\nЗнакСвет © 2018-2020" +
                 "\nСуетин Д.Е. © 2018-2020" +
-                "\nВерсия " + PROGRAM_VERSION +
-                "\nПамяти JVM свободно/всего: " + Runtime.getRuntime().freeMemory() / 1_000_000 + "МБ / " + Runtime.getRuntime().totalMemory() / 1_000_000 + "МБ"
+                "\nВерсия " + PROGRAM_VERSION
         );
         final Hyperlink isLedLink = new Hyperlink(CONTROLLER_PAGE_URL);
         isLedLink.setOnAction(event -> mainApp.getHostServices().showDocument(CONTROLLER_PAGE_URL));
@@ -514,6 +513,7 @@ public class MainController {
             timeSheetWindow.setTitle("Настройки времени контроллера");
             timeSheetWindow.setOnCloseRequest(e -> timeSheetWindow.hide());
             timeSheetWindow.initOwner(mainApp.getMainStage());
+            loader.<TimeSheetController>getController().setMainWindow(timeSheetWindow);
             timeSheetWindow.getIcons().add(new Image(getClass().getResourceAsStream("../images/play.png")));
         }
         timeSheetWindow.show();

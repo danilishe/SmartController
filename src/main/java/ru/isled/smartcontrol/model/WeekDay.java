@@ -26,4 +26,13 @@ public enum WeekDay {
     public String toString() {
         return description;
     }
+
+    public static WeekDay of(String name) {
+        for (WeekDay weekDay : WeekDay.values()) {
+            if (weekDay.name().equalsIgnoreCase(name) || weekDay.getCode().equalsIgnoreCase(name) || weekDay.toString().equalsIgnoreCase(name)) {
+                return weekDay;
+            }
+        }
+        return MONDAY;
+    }
 }
