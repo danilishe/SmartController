@@ -50,12 +50,6 @@
                                                     shortcut="UP"/>
                             </accelerator>
                         </MenuItem>
-                        <MenuItem mnemonicParsing="false" onAction="#exportTimesheet" text="Экспорт настроек времени">
-                            <accelerator>
-                                <KeyCodeCombination alt="UP" code="T" control="DOWN" meta="UP" shift="UP"
-                                                    shortcut="UP"/>
-                            </accelerator>
-                        </MenuItem>
                         <SeparatorMenuItem mnemonicParsing="false"/>
                         <MenuItem mnemonicParsing="false" onAction="#exitHandler" text="Выход">
                             <accelerator>
@@ -65,8 +59,28 @@
                         </MenuItem>
                     </Menu>
                     <Menu mnemonicParsing="false" text="Редактирование">
-                        <MenuItem mnemonicParsing="false" onAction="#selectAll" text="Выделить всё"/>
-                        <MenuItem mnemonicParsing="false" onAction="#clearSelection" text="Снять выделение"/>
+                        <MenuItem mnemonicParsing="false" onAction="#selectAll" text="Выделить всё">
+                            <accelerator>
+                                <KeyCodeCombination alt="UP" code="A" control="DOWN" meta="UP" shift="UP"
+                                                    shortcut="UP"/>
+                            </accelerator>
+                        </MenuItem>
+                        <MenuItem mnemonicParsing="false" onAction="#clearSelection" text="Снять выделение">
+                            <accelerator>
+                                <KeyCodeCombination alt="UP" code="A" control="DOWN" meta="UP" shift="DOWN"
+                                                    shortcut="UP"/>
+                            </accelerator>
+                        </MenuItem>
+                    </Menu>
+                    <Menu mnemonicParsing="false" text="Таймер">
+                        <items>
+                            <MenuItem mnemonicParsing="false" onAction="#exportTimesheet" text="Настройка таймера">
+                                <accelerator>
+                                    <KeyCodeCombination alt="UP" code="T" control="DOWN" meta="UP" shift="UP"
+                                                        shortcut="UP"/>
+                                </accelerator>
+                            </MenuItem>
+                        </items>
                     </Menu>
                     <Menu mnemonicParsing="false" text="Помощь">
                         <MenuItem mnemonicParsing="false" onAction="#showAboutInfoHandler" text="О программе..."/>

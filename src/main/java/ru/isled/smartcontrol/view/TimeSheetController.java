@@ -68,18 +68,22 @@ public class TimeSheetController {
         weekday.setSortType(TableColumn.SortType.ASCENDING);
 
         setHours.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23));
+        setHours.getValueFactory().setWrapAround(true);
         setHours.getValueFactory().setConverter(HoursConverter.INSTANCE);
         setHours.setOnScroll(e -> setHours.increment((int) e.getTextDeltaY()));
 
         setMinutes.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59));
+        setMinutes.getValueFactory().setWrapAround(true);
         setMinutes.getValueFactory().setConverter(MinutesConverter.INSTANCE);
         setMinutes.setOnScroll(e -> setMinutes.increment((int) e.getTextDeltaY()));
 
         hours.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23));
+        hours.getValueFactory().setWrapAround(true);
         hours.getValueFactory().setConverter(HoursConverter.INSTANCE);
         hours.setOnScroll(e -> hours.increment((int) e.getTextDeltaY()));
 
         minutes.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59));
+        minutes.getValueFactory().setWrapAround(true);
         minutes.getValueFactory().setConverter(MinutesConverter.INSTANCE);
         minutes.setOnScroll(e -> minutes.increment((int) e.getTextDeltaY()));
 
