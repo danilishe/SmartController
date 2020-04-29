@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
@@ -514,7 +514,12 @@ public class MainController {
             timeSheetWindow.setOnCloseRequest(e -> timeSheetWindow.hide());
             timeSheetWindow.initOwner(mainApp.getMainStage());
             loader.<TimeSheetController>getController().setMainWindow(timeSheetWindow);
-            timeSheetWindow.getIcons().add(new Image(getClass().getResourceAsStream("../images/play.png")));
+            timeSheetWindow.getScene().setOnKeyTyped(event -> {
+                        if (event.getCharacter().equals("\u001B") || event.getCode() == KeyCode.ESCAPE)
+                            timeSheetWindow.hide();
+                    }
+            );
+            timeSheetWindow.setAlwaysOnTop(true);
         }
         timeSheetWindow.show();
     }
