@@ -472,28 +472,64 @@
                         <Label contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
                                minWidth="-Infinity" prefWidth="60.0" text="Гамма" HBox.hgrow="NEVER"/>
                         <Slider fx:id="gammaSlider" blockIncrement="0.1" majorTickUnit="10.0" max="4.0" min="0.0"
-                                minorTickCount="5" prefHeight="38.0" prefWidth="229.0" showTickMarks="true"
-                                value="2.2"/>
+                                minorTickCount="5" prefHeight="38.0" prefWidth="229.0" showTickMarks="true" value="2.2">
+                            <tooltip>
+                                <Tooltip
+                                        text="Гамма это коррекция кривой, по которой возрастает яркость. 2.2 считается нормой для LED"/>
+                            </tooltip>
+                        </Slider>
                         <Label fx:id="gammaLabel" prefHeight="21.0" prefWidth="125.0" text="2.2"/>
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER">
+                    <children>
+                        <Label minWidth="-Infinity" text="Сброс">
+                            <padding>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="2.0"/>
+                            </padding>
+                            <font>
+                                <Font name="System Bold" size="14.0"/>
+                            </font>
+                        </Label>
+                        <Separator prefWidth="1.0E16"/>
                     </children>
                 </HBox>
                 <HBox alignment="TOP_RIGHT" spacing="5.0">
                     <children>
-                        <Button mnemonicParsing="false" onAction="#refreshTableView" text="🔄">
+                        <Button mnemonicParsing="false" onAction="#refreshTableView" prefHeight="25.0" prefWidth="36.0"
+                                text="🔄">
                             <font>
                                 <Font size="12.0"/>
                             </font>
+                            <tooltip>
+                                <Tooltip text="Перерисовать таблицу кадров"/>
+                            </tooltip>
                         </Button>
-                        <Button mnemonicParsing="false" onAction="#dropQuantifiers" text="Сбросить каналы">
+                        <Button mnemonicParsing="false" onAction="#dropQuantifiers" text="Кратность каналов">
                             <font>
                                 <Font size="12.0"/>
                             </font>
+                            <tooltip>
+                                <Tooltip text="Все пиксели становятся одноканальными, без дублирования"/>
+                            </tooltip>
                         </Button>
                         <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#dropRgbMode"
-                                text="Сбросить цветность">
+                                text="Цвет">
                             <font>
                                 <Font size="12.0"/>
                             </font>
+                            <tooltip>
+                                <Tooltip text="Все пиксели становятся одноцветными"/>
+                            </tooltip>
+                        </Button>
+                        <Button layoutX="287.0" layoutY="10.0" mnemonicParsing="false" onAction="#newFile"
+                                text="Сбросить всё">
+                            <font>
+                                <Font size="12.0"/>
+                            </font>
+                            <tooltip>
+                                <Tooltip text="Создастся новый проект"/>
+                            </tooltip>
                         </Button>
                     </children>
                 </HBox>

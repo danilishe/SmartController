@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <BorderPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="ru.isled.smartcontrol.view.TimeSheetController">
+            fx:controller="ru.isled.smartcontrol.view.TimeSheetController" fx:id="timeSettingsPane">
     <center>
         <TableView fx:id="sheet" fixedCellSize="50.0" prefHeight="381.0" prefWidth="441.0"
                    BorderPane.alignment="CENTER">

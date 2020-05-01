@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
@@ -324,6 +325,13 @@ public class MainController {
 
     @FXML
     public void initialize() {
+        frameTableView.addEventHandler(KeyEvent.KEY_PRESSED, e -> {
+            if (e.getCode() == KeyCode.DELETE || e.getCode() == KeyCode.BACK_SPACE) {
+                this.setColor(Color.BLACK, Color.BLACK);
+                this.setEffectSelectedCells(PixelEffect.Solid);
+            }
+        });
+
 
         frameNumColumn.setCellValueFactory(x1 -> x1.getValue().numberProperty());
         frameRepeatColumn.setCellValueFactory(x1 -> x1.getValue().cyclesProperty());
@@ -357,13 +365,6 @@ public class MainController {
         initPixelQuantifierSpinner();
 
         tableController = new TableController(this, frameTableView);
-// TODO it could be fix a bug when project frame count is more when value in frameSpinner after effect, but doesn't work
-//        frameTableView.getItems().addListener((InvalidationListener) observable -> {
-//            final int size = ((List<?>) observable).size();
-//            if (size != framesSpinner.getValue()) {
-//                framesSpinner.getEditor().textProperty().set("" + size);
-//            }
-//        });
 
         framePreviewController = new FramePreviewController(this);
         framePreviewController.init(tableController.getPreviewPixels(), animateFramePreview.selectedProperty());

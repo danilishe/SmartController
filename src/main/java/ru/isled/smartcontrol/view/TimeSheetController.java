@@ -3,6 +3,8 @@ package ru.isled.smartcontrol.view;
 import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -25,6 +27,7 @@ import static ru.isled.smartcontrol.Constants.*;
 public class TimeSheetController {
     public static final String SCHEDULED_COMMAND_REGEXP = "^(?<command>on|off): (?<hours>\\d\\d):(?<minutes>\\d\\d) (?<weekday>|sun|mon|tue|wed|thu|fri|sat)$";
     public static final String TIME_RECORD_REGEXP = "^time: (?<hours>\\d\\d):(?<minutes>\\d\\d) (?<weekday>sun|mon|tue|wed|thu|fri|sat)$";
+    public Pane timeSettingsPane;
     Pattern timeRecord = Pattern.compile(TIME_RECORD_REGEXP);
     Pattern commandRecord = Pattern.compile(SCHEDULED_COMMAND_REGEXP);
     public Spinner<Integer> hours;
@@ -101,6 +104,13 @@ public class TimeSheetController {
             else setWeekday.getSelectionModel().selectNext();
         });
         setCurrentTime();
+
+        timeSettingsPane.addEventHandler(KeyEvent.KEY_PRESSED, e -> {
+            if (e.getCode() == KeyCode.INSERT)
+                addRecord();
+            else if (e.getCode() == KeyCode.DELETE || e.getCode() == KeyCode.BACK_SPACE)
+                removeSelected();
+        });
     }
 
     public void removeSelected() {
