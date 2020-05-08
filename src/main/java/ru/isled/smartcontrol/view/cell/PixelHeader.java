@@ -17,7 +17,7 @@ import javafx.scene.text.Text;
 import ru.isled.smartcontrol.model.Pixel;
 import ru.isled.smartcontrol.model.effect.RgbMode;
 
-import static ru.isled.smartcontrol.Constants.*;
+import static ru.isled.smartcontrol.Constants.MAX_QUANTIFIER;
 
 public class PixelHeader extends VBox {
     public final Shape previewPixel;
@@ -27,6 +27,7 @@ public class PixelHeader extends VBox {
         ContextMenu contextMenu = getContextMenu(pixel);
 
         setMinHeight(40);
+        setMinWidth(60);
         setAlignment(Pos.BOTTOM_CENTER);
         setOnContextMenuRequested(event -> {
             contextMenu.show(this, event.getScreenX(), event.getScreenY());
@@ -52,13 +53,16 @@ public class PixelHeader extends VBox {
         Spinner<Integer> pixelQuantifier = new Spinner<>(1, MAX_QUANTIFIER, pixel.getQuantifier(), 1);
         pixelQuantifier.setEditable(false);
         pixelQuantifier.getValueFactory().valueProperty().bindBidirectional(pixel.quantifierProperty());
-        pixelQuantifier.getValueFactory().valueProperty().addListener((ov, o, n) -> previewPixel.setScaleY(1 + (double) n / 10));
+        pixelQuantifier.getValueFactory().valueProperty().addListener((ov, o, n) -> previewPixel.setScaleY(1 + ((double) n - 1) / 10));
         pixelQuantifier.setOnScroll(scroll -> {
             if (scroll.getDeltaY() > 0) pixelQuantifier.increment();
             else pixelQuantifier.decrement();
         });
         pixelQuantifier.setScaleX(.8);
         pixelQuantifier.setScaleY(.8);
+
+        pixelQuantifier.setMinWidth(40);
+        pixelQuantifier.setMaxWidth(40);
 
         Text rgbModeText = new Text(pixel.getRgbMode().name());
         rgbModeText.textProperty().bind(pixel.rgbModeProperty().asString());
