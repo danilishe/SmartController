@@ -166,7 +166,6 @@ public class TableController {
             TableColumn<LedFrame, String> column = new TableColumn<>();
             final Pixel pixel = mainController.getProject().getPixel(i);
             PixelHeader header = new PixelHeader(pixel);
-//            column.widthProperty().addListener((observable, oldValue, newValue) -> header.setPrefWidth(newValue.doubleValue() - 2.0));
             previewPixels.add(header.previewPixel);
 
             column.setGraphic(header);

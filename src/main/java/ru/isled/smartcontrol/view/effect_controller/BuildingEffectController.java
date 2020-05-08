@@ -125,7 +125,7 @@ public class BuildingEffectController implements Initializable, MultiFrameEffect
     }
 
     public void loadDialog() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("building.fxml"));
+        FXMLLoader loader = new FXMLLoader(ClassLoader.getSystemResource("effect/building.fxml"));
         loader.setController(this);
         window = new Alert(Alert.AlertType.CONFIRMATION);
         try {

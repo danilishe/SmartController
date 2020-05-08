@@ -283,7 +283,7 @@ public class ColorGradientController implements Initializable {
     }
 
     private void loadDialog() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("colorGradient.fxml"));
+        FXMLLoader loader = new FXMLLoader(ClassLoader.getSystemResource("effect/colorGradient.fxml"));
         loader.setController(this);
         window = new Alert(Alert.AlertType.CONFIRMATION);
         try {

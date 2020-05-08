@@ -78,7 +78,7 @@ public class SmartControl extends Application {
 
         project = new Project();
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("view/main.fxml"));
+        FXMLLoader loader = new FXMLLoader(ClassLoader.getSystemResource("view/main.fxml"));
         Scene scene = new Scene(loader.load());
 
         controller = loader.getController();
@@ -86,8 +86,8 @@ public class SmartControl extends Application {
         controller.setMainApp(this);
 
         mainStage.setScene(scene);
-        mainStage.getIcons().add(new Image(getClass().getResourceAsStream("images/play.png")));
-        mainStage.getScene().getStylesheets().addAll(getClass().getResource("css/custom.css").toExternalForm());
+        mainStage.getIcons().add(new Image("images/play.png"));
+        mainStage.getScene().getStylesheets().addAll(ClassLoader.getSystemResource("css/custom.css").toExternalForm());
         mainStage.setMinWidth(800);
         mainStage.setMinHeight(800);
         mainStage.centerOnScreen();

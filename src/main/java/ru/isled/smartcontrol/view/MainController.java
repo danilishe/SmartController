@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
@@ -285,6 +286,7 @@ public class MainController {
             log.debug("x1={} y1={} x2={} y2={}", x1, y1, x2, y2);
 
             String selectedEffect = effectsSelector.getValue();
+            // todo инверсировать, эффект ничего не должен знать о проекте. наложением эффекта должен заниматься кто-то другой
             Effect.selectEffect(selectedEffect).apply(getProject(), x1, y1, x2, y2);
 
         }
@@ -506,7 +508,7 @@ public class MainController {
 
     public void exportTimesheet() throws IOException {
         if (timeSheetWindow == null) {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("timesheet.fxml"));
+            FXMLLoader loader = new FXMLLoader(ClassLoader.getSystemResource("view/timesheet.fxml"));
             Scene scene = new Scene(loader.load());
             timeSheetWindow = new Stage();
             timeSheetWindow.resizableProperty().setValue(false);
@@ -520,6 +522,7 @@ public class MainController {
                             timeSheetWindow.hide();
                     }
             );
+            timeSheetWindow.getIcons().add(new Image("images/play.png"));
             timeSheetWindow.setAlwaysOnTop(true);
         }
         timeSheetWindow.show();
