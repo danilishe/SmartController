@@ -158,7 +158,7 @@ public class GlareEffectController implements Initializable {
     }
 
     private void loadDialog() {
-        FXMLLoader loader = new FXMLLoader(ClassLoader.getSystemResource("effect/glare.fxml"));
+        FXMLLoader loader = new FXMLLoader(ClassLoader.getSystemResource("view/effect/glare.fxml"));
         loader.setController(this);
         window = new Alert(Alert.AlertType.CONFIRMATION);
         try {

@@ -86,7 +86,7 @@ public class FadeOutEffectController implements Initializable {
     }
 
     private void loadDialog() {
-        FXMLLoader loader = new FXMLLoader(ClassLoader.getSystemResource("effect/fadeOut.fxml"));
+        FXMLLoader loader = new FXMLLoader(ClassLoader.getSystemResource("view/effect/fadeOut.fxml"));
         loader.setController(this);
         window = new Alert(Alert.AlertType.CONFIRMATION);
         try {

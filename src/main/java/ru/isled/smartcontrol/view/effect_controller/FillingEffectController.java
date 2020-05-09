@@ -153,7 +153,7 @@ public class FillingEffectController implements Initializable {
     }
 
     private void loadDialog() {
-        FXMLLoader loader = new FXMLLoader(ClassLoader.getSystemResource("effect/fill.fxml"));
+        FXMLLoader loader = new FXMLLoader(ClassLoader.getSystemResource("view/effect/fill.fxml"));
         loader.setController(this);
         window = new Alert(Alert.AlertType.CONFIRMATION);
         try {

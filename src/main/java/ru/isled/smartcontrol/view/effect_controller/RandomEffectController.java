@@ -124,7 +124,7 @@ public class RandomEffectController implements Initializable {
     }
 
     public void loadDialog() {
-        FXMLLoader loader = new FXMLLoader(ClassLoader.getSystemResource("effect/random.fxml"));
+        FXMLLoader loader = new FXMLLoader(ClassLoader.getSystemResource("view/effect/random.fxml"));
         loader.setController(this);
         window = new Alert(Alert.AlertType.CONFIRMATION);
         try {

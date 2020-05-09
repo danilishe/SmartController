@@ -135,7 +135,7 @@ public class DisbuildingEffectController implements Initializable {
     }
 
     public void loadDialog() {
-        FXMLLoader loader = new FXMLLoader(ClassLoader.getSystemResource("effect/building.fxml"));
+        FXMLLoader loader = new FXMLLoader(ClassLoader.getSystemResource("view/effect/building.fxml"));
         loader.setController(this);
         window = new Alert(Alert.AlertType.CONFIRMATION);
         try {
