@@ -6,6 +6,7 @@ import javafx.concurrent.Task;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.effect.BlendMode;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
@@ -35,6 +36,8 @@ public class Dialogs {
 
     private static Stage stage;
     private static Alert alert;
+    private static final Image playIcon = new Image("images/play.png");
+
 
     public static void setStage(Stage stage) {
         Dialogs.stage = stage;
@@ -53,6 +56,7 @@ public class Dialogs {
 
     public static void preview(Project project) {
         Dialog<Void> preview = new Dialog<>();
+        ((Stage) preview.getDialogPane().getScene().getWindow()).getIcons().add(playIcon);
         preview.setTitle("Предпросмотр");
         int lastChannel = 0, firstChannel;
         Pixel pixel;
