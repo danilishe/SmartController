@@ -5,37 +5,41 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.paint.Color;
+import javafx.util.Pair;
 import ru.isled.smartcontrol.model.Project;
+import ru.isled.smartcontrol.util.SimpleValueScroller;
+import ru.isled.smartcontrol.util.TransparentColorFilter;
+import ru.isled.smartcontrol.view.CustomColorController;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class BuildingEffectController implements Initializable, MultiFrameEffect {
+public class BuildingEffectController implements Initializable {
     private static List<IntegerProperty> cells;
     private static int sizeX;
     private static int sizeY;
     private static BuildingEffectController controller;
+    private Project project;
+    private int x1;
+    private int y1;
+    private int x2;
+    private int y2;
 
     @FXML
     private RadioButton fromRight;
 
     @FXML
-    private Slider effectBrightness;
+    private CheckBox setBgColor;
 
     @FXML
-    private Label effectBrightnessLabel;
-
+    private ColorPicker bgColorPicker;
     @FXML
-    private CheckBox background;
-
-    @FXML
-    private Slider backgroundBrightness;
-
-    @FXML
-    private Label backgroundBrightnessLabel;
+    private ColorPicker colorPicker;
 
     @FXML
     private Spinner<Integer> blockWidth;
@@ -46,6 +50,11 @@ public class BuildingEffectController implements Initializable, MultiFrameEffect
     @FXML
     private Spinner<Integer> traceBefore;
 
+    @FXML
+    private CheckBox autoFrame;
+
+    @FXML
+    private CheckBox onlyEmpty;
 
     Alert window;
 
@@ -53,75 +62,37 @@ public class BuildingEffectController implements Initializable, MultiFrameEffect
         loadDialog();
     }
 
-    public static BuildingEffectController get(List<IntegerProperty> aCells, int x, int y) {
-        cells = aCells;
-        sizeX = x;
-        sizeY = y;
-
+    public static BuildingEffectController get(Project project, int x1, int y1, int x2, int y2) {
         if (controller == null)
             controller = new BuildingEffectController();
+        controller.project = project;
+        controller.x1 = x1;
+        controller.y1 = y1;
+        controller.x2 = x2;
+        controller.y2 = y2;
+
         return controller;
     }
 
-    public void apply(boolean blockFallingFromRight,
-                      int bright, int blockWidth,
-                      int bgBright, boolean isBgOpaque,
-                      int tailBefore, int tailAfter) {
+    /** только логика самого эффекта в 2х цветах **/
+    private List<List<Pair<Color, Color>>> apply(int blockWidth, int traceBefore, int traceAfter, int width) {
 
-        int firstGlareLine = 0;
-        int lastGlareLine = 0;
-        if (isBgOpaque) cells.forEach(cell -> cell.setValue(bgBright));
-        final int totalBlockWidth = tailAfter + tailBefore + blockWidth;
-
-        // наложение бегущего блика-блока
-        int blocksCountForFillingLine = (int) Math.ceil((double) sizeX / blockWidth);
-        for (int block = 1; block <= blocksCountForFillingLine && lastGlareLine < sizeY; block++) {
-            lastGlareLine = Math.min(firstGlareLine + totalBlockWidth + sizeX, sizeY);
-
-            int lastGlareIndex = Math.min(lastGlareLine * sizeX, cells.size());
-            int firstGlareIndex = Math.min(firstGlareLine * sizeX, cells.size() - 1);
-
-            List<IntegerProperty> forGlare = cells.subList(firstGlareIndex, lastGlareIndex);
-//            GlareEffectController.get(forGlare, sizeX, lastGlareLine - firstGlareLine)
-//                    .apply(!blockFallingFromRight, bright, blockWidth, bgBright, false,
-//                            tailBefore, tailAfter);
-
-            firstGlareLine = lastGlareLine - tailAfter - (block * blockWidth);
-        }
-
-        // наложение закраски блоков
-        firstGlareLine = 0;
-        for (int block = 1; block <= blocksCountForFillingLine; block++) {
-            int filledCellsLine = firstGlareLine + (sizeX - (block * blockWidth)) + tailBefore + 1;
-
-            for (int y = filledCellsLine; y < sizeY; y++) {
-                for (int x = 0; x < block * blockWidth; x++) {
-                    try {
-                        int index = blockFallingFromRight ? y * sizeX + x : (y + 1) * sizeX - x - 1;
-                        cells.get(index).set(bright);
-                    } catch (IndexOutOfBoundsException e) {
-                        return;
-                    }
-                }
-            }
-            firstGlareLine += totalBlockWidth + sizeX - tailAfter - (block * blockWidth);
-        }
-
+        return new ArrayList<>();
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         blockWidth.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 15, 1));
+        blockWidth.setOnScroll(new SimpleValueScroller(blockWidth));
         traceBefore.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 15, 0));
+        traceBefore.setOnScroll(new SimpleValueScroller(traceBefore));
         traceAfter.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 15, 0));
-
-        backgroundBrightness.valueProperty().addListener(((observable, oldValue, newValue) -> {
-            backgroundBrightnessLabel.setText(String.valueOf(newValue.intValue()));
-        }));
-        effectBrightness.valueProperty().addListener(((observable, oldValue, newValue) -> {
-            effectBrightnessLabel.setText(String.valueOf(newValue.intValue()));
-        }));
+        traceAfter.setOnScroll(new SimpleValueScroller(traceAfter));
+        bgColorPicker.setValue(Color.BLACK);
+        bgColorPicker.valueProperty().addListener(new TransparentColorFilter(bgColorPicker));
+        bgColorPicker.getCustomColors().addAll(CustomColorController.getCustomColorsPalette());
+        colorPicker.valueProperty().addListener(new TransparentColorFilter(colorPicker));
+        colorPicker.getCustomColors().addAll(CustomColorController.getCustomColorsPalette());
     }
 
     public void loadDialog() {
@@ -141,14 +112,10 @@ public class BuildingEffectController implements Initializable, MultiFrameEffect
 
     }
 
-    @Override
-    public void apply(Project project, int x1, int y1, int x2, int y2) {
+    public void apply() {
         Optional<ButtonType> button = window.showAndWait();
         if (ButtonType.OK.equals(button.get())) {
-            apply(fromRight.isSelected(),
-                    (int) effectBrightness.getValue(), blockWidth.getValue(),
-                    (int) backgroundBrightness.getValue(), background.isSelected(),
-                    traceBefore.getValue(), traceAfter.getValue());
+            apply(blockWidth.getValue(), traceBefore.getValue(), traceAfter.getValue(), x2 - x1);
         }
     }
 }

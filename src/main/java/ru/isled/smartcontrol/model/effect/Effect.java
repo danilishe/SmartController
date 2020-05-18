@@ -73,6 +73,8 @@ public enum Effect implements MultiFrameEffect {
 
         @Override
         public void apply(Project project, int x1, int y1, int x2, int y2) {
+            final BuildingEffectController buildingEffectController = BuildingEffectController.get(project, x1, y1, x2, y2);
+            buildingEffectController.apply();
         }
     },
 

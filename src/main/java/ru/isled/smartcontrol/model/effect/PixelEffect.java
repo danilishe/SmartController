@@ -4,7 +4,8 @@ import javafx.scene.paint.Color;
 
 import java.util.Arrays;
 
-import static ru.isled.smartcontrol.Constants.*;
+import static ru.isled.smartcontrol.Constants.BASE_FRAME_LENGTH;
+import static ru.isled.smartcontrol.Constants.MIN_BRIGHT;
 
 public enum PixelEffect {
     FadeIn {
