@@ -287,7 +287,7 @@ public class MainController {
 
             String selectedEffect = effectsSelector.getValue();
             // todo инверсировать, эффект ничего не должен знать о проекте. наложением эффекта должен заниматься кто-то другой
-            Effect.selectEffect(selectedEffect).apply(getProject(), x1, y1, x2, y2);
+            Effect.selectEffect(selectedEffect).applyEffect(getProject(), x1, y1, x2, y2);
             framesSpinner.getValueFactory().setValue(getProject().framesCount());
         }
     }

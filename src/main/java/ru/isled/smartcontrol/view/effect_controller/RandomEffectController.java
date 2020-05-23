@@ -7,6 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ru.isled.smartcontrol.model.Area;
 import ru.isled.smartcontrol.model.Project;
 
 import java.io.IOException;

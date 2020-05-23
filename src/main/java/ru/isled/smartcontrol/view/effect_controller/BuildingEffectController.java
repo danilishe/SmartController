@@ -1,13 +1,14 @@
 package ru.isled.smartcontrol.view.effect_controller;
 
-import javafx.beans.property.IntegerProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.util.Pair;
-import ru.isled.smartcontrol.model.Project;
+import ru.isled.smartcontrol.model.Direction;
+import ru.isled.smartcontrol.model.effect.EffectController;
+import ru.isled.smartcontrol.model.effect.multiframe.EffectParameters;
 import ru.isled.smartcontrol.util.SimpleValueScroller;
 import ru.isled.smartcontrol.util.TransparentColorFilter;
 import ru.isled.smartcontrol.view.CustomColorController;
@@ -19,16 +20,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class BuildingEffectController implements Initializable {
-    private static List<IntegerProperty> cells;
-    private static int sizeX;
-    private static int sizeY;
+public class BuildingEffectController implements Initializable, EffectController {
     private static BuildingEffectController controller;
-    private Project project;
-    private int x1;
-    private int y1;
-    private int x2;
-    private int y2;
 
     @FXML
     private RadioButton fromRight;
@@ -62,20 +55,16 @@ public class BuildingEffectController implements Initializable {
         loadDialog();
     }
 
-    public static BuildingEffectController get(Project project, int x1, int y1, int x2, int y2) {
+    public static EffectController get() {
         if (controller == null)
             controller = new BuildingEffectController();
-        controller.project = project;
-        controller.x1 = x1;
-        controller.y1 = y1;
-        controller.x2 = x2;
-        controller.y2 = y2;
-
         return controller;
     }
 
-    /** только логика самого эффекта в 2х цветах **/
-    private List<List<Pair<Color, Color>>> apply(int blockWidth, int traceBefore, int traceAfter, int width) {
+    /**
+     * только логика самого эффекта в 2х цветах
+     **/
+    private List<List<Pair<Color, Color>>> apply(int blockWidth, int traceBefore, int traceAfter, int width, Direction direction) {
 
         return new ArrayList<>();
     }
@@ -113,9 +102,22 @@ public class BuildingEffectController implements Initializable {
     }
 
     public void apply() {
-        Optional<ButtonType> button = window.showAndWait();
-        if (ButtonType.OK.equals(button.get())) {
-            apply(blockWidth.getValue(), traceBefore.getValue(), traceAfter.getValue(), x2 - x1);
-        }
+
+    }
+
+    @Override
+    public Optional<EffectParameters> getParameters() {
+        return window.showAndWait()
+                .map(button -> {
+                   if (button == ButtonType.OK) {
+                       return EffectParameters.builder()
+                               .direction(fromRight.isSelected() ? Direction.RIGHT : Direction.LEFT)
+                               .blockWidth(blockWidth.getValue())
+                               .traceBefore(traceBefore.getValue())
+                               .traceAfter(traceAfter.getValue())
+                               .build();
+                   } else return null;
+                });
+
     }
 }

@@ -8,6 +8,7 @@ import javafx.scene.paint.Color;
 import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ru.isled.smartcontrol.model.Area;
 import ru.isled.smartcontrol.model.Pixel;
 import ru.isled.smartcontrol.model.Project;
 import ru.isled.smartcontrol.util.TransparentColorFilter;
