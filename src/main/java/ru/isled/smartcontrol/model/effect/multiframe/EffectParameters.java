@@ -7,10 +7,10 @@ import ru.isled.smartcontrol.model.Direction;
 @Builder
 @Getter
 public class EffectParameters {
-    Direction direction;
-    int width;
-    int traceBefore;
-    int traceAfter;
-    int blockWidth;
-    boolean autoAdjustLength;
+    private final Direction direction;
+    private final int width;
+    private final int traceBefore;
+    private final int traceAfter;
+    private final int blockWidth;
+    private final boolean autoAdjustLength;
 }
