@@ -37,4 +37,9 @@ public class MicroPixel {
     public int getMiddle() {
         return (getFirst() + getSecond()) / 2;
     }
+
+    @Override
+    public String toString() {
+        return Integer.toString(getMiddle());
+    }
 }

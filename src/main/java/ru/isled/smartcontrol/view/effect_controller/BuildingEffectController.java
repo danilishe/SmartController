@@ -1,11 +1,13 @@
 package ru.isled.smartcontrol.view.effect_controller;
 
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.util.Pair;
+import ru.isled.smartcontrol.model.BlendMode;
 import ru.isled.smartcontrol.model.Direction;
 import ru.isled.smartcontrol.model.effect.EffectController;
 import ru.isled.smartcontrol.model.effect.multiframe.EffectParameters;
@@ -15,19 +17,13 @@ import ru.isled.smartcontrol.view.CustomColorController;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class BuildingEffectController implements Initializable, EffectController {
     private static BuildingEffectController controller;
 
     @FXML
     private RadioButton fromRight;
-
-    @FXML
-    private CheckBox setBgColor;
 
     @FXML
     private ColorPicker bgColorPicker;
@@ -42,12 +38,11 @@ public class BuildingEffectController implements Initializable, EffectController
 
     @FXML
     private Spinner<Integer> traceBefore;
+    @FXML
+    private ChoiceBox<BlendMode> blendModeDropdown;
 
     @FXML
     private CheckBox autoFrame;
-
-    @FXML
-    private CheckBox onlyEmpty;
 
     Alert window;
 
@@ -82,6 +77,8 @@ public class BuildingEffectController implements Initializable, EffectController
         bgColorPicker.getCustomColors().addAll(CustomColorController.getCustomColorsPalette());
         colorPicker.valueProperty().addListener(new TransparentColorFilter(colorPicker));
         colorPicker.getCustomColors().addAll(CustomColorController.getCustomColorsPalette());
+        blendModeDropdown.setItems(FXCollections.observableList(Arrays.asList(BlendMode.values())));
+        blendModeDropdown.valueProperty().setValue(BlendMode.FULL_BLEND);
     }
 
     public void loadDialog() {
@@ -109,14 +106,17 @@ public class BuildingEffectController implements Initializable, EffectController
     public Optional<EffectParameters> getParameters() {
         return window.showAndWait()
                 .map(button -> {
-                   if (button == ButtonType.OK) {
-                       return EffectParameters.builder()
-                               .direction(fromRight.isSelected() ? Direction.RIGHT : Direction.LEFT)
-                               .blockWidth(blockWidth.getValue())
-                               .traceBefore(traceBefore.getValue())
-                               .traceAfter(traceAfter.getValue())
-                               .build();
-                   } else return null;
+                    if (button == ButtonType.OK) {
+                        return new EffectParameters()
+                                .setDirection(fromRight.isSelected() ? Direction.LEFT : Direction.RIGHT)
+                                .setBlockWidth(blockWidth.getValue())
+                                .setTraceBefore(traceBefore.getValue())
+                                .setTraceAfter(traceAfter.getValue())
+                                .setMainColor(colorPicker.getValue())
+                                .setBgColor(bgColorPicker.getValue())
+                                .setBlendMode(blendModeDropdown.getValue())
+                                .setAutoAdjustLength(true);
+                    } else return null;
                 });
 
     }

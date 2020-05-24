@@ -8,6 +8,7 @@ import ru.isled.smartcontrol.model.effect.multiframe.MultiFrameEffect;
 import ru.isled.smartcontrol.view.effect_controller.*;
 
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 public enum Effect implements ProjectAdjuster {
     ColorGradient {
@@ -81,8 +82,10 @@ public enum Effect implements ProjectAdjuster {
             BuildingEffectController.get()
                     .getParameters()
                     .ifPresent(p -> {
+                        p.setWidth(x2 - x1);
                         final MultiFrameEffect effect = new BuildingEffectCreator().create(p);
-                        EffectApplier.applyStructure(project, effect, area, p);
+//                        System.err.println(effect);
+                        EffectBlender.blend(project, effect, area, p);
                     });
         }
     },
