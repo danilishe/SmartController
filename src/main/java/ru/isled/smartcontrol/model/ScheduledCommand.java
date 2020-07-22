@@ -55,6 +55,7 @@ public class ScheduledCommand {
 
     @Override
     public String toString() {
+        if (getWeekDay() == WeekDay.EVERY_DAY) return String.format("%s: %02d:%02d", getCommand().getCode(), hours, minutes);
         return String.format("%s: %02d:%02d %s", getCommand().getCode(), hours, minutes, getWeekDay().getCode());
     }
 
