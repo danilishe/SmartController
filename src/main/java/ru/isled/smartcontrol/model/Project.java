@@ -173,18 +173,20 @@ public class Project {
             for (int pixelNo = 0; pixelNo < pixelsCount(); pixelNo++) {
 
                 final byte[][] pixelExport = getPixel(pixelNo).exportFrame(frame.getNumber() - 1, frame.getLength());
-                for (int frameCycle = 0; frameCycle < frame.getCycles(); frameCycle++) {
-                    for (int subFrame = 0; subFrame < pixelExport.length; subFrame++) {
-                        for (int channel = 0; channel < pixelExport[0].length; channel++) {
-                            final int i = (subframesCounter + subFrame) * MAX_CHANNELS_COUNT + channelsCounter + channel;
-                            data[i] = Util.withGamma(pixelExport[subFrame][channel], getGamma());
+                for (int subFrame = 0; subFrame < pixelExport.length; subFrame++) { // should be frame.getLength()
+                    for (int channel = 0; channel < pixelExport[0].length; channel++) { // should be getPixel(pixelNo).channels()
+                        final int i = (subframesCounter + subFrame) * MAX_CHANNELS_COUNT + channelsCounter + channel;
+
+                        byte quark = Util.withGamma(pixelExport[subFrame][channel], getGamma());
+                        for (int cycle = 0; cycle < frame.getCycles(); cycle++) {
+                            data[i + MAX_CHANNELS_COUNT * pixelExport.length * cycle] = quark;
                         }
                     }
                 }
                 channelsCounter += pixelExport[0].length;
                 assert channelsCounter < MAX_CHANNELS_COUNT;
             }
-            subframesCounter += Util.framesAt(frame.getLength());
+            subframesCounter += Util.framesAt(frame.getLength() * frame.getCycles());
         }
         return data;
     }
@@ -192,7 +194,7 @@ public class Project {
     public long getLength() {
         return frames.stream()
                 .limit(framesCount())
-                .mapToLong(f -> f.getLength() * f.getCycles())
+                .mapToLong(f -> (long) f.getLength() * f.getCycles())
                 .sum();
     }
 

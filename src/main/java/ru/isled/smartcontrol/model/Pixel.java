@@ -117,10 +117,10 @@ public class Pixel {
     }
 
     /**
-     * exports pixelFrame with quantifiers and respectively how channel has rgbMode
+     * exports pixelFrame with quantifiers and respectively which rgbMode has the channel (this pixel)
      *
-     * @param frameNo
-     * @param frameLengthMsec
+     * @param frameNo frame number
+     * @param frameLengthMsec desired frame length in milliseconds
      * @return byte array of subframes. all channels are flatten and repeated
      */
     public byte[][] exportFrame(int frameNo, int frameLengthMsec) {
