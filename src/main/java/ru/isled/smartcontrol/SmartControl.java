@@ -120,7 +120,7 @@ public class SmartControl extends Application {
 
         project = newProject;
         controller.setProject(project);
-        //todo как-то обновить окно, чтобы проект показывался
+        updateHeader();
     }
 
     private void addItemToLastFiles(File file) {
