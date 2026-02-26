@@ -6,7 +6,7 @@
 
     <groupId>ISLed</groupId>
     <artifactId>Controller</artifactId>
-    <version>2.3.3</version>
+    <version>2.3.4</version>
     <organization>
         <name>IS-Led</name>
         <url>http://is-led.ru/</url>
@@ -19,7 +19,6 @@
         <app.name>SmartControl</app.name>
         <app.vendor>IS-Led</app.vendor>
         <app.upgrade.uuid>0b9fd94b-436a-4d1d-90d3-927f0dc4dfdc</app.upgrade.uuid>
-        <project.version>1.0</project.version>
         <default.encoding>UTF-8</default.encoding>
         <encoding>UTF-8</encoding>
     </properties>

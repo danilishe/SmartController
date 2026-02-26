@@ -137,14 +137,6 @@ public class Dialogs {
         Label label = new Label();
         label.textProperty().bind(timer.messageProperty());
 
-//        CheckBox showGlow = new CheckBox("сияние");
-//        showGlow.setSelected(false);
-//        showGlow.selectedProperty().addListener((observable, oldValue, newValue) -> {
-//            if (newValue) backgrounds.forEach(l -> l.setEffect(new Glow(5)));
-//            else backgrounds.forEach(l -> l.setEffect(null));
-//        });
-
-
         VBox vBox = new VBox(5, label, mainBackGround/*, showGlow*/);
         preview.getDialogPane().setContent(vBox);
         preview.getDialogPane().getButtonTypes().addAll(ButtonType.OK);

@@ -29,6 +29,7 @@ import ru.isled.smartcontrol.view.cell.LedFrameLengthCell;
 import java.io.File;
 import java.io.IOException;
 import java.time.DateTimeException;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -81,7 +82,7 @@ public class MainController {
     public Spinner<Integer> frameLengthSpinner;
     @FXML
     public Spinner<Integer> frameCyclesSpinner;
-    private FrameHandlersController frameHandlersController = new FrameHandlersController(this);
+    private final FrameHandlersController frameHandlersController = new FrameHandlersController(this);
     private ColorPaletteController colorPaletteController;
 
     @FXML
@@ -259,8 +260,8 @@ public class MainController {
         alert.setTitle("О программе");
         alert.setHeaderText("SMART Control " + BuildInfo.PROGRAM_VERSION);
         final Label label = new Label("Программа для создания и редактирования эффектов для контроллера ISLed" +
-                "\nЗнакСвет © 2018-2020" +
-                "\nСуетин Д.Е. © 2018-2020" +
+                "\nЗнакСвет © 2018-" + LocalDate.now().getYear() +
+                "\nСуетин Д.Е. © 2018-" + LocalDate.now().getYear() +
                 "\nВерсия " + BuildInfo.PROGRAM_VERSION
         );
         final Hyperlink isLedLink = new Hyperlink(CONTROLLER_PAGE_URL);
