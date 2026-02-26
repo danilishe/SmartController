@@ -8,7 +8,7 @@ import ru.isled.smartcontrol.view.Dialogs;
 import java.io.*;
 
 public class FileHelper {
-    private static final Logger log = LogManager.getLogger();
+    private static final Logger log = LogManager.getLogger(FileHelper.class);
 
     public static boolean save(File file, byte[] data) {
         try (OutputStream bw = new BufferedOutputStream(new FileOutputStream(file))) {

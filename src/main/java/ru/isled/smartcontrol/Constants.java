@@ -4,7 +4,6 @@ import javafx.stage.FileChooser;
 
 public interface Constants {
 
-    String PROGRAM_VERSION = "2.3.2";
     int MIN_FRAMES = 1;
     int MAX_FRAMES = 5_000;
     int MIN_PIXELS_COUNT = 1;

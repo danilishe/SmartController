@@ -21,7 +21,7 @@ import java.util.*;
 import static ru.isled.smartcontrol.util.Util.fill;
 
 public class GlareEffectController implements Initializable {
-    Logger log = LogManager.getLogger();
+    Logger log = LogManager.getLogger(GlareEffectController.class);
     private Project project;
     private int x1, y1, x2, y2;
     private static GlareEffectController controller;

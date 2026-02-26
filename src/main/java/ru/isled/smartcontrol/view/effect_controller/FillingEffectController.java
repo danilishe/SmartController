@@ -19,7 +19,7 @@ import java.util.ResourceBundle;
 import static ru.isled.smartcontrol.util.Util.fill;
 
 public class FillingEffectController implements Initializable {
-    private static final Logger log = LogManager.getLogger();
+    private static final Logger log = LogManager.getLogger(FillingEffectController.class);
     private static FillingEffectController controller;
     Alert window;
     @FXML

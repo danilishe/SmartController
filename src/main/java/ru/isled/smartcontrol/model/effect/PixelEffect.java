@@ -30,7 +30,7 @@ public enum PixelEffect {
         @Override
         protected String effectOverlay() {
             return "linear-gradient(from 0% 0% to 0% 100%, " +
-                    "#0000 1%, black 50%, #0000 100%" +
+                    "#0000 0%, black 50%, #0000 100%" +
                     ") /* FOI */ ";
         }
 
@@ -214,9 +214,10 @@ public enum PixelEffect {
         @Override
         public Color[] interpolate(int iterations, Color start, Color end) {
             final Color[] colors = new Color[iterations];
-            for (int i = 0; i < iterations; i++) {
+            for (int i = 0; i < iterations - 1; i++) {
                 colors[i] = start.interpolate(end, (double) i / iterations);
             }
+            colors[iterations - 1] = end;
             return colors;
         }
 

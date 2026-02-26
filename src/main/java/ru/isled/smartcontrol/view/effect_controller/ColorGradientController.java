@@ -37,7 +37,7 @@ import static ru.isled.smartcontrol.Constants.PALETTE_COLOR_SIZE;
 import static ru.isled.smartcontrol.util.Util.isOdd;
 
 public class ColorGradientController implements Initializable {
-    private static final Logger log = LogManager.getLogger();
+    private static final Logger log = LogManager.getLogger(ColorGradientController.class);
     private static final List<Gradient> gradientSamples = Arrays.asList(
             new Gradient(1, 1, Color.RED, Color.LIME, Color.BLUE),
             new Gradient(1, 1, Color.RED, Color.ORANGE, Color.YELLOW, Color.LIME, Color.SKYBLUE, Color.BLUE, Color.VIOLET),

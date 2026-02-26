@@ -7,7 +7,6 @@ import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.isled.smartcontrol.model.Area;
 import ru.isled.smartcontrol.model.Project;
 
 import java.io.IOException;
@@ -17,8 +16,9 @@ import java.util.ResourceBundle;
 
 import static ru.isled.smartcontrol.util.Util.fill;
 
+
 public class RandomEffectController implements Initializable {
-    private static final Logger log = LogManager.getLogger();
+    private static final Logger log = LogManager.getLogger(RandomEffectController.class);
     private static RandomEffectController controller;
     private Project project;
     private int x1;

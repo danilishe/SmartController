@@ -9,7 +9,7 @@ import static ru.isled.smartcontrol.Constants.BASE_FRAME_LENGTH;
 import static ru.isled.smartcontrol.Constants.MAX_BRIGHT;
 
 public class Util {
-    private static final Logger log = LogManager.getLogger();
+    private static final Logger log = LogManager.getLogger(Util.class);
 
     public static String toHex(Color color) {
         return String.format("%02x%02x%02x",

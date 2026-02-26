@@ -16,6 +16,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ru.isled.smartcontrol.BuildInfo;
 import ru.isled.smartcontrol.SmartControl;
 import ru.isled.smartcontrol.model.LedFrame;
 import ru.isled.smartcontrol.model.Pixel;
@@ -36,7 +37,7 @@ import java.util.Locale;
 import static ru.isled.smartcontrol.Constants.*;
 
 public class MainController {
-    private static final Logger log = LogManager.getLogger();
+    private static final Logger log = LogManager.getLogger(MainController.class);
 
     @FXML
     public Spinner<Integer> framesSpinner;
@@ -256,11 +257,11 @@ public class MainController {
         alert.initOwner(mainApp.getMainStage());
 
         alert.setTitle("О программе");
-        alert.setHeaderText("SMART Control " + PROGRAM_VERSION);
+        alert.setHeaderText("SMART Control " + BuildInfo.PROGRAM_VERSION);
         final Label label = new Label("Программа для создания и редактирования эффектов для контроллера ISLed" +
                 "\nЗнакСвет © 2018-2020" +
                 "\nСуетин Д.Е. © 2018-2020" +
-                "\nВерсия " + PROGRAM_VERSION
+                "\nВерсия " + BuildInfo.PROGRAM_VERSION
         );
         final Hyperlink isLedLink = new Hyperlink(CONTROLLER_PAGE_URL);
         isLedLink.setOnAction(event -> mainApp.getHostServices().showDocument(CONTROLLER_PAGE_URL));

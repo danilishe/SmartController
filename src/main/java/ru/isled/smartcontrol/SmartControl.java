@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import lombok.Getter;
 import ru.isled.smartcontrol.controller.FileHelper;
 import ru.isled.smartcontrol.controller.ProgramProperties;
 import ru.isled.smartcontrol.controller.ProjectIO;
@@ -21,21 +22,12 @@ import java.util.List;
 
 import static ru.isled.smartcontrol.Constants.*;
 
-//import ru.isled.smartcontrol.controller.ProjectIO;
-
 public class SmartControl extends Application {
+    @Getter
     private Stage mainStage = null;
     private Project project = null;
     private MainController controller;
-    private List<String> lastFiles = new ArrayList<>();
-
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-    public Stage getMainStage() {
-        return mainStage;
-    }
+    private final List<String> lastFiles = new ArrayList<>();
 
     private void loadDefaults() {
         Project.hasChangesProperty().addListener(l -> updateHeader());

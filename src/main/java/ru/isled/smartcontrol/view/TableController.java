@@ -1,6 +1,6 @@
 package ru.isled.smartcontrol.view;
 
-import com.sun.javafx.scene.control.skin.TableHeaderRow;
+import javafx.collections.ListChangeListener;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -49,9 +49,13 @@ public class TableController {
 
 
     private void disableColumnReordering() {
-        frameTableView.widthProperty().addListener((source, oldWidth, newWidth) -> {
-            TableHeaderRow header = (TableHeaderRow) frameTableView.lookup("TableHeaderRow");
-            header.reorderingProperty().addListener((observable, oldValue, newValue) -> header.setReordering(false));
+        frameTableView.getColumns().forEach(c -> c.setReorderable(false));
+        frameTableView.getColumns().addListener((ListChangeListener<TableColumn<LedFrame, ?>>) change -> {
+            while (change.next()) {
+                if (change.wasAdded()) {
+                    change.getAddedSubList().forEach(c -> c.setReorderable(false));
+                }
+            }
         });
     }
 

@@ -1,45 +1,38 @@
-/*
+
 package ru.isled.smartcontrol.model;
 
 import javafx.scene.paint.Color;
-import org.junit.jupiter.api.Test;
+import org.testng.annotations.Test;
 import ru.isled.smartcontrol.model.effect.PixelEffect;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.testng.AssertJUnit.assertEquals;
 
-class PixelEffectTest {
+public class PixelEffectTest {
     @Test
     public void testFlashLength() {
-        assertEquals(PixelEffect.FadeInOut.interpolate(2, Color.BLACK, Color.WHITE).length, 2);
-        assertEquals(PixelEffect.FadeInOut.interpolate(3, Color.BLACK, Color.WHITE).length, 3);
+        assertEquals(2, PixelEffect.FadeInOut.interpolate(2, Color.BLACK, Color.WHITE).length);
+        assertEquals(3, PixelEffect.FadeInOut.interpolate(3, Color.BLACK, Color.WHITE).length);
     }
 
     @Test
     public void testFlashExtrems() {
-        assertEquals(PixelEffect.FadeInOut.interpolate(3, Color.WHITE, Color.WHITE)[0], Color.BLACK);
-        assertEquals(PixelEffect.FadeInOut.interpolate(3, Color.WHITE, Color.WHITE)[0], Color.WHITE);
-        assertEquals(PixelEffect.FadeInOut.interpolate(3, Color.WHITE, Color.WHITE)[2], Color.BLACK);
+        Color[] effect = PixelEffect.FadeInOut.interpolate(5, Color.WHITE, Color.WHITE);
+        assertEquals("start", Color.BLACK, effect[0]);
+        assertEquals("middle", Color.WHITE, effect[2]);
+        assertEquals("end", Color.BLACK, effect[4]);
     }
-//    @Test
-//    public void testFlashMiddle() {
-//        assertEquals(PixelEffect.FadeInOut.getColors(3)[1], MAX_BRIGHT);
-//        assertEquals(PixelEffect.FadeInOut.getColors(7)[3], MAX_BRIGHT);
-//        assertEquals(PixelEffect.FadeInOut.getColors(9)[4], MAX_BRIGHT);
-//    }
-//    @Test
-//    public void testNegaFlashLength() {
-//        assertEquals(PixelEffect.FadeOutIn.getColors(2).length, 2);
-//        assertEquals(PixelEffect.FadeOutIn.getColors(3).length, 3);
-//    }
-//    @Test
-//    public void testNegaFlashExtrems() {
-//        assertEquals(PixelEffect.FadeOutIn.getColors(2)[0], MAX_BRIGHT);
-//        assertEquals(PixelEffect.FadeOutIn.getColors(2)[1], MAX_BRIGHT);
-//    }
-//    @Test
-//    public void testNegaFlashMiddle() {
-//        assertEquals(PixelEffect.FadeOutIn.getColors(3)[1], MIN_BRIGHT);
-//        assertEquals(PixelEffect.FadeOutIn.getColors(7)[3], MIN_BRIGHT);
-//        assertEquals(PixelEffect.FadeOutIn.getColors(9)[4], MIN_BRIGHT);
-//    }
-}*/
+
+    @Test
+    public void testSolidExtrems2() {
+        Color[] effect = PixelEffect.Solid.interpolate(2, Color.WHITE, Color.BLACK);
+        assertEquals("start", Color.WHITE, effect[0]);
+        assertEquals("end", Color.BLACK, effect[1]);
+    }
+
+    @Test
+    public void testSolidExtrems3() {
+        Color[] effect = PixelEffect.Solid.interpolate(3, Color.WHITE, Color.BLACK);
+        assertEquals("start", Color.WHITE, effect[0]);
+        assertEquals("end", Color.BLACK, effect[2]);
+    }
+}
