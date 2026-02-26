@@ -1,0 +1,35 @@
+name: Release (Windows MSI)
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build-msi:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21 (Zulu)
+        uses: actions/setup-java@v4
+        with:
+          distribution: zulu
+          java-version: "21"
+          cache: maven
+
+      - name: Install WiX Toolset
+        run: choco install wixtoolset -y
+
+      - name: Build MSI
+        run: mvn -Pinstaller -DskipTests package
+
+      - name: Upload MSI to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: target/jpackage-installer/*.msi

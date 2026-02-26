@@ -16,6 +16,9 @@
         <maven.compiler.target>11</maven.compiler.target>
         <javafx.version>17.0.10</javafx.version>
         <javafx.platform>win</javafx.platform>
+        <app.name>SmartControl</app.name>
+        <app.vendor>IS-Led</app.vendor>
+        <app.upgrade.uuid>0b9fd94b-436a-4d1d-90d3-927f0dc4dfdc</app.upgrade.uuid>
         <project.version>1.0</project.version>
         <default.encoding>UTF-8</default.encoding>
         <encoding>UTF-8</encoding>
@@ -118,26 +121,6 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-toolchains-plugin</artifactId>
-                <version>3.2.0</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>toolchain</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <toolchains>
-                        <jdk>
-                            <version>21</version>
-                            <vendor>azul</vendor>
-                        </jdk>
-                    </toolchains>
-                </configuration>
-            </plugin>
-            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.1.0</version>
@@ -156,9 +139,9 @@
                                 --input "${project.build.directory}/jpackage-input"
                                 --main-jar "${project.build.finalName}.jar"
                                 --main-class ru.isled.smartcontrol.SmartControl
-                                --name SmartControl
+                                --name ${app.name}
                                 --app-version ${project.version}
-                                --vendor ISLed
+                                --vendor ${app.vendor}
                                 --win-console
                                 -p "${project.build.directory}/jpackage-input"
                                 --add-modules javafx.controls,javafx.fxml,java.management,java.naming
@@ -257,6 +240,48 @@
                                 <argument>ru.isled.smartcontrol.SmartControl</argument>
                             </arguments>
                         </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>installer</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <executions>
+                            <execution>
+                                <id>jpackage-msi</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>${java.home}/bin/jpackage</executable>
+                                    <commandlineArgs>
+                                        --type msi
+                                        --dest "${project.build.directory}/jpackage-installer"
+                                        --input "${project.build.directory}/jpackage-input"
+                                        --main-jar "${project.build.finalName}.jar"
+                                        --main-class ru.isled.smartcontrol.SmartControl
+                                        --name ${app.name}
+                                        --app-version ${project.version}
+                                        --vendor ${app.vendor}
+                                        --win-upgrade-uuid ${app.upgrade.uuid}
+                                        --win-menu
+                                        --win-menu-group ${app.vendor}
+                                        --win-shortcut
+                                        --win-dir-chooser
+                                        --install-dir "${app.vendor}\\${app.name}"
+                                        -p "${project.build.directory}/jpackage-input"
+                                        --add-modules javafx.controls,javafx.fxml,java.management,java.naming
+                                    </commandlineArgs>
+                                </configuration>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>
