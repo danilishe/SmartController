@@ -1,8 +1,10 @@
 package ru.isled.smartcontrol.view;
 
 import javafx.collections.ListChangeListener;
+import javafx.scene.AccessibleAttribute;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
@@ -31,7 +33,9 @@ public class TableController {
         frameTableView.getSelectionModel().setCellSelectionEnabled(true);
         frameTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         frameTableView.addEventHandler(MouseEvent.MOUSE_CLICKED, x -> handleCellSelection());
+        frameTableView.addEventFilter(ScrollEvent.SCROLL, this::scrollHorizontally);
 
+        FrozenColumnsSkin.install(frameTableView, HEADER_COLUMNS);
         disableColumnReordering();
 
         ContextMenu tableContextMenu = new ContextMenu();
@@ -45,6 +49,20 @@ public class TableController {
             tableContextMenu.getItems().add(menuItem);
         }
         frameTableView.setContextMenu(tableContextMenu);
+    }
+
+    private void scrollHorizontally(ScrollEvent event) {
+        if (!event.isShiftDown()) {
+            return;
+        }
+
+        ScrollBar bar = (ScrollBar) frameTableView.queryAccessibleAttribute(AccessibleAttribute.HORIZONTAL_SCROLLBAR);
+        if (bar != null && bar.isVisible()) {
+            double delta = event.getDeltaX() != 0 ? event.getDeltaX() : event.getDeltaY();
+            double value = Math.max(bar.getMin(), Math.min(bar.getMax(), bar.getValue() - delta));
+            bar.setValue(value);
+        }
+        event.consume();
     }
 
 
@@ -152,6 +170,7 @@ public class TableController {
                 column.setVisible(expectedVisibility);
 
         }
+        frameTableView.refresh();
     }
 
     public List<Pixel> getSelectedPixels() {

@@ -556,7 +556,7 @@
                                      prefWidth="50.0" resizable="false" sortable="false" styleClass="header" text="⏰"/>
                     </columns>
                     <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                        <TableView fx:constant="UNCONSTRAINED_RESIZE_POLICY"/>
                     </columnResizePolicy>
                 </TableView>
             </children>

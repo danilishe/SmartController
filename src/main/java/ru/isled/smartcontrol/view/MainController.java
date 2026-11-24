@@ -17,7 +17,7 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.isled.smartcontrol.BuildInfo;
-import ru.isled.smartcontrol.SmartControl;
+import ru.isled.smartcontrol.SmartControlApplication;
 import ru.isled.smartcontrol.model.LedFrame;
 import ru.isled.smartcontrol.model.Pixel;
 import ru.isled.smartcontrol.model.Project;
@@ -72,7 +72,7 @@ public class MainController {
     private FramePreviewController framePreviewController;
 
     private Project project;
-    private SmartControl mainApp;
+    private SmartControlApplication mainApp;
     @FXML
     private Label fullTime;
     @FXML
@@ -294,7 +294,7 @@ public class MainController {
         }
     }
 
-    public void setMainApp(SmartControl main) {
+    public void setMainApp(SmartControlApplication main) {
         mainApp = main;
     }
 
